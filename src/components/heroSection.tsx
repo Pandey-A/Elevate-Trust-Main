@@ -3,7 +3,7 @@ import elevateMainLogo from "../assets/homepage-icons/elevatestarting-logo.svg";
 import globeMap from "../assets/homepage-icons/Globe.png";
 import futureIcon from "../assets/homepage-icons/future.png";
 import editModeIcon from "../assets/homepage-icons/editmode.png";
-import "./heroSection.css";
+import userLoveIcon from "../assets/homepage-icons/user-love-01.svg";
 
 export default function HeroSection() {
   return (
@@ -21,7 +21,7 @@ export default function HeroSection() {
       <div className="hero-inner">
         <div className="hero-left">
           <div className="hero-badge">
-            <img src="./src/assets/homepage-icons/user-love-01.svg" alt="scaling startups and businesses" />
+            <img src={userLoveIcon} alt="" aria-hidden />
             Scaling Startups and Businesses.
           </div>
 
