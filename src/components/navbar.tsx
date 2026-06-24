@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ChevronDown } from 'lucide-react';
 import elevateLogo from '../assets/nav/elevate-logo.svg';
-import linkedinIcon from '../assets/nav/linkedin-logo.svg';
+import linkedinIcon from '../assets/nav/Linkedin-logo.svg';
 import instagramIcon from '../assets/nav/Instagram-logo.svg';
 import telegramIcon from '../assets/nav/Telegram-logo.svg';
 import letsConnectIcon from '../assets/nav/lets-connect.svg';
