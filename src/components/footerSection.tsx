@@ -7,7 +7,7 @@ import tiktokLogo from "../assets/footer/TiktokLogo.svg";
 import xLogo from "../assets/footer/xlogo.svg";
 import worldMapBackground from "../assets/footer/worldmapfooter.svg"
 import elevateFooterServiceLogo from "../assets/footer/elevateservicelogo.svg";
-import maskGroup from "../assets/footer/Mask-group.svg";
+import maskGroup from "../assets/homepage-icons/Mask-group.svg";
 import paperplanefooter from "../assets/footer/PaperPlaneTilt.svg";
 
 const services = [
@@ -65,44 +65,37 @@ export default function FooterSection() {
       />
 
       <div className="relative mx-auto max-w-9xl  mb-5">
-        {/* SECTION: TOP FOOTER GRID (LOGO + 3 LINK COLUMNS) */}
         <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-4">
-          {/* SECTION: BRAND + DESCRIPTION */}
           <div className="flex flex-col ">
             <img src={elevateFooterLogo} alt="Elevate Trust logo" className="h-auto w-50" />
             <p className="mt-6 max-w-xs w-[270px] text-[10px] leading-[16px] aline-center justify-center text-white/40 mt-10">
-            We partner with innovators to develop state-of-the-art AI solutions designed to drive strategic business outcomes. Our expertise covers a wide range of industries, tackling complex challenges with AI algorithms specifically tailored for both structured and unstructured data.
+              We partner with innovators to develop state-of-the-art AI solutions designed to drive strategic business outcomes. Our expertise covers a wide range of industries, tackling complex challenges with AI algorithms specifically tailored for both structured and unstructured data.
             </p>
           </div>
 
-          {/* SECTION: SERVICES */}
           <div>
             <h3 className="text-[20px] font-semibold uppercase tracking-normal">Services</h3>
-            <FooterList  items={services} />
+            <FooterList items={services} />
           </div>
 
 
-          {/* SECTION: OTHER SERVICES */}
           <div>
             <h3 className="text-[20px] font-semibold uppercase tracking-normal">Other Services</h3>
             <FooterList items={otherServices} />
           </div>
 
-          {/* SECTION: ABOUT COMPANY */}
           <div>
             <h3 className="text-[22px] font-semibold uppercase tracking-normal">About Company</h3>
             <FooterList items={aboutCompany} />
           </div>
         </div>
 
-        {/* SECTION: DIVIDER LINE IMAGE */}
         <div className="mb-8 mt-7"><br /><br />
-        <hr className="my-8 mt-[15px] mb-18  opacity-10" />
+          <hr className="my-8 mt-[15px] mb-18  opacity-10" />
         </div>
 
-        {/* SECTION: BOTTOM FOOTER GRID (CONTACT + PARTNERS + NEWSLETTER) */}
         <div className="grid grid-cols-1 gap-1 mt-10 md:grid-cols-2 lg:grid-cols-4">
-          {/* SECTION: CONTACT */}
+
           <div>
             <h3 className="text-[20px] font-semibold uppercase">Contact</h3>
             <div className="mt-10 space-y-1.5 ml-7 text-white/85">
@@ -112,13 +105,11 @@ export default function FooterSection() {
             </div>
           </div>
 
-          {/* SECTION: PARTNERS */}
           <div>
             <h3 className="text-[20px] font-semibold uppercase">Partners</h3>
             <img src={maskGroup} alt="Partner logos" className="mt-10 h-auto w-full max-w-[230px]" />
           </div>
 
-          {/* SECTION: NEWSLETTER */}
           <div>
             <h3 className="text-[20px] font-semibold uppercase">Newsletter</h3>
             <form className="mt-10 max-w-[350px] ">
@@ -141,7 +132,6 @@ export default function FooterSection() {
           </div>
         </div>
 
-        {/* SECTION: FOOTER BOTTOM BAR (SOCIAL + LEGAL) */}
         <div className="mt-7 flex flex-col items-start justify-between gap-4 pt-2 md:flex-row md:items-center">
           <div className="flex items-center gap-1">
             {socialLinks.map((social) => (

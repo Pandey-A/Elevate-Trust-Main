@@ -1,0 +1,241 @@
+/* ── Why Partner section ── */
+
+.why-partner {
+  background: #fff;
+}
+
+/* ── Cards grid ── */
+.why-partner__cards {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-top: 48px;
+}
+
+@media (min-width: 768px) {
+  .why-partner__cards {
+    flex-direction: row;
+    gap: 28px;
+  }
+}
+
+/* ── Shared card base ── */
+.why-partner__card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+  min-height: 380px;
+  border-radius: 28px;
+  padding: 36px 32px 0;
+  overflow: hidden;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.why-partner__card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(17, 61, 119, 0.12);
+}
+
+@media (min-width: 640px) {
+  .why-partner__card {
+    min-height: 420px;
+    padding: 40px 36px 0;
+    border-radius: 32px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .why-partner__card {
+    min-height: 460px;
+    padding: 44px 40px 0;
+  }
+}
+
+/* ── Dark (Our Vision) ── */
+.why-partner__card--dark {
+  background: #113d77;
+  color: #fff;
+}
+
+/* faint world map background */
+.why-partner__card--dark::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("../assets/homepage-icons/partner-globe.png") center center / contain no-repeat;
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.why-partner__card--dark .why-partner__card-title {
+  color: #fff;
+}
+
+.why-partner__card--dark .why-partner__card-text {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* ── Light (Expertise) ── */
+.why-partner__card--light {
+  background: #eef4fa;
+  color: #1a1a2e;
+}
+
+.why-partner__card--light .why-partner__card-title {
+  color: #1a1a2e;
+}
+
+.why-partner__card--light .why-partner__card-text {
+  color: #4a4a5a;
+}
+
+/* ── Card content ── */
+.why-partner__card-content {
+  position: relative;
+  z-index: 1;
+}
+
+.why-partner__card-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin: 0 0 16px;
+  line-height: 1.2;
+}
+
+@media (min-width: 640px) {
+  .why-partner__card-title {
+    font-size: 1.7rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .why-partner__card-title {
+    font-size: 1.85rem;
+  }
+}
+
+.why-partner__card-text {
+  font-size: 0.88rem;
+  line-height: 1.65;
+  margin: 0;
+  max-width: 380px;
+}
+
+/* ── Read More button ── */
+.why-partner__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 28px;
+  padding: 8px 14px 8px 18px;
+  border-radius: 9999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color 0.25s ease,
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.why-partner__btn:hover {
+  transform: scale(1.04);
+}
+
+/* dark card button: white bg */
+.why-partner__card--dark .why-partner__btn {
+  background: #fff;
+  color: #113d77;
+  border: none;
+}
+
+.why-partner__card--dark .why-partner__btn:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.why-partner__card--dark .why-partner__btn-icon {
+  background: #113d77;
+  color: #fff;
+}
+
+/* light card button: white bg with subtle border */
+.why-partner__card--light .why-partner__btn {
+  background: #fff;
+  color: #1a1a2e;
+  border: 1px solid #d0dcea;
+}
+
+.why-partner__card--light .why-partner__btn:hover {
+  box-shadow: 0 4px 16px rgba(17, 61, 119, 0.1);
+}
+
+.why-partner__card--light .why-partner__btn-icon {
+  background: #2365aa;
+  color: #fff;
+}
+
+.why-partner__btn-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+}
+
+.why-partner__btn-icon svg {
+  width: 13px;
+  height: 13px;
+}
+
+/* ── Card illustration ── */
+.why-partner__card-bottom {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  margin-top: auto;
+  padding-top: 20px;
+}
+
+.why-partner__card-illustration {
+  width: 160px;
+  height: auto;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+@media (min-width: 640px) {
+  .why-partner__card-illustration {
+    width: 180px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .why-partner__card-illustration {
+    width: 200px;
+  }
+}
+
+/* ── Bottom divider ── */
+.why-partner__divider {
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: #e4e8ee;
+  margin-top: 56px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .why-partner__card:hover {
+    transform: none;
+  }
+
+  .why-partner__btn:hover {
+    transform: none;
+  }
+}

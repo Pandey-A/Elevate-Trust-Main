@@ -1,0 +1,244 @@
+.fly-cta {
+  position: relative;
+  background-color: #2e6db5;
+  color: #ffffff;
+  padding: 80px 24px;
+  overflow: hidden;
+  min-height: 360px;
+}
+
+.fly-cta__bg-globe {
+  position: absolute;
+  bottom: -300px;
+  left: -300px;
+  width: 900px;
+  height: auto;
+  opacity: 0.18;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.fly-cta__bg-wave {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: auto;
+  opacity: 0.12;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.fly-cta__container {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  z-index: 3;
+}
+
+.fly-cta__content {
+  position: relative;
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto;
+  z-index: 4;
+}
+
+.fly-cta__title {
+  font-family: 'Lay Grotesk - Trial', 'Inter', sans-serif;
+  font-size: 56px;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin: 0 0 28px 0;
+}
+
+.fly-cta__btn-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.fly-cta__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  background-color: #ffffff;
+  color: #113d77;
+  padding: 10px 24px;
+  border-radius: 9999px;
+  font-family: 'Lay Grotesk - Trial', 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fly-cta__btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
+  background-color: #f8fafc;
+}
+
+.fly-cta__btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: #113d77;
+  color: #ffffff;
+  transition: transform 0.3s ease;
+}
+
+.fly-cta__btn:hover .fly-cta__btn-icon {
+  transform: scale(1.05);
+}
+
+.fly-cta__desc {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.7);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.fly-cta__illustration-wrapper {
+  position: absolute;
+  right: 0;
+  bottom: -80px;
+  width: 440px;
+  height: 340px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.fly-cta__ill-slabs {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 420px;
+  height: auto;
+}
+
+.fly-cta__ill-people {
+  position: absolute;
+  bottom: 80px;
+  right: 80px;
+  width: 220px;
+  height: auto;
+  z-index: 3;
+}
+
+.fly-cta__ill-left-people {
+  position: absolute;
+  left: 0;
+  bottom: -80px;
+  width: 240px;
+  height: auto;
+  z-index: 2;
+  pointer-events: none;
+}
+
+
+@media (max-width: 1280px) {
+  .fly-cta__illustration-wrapper {
+    width: 360px;
+    height: 280px;
+    right: -20px;
+    bottom: -60px;
+  }
+
+  .fly-cta__ill-slabs {
+    width: 340px;
+  }
+
+  .fly-cta__ill-people {
+    width: 180px;
+    bottom: 60px;
+    right: 70px;
+  }
+
+  .fly-cta__ill-left-people {
+    width: 200px;
+    left: -20px;
+    bottom: -60px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .fly-cta {
+    padding: 70px 24px;
+    min-height: auto;
+  }
+
+  .fly-cta__title {
+    font-size: 48px;
+  }
+
+  .fly-cta__illustration-wrapper {
+    width: 300px;
+    height: 240px;
+    right: -30px;
+    bottom: -50px;
+  }
+
+  .fly-cta__ill-slabs {
+    width: 280px;
+  }
+
+  .fly-cta__ill-people {
+    width: 150px;
+    bottom: 50px;
+    right: 60px;
+  }
+
+  .fly-cta__ill-left-people {
+    width: 160px;
+    left: -30px;
+    bottom: -50px;
+  }
+}
+
+@media (max-width: 768px) {
+  .fly-cta {
+    padding: 60px 16px;
+  }
+
+  .fly-cta__title {
+    font-size: 36px;
+  }
+
+  .fly-cta__desc {
+    font-size: 12px;
+    line-height: 1.6;
+  }
+
+  .fly-cta__btn {
+    padding: 10px 22px;
+    font-size: 13px;
+  }
+
+  .fly-cta__btn-icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .fly-cta__illustration-wrapper {
+    display: none;
+  }
+
+  .fly-cta__ill-left-people {
+    display: none;
+  }
+
+  .fly-cta__bg-globe {
+    width: 600px;
+    bottom: -200px;
+    left: -200px;
+  }
+}
