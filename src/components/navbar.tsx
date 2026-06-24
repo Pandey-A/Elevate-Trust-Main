@@ -4,7 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { ChevronDown } from 'lucide-react';
 import elevateLogo from '../assets/nav/elevate-logo.svg';
 import linkedinIcon from '../assets/nav/linkedin-logo.svg';
-import instagramIcon from '../assets/nav/instagram-logo.svg';
+import instagramIcon from '../assets/nav/Instagram-logo.svg';
 import telegramIcon from '../assets/nav/Telegram-logo.svg';
 import letsConnectIcon from '../assets/nav/lets-connect.svg';
 const navLinks = [
@@ -41,7 +41,7 @@ export default function Navbar() {
       <div className="max-w-[95vw] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Single row flex container - everything in one line */}
         <div className="flex items-center justify-between h-16">
-          
+
           {/* LEFT: Logo + Nav Links */}
           <div className="flex items-center gap-6">
             {/* Logo */}
@@ -104,24 +104,24 @@ export default function Navbar() {
 
             {/* Social Icons - Correct ones */}
             <div className="flex items-center gap-1">
-              <a 
-                href="#" 
+              <a
+                href="#"
                 aria-label="Telegram"
                 className="text-gray-800 hover:text-gray-600 transition-colors"
               >
                 <img src={telegramIcon} alt="Telegram" className="w-5 h-5" />
               </a>
-              <a 
-                href="#" 
+              <a
+                href="#"
                 aria-label="LinkedIn"
                 className="text-gray-800 hover:text-gray-600 transition-colors"
               >
                 <img src={linkedinIcon} alt="LinkedIn" className="w-5 h-5" />
               </a>
-              <a 
-                href="#" 
+              <a
+                href="#"
                 aria-label="Instagram"
-                  className="text-gray-800 hover:text-gray-600 transition-colors"
+                className="text-gray-800 hover:text-gray-600 transition-colors"
               >
                 <img src={instagramIcon} alt="Instagram" className="w-5 h-5" />
               </a>
@@ -130,8 +130,8 @@ export default function Navbar() {
             {/* CTA Button - Fixed sizing */}
             <button className=" flex gap-2 px-3 py-2 bg-[#2365AA] text-white text-[1.85vh] font-medium rounded-full hover:bg-[#152a45] transition-colors justify-center w-[164px] h-[40px] items-center">
               <span>Let's Connect</span>
-              
-                <img src={letsConnectIcon} alt="Arrow Right" className="w-[28px] h-[28px]" />
+
+              <img src={letsConnectIcon} alt="Arrow Right" className="w-[28px] h-[28px]" />
             </button>
           </div>
         </div>
