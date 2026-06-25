@@ -36,7 +36,7 @@
   pointer-events: none;
 }
 
-/* ── Globe background ─────────────────────────────────────────────── */
+/* ── Globe background + view trigger ───────────────────────────────── */
 .hero-map-wrapper {
   position: absolute;
   bottom: 6%;
@@ -44,8 +44,8 @@
   transform: translateX(-50%);
   width: 92vw;
   max-width: 1280px;
-  pointer-events: none;
   z-index: 0;
+  pointer-events: none;
 }
 
 .hero-worldmap {
@@ -55,6 +55,105 @@
   opacity: 1;
   pointer-events: none;
   user-select: none;
+}
+
+.hero-globe-view-btn {
+  position: absolute;
+  top: 42%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  pointer-events: auto;
+  border: none;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+  font-family: var(--font);
+}
+
+.hero-globe-view-btn__pulse {
+  position: absolute;
+  inset: -8px;
+  border-radius: 999px;
+  border: 1px solid rgba(216, 48, 78, 0.45);
+  animation: hero-globe-btn-pulse 2.4s ease-out infinite;
+  pointer-events: none;
+}
+
+@keyframes hero-globe-btn-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  70% {
+    transform: scale(1.18);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.18);
+    opacity: 0;
+  }
+}
+
+.hero-globe-view-btn__inner {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 22px 12px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 12px 32px rgba(0, 0, 0, 0.28);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.hero-globe-view-btn:hover .hero-globe-view-btn__inner {
+  transform: translateY(-3px);
+  background: rgba(255, 255, 255, 0.16);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 18px 40px rgba(0, 0, 0, 0.32);
+}
+
+.hero-globe-view-btn__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--white);
+  flex-shrink: 0;
+  box-shadow: 0 4px 14px rgba(216, 48, 78, 0.4);
+}
+
+.hero-globe-view-btn__text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  text-align: left;
+}
+
+.hero-globe-view-btn__label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--white);
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+.hero-globe-view-btn__sub {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--silver);
+  white-space: nowrap;
 }
 
 /* ── Top-center logo ──────────────────────────────────────────────── */
@@ -456,170 +555,330 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   RESPONSIVE
+   RESPONSIVE — tablet & mobile use grid instead of absolute cards
    ═══════════════════════════════════════════════════════════════════ */
 @media (max-width: 1100px) {
+  .hero-section {
+    height: auto;
+    min-height: 0;
+    overflow-x: clip;
+    padding-bottom: 88px;
+  }
+
   .hero-inner {
     flex-direction: column;
-    padding: 5vh 32px 0;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 48px 24px 0;
+    gap: 36px;
   }
 
   .hero-left {
     flex: none;
-    max-width: 100%;
-  }
-
-  .hero-right {
-    min-height: 420px;
-  }
-
-  .hero-cards-container {
-    position: relative;
     width: 100%;
-    max-width: 520px;
-    height: 420px;
-    margin: 0 auto;
-  }
-
-  .hero-card--we {
-    top: 10px !important;
-    left: 28% !important;
-    width: 110px;
-    height: 98px;
-    font-size: 26px;
-  }
-
-  .hero-card--future {
-    top: 0 !important;
-    right: 0 !important;
-    left: auto !important;
-    width: 170px;
-    height: 162px;
-    font-size: 17px;
-  }
-
-  .hero-card--arrow {
-    top: 130px !important;
-    left: 50% !important;
-    transform: translateX(-50%);
-    width: 96px;
-    height: 88px;
-  }
-
-  .hero-card--create {
-    top: 240px !important;
-    left: 0 !important;
-    width: 190px;
-    height: 182px;
-    font-size: 18px;
-  }
-
-  .hero-empower {
-    top: 268px !important;
-    left: 210px !important;
-    right: 0 !important;
+    max-width: 100%;
+    padding-top: 0;
   }
 
   .hero-h1 {
-    font-size: clamp(36px, 6vw, 52px);
+    font-size: clamp(34px, 7vw, 52px);
+    letter-spacing: -1px;
+    word-break: break-word;
+  }
+
+  .hero-right {
+    min-height: 0;
+    width: 100%;
+  }
+
+  .hero-cards-container {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    height: auto;
+    min-height: unset;
+    margin: 0 auto;
+  }
+
+  .hero-card {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    transform: none !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 100px;
+    padding: 14px 12px;
+  }
+
+  .hero-card--we:hover,
+  .hero-card--create:hover,
+  .hero-card.hero-card--arrow:hover,
+  .hero-card.hero-card--future:hover {
+    transform: none !important;
+  }
+
+  .hero-card--we {
+    grid-column: 1;
+    grid-row: 1;
+    font-size: 26px;
+    border-radius: 20px;
+    min-height: 108px;
+  }
+
+  .hero-card--future {
+    grid-column: 2;
+    grid-row: 1;
+    font-size: 16px;
+    border-radius: 22px;
+    min-height: 108px;
+  }
+
+  .hero-card__future-icon {
+    width: 56px;
+    height: 40px;
+  }
+
+  .hero-card--arrow {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    width: 72px !important;
+    min-height: 64px;
+    justify-self: center;
+    border-radius: 18px;
+    padding: 10px;
+  }
+
+  .hero-card--arrow .hero-card__arrow-circle {
+    width: 34px;
+    height: 34px;
+  }
+
+  .hero-card--create {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    flex-direction: row;
+    justify-content: center;
+    gap: 14px;
+    font-size: 18px;
+    border-radius: 22px;
+    min-height: 112px;
+    padding: 16px 20px;
+  }
+
+  .hero-card__create-illust {
+    width: 64px;
+    height: 50px;
+    flex-shrink: 0;
+  }
+
+  .hero-empower {
+    grid-column: 1 / -1;
+    grid-row: 4;
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    margin-top: 4px;
+    text-align: center;
+    padding: 0 4px;
+  }
+
+  .hero-empower h2 {
+    font-size: clamp(17px, 4vw, 22px);
   }
 }
 
 @media (max-width: 768px) {
   .hero-section {
-    height: auto;
-    min-height: 100vh;
-    padding-bottom: 80px;
+    padding-bottom: 72px;
+  }
+
+  .hero-top-logo {
+    display: none;
   }
 
   .hero-inner {
-    padding: 4vh 20px 0;
+    padding: 28px 20px 0;
+    gap: 32px;
+  }
+
+  .hero-left {
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .hero-badge {
+    font-size: 12px;
+    padding: 6px 14px;
+    max-width: 100%;
   }
 
   .hero-h1 {
-    font-size: 36px;
+    font-size: clamp(30px, 8.5vw, 38px);
   }
 
-  .hero-right {
-    min-height: 320px;
+  .hero-sub {
+    font-size: 13px;
+    line-height: 1.65;
+  }
+
+  .hero-sub br {
+    display: none;
+  }
+
+  .hero-stars-row {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .hero-cta-btn {
+    width: 100%;
+    max-width: 100%;
+    justify-content: space-between;
+    font-size: 13px;
+    padding: 12px 18px;
+  }
+
+  .hero-cards-container {
+    max-width: 100%;
+    gap: 12px;
+  }
+
+  .hero-card {
+    min-height: 88px;
+    padding: 12px 10px;
+    border-radius: 16px;
   }
 
   .hero-card--we {
-    width: 90px;
-    height: 76px;
-    font-size: 24px;
+    font-size: 22px;
+    min-height: 92px;
   }
 
   .hero-card--future {
-    width: 110px;
-    height: 95px;
-    font-size: 15px;
+    font-size: 14px;
+    min-height: 92px;
+    border-radius: 18px;
   }
 
-  .hero-card--create {
-    width: 160px;
-    height: 105px;
-    font-size: 16px;
+  .hero-card__future-icon {
+    width: 48px;
+    height: 34px;
   }
 
   .hero-card--arrow {
-    width: 70px;
-    height: 60px;
-    border-radius: 15px;
+    width: 64px !important;
+    min-height: 56px;
+    border-radius: 14px;
   }
 
   .hero-card--arrow .hero-card__arrow-circle {
+    width: 28px;
+    height: 28px;
+  }
+
+  .hero-card--create {
+    font-size: 16px;
+    min-height: 96px;
+    border-radius: 18px;
+    padding: 14px 16px;
+  }
+
+  .hero-card__create-illust {
+    width: 56px;
+    height: 44px;
+  }
+
+  .hero-empower {
+    margin-top: 8px;
+    text-align: left;
+  }
+
+  .hero-empower h2 {
+    font-size: clamp(16px, 4.2vw, 19px);
+    line-height: 1.35;
+  }
+
+  .hero-empower h2 br {
+    display: none;
+  }
+
+  .hero-empower p {
+    font-size: 12px;
+  }
+
+  .hero-map-wrapper {
+    width: 110%;
+    max-width: none;
+    bottom: 2%;
+    opacity: 0.85;
+  }
+
+  .hero-globe-view-btn {
+    top: 38%;
+  }
+
+  .hero-globe-view-btn__inner {
+    padding: 10px 16px 10px 12px;
+    gap: 10px;
+  }
+
+  .hero-globe-view-btn__icon {
     width: 32px;
     height: 32px;
   }
 
-  .hero-top-logo img {
-    width: 52px;
+  .hero-globe-view-btn__label {
+    font-size: 12px;
   }
 
-  .hero-empower h2 {
-    font-size: 17px;
+  .hero-globe-view-btn__sub {
+    font-size: 10px;
   }
 
-  .hero-map-wrapper {
-    width: 96vw;
+  .hero-bottom-label {
+    position: relative;
+    bottom: auto;
+    left: auto;
+    transform: none;
+    margin-top: 28px;
+    padding: 0 4px 4px;
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    width: 100%;
+    box-sizing: border-box;
   }
 }
 
 @media (max-width: 480px) {
-  .hero-h1 {
-    font-size: 30px;
+  .hero-inner {
+    padding: 24px 16px 0;
+    gap: 28px;
   }
 
-  .hero-right {
-    min-height: 280px;
+  .hero-h1 {
+    font-size: clamp(26px, 7.5vw, 32px);
   }
 
   .hero-card--we {
-    width: 80px;
-    height: 66px;
     font-size: 20px;
+    min-height: 80px;
   }
 
   .hero-card--future {
-    width: 100px;
-    height: 85px;
+    min-height: 80px;
   }
 
   .hero-card--create {
-    width: 140px;
-    height: 90px;
-    font-size: 14px;
-  }
-
-  .hero-card--arrow {
-    width: 60px;
-    height: 50px;
-    border-radius: 12px;
-  }
-
-  .hero-card--arrow .hero-card__arrow-circle {
-    width: 26px;
-    height: 26px;
+    min-height: 88px;
+    font-size: 15px;
   }
 }
