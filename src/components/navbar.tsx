@@ -8,11 +8,29 @@ import instagramIcon from '../assets/nav/Instagram-logo.svg';
 import telegramIcon from '../assets/nav/Telegram-logo.svg';
 import letsConnectIcon from '../assets/nav/lets-connect.svg';
 
+const SERVICE_DETAILS_PATH = '/ServiceDetails';
+
+const ourServicesMenu = {
+  title: 'Our Services',
+  leftColumn: [
+    'AI/ML Solution',
+    'Generative AI',
+    'Audio/Video Analytics',
+    'Cloud/On-Premise Deployment',
+    'IOT based business process automation',
+  ],
+  rightColumn: [
+    'Web Design & Development',
+    'Mobile App Development',
+    'Custom Software Development',
+    'ERP Solutions',
+  ],
+};
+
 const navLinks = [
   {
     label: 'Our Solutions',
-    href: '/solutions',
-    dropdown: ['Digital Transformation', 'Cloud Services', 'Data Analytics']
+    megaMenu: true,
   },
   {
     label: 'Technologies',
@@ -42,6 +60,7 @@ export default function Navbar() {
   useEffect(() => {
     setMobileMenuOpen(false);
     setMobileExpanded(null);
+    setActiveDropdown(null);
   }, [location.pathname]);
 
   useEffect(() => {
@@ -60,6 +79,42 @@ export default function Navbar() {
     setMobileExpanded((current) => (current === label ? null : label));
   };
 
+  const isServiceDetailsActive = location.pathname === SERVICE_DETAILS_PATH;
+
+  const renderServicesMenu = (onNavigate?: () => void) => (
+    <div className="px-1 pt-1">
+      <p className="mb-4 text-base font-bold text-[#272935]">{ourServicesMenu.title}</p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-1">
+        <ul className="space-y-3">
+          {ourServicesMenu.leftColumn.map((item) => (
+            <li key={item}>
+              <Link
+                to={SERVICE_DETAILS_PATH}
+                className="text-sm text-[#4B5563] hover:text-[#272935] transition-colors leading-snug"
+                onClick={onNavigate}
+              >
+                {item}
+              </Link>
+            </li>
+          ))}
+        </ul>
+        <ul className="space-y-3">
+          {ourServicesMenu.rightColumn.map((item) => (
+            <li key={item}>
+              <Link
+                to={SERVICE_DETAILS_PATH}
+                className="text-sm text-[#4B5563] hover:text-[#272935] transition-colors leading-snug"
+                onClick={onNavigate}
+              >
+                {item}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+
   return (
     <nav className="relative z-50 w-full bg-white border-b border-gray-200">
       <div className="max-w-[95vw] mx-auto px-4 sm:px-6 lg:px-8">
@@ -75,25 +130,52 @@ export default function Navbar() {
 
             <div className="hidden lg:flex items-center gap-0.55">
               {navLinks.map((link) => (
+                'megaMenu' in link && link.megaMenu ? (
+                  <div
+                    key={link.label}
+                    className="relative"
+                    onMouseEnter={() => setActiveDropdown(link.label)}
+                    onMouseLeave={() => setActiveDropdown(null)}
+                  >
+                    <span
+                      className={`px-2 py-[0.3vh] text-[1.85vh] font-medium rounded-md transition-colors flex items-center gap-1 cursor-default
+                        ${isServiceDetailsActive || activeDropdown === link.label
+                          ? 'text-[#272935]'
+                          : 'text-gray-600 hover:text-gray-900'
+                        }`}
+                    >
+                      {link.label}
+                      <ChevronDown className="w-3.5 h-3.5" />
+                    </span>
+
+                    {activeDropdown === link.label && (
+                      <div className="absolute top-full left-0 pt-2 z-50">
+                        <div className="min-w-[520px] bg-white rounded-2xl shadow-[0_12px_40px_rgba(0,0,0,0.12)] border border-gray-100 px-8 py-7">
+                          {renderServicesMenu()}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ) : (
                 <div
                   key={link.label}
                   className="relative"
-                  onMouseEnter={() => link.dropdown && setActiveDropdown(link.label)}
+                  onMouseEnter={() => 'dropdown' in link && link.dropdown && setActiveDropdown(link.label)}
                   onMouseLeave={() => setActiveDropdown(null)}
                 >
                   <Link
-                    to={link.href}
+                    to={'href' in link ? link.href : '/'}
                     className={`px-2 py-[0.3vh] text-[1.85vh] font-medium rounded-md transition-colors flex items-center gap-1
-                      ${location.pathname === link.href
+                      ${'href' in link && location.pathname === link.href
                         ? 'text-[#272935]'
                         : 'text-gray-600 hover:text-gray-900'
                       }`}
                   >
                     {link.label}
-                    {link.dropdown && <ChevronDown className="w-3.5 h-3.5" />}
+                    {'dropdown' in link && link.dropdown && <ChevronDown className="w-3.5 h-3.5" />}
                   </Link>
 
-                  {link.dropdown && activeDropdown === link.label && (
+                  {'dropdown' in link && link.dropdown && activeDropdown === link.label && (
                     <div className="absolute top-full left-0 mt-1 w-56 bg-white rounded-lg shadow-lg border border-gray-100 py-2 z-50">
                       {link.dropdown.map((item) => (
                         <Link
@@ -107,6 +189,7 @@ export default function Navbar() {
                     </div>
                   )}
                 </div>
+                )
               ))}
             </div>
           </div>
@@ -173,7 +256,28 @@ export default function Navbar() {
             <div className="px-4 py-4 space-y-1">
               {navLinks.map((link) => (
                 <div key={link.label} className="border-b border-gray-100 last:border-b-0">
-                  {link.dropdown ? (
+                  {'megaMenu' in link && link.megaMenu ? (
+                    <>
+                      <button
+                        type="button"
+                        className="flex w-full items-center justify-between py-3 text-base font-medium text-gray-800"
+                        onClick={() => toggleMobileDropdown(link.label)}
+                        aria-expanded={mobileExpanded === link.label}
+                      >
+                        {link.label}
+                        <ChevronDown
+                          className={`w-4 h-4 transition-transform ${
+                            mobileExpanded === link.label ? 'rotate-180' : ''
+                          }`}
+                        />
+                      </button>
+                      {mobileExpanded === link.label && (
+                        <div className="pb-4 pl-1">
+                          {renderServicesMenu(closeMobileMenu)}
+                        </div>
+                      )}
+                    </>
+                  ) : 'dropdown' in link && link.dropdown ? (
                     <>
                       <button
                         type="button"
@@ -212,9 +316,9 @@ export default function Navbar() {
                     </>
                   ) : (
                     <Link
-                      to={link.href}
+                      to={'href' in link ? link.href : '/'}
                       className={`block py-3 text-base font-medium ${
-                        location.pathname === link.href ? 'text-[#272935]' : 'text-gray-800'
+                        'href' in link && location.pathname === link.href ? 'text-[#272935]' : 'text-gray-800'
                       }`}
                       onClick={closeMobileMenu}
                     >
