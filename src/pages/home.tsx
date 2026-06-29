@@ -8,7 +8,6 @@ import WhyPartner from "../components/WhyPartner";
 import LatestWorks from "../components/LatestWorks";
 import Testimonials from "../components/testimonials";
 import FlyCTA from "../components/FlyCTA";
-import FooterSection from "../components/footerSection";
 import Service from "../components/Service";
 export default function Home() {
   return (
