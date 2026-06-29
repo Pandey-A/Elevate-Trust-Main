@@ -10,6 +10,32 @@ import letsConnectIcon from '../assets/nav/lets-connect.svg';
 
 const SERVICE_DETAILS_PATH = '/ServiceDetails';
 
+type MegaMenuNavLink = {
+  label: string;
+  megaMenu: true;
+};
+
+type DropdownNavLink = {
+  label: string;
+  href: string;
+  dropdown: string[];
+};
+
+type SimpleNavLink = {
+  label: string;
+  href: string;
+};
+
+type NavLink = MegaMenuNavLink | DropdownNavLink | SimpleNavLink;
+
+function isMegaMenuLink(link: NavLink): link is MegaMenuNavLink {
+  return 'megaMenu' in link && link.megaMenu;
+}
+
+function isDropdownLink(link: NavLink): link is DropdownNavLink {
+  return 'dropdown' in link;
+}
+
 const ourServicesMenu = {
   title: 'Our Services',
   leftColumn: [
@@ -27,7 +53,7 @@ const ourServicesMenu = {
   ],
 };
 
-const navLinks = [
+const navLinks: NavLink[] = [
   {
     label: 'Our Solutions',
     megaMenu: true,
@@ -130,7 +156,7 @@ export default function Navbar() {
 
             <div className="hidden lg:flex items-center gap-0.55">
               {navLinks.map((link) => (
-                'megaMenu' in link && link.megaMenu ? (
+                isMegaMenuLink(link) ? (
                   <div
                     key={link.label}
                     className="relative"
@@ -160,22 +186,22 @@ export default function Navbar() {
                 <div
                   key={link.label}
                   className="relative"
-                  onMouseEnter={() => 'dropdown' in link && link.dropdown && setActiveDropdown(link.label)}
+                  onMouseEnter={() => isDropdownLink(link) && setActiveDropdown(link.label)}
                   onMouseLeave={() => setActiveDropdown(null)}
                 >
                   <Link
-                    to={'href' in link ? link.href : '/'}
+                    to={link.href}
                     className={`px-2 py-[0.3vh] text-[1.85vh] font-medium rounded-md transition-colors flex items-center gap-1
-                      ${'href' in link && location.pathname === link.href
+                      ${location.pathname === link.href
                         ? 'text-[#272935]'
                         : 'text-gray-600 hover:text-gray-900'
                       }`}
                   >
                     {link.label}
-                    {'dropdown' in link && link.dropdown && <ChevronDown className="w-3.5 h-3.5" />}
+                    {isDropdownLink(link) && <ChevronDown className="w-3.5 h-3.5" />}
                   </Link>
 
-                  {'dropdown' in link && link.dropdown && activeDropdown === link.label && (
+                  {isDropdownLink(link) && activeDropdown === link.label && (
                     <div className="absolute top-full left-0 mt-1 w-56 bg-white rounded-lg shadow-lg border border-gray-100 py-2 z-50">
                       {link.dropdown.map((item) => (
                         <Link
@@ -256,7 +282,7 @@ export default function Navbar() {
             <div className="px-4 py-4 space-y-1">
               {navLinks.map((link) => (
                 <div key={link.label} className="border-b border-gray-100 last:border-b-0">
-                  {'megaMenu' in link && link.megaMenu ? (
+                  {isMegaMenuLink(link) ? (
                     <>
                       <button
                         type="button"
@@ -277,7 +303,7 @@ export default function Navbar() {
                         </div>
                       )}
                     </>
-                  ) : 'dropdown' in link && link.dropdown ? (
+                  ) : isDropdownLink(link) ? (
                     <>
                       <button
                         type="button"
@@ -316,9 +342,9 @@ export default function Navbar() {
                     </>
                   ) : (
                     <Link
-                      to={'href' in link ? link.href : '/'}
+                      to={link.href}
                       className={`block py-3 text-base font-medium ${
-                        'href' in link && location.pathname === link.href ? 'text-[#272935]' : 'text-gray-800'
+                        location.pathname === link.href ? 'text-[#272935]' : 'text-gray-800'
                       }`}
                       onClick={closeMobileMenu}
                     >
