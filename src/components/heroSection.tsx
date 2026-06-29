@@ -1,18 +1,18 @@
+import type { CSSProperties } from "react";
 import "./heroSection.css";
 import elevateMainLogo from "../assets/homepage-icons/elevatestarting-logo.svg";
-import globeMap from "../assets/homepage-icons/Globe.png";
+import heroBg from "../assets/homepage-icons/Hero-bg.png";
 import futureIcon from "../assets/homepage-icons/future.png";
 import editModeIcon from "../assets/homepage-icons/editmode.png";
 import userLoveIcon from "../assets/homepage-icons/user-love-01.svg";
 
 export default function HeroSection() {
   return (
-    <section id="hero" className="hero-section">
-      <div className="hero-diagonal" aria-hidden="true" />
-
-      <div className="hero-map-wrapper">
-        <img src={globeMap} alt="" className="hero-worldmap" aria-hidden="true" />
-      </div>
+    <section
+      id="hero"
+      className="hero-section"
+      style={{ "--hero-bg-image": `url(${heroBg})` } as CSSProperties}
+    >
 
       <div className="hero-top-logo">
         <img src={elevateMainLogo} alt="Elevate Trust" />
@@ -22,14 +22,12 @@ export default function HeroSection() {
         <div className="hero-left">
           <div className="hero-badge">
             <img src={userLoveIcon} alt="" aria-hidden />
-            Scaling Startups and Businesses.
+            Scaling Startups and Businesses
           </div>
 
           <h1 className="hero-h1">
-            AI Native<br />
-            Product<br />
-            Engineering<br />
-            Firm
+            AI Native Product<br />
+            Engineering Firm
           </h1>
 
           <p className="hero-sub">
@@ -41,7 +39,7 @@ export default function HeroSection() {
           <div className="hero-stars-row">
             <span className="hero-stars">
               {[...Array(5)].map((_, i) => (
-                <svg key={i} width="14" height="14" viewBox="0 0 24 24" fill="#D8304E">
+                <svg key={i} width="14" height="14" viewBox="0 0 24 24" fill="#F5B301">
                   <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
                 </svg>
               ))}
@@ -86,16 +84,16 @@ export default function HeroSection() {
               </div>
               <span>Create</span>
             </div>
-
-            <div className="hero-empower">
-              <h2>
-                Empowering Businesses<br />
-                with AI/ML Solutions
-              </h2>
-              <p>That Build Trust and Drive Transformation</p>
-            </div>
           </div>
         </div>
+      </div>
+
+      <div className="hero-empower">
+        <h2>
+          Empowering Businesses<br />
+          with AI/ML Solutions
+        </h2>
+        <p>That Build Trust and Drive Transformation</p>
       </div>
 
       <div className="hero-bottom-label">

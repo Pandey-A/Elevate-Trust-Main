@@ -23,7 +23,6 @@ export default function Home() {
       <LatestWorks />
       <Testimonials />
       <FlyCTA />
-      <FooterSection />
     </main>
   );
 }

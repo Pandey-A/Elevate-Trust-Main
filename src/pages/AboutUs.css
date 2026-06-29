@@ -1,0 +1,390 @@
+.about-page {
+    font-family: "Ubuntu", sans-serif;
+    background-color: #FFFFFF;
+    color: #272935;
+  }
+  
+  /* ── HERO SECTION ──────────────────────────── */
+  .about-hero {
+    position: relative;
+    width: 100%;
+    padding: 100px 20px 80px;
+    background-color: #0d2f5a;
+    background: radial-gradient(circle at center, #113D77 0%, #0a2548 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  
+  .about-hero-bg {
+    position: absolute;
+    top: 65%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120%;
+    max-width: 1600px;
+    pointer-events: none;
+    opacity: 1;
+  }
+  
+  .about-hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 760px;
+  }
+  
+  .about-hero-title {
+    color: #FFFFFF;
+    font-size: clamp(36px, 4.5vw, 48px);
+    font-weight: 700;
+    margin-bottom: 20px;
+    letter-spacing: -0.5px;
+  }
+  
+  .about-hero-subtitle {
+    color: #A1B1CB;
+    font-size: clamp(14px, 2vw, 16px);
+    line-height: 1.6;
+    font-weight: 300;
+    margin-bottom: 36px;
+  }
+  
+  .about-hero-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 10px 8px 24px;
+    background: #2365AA;
+    border: none;
+    border-radius: 999px;
+    color: #FFFFFF;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: background 0.3s ease;
+  }
+  
+  .about-hero-btn:hover {
+    background: #1a5490;
+  }
+  
+  .about-hero-btn__circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #FFFFFF;
+  }
+  
+  .about-hero-btn__circle svg {
+    stroke: #2365AA;
+  }
+  
+  /* ── BREADCRUMBS ───────────────────────────── */
+  .about-breadcrumbs {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px 24px;
+    font-size: 13px;
+    color: #848B9B;
+  }
+  
+  .about-breadcrumbs a {
+    color: #272935;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  
+  .about-breadcrumbs a:hover {
+    text-decoration: underline;
+  }
+  
+  .about-breadcrumbs span {
+    margin: 0 8px;
+  }
+  
+  /* ── MAIN CONTENT ──────────────────────────── */
+  .about-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 24px 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  
+  /* Top Section (Title + Core Value) */
+  .about-top-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    align-items: stretch;
+  }
+  
+  .about-title-wrapper {
+    display: flex;
+    align-items: center;
+    padding-right: 40px;
+  }
+  
+  .about-main-title {
+    font-size: clamp(38px, 4.5vw, 56px);
+    font-weight: 700;
+    line-height: 1.1;
+    color: #272935;
+    margin: 0;
+    letter-spacing: -1px;
+  }
+  
+  .core-value-card {
+    background: #2365AA;
+    border-radius: 24px;
+    padding: 40px;
+    color: #FFFFFF;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .core-value-card h2 {
+    font-size: 32px;
+    font-weight: 700;
+    margin: 0 0 20px 0;
+  }
+  
+  .core-value-card p {
+    font-size: 14px;
+    line-height: 1.6;
+    max-width: 60%;
+    font-weight: 400;
+    color: #E2E8F0;
+    margin: 0;
+  }
+  
+  .core-value-card img {
+    position: absolute;
+    right: -10px;
+    bottom: 0;
+    width: 200px;
+    height: auto;
+    object-fit: contain;
+  }
+  
+  /* Bottom Section (Mission + Vision) */
+  .about-bottom-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  
+  .about-info-card {
+    background: #F4F7FB;
+    border-radius: 24px;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    min-height: 280px;
+    overflow: hidden;
+  }
+  
+  .about-info-card h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #272935;
+    margin: 0 0 16px 0;
+  }
+  
+  .about-info-card p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #4A5568;
+    max-width: 60%;
+    margin: 0;
+  }
+  
+  .mission-img {
+    position: absolute;
+    right: 20px;
+    bottom: 0;
+    width: 140px;
+    height: auto;
+  }
+  
+  .vision-img {
+    position: absolute;
+    right: 20px;
+    bottom: 0;
+    width: 130px;
+    height: auto;
+  }
+  
+  /* ── RESPONSIVE ────────────────────────────── */
+  @media (max-width: 900px) {
+    .about-top-section {
+      grid-template-columns: 1fr;
+    }
+    
+    .about-title-wrapper {
+      padding-right: 0;
+      margin-bottom: 20px;
+    }
+    
+    .core-value-card p {
+      max-width: 100%;
+      margin-bottom: 120px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .about-bottom-section {
+      grid-template-columns: 1fr;
+    }
+    
+    .about-info-card p {
+      max-width: 100%;
+      margin-bottom: 100px;
+    }
+  }
+  
+  /* ── DESK PROFILES SECTION ─────────────────── */
+  .about-desk-section {
+    background-color: #F0F8FA;
+    padding: 80px 24px;
+    width: 100%;
+  }
+  
+  .desk-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 80px;
+  }
+  
+  .desk-profile {
+    display: flex;
+    gap: 60px;
+    align-items: flex-start;
+  }
+  
+  .desk-profile-left {
+    flex: 0 0 280px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .desk-img-wrapper {
+    border-radius: 20px;
+    padding: 0;
+    margin-bottom: 24px;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .desk-img-wrapper img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 20px;
+  }
+  
+  .desk-name {
+    font-size: 22px;
+    font-weight: 700;
+    color: #272935;
+    margin: 0 0 6px 0;
+  }
+  
+  .desk-role {
+    font-size: 13px;
+    color: #5A6474;
+    margin: 0;
+    line-height: 1.4;
+  }
+  
+  .desk-profile-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .desk-title {
+    font-size: clamp(32px, 4vw, 42px);
+    font-weight: 700;
+    color: #272935;
+    margin: 0 0 24px 0;
+    line-height: 1.15;
+    letter-spacing: -1px;
+  }
+  
+  .desk-bubble {
+    background-color: #2365AA;
+    border-radius: 0 24px 24px 24px;
+    padding: 40px;
+    color: #FFFFFF;
+    position: relative;
+  }
+  
+  /* CSS Triangle for the speech bubble */
+  .desk-bubble::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -20px;
+    width: 0;
+    height: 0;
+    border-top: 25px solid #2365AA;
+    border-left: 20px solid transparent;
+  }
+  
+  .desk-bubble p {
+    font-size: 14px;
+    line-height: 1.7;
+    color: #E2E8F0;
+    margin: 0 0 20px 0;
+    font-weight: 300;
+  }
+  
+  .desk-bubble p:last-child {
+    margin-bottom: 0;
+  }
+  
+  /* ── DESK RESPONSIVE ───────────────────────── */
+  @media (max-width: 900px) {
+    .desk-profile {
+      flex-direction: column;
+      gap: 40px;
+    }
+    
+    .desk-profile-left {
+      flex: auto;
+      width: 100%;
+      max-width: 320px;
+    }
+    
+    .desk-bubble {
+      border-radius: 24px;
+    }
+    
+    .desk-bubble::before {
+      top: -20px;
+      left: 40px;
+      border-top: none;
+      border-bottom: 25px solid #2365AA;
+      border-left: 20px solid transparent;
+      border-right: 20px solid transparent;
+    }
+  }
+  
