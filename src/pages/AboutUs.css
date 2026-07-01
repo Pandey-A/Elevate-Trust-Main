@@ -1,5 +1,5 @@
 .about-page {
-    font-family: "Ubuntu", sans-serif;
+    font-family: "Lay Grotesk Trial", "Lay Grotesk - Trial", sans-serif;
     background-color: #FFFFFF;
     color: #272935;
   }
@@ -8,7 +8,7 @@
   .about-hero {
     position: relative;
     width: 100%;
-    padding: 100px 20px 80px;
+    padding: clamp(80px, 10vw, 120px) var(--site-padding-x, 20px) clamp(60px, 8vw, 100px);
     background-color: #0d2f5a;
     background: radial-gradient(circle at center, #113D77 0%, #0a2548 100%);
     display: flex;
@@ -33,20 +33,21 @@
     position: relative;
     z-index: 2;
     text-align: center;
-    max-width: 760px;
+    max-width: min(900px, 90%);
   }
   
   .about-hero-title {
     color: #FFFFFF;
-    font-size: clamp(36px, 4.5vw, 48px);
+    font-size: clamp(36px, 4.5vw, 56px);
     font-weight: 700;
     margin-bottom: 20px;
     letter-spacing: -0.5px;
   }
   
   .about-hero-subtitle {
+    font-family: "Ubuntu", sans-serif;
     color: #A1B1CB;
-    font-size: clamp(14px, 2vw, 16px);
+    font-size: clamp(14px, 1.5vw, 18px);
     line-height: 1.6;
     font-weight: 300;
     margin-bottom: 36px;
@@ -56,13 +57,13 @@
     display: inline-flex;
     align-items: center;
     gap: 12px;
-    padding: 8px 10px 8px 24px;
+    padding: 10px 12px 10px 28px;
     background: #2365AA;
     border: none;
     border-radius: 999px;
     color: #FFFFFF;
     font-family: inherit;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 500;
     cursor: pointer;
     text-transform: uppercase;
@@ -90,9 +91,9 @@
   
   /* ── BREADCRUMBS ───────────────────────────── */
   .about-breadcrumbs {
-    max-width: 1200px;
+    max-width: var(--site-max-width, 1440px);
     margin: 0 auto;
-    padding: 30px 24px;
+    padding: 30px var(--site-padding-x, 24px);
     font-size: 13px;
     color: #848B9B;
   }
@@ -113,9 +114,9 @@
   
   /* ── MAIN CONTENT ──────────────────────────── */
   .about-container {
-    max-width: 1200px;
+    max-width: var(--site-max-width, 1440px);
     margin: 0 auto;
-    padding: 20px 24px 80px;
+    padding: 20px var(--site-padding-x, 24px) 80px;
     display: flex;
     flex-direction: column;
     gap: 24px;
@@ -266,7 +267,7 @@
   }
   
   .desk-container {
-    max-width: 1100px;
+    max-width: var(--site-max-width, 1440px);
     margin: 0 auto;
     display: flex;
     flex-direction: column;

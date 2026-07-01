@@ -3,7 +3,7 @@ import worldMapBackground from "../../assets/homepage-icons/Group(3).png";
 
 export default function ServiceHero() {
   return (
-    <section className="relative h-[20rem] w-full overflow-hidden bg-[#113D77] sm:h-[22rem] md:h-[23rem] lg:h-[25rem]">
+    <section className="relative h-[20rem] w-full overflow-hidden bg-[#113D77] sm:h-[22rem] md:h-[23rem] lg:h-[25rem] xl:h-[28rem]">
       {/* Map — img pinned to bottom via flex items-end */}
       <div
         aria-hidden
@@ -16,13 +16,13 @@ export default function ServiceHero() {
         />
       </div>
 
-      <div className="relative z-[2] mx-auto flex h-full w-full max-w-[1440px] items-center justify-center p-4 lg:p-8">
-        <div className="flex w-full max-w-[20rem] flex-col items-center gap-3 text-center sm:max-w-[26rem] sm:gap-3.5 md:max-w-[30rem] lg:w-[50%] lg:max-w-[36rem] lg:gap-4">
-          <h1 className="text-[1.25rem] font-bold leading-[1.35] text-white sm:text-[1.5rem] md:text-[1.75rem] lg:text-[2rem] lg:leading-[1.45]">
+      <div className="relative z-[2] mx-auto flex h-full w-full max-w-site items-center justify-center p-4 lg:p-8 xl:p-10">
+        <div className="flex w-full max-w-[20rem] flex-col items-center gap-3 text-center sm:max-w-[26rem] sm:gap-3.5 md:max-w-[30rem] lg:w-[55%] lg:max-w-[42rem] xl:max-w-[48rem] lg:gap-4">
+          <h1 className="text-[1.25rem] font-bold leading-[1.35] text-white sm:text-[1.5rem] md:text-[1.75rem] lg:text-[2rem] xl:text-[2.25rem] lg:leading-[1.45]">
             Custom AI/ML Solutions for Strategic Business Outcomes
           </h1>
 
-          <p className="font-ubuntu text-[0.65rem] font-normal leading-relaxed text-white/50 sm:text-[0.7rem] md:text-[0.75rem] lg:text-[0.7rem] lg:leading-6">
+          <p className="font-ubuntu text-[0.65rem] font-normal leading-relaxed text-white/50 sm:text-[0.7rem] md:text-[0.75rem] lg:text-[0.85rem] xl:text-base lg:leading-6">
             We collaborate with clients to elevate AI solutions aimed at achieving
             strategic business goals. Our knowledge covers many industries,
             tackling difficult issues using AI methods designed for both
@@ -32,7 +32,7 @@ export default function ServiceHero() {
 
           <a
             href="#"
-            className="mt-1 inline-flex shrink-0 items-center gap-2 rounded-full bg-[#2365AA] px-3 py-1.5 pl-4 pr-2 text-xs font-medium text-white transition hover:bg-[#1d5694] sm:py-2 sm:text-sm"
+            className="btn-cta mt-1 shrink-0 bg-[#2365AA] text-white hover:bg-[#1d5694] pl-5 pr-3"
           >
             Contact Us
             <span className="flex h-6 w-6 items-end justify-end rounded-full bg-[#113D77] sm:h-7 sm:w-7">

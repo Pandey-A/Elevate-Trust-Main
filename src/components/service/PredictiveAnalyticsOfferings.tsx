@@ -38,7 +38,7 @@ const offerings = [
 export default function PredictiveAnalyticsOfferings() {
   return (
     <section className="w-full bg-white">
-      <div className="mx-auto w-full max-w-[1440px] px-5 pb-10 pt-3 sm:px-8 md:px-10 lg:px-20 lg:py-8">
+      <div className="mx-auto w-full max-w-site px-5 pb-10 pt-3 sm:px-8 md:px-10 lg:px-20 lg:py-8">
         <nav
           className="mb-10 text-center text-[10px] text-[#9CA3AF] sm:mb-12 sm:text-xs lg:mb-6 lg:text-left"
           aria-label="Breadcrumb"

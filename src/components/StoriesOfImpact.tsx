@@ -150,7 +150,7 @@ export default function StoriesOfImpact() {
 
   return (
     <section
-      className="stories-section relative overflow-hidden bg-[#113D77] px-4 py-14 sm:px-6 sm:py-16 lg:px-10 lg:py-20"
+      className="stories-section relative overflow-hidden bg-[#113D77] px-4 py-14 sm:px-6 sm:py-16 lg:px-10 lg:py-20 xl:px-12 2xl:px-16"
       aria-label="Client testimonials"
     >
       <img
@@ -160,20 +160,20 @@ export default function StoriesOfImpact() {
         className="stories-vector pointer-events-none absolute right-0 top-0 h-[360px] w-auto sm:h-[440px] lg:h-[560px]"
       />
 
-      <div className="relative mx-auto max-w-7xl">
+      <div className="relative mx-auto max-w-site w-full">
         <div className="text-center">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.16em] sm:text-xs">
+          <p className="section-eyebrow font-semibold uppercase tracking-[0.16em]">
             <span className="text-white">Client </span>
             <span className="text-[#2365AA]">Testimonials</span>
           </p>
 
-          <h2 className="mt-3 text-3xl font-bold text-white sm:text-4xl lg:text-[42px]">
+          <h2 className="mt-3 text-3xl font-bold text-white sm:text-4xl lg:text-[44px] xl:text-[50px] 2xl:text-[56px] min-[1920px]:text-[62px] min-[2560px]:text-[68px]">
             Stories of Impact
           </h2>
 
           <a
             href="#"
-            className="mt-5 inline-flex items-center gap-3 rounded-full bg-white px-5 py-2.5 text-sm font-medium text-[#113D77] transition hover:bg-white/90"
+            className="btn-cta mt-5 bg-white text-[#113D77] hover:bg-white/90"
           >
             View all
             <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#113D77]">
@@ -232,14 +232,14 @@ export default function StoriesOfImpact() {
                           />
                         </div>
 
-                        <p className="mt-5 flex-1 text-[13px] leading-[1.65] text-[#272935]/90 sm:mt-6 sm:text-sm">
+                        <p className="section-body mt-5 flex-1 leading-[1.65] text-[#272935]/90 sm:mt-6">
                           {story.quote}
                         </p>
 
                         <div className="relative mt-5 flex items-end justify-between gap-3 sm:mt-6">
                           <div>
-                            <p className="text-sm font-bold text-[#272935] sm:text-base">{story.name}</p>
-                            <p className="mt-0.5 text-xs text-[#272935]/65 sm:text-sm">{story.title}</p>
+                            <p className="section-body-lg font-bold text-[#272935]">{story.name}</p>
+                            <p className="section-body-sm mt-0.5 text-[#272935]/65">{story.title}</p>
                           </div>
                           <span className="stories-quote-mark" aria-hidden>
                             &rdquo;

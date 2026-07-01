@@ -68,7 +68,7 @@ const featureCards = [
 export default function ProcessAutomationFeatures() {
   return (
     <section className="w-full bg-[#F0F5FB]">
-      <div className="mx-auto w-full max-w-[1440px] px-5 py-10 sm:px-8 md:px-10 lg:px-20 lg:py-16">
+      <div className="mx-auto w-full max-w-site px-5 py-10 sm:px-8 md:px-10 lg:px-20 lg:py-16">
         <div className="grid grid-cols-1 gap-8 md:gap-10 lg:grid-cols-[minmax(0,700px)_1fr] lg:items-stretch lg:gap-4">
           {/* Left — 3×2 cards; on phone/tablet show below intro */}
           <div className="order-2 mx-auto grid w-full min-w-0 max-w-md grid-cols-1 gap-3 sm:max-w-none sm:grid-cols-2 md:gap-4 lg:order-1 lg:mx-0 lg:max-w-[1000px] lg:grid-cols-3 lg:grid-rows-2 lg:items-stretch lg:gap-3">

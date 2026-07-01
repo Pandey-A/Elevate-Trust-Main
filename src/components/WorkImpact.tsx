@@ -48,10 +48,10 @@ const impactCards: ImpactCard[] = [
 export default function WorkImpact() {
   return (
     <section
-      className="work-impact px-4 py-14 sm:px-6 sm:py-16 lg:px-10 lg:py-20"
+      className="work-impact px-4 py-14 sm:px-6 sm:py-16 lg:px-10 lg:py-20 xl:px-12 2xl:px-16"
       aria-label="Work that proves our impact"
     >
-      <div className="mx-auto max-w-7xl">
+      <div className="mx-auto max-w-site w-full">
         <div className="work-impact__inner">
           {/* ── Left: heading + CTA ── */}
           <div className="work-impact__left">

@@ -8,17 +8,17 @@ import "./WhyPartner.css";
 export default function WhyPartner() {
   return (
     <section
-      className="why-partner px-4 py-16 sm:px-6 sm:py-20 lg:px-10 lg:py-24"
+      className="why-partner px-4 py-16 sm:px-6 sm:py-20 lg:px-10 lg:py-24 xl:px-12 2xl:px-16"
       aria-label="Why Partner With Us"
     >
-      <div className="mx-auto max-w-7xl">
+      <div className="mx-auto max-w-site w-full">
         {/* ── Heading ── */}
         <div className="text-center">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] sm:text-xs">
+          <p className="section-eyebrow font-semibold uppercase tracking-[0.18em]">
             <span className="text-[#1a1a2e]">Why Choose </span>
             <span className="text-[#2365aa]">Us</span>
           </p>
-          <h2 className="mt-3 text-3xl font-bold text-[#1a1a2e] sm:text-4xl lg:text-[44px] lg:leading-[1.15]">
+          <h2 className="mt-3 text-3xl font-bold text-[#1a1a2e] sm:text-4xl lg:text-[44px] lg:leading-[1.15] xl:text-[50px] 2xl:text-[56px] min-[1920px]:text-[62px]">
             Why Partner With Us
           </h2>
         </div>

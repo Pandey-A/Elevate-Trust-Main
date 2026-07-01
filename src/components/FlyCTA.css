@@ -2,9 +2,16 @@
   position: relative;
   background-color: #2e6db5;
   color: #ffffff;
-  padding: 80px 24px;
+  padding: 56px var(--site-padding-x, 24px);
   overflow: hidden;
-  min-height: 360px;
+  min-height: 300px;
+}
+
+@media (min-width: 1536px) {
+  .fly-cta {
+    padding: 72px var(--site-padding-x, 24px);
+    min-height: 360px;
+  }
 }
 
 .fly-cta__bg-globe {
@@ -32,7 +39,7 @@
 .fly-cta__container {
   position: relative;
   width: 100%;
-  max-width: 1200px;
+  max-width: var(--content-max-width, 1080px);
   margin: 0 auto;
   z-index: 3;
 }
@@ -40,14 +47,13 @@
 .fly-cta__content {
   position: relative;
   text-align: center;
-  max-width: 700px;
+  max-width: min(720px, 100%);
   margin: 0 auto;
   z-index: 4;
 }
 
 .fly-cta__title {
-  font-family: 'Lay Grotesk - Trial', 'Inter', sans-serif;
-  font-size: 56px;
+  font-size: clamp(28px, 3.5vw, 44px);
   font-weight: 800;
   line-height: 1.15;
   letter-spacing: -0.02em;
@@ -63,13 +69,12 @@
 .fly-cta__btn {
   display: inline-flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   background-color: #ffffff;
   color: #113d77;
-  padding: 10px 24px;
+  padding: 10px 22px;
   border-radius: 9999px;
-  font-family: 'Lay Grotesk - Trial', 'Inter', sans-serif;
-  font-size: 14px;
+  font-size: var(--fs-body-sm);
   font-weight: 600;
   text-decoration: none;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
@@ -99,12 +104,37 @@
 }
 
 .fly-cta__desc {
-  font-family: 'Inter', sans-serif;
-  font-size: 13px;
-  line-height: 1.7;
+  font-size: var(--fs-body-sm);
+  line-height: 1.65;
   color: rgba(255, 255, 255, 0.7);
-  max-width: 600px;
+  max-width: min(600px, 100%);
   margin: 0 auto;
+}
+
+@media (min-width: 1536px) {
+  .fly-cta__btn {
+    padding: 12px 26px;
+    font-size: var(--fs-body);
+  }
+
+  .fly-cta__desc {
+    font-size: var(--fs-body);
+  }
+}
+
+@media (min-width: 1920px) {
+  .fly-cta__title {
+    font-size: clamp(36px, 3.2vw, 56px);
+  }
+
+  .fly-cta__desc {
+    font-size: var(--fs-body-xl);
+    max-width: min(760px, 100%);
+  }
+
+  .fly-cta__btn {
+    font-size: var(--fs-body-xl);
+  }
 }
 
 .fly-cta__illustration-wrapper {
@@ -214,13 +244,13 @@
   }
 
   .fly-cta__desc {
-    font-size: 12px;
+    font-size: var(--fs-small);
     line-height: 1.6;
   }
 
   .fly-cta__btn {
     padding: 10px 22px;
-    font-size: 13px;
+    font-size: var(--fs-body-sm);
   }
 
   .fly-cta__btn-icon {

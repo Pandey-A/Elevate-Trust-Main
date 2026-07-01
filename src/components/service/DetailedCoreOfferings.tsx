@@ -10,7 +10,7 @@ const outcomeParagraphs = [
 export default function DetailedCoreOfferings() {
   return (
     <section className="w-full bg-white">
-      <div className="mx-auto w-full max-w-[1440px] px-5 py-10 sm:px-8 md:px-10 lg:px-20 lg:py-16">
+      <div className="mx-auto w-full max-w-site px-5 py-10 sm:px-8 md:px-10 lg:px-20 lg:py-16">
         <div className="grid grid-cols-1 items-center gap-10 md:gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-16 xl:gap-20">
           {/* Left — heading + outcome paragraphs */}
           <div className="text-center lg:text-left">

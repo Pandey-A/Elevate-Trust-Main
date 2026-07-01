@@ -174,16 +174,16 @@ export default function AILandscape() {
 
   return (
     <section
-      className="ai-landscape px-4 py-16 sm:px-6 sm:py-20 lg:px-10 lg:py-24"
+      className="ai-landscape px-4 py-16 sm:px-6 sm:py-20 lg:px-10 lg:py-24 xl:px-12 2xl:px-16"
       aria-label="Our AI Landscape"
     >
-      <div className="mx-auto max-w-7xl">
+      <div className="mx-auto max-w-site w-full">
         <div className="text-center">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] sm:text-xs">
+          <p className="section-eyebrow font-semibold uppercase tracking-[0.18em]">
             <span className="text-[#1a1a2e]">Smart Solutions for a </span>
             <span className="text-[#2e7ad1]">Smarter Tomorrow</span>
           </p>
-          <h2 className="mt-3 text-3xl font-bold text-[#1a1a2e] sm:text-4xl lg:text-[44px] lg:leading-[1.15]">
+          <h2 className="mt-3 text-3xl font-bold text-[#1a1a2e] sm:text-4xl lg:text-[44px] lg:leading-[1.15] xl:text-[50px] 2xl:text-[56px] min-[1920px]:text-[62px]">
             Our AI Landscape
           </h2>
         </div>
@@ -237,7 +237,7 @@ export default function AILandscape() {
             </div>
           </div>
 
-          <div className="mx-auto mt-10 flex max-w-xl items-center gap-6 px-2">
+          <div className="mx-auto mt-10 flex w-full max-w-3xl xl:max-w-4xl items-center gap-6 px-2">
             <button
               type="button"
               onClick={goPrev}

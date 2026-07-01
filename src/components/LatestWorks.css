@@ -4,8 +4,67 @@
   position: relative;
   background-color: #113d77;
   color: #ffffff;
-  padding: 80px 24px;
+  padding-block: 56px;
   overflow: hidden;
+}
+
+@media (min-width: 1536px) {
+  .latest-works {
+    padding-block: 72px;
+  }
+}
+
+@media (min-width: 1920px) {
+  .latest-works__decor-globe {
+    width: min(650px, 38vw);
+    left: max(-80px, calc(50% - var(--site-max-width, 1440px) / 2 - 120px));
+  }
+
+  .latest-works__decor-vector {
+    width: min(720px, 42vw);
+    right: max(0px, calc(50% - var(--site-max-width, 1440px) / 2));
+  }
+
+  .latest-works__title {
+    font-size: clamp(38px, 2.5vw, 58px);
+  }
+
+  .latest-works__trigger-title {
+    font-size: clamp(24px, 1.6vw, 34px);
+  }
+
+  .latest-works__trigger-num {
+    font-size: var(--fs-body-xl);
+  }
+
+  .latest-works__card-label {
+    font-size: clamp(22px, 1.8vw, 28px);
+  }
+
+  .latest-works__card-desc {
+    font-size: var(--fs-body-lg);
+  }
+
+  .latest-works__tech-heading {
+    font-size: var(--fs-body-xl);
+  }
+
+  .latest-works__tech-pill {
+    font-size: var(--fs-body);
+  }
+
+  .latest-works__grid {
+    column-gap: clamp(24px, 2vw, 40px);
+    row-gap: clamp(28px, 2.5vw, 36px);
+  }
+
+  .latest-works__card {
+    padding: clamp(24px, 2vw, 32px);
+  }
+
+  .latest-works__illustration {
+    max-height: clamp(160px, 12vw, 220px);
+  }
 }
 
 /* Background graphics positioning */
@@ -33,25 +92,28 @@
 
 .latest-works__container {
   position: relative;
-  max-width: 1200px;
-  margin: 0 auto;
   z-index: 2;
 }
 
-/* Header styling */
+/* Section header */
 .latest-works__header {
   text-align: center;
-  margin-bottom: 60px;
+  margin-bottom: 40px;
+}
+
+@media (min-width: 1536px) {
+  .latest-works__header {
+    margin-bottom: 48px;
+  }
 }
 
 .latest-works__subtitle {
-  font-family: 'Lay Grotesk - Trial', 'Inter', sans-serif;
-  font-size: 12px;
+  font-size: var(--fs-small);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.25em;
   color: #ffffff;
-  margin-bottom: 12px;
+  margin: 0 0 12px;
 }
 
 .latest-works__subtitle-highlight {
@@ -59,12 +121,11 @@
 }
 
 .latest-works__title {
-  font-family: 'Lay Grotesk - Trial', 'Inter', sans-serif;
-  font-size: 48px;
+  font-size: clamp(28px, 3vw, 52px);
   font-weight: 800;
   letter-spacing: -0.02em;
   color: #ffffff;
-  margin: 0 0 24px 0;
+  margin: 0 0 20px;
 }
 
 .latest-works__btn-wrapper {
@@ -76,17 +137,23 @@
 .latest-works__btn {
   display: inline-flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
   background-color: #ffffff;
   color: #113d77;
-  padding: 10px 24px;
+  padding: 10px 22px;
   border-radius: 9999px;
-  font-family: 'Lay Grotesk - Trial', 'Inter', sans-serif;
-  font-size: 14px;
+  font-size: var(--fs-body-sm);
   font-weight: 600;
   text-decoration: none;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (min-width: 1536px) {
+  .latest-works__btn {
+    padding: 12px 26px;
+    font-size: var(--fs-body);
+  }
 }
 
 .latest-works__btn:hover {
@@ -115,7 +182,6 @@
 .latest-works__accordion {
   display: flex;
   flex-direction: column;
-  margin-top: 40px;
 }
 
 .latest-works__item {
@@ -135,35 +201,40 @@
   background: none;
   border: none;
   color: inherit;
-  padding: 32px 0;
+  padding: 22px 0;
   cursor: pointer;
   text-align: left;
   transition: all 0.3s ease;
 }
 
 .latest-works__trigger-num {
-  font-family: 'Lay Grotesk - Trial', 'Inter', sans-serif;
-  font-size: 16px;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.5);
+  font-size: var(--fs-body);
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.45);
   transition: color 0.3s ease;
-  min-width: 60px;
+  flex-shrink: 0;
+  min-width: 52px;
+  font-variant-numeric: tabular-nums;
 }
 
 .latest-works__trigger-line {
-  flex: 1;
+  flex: 0 1 120px;
+  max-width: 160px;
+  min-width: 48px;
   height: 1px;
-  background-color: rgba(255, 255, 255, 0.12);
-  margin: 0 32px;
+  background-color: rgba(255, 255, 255, 0.18);
+  margin: 0 20px;
   transition: background-color 0.3s ease;
 }
 
 .latest-works__trigger-title {
-  font-family: 'Lay Grotesk - Trial', 'Inter', sans-serif;
-  font-size: 32px;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.65);
-  transition: color 0.3s ease, transform 0.3s ease;
+  flex: 1;
+  min-width: 0;
+  font-size: clamp(17px, 1.8vw, 28px);
+  font-weight: 500;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.55);
+  transition: color 0.3s ease;
 }
 
 .latest-works__trigger-chevron {
@@ -182,6 +253,7 @@
 /* Open item adjustments */
 .latest-works__item--open .latest-works__trigger-title {
   color: #ffffff;
+  font-weight: 600;
 }
 
 .latest-works__item--open .latest-works__trigger-num {
@@ -200,11 +272,10 @@
 /* Hover effects for trigger */
 .latest-works__trigger:hover .latest-works__trigger-title {
   color: #ffffff;
-  transform: translateX(4px);
 }
 
 .latest-works__trigger:hover .latest-works__trigger-line {
-  background-color: rgba(255, 255, 255, 0.25);
+  background-color: rgba(255, 255, 255, 0.28);
 }
 
 /* Collapsible body container (Height animation) */
@@ -233,9 +304,9 @@
 .latest-works__grid {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  column-gap: 32px;
-  row-gap: 40px;
-  padding: 0 0 54px 0;
+  column-gap: 24px;
+  row-gap: 28px;
+  padding: 0 0 40px 0;
   align-items: start;
 }
 
@@ -267,8 +338,8 @@
 
 /* Cards styles */
 .latest-works__card {
-  padding: 32px;
-  border-radius: 24px;
+  padding: 24px;
+  border-radius: 20px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -292,16 +363,15 @@
 }
 
 .latest-works__card-label {
-  font-family: 'Lay Grotesk - Trial', 'Inter', sans-serif;
-  font-size: 24px;
+  font-size: clamp(18px, 1.8vw, 24px);
   font-weight: 700;
-  margin: 0 0 16px 0;
+  margin: 0 0 12px 0;
   letter-spacing: -0.01em;
 }
 
 .latest-works__card-desc {
-  font-size: 15px;
-  line-height: 1.65;
+  font-size: var(--fs-body-lg);
+  line-height: 1.6;
   margin: 0;
 }
 
@@ -312,9 +382,57 @@
   gap: 16px;
 }
 
+.latest-works__demo-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.latest-works__demo-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.latest-works__demo-link {
+  font-size: var(--fs-body-sm);
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.2s ease;
+}
+
+.latest-works__demo-link:hover {
+  color: #ffffff;
+}
+
+.latest-works__solution-list {
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.latest-works__solution-list .latest-works__card-desc {
+  position: relative;
+  padding-left: 14px;
+}
+
+.latest-works__solution-list .latest-works__card-desc::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: rgba(255, 255, 255, 0.65);
+}
+
 .latest-works__tech-heading {
-  font-family: 'Lay Grotesk - Trial', 'Inter', sans-serif;
-  font-size: 18px;
+  font-size: var(--fs-body-lg);
   font-weight: 500;
   color: rgba(255, 255, 255, 0.7);
   margin: 0;
@@ -327,12 +445,12 @@
 }
 
 .latest-works__tech-pill {
-  font-size: 13px;
+  font-size: var(--fs-small);
   font-weight: 500;
   background-color: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.15);
   color: rgba(255, 255, 255, 0.85);
-  padding: 8px 22px;
+  padding: 6px 16px;
   border-radius: 9999px;
   transition: all 0.3s ease;
   cursor: default;
@@ -375,11 +493,11 @@
 
 @media (max-width: 1024px) {
   .latest-works__title {
-    font-size: 40px;
+    font-size: 32px;
   }
-  
+
   .latest-works__trigger-title {
-    font-size: 26px;
+    font-size: clamp(16px, 2.2vw, 22px);
   }
 
   .latest-works__grid {
@@ -411,7 +529,7 @@
 
 @media (max-width: 768px) {
   .latest-works {
-    padding: 60px 16px;
+    padding-block: 60px;
   }
 
   .latest-works__title {
@@ -431,16 +549,18 @@
   }
 
   .latest-works__trigger-num {
-    font-size: 14px;
+    font-size: var(--fs-body);
     min-width: 40px;
   }
 
   .latest-works__trigger-line {
-    margin: 0 16px;
+    flex: 0 1 40px;
+    max-width: 56px;
+    margin: 0 12px;
   }
 
   .latest-works__trigger-title {
-    font-size: 20px;
+    font-size: clamp(15px, 4vw, 18px);
   }
 
   .latest-works__grid {

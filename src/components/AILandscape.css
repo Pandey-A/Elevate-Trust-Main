@@ -71,6 +71,24 @@
   line-height: 1.45;
 }
 
+.ai-card__list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+@media (min-width: 1920px) {
+  .ai-card__list li {
+    font-size: 1.0625rem;
+  }
+
+  .ai-card__title {
+    font-size: 1.5rem;
+  }
+}
+
 .ai-card--light .ai-card__list li {
   color: #3a3a4a;
 }
@@ -218,6 +236,37 @@
 
   .ai-card__illustration img {
     width: 165px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .ai-card {
+    width: 340px;
+    min-height: 440px;
+    padding: 36px 32px 0;
+  }
+
+  .ai-card__title {
+    font-size: 1.45rem;
+  }
+
+  .ai-card__list li {
+    font-size: 0.9rem;
+  }
+
+  .ai-landscape__track {
+    gap: 28px;
+  }
+}
+
+@media (min-width: 1536px) {
+  .ai-card {
+    width: 360px;
+    min-height: 460px;
+  }
+
+  .ai-card__title {
+    font-size: 1.5rem;
   }
 }
 

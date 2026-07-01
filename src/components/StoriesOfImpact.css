@@ -72,6 +72,18 @@
   }
 }
 
+@media (min-width: 1440px) {
+  .stories-card {
+    width: 340px;
+  }
+}
+
+@media (min-width: 1536px) {
+  .stories-card {
+    width: 360px;
+  }
+}
+
 .stories-quote-mark {
   font-family: Georgia, "Times New Roman", serif;
   font-size: 4.5rem;
@@ -79,6 +91,16 @@
   color: #272935;
   opacity: 0.08;
   user-select: none;
+}
+
+@media (min-width: 1920px) {
+  .stories-card {
+    width: 380px;
+  }
+
+  .stories-card .section-body {
+    font-size: var(--fs-body-lg);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

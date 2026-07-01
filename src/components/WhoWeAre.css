@@ -4,8 +4,14 @@
   position: relative;
   background-color: #113d77;
   color: #ffffff;
-  padding: 90px 24px;
+  padding: 56px var(--site-padding-x, 24px);
   overflow: hidden;
+}
+
+@media (min-width: 1536px) {
+  .who-we-are {
+    padding: 72px var(--site-padding-x, 24px);
+  }
 }
 
 /* Background Vector Graphic */
@@ -22,7 +28,7 @@
 
 .who-we-are__container {
   position: relative;
-  max-width: 1200px;
+  max-width: var(--content-max-width, 1080px);
   margin: 0 auto;
   z-index: 2;
   display: flex;
@@ -32,8 +38,7 @@
 
 /* Heading styling */
 .who-we-are__title {
-  font-family: 'Lay Grotesk - Trial', 'Inter', sans-serif;
-  font-size: 52px;
+  font-size: clamp(32px, 3vw, 44px);
   font-weight: 800;
   letter-spacing: -0.02em;
   color: #ffffff;
@@ -43,16 +48,15 @@
 
 /* Description styling */
 .who-we-are__description {
-  max-width: 960px;
-  margin: 0 auto 60px auto;
+  max-width: min(900px, 100%);
+  margin: 0 auto 48px auto;
   display: flex;
   flex-direction: column;
   gap: 28px;
 }
 
 .who-we-are__paragraph {
-  font-family: 'Inter', sans-serif;
-  font-size: 15px;
+  font-size: var(--fs-body);
   line-height: 1.8;
   color: rgba(255, 255, 255, 0.72);
   text-align: center;
@@ -87,8 +91,7 @@
 }
 
 .who-we-are__stat-num {
-  font-family: 'Lay Grotesk - Trial', 'Inter', sans-serif;
-  font-size: 56px;
+  font-size: clamp(40px, 3.5vw, 52px);
   font-weight: 800;
   color: #113d77;
   line-height: 1;
@@ -97,13 +100,23 @@
 }
 
 .who-we-are__stat-label {
-  font-family: 'Inter', sans-serif;
-  font-size: 14px;
+  font-size: var(--fs-body);
   font-weight: 500;
   color: #4a5d78;
   line-height: 1.6;
   margin: 0;
   white-space: pre-line;
+}
+
+@media (min-width: 1920px) {
+  .who-we-are__title {
+    font-size: clamp(40px, 3.2vw, 56px);
+  }
+
+  .who-we-are__paragraph,
+  .who-we-are__stat-label {
+    font-size: var(--fs-body-xl);
+  }
 }
 
 /* Responsive styles */
