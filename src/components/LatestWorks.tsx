@@ -1,10 +1,14 @@
+import type { CSSProperties } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { useState } from "react";
 
-import landscape1 from "../assets/homepage-icons/landscape-1.svg";
 import landscape2 from "../assets/homepage-icons/landscape-2.png";
 import landscape3 from "../assets/homepage-icons/landscape-3.svg";
 import landscape4 from "../assets/homepage-icons/landscape-4.svg";
+import latestWorksIllust001 from "../assets/homepage-icons/latest-works-illust-001.svg";
+import latestWorksFrame from "../assets/homepage-icons/latest-works-frame.png";
+import latestWorksSectionBg from "../assets/homepage-icons/latest-works-section-bg.png";
+import GlobeDecor from "../assets/homepage-icons/Globe.png";
 import partnerGlobe from "../assets/homepage-icons/partner-globe.png";
 import storiesVector from "../assets/homepage-icons/stories-vector.png";
 
@@ -43,7 +47,7 @@ const works: WorkItem[] = [
       "Delivered a centralized compliance engine that automates RFP query handling, flags non-compliant responses instantly, and provides dashboards for procurement teams to track vendor eligibility in real time.",
     businessOutcome:
       "Reduced manual RFP review time by 65%, improved compliance accuracy, and enabled faster, data-driven procurement decisions across government workflows.",
-    image: landscape1,
+    image: latestWorksIllust001,
   },
   {
     num: "/002",
@@ -112,7 +116,7 @@ const works: WorkItem[] = [
       "The solution involves a real-time illicit behavior detection system powered by CNN models and integrated via the  Samsara API to analyze video feeds for meter-bypass events. It features a comprehensive dashboard where  management can track high-flagging incidents by driver, trip location, and frequency. This human-in-the-loop  framework allows for streamlined auditing, while an AI matching engine continuously refines its detection accuracy  based on feedback from verified cases.",
     businessOutcome:
       "Implementation of the AI video analytics system reduced manual auditing efforts by 90%, enabling the extraction  of critical cases from massive image and video datasets with high speed. The models are robust enough to handle  complex scenarios such as varying light and low image quality. Furthermore, the client successfully commercialised  the solution by offering this high-flagging detection technology to other taxi services.",
-    image: landscape1,
+    image: latestWorksFrame,
   },
 ];
 
@@ -124,24 +128,35 @@ export default function LatestWorks() {
   };
 
   return (
-    <section className="latest-works" aria-label="Latest Works">
-      <img
-        src={partnerGlobe}
-        alt=""
-        aria-hidden
-        className="latest-works__decor-globe"
-      />
-      <img
-        src={storiesVector}
-        alt=""
-        aria-hidden
-        className="latest-works__decor-vector"
-      />
+    <section
+      className="latest-works"
+      aria-label="Latest Works"
+      style={
+        { "--latest-works-bg": `url(${latestWorksSectionBg})` } as CSSProperties
+      }
+    >
+      <div className="latest-works__section-decor" aria-hidden>
+        <img
+          src={partnerGlobe}
+          alt=""
+          className="latest-works__decor-globe"
+        />
+        <img
+          src={GlobeDecor}
+          alt=""
+          className="latest-works__decor-globe-xl"
+        />
+        <img
+          src={storiesVector}
+          alt=""
+          className="latest-works__decor-vector"
+        />
+      </div>
 
       <div className="site-container latest-works__container">
         <div className="latest-works__header">
           <p className="latest-works__subtitle">
-            OUR CREATIVE{" "}
+            <span className="latest-works__subtitle-lead">OUR CREATIVE </span>
             <span className="latest-works__subtitle-highlight">JOURNEY</span>
           </p>
           <h2 className="latest-works__title">Latest Works</h2>
@@ -195,10 +210,10 @@ export default function LatestWorks() {
                     <div className="latest-works__grid">
                       <div className="latest-works__col-left-top">
                         <div className="latest-works__card latest-works__card--white">
-                          <h4 className="latest-works__card-label text-[#272935]">
+                          <h4 className="latest-works__card-label">
                             Business Challenge
                           </h4>
-                          <p className="latest-works__card-desc text-[#272935]/85">
+                          <p className="latest-works__card-desc">
                             {work.businessChallenge}
                           </p>
                         </div>
@@ -248,24 +263,24 @@ export default function LatestWorks() {
 
                       <div className="latest-works__col-solution">
                         <div className="latest-works__card latest-works__card--blue-glass">
-                          <h4 className="latest-works__card-label text-white">
+                          <h4 className="latest-works__card-label">
                             Solution Overview
                           </h4>
                           {work.solutionBullets ? (
                             <>
-                              <p className="latest-works__card-desc text-white/80">
+                              <p className="latest-works__card-desc">
                                 {work.solutionOverview}
                               </p>
                               <ul className="latest-works__solution-list">
                                 {work.solutionBullets.map((bullet) => (
-                                  <li key={bullet} className="latest-works__card-desc text-white/80">
+                                  <li key={bullet} className="latest-works__card-desc">
                                     {bullet}
                                   </li>
                                 ))}
                               </ul>
                             </>
                           ) : (
-                            <p className="latest-works__card-desc text-white/80">
+                            <p className="latest-works__card-desc">
                               {work.solutionOverview}
                             </p>
                           )}
@@ -274,10 +289,10 @@ export default function LatestWorks() {
 
                       <div className="latest-works__col-results">
                         <div className="latest-works__card latest-works__card--blue-glass">
-                          <h4 className="latest-works__card-label text-white">
+                          <h4 className="latest-works__card-label">
                             Business Outcome
                           </h4>
-                          <p className="latest-works__card-desc text-white/80">
+                          <p className="latest-works__card-desc">
                             {work.businessOutcome}
                           </p>
                         </div>

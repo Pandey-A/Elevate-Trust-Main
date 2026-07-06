@@ -1,0 +1,183 @@
+/* Navbar — exact Figma match @ 2012px (Headeer #1216:5561) */
+
+@media (min-width: 2012px) {
+  .navbar {
+    position: relative;
+    z-index: 50;
+    width: 100%;
+    max-width: none;
+    height: 100px;
+    margin-inline: 0;
+    background: #ffffff;
+    border-bottom: none;
+    box-shadow: 0 8px 22.4px rgba(0, 0, 0, 0.05);
+  }
+
+  .navbar .site-container.navbar__shell {
+    width: 2012px;
+    max-width: 2012px;
+    margin-inline: auto;
+    padding: 0;
+  }
+
+  .navbar__inner.grid {
+    display: block;
+    position: relative;
+    width: 2012px;
+    height: 100px;
+    margin: 0;
+    padding: 0;
+  }
+
+  .navbar__logo {
+    position: absolute;
+    left: 160px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .navbar__nav.hidden.lg\:flex {
+    display: flex !important;
+  }
+
+  .navbar__right.hidden.lg\:flex {
+    display: flex !important;
+  }
+
+  .navbar__social.hidden.xl\:flex {
+    display: flex !important;
+  }
+
+  .navbar__logo img {
+    width: 173px;
+    height: 51px;
+    object-fit: contain;
+  }
+
+  .navbar__nav {
+    position: absolute;
+    left: 404px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex !important;
+    align-items: center;
+    gap: 31px;
+  }
+
+  .navbar__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: "Lay Grotesk Trial", "Lay Grotesk - Trial", sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.2;
+    color: #272935;
+    padding: 0;
+    white-space: nowrap;
+    text-decoration: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .navbar__link svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  .navbar__nav > div {
+    display: flex;
+    align-items: center;
+    gap: 31px;
+  }
+
+  .navbar__right {
+    position: absolute;
+    top: 0;
+    right: 159px;
+    display: flex !important;
+    align-items: center;
+    gap: 24px;
+    width: auto;
+    height: 100px;
+  }
+
+  .navbar__about {
+    position: static;
+    display: inline-flex;
+    align-items: center;
+    height: 53px;
+    margin: 0;
+    padding: 0;
+    font-family: "Lay Grotesk Trial", "Lay Grotesk - Trial", sans-serif;
+    font-size: 18px !important;
+    font-weight: 400 !important;
+    line-height: 1;
+    color: #272935 !important;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .navbar__social {
+    position: static;
+    display: flex !important;
+    align-items: center;
+    height: 53px;
+    gap: 35px;
+    margin: 0;
+    padding: 0;
+  }
+
+  .navbar__social a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 0;
+  }
+
+  .navbar__social img {
+    width: 28px !important;
+    height: 28px !important;
+    display: block;
+  }
+
+  .navbar__cta {
+    position: static;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    width: 195px;
+    height: 53px !important;
+    min-height: 53px;
+    max-height: 53px;
+    margin: 0;
+    padding: 0 24px !important;
+    border: none;
+    border-radius: 36px;
+    background: #2365aa;
+    color: #ffffff !important;
+    font-family: "Lay Grotesk Trial", "Lay Grotesk - Trial", sans-serif;
+    font-size: 18px !important;
+    font-weight: 400 !important;
+    line-height: 1.2;
+    cursor: pointer;
+    box-sizing: border-box;
+    flex-shrink: 0;
+  }
+
+  .navbar__cta:hover {
+    background: #1a5490;
+  }
+
+  .navbar__cta img {
+    width: 22px !important;
+    height: 22px !important;
+    flex-shrink: 0;
+  }
+
+  .navbar__mobile-toggle {
+    display: none;
+  }
+}

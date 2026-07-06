@@ -399,8 +399,8 @@
   color: var(--blue);
 }
 
-/* ── Desktop Card Placement (Exact Figma Coordinates) ────────────── */
-@media (min-width: 1101px) {
+/* ── Desktop Card Placement (laptop only — NOT exact Figma) ─────── */
+@media (min-width: 1101px) and (max-width: 2011px) {
   .hero-empower {
     right: max(48px, calc((100% - min(1600px, 94vw)) / 2 + 48px));
     bottom: 56px;
@@ -798,5 +798,342 @@
   .hero-card--create {
     min-height: 88px;
     font-size: 15px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   EXACT FIGMA MATCH — visible hero 2012×1096 @ 2012px viewport
+   Figma: layout_dd0efcf5 (Hero bg content) · top 100px below header
+   Coordinates = Hero Image positions minus 292px content offset
+   ═══════════════════════════════════════════════════════════════════ */
+@media (min-width: 2012px) {
+  .hero-section {
+    width: 2012px;
+    max-width: 2012px;
+    height: 1096px;
+    min-height: 1096px;
+    margin-inline: auto;
+    overflow: hidden;
+  }
+
+  .hero-inner {
+    position: relative;
+    width: 2012px;
+    height: 1096px;
+    max-width: none;
+    padding: 0;
+    margin: 0;
+    gap: 0;
+    min-height: 1096px;
+    display: block;
+  }
+
+  /* Slogan — Figma x:452 y:125 → 160, 125 */
+  .hero-left {
+    position: absolute;
+    left: 160px;
+    top: 125px;
+    width: 584px;
+    height: 712px;
+    max-width: none;
+    flex: none;
+    padding: 0;
+    gap: 0;
+  }
+
+  .hero-badge {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 301px;
+    height: 43px;
+    margin: 0;
+    gap: 8px;
+    border-radius: 39px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(4.65px);
+    -webkit-backdrop-filter: blur(4.65px);
+    font-size: 14px;
+    font-weight: 400;
+    color: #ffffff;
+    justify-content: flex-start;
+    padding: 0 0 0 25px;
+  }
+
+  .hero-badge img {
+    width: 24px;
+    height: 24px;
+  }
+
+  .hero-h1 {
+    position: absolute;
+    top: 78px;
+    left: 0;
+    width: 584px;
+    margin: 0;
+    font-size: 100px;
+    font-weight: 700;
+    line-height: 92px;
+    letter-spacing: 0;
+    color: #ffffff;
+  }
+
+  .hero-sub {
+    position: absolute;
+    top: 476px;
+    left: 0;
+    width: 361px;
+    margin: 0;
+    font-family: "Ubuntu", sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 24px;
+    color: #a1b1cb;
+  }
+
+  .hero-stars-row {
+    position: absolute;
+    top: 582px;
+    left: 3px;
+    margin: 0;
+    gap: 10px;
+  }
+
+  .hero-stars {
+    gap: 4px;
+  }
+
+  .hero-stars svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  .hero-review-count {
+    font-size: 16px;
+    font-weight: 500;
+    color: #ffffff;
+  }
+
+  .hero-cta-btn {
+    position: absolute;
+    top: 644px;
+    left: 0;
+    width: auto;
+    min-width: 285px;
+    max-width: none;
+    height: 68px;
+    margin: 0;
+    padding: 20.53px 38.49px 19.25px 26px;
+    gap: 6.42px;
+    border-radius: 46.19px;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.2;
+    white-space: nowrap;
+    background: #2365aa;
+    box-sizing: border-box;
+  }
+
+  .hero-cta-btn > span:first-child {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  .hero-cta-btn__circle {
+    width: 47.47px;
+    height: 47.47px;
+    flex-shrink: 0;
+  }
+
+  .hero-cta-btn__circle svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  /* We Create future — Figma x:1592 y:125 → 1300, 125 · 556×931 */
+  .hero-right {
+    position: absolute;
+    left: 1300px;
+    top: 125px;
+    width: 556px;
+    height: 931px;
+    min-height: 931px;
+    flex: none;
+    display: block;
+  }
+
+  .hero-cards-container {
+    position: relative !important;
+    display: block !important;
+    width: 556px !important;
+    height: 931px !important;
+    max-width: none !important;
+    margin: 0 !important;
+    transform: none !important;
+    top: auto !important;
+    right: auto !important;
+    grid-template-columns: unset !important;
+    gap: 0 !important;
+  }
+
+  .hero-card {
+    position: absolute !important;
+    display: flex !important;
+    width: auto !important;
+    height: auto !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    transform: none !important;
+  }
+
+  /* We — 163×155 @ (0, 133) within cards group */
+  .hero-card--we {
+    top: 133px !important;
+    left: 0 !important;
+    right: auto !important;
+    bottom: auto !important;
+    width: 163px !important;
+    height: 155px !important;
+    border-radius: 50px;
+    font-size: 44px;
+    font-weight: 600;
+    color: #113d77;
+    background: #ffffff;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Future — 237×227 @ (319, 0) */
+  .hero-card--future {
+    top: 0 !important;
+    left: 319px !important;
+    right: auto !important;
+    width: 237px !important;
+    height: 227px !important;
+    border-radius: 50px;
+    font-size: 44px;
+    font-weight: 600;
+    gap: 8px;
+    color: #ffffff;
+    background: rgba(23, 23, 23, 0.2);
+    backdrop-filter: blur(6.65px);
+    -webkit-backdrop-filter: blur(6.65px);
+    border: 2px solid transparent;
+    background-image:
+      linear-gradient(rgba(23, 23, 23, 0.2), rgba(23, 23, 23, 0.2)),
+      linear-gradient(137deg, #2364aa 5%, #113d77 100%);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.14),
+      0 8px 24px rgba(0, 0, 0, 0.18);
+  }
+
+  .hero-card__future-icon {
+    width: 91px;
+    height: 70px;
+  }
+
+  /* Arrow — 184×176 @ (172, 229) */
+  .hero-card--arrow {
+    top: 229px !important;
+    left: 172px !important;
+    right: auto !important;
+    width: 184px !important;
+    height: 176px !important;
+    border-radius: 50px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.14),
+      0 8px 24px rgba(0, 0, 0, 0.18);
+  }
+
+  .hero-card--arrow .hero-card__arrow-circle {
+    width: 48px;
+    height: 48px;
+  }
+
+  .hero-card--arrow .hero-card__arrow-circle svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  /* Create — 251×240 @ (68, 425) */
+  .hero-card--create {
+    top: 425px !important;
+    left: 68px !important;
+    right: auto !important;
+    width: 251px !important;
+    height: 240px !important;
+    border-radius: 50px;
+    font-size: 44px;
+    font-weight: 600;
+    color: #113d77;
+    background: #ffffff;
+    gap: 6px;
+    flex-direction: column !important;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.1);
+  }
+
+  .hero-card__create-illust {
+    width: 120px;
+    height: 87px;
+  }
+
+  /* Empower — y:762 inside cards column */
+  .hero-empower {
+    position: absolute !important;
+    top: 762px !important;
+    right: 1px !important;
+    left: auto !important;
+    bottom: auto !important;
+    width: 369px;
+    max-width: none;
+    margin: 0 !important;
+    padding: 0;
+    text-align: right;
+  }
+
+  .hero-empower h2 {
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1.25;
+    color: #ffffff;
+    margin: 0 0 14px;
+  }
+
+  .hero-empower p {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.25;
+    color: #a1b1cb;
+    font-style: normal;
+    margin: 0;
+  }
+
+  /* OUR CUSTOMERS — x:908 in 2012 content area */
+  .hero-bottom-label {
+    position: absolute;
+    left: 908px;
+    bottom: 40px;
+    transform: none;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: 0;
+  }
+
+  .hero-bottom-label__cust {
+    color: #2365aa;
+  }
+
+  .hero-card--we:hover,
+  .hero-card--create:hover,
+  .hero-card.hero-card--arrow:hover,
+  .hero-card.hero-card--future:hover {
+    transform: translateY(-6px) !important;
   }
 }

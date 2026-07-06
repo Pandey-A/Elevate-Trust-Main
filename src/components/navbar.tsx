@@ -7,6 +7,7 @@ import linkedinIcon from '../assets/nav/Linkedin-logo.svg';
 import instagramIcon from '../assets/nav/Instagram-logo.svg';
 import telegramIcon from '../assets/nav/Telegram-logo.svg';
 import letsConnectIcon from '../assets/nav/lets-connect.svg';
+import './navbar.css';
 
 const SERVICE_DETAILS_PATH = '/ServiceDetails';
 
@@ -55,11 +56,11 @@ const ourServicesMenu = {
 
 const navLinks: NavLink[] = [
   {
-    label: 'Our Solutions',
+    label: 'Our Services',
     megaMenu: true,
   },
   {
-    label: 'Technologies',
+    label: 'Technology Trends',
     href: '/technologies',
     dropdown: ['AI/ML', 'Blockchain', 'IoT']
   },
@@ -142,10 +143,10 @@ export default function Navbar() {
   );
 
   return (
-    <nav className="relative z-50 w-full bg-white border-b border-gray-200">
-      <div className="site-container">
-        <div className="grid h-14 grid-cols-[auto_1fr_auto] items-center gap-3 sm:h-16 lg:gap-4">
-          <Link to="/" className="flex-shrink-0" onClick={closeMobileMenu}>
+    <nav className="navbar relative z-50 w-full bg-white border-b border-gray-200">
+      <div className="site-container navbar__shell">
+        <div className="navbar__inner grid h-14 grid-cols-[auto_1fr_auto] items-center gap-3 sm:h-16 lg:gap-4">
+          <Link to="/" className="navbar__logo flex-shrink-0" onClick={closeMobileMenu}>
             <img
               src={elevateLogo}
               alt="Elevate Trust"
@@ -153,7 +154,7 @@ export default function Navbar() {
             />
           </Link>
 
-          <div className="hidden min-w-0 lg:flex items-center justify-center">
+          <div className="navbar__nav hidden min-w-0 lg:flex items-center justify-center">
             <div className="flex items-center gap-0 xl:gap-0.5">
               {navLinks.map((link) => (
                 isMegaMenuLink(link) ? (
@@ -164,7 +165,7 @@ export default function Navbar() {
                     onMouseLeave={() => setActiveDropdown(null)}
                   >
                     <span
-                      className={`flex cursor-default items-center gap-0.5 whitespace-nowrap rounded-md px-1.5 py-1 text-[13px] font-medium transition-colors xl:px-2 xl:text-sm min-[1280px]:text-[15px] min-[1536px]:text-[16px] min-[1920px]:text-[18px]
+                      className={`navbar__link flex cursor-default items-center gap-0.5 whitespace-nowrap rounded-md px-1.5 py-1 text-[13px] font-medium transition-colors xl:px-2 xl:text-sm min-[1280px]:text-[15px] min-[1536px]:text-[16px] min-[1920px]:text-[18px]
                         ${isServiceDetailsActive || activeDropdown === link.label
                           ? 'text-[#272935]'
                           : 'text-gray-600 hover:text-gray-900'
@@ -191,7 +192,7 @@ export default function Navbar() {
                 >
                   <Link
                     to={link.href}
-                    className={`flex items-center gap-0.5 whitespace-nowrap rounded-md px-1.5 py-1 text-[13px] font-medium transition-colors xl:px-2 xl:text-sm min-[1280px]:text-[15px] min-[1536px]:text-[16px] min-[1920px]:text-[18px]
+                    className={`navbar__link flex items-center gap-0.5 whitespace-nowrap rounded-md px-1.5 py-1 text-[13px] font-medium transition-colors xl:px-2 xl:text-sm min-[1280px]:text-[15px] min-[1536px]:text-[16px] min-[1920px]:text-[18px]
                       ${location.pathname === link.href
                         ? 'text-[#272935]'
                         : 'text-gray-600 hover:text-gray-900'
@@ -220,15 +221,15 @@ export default function Navbar() {
             </div>
           </div>
 
-          <div className="hidden items-center justify-end gap-2.5 lg:flex xl:gap-3.5">
+          <div className="navbar__right hidden items-center justify-end gap-2.5 lg:flex xl:gap-3.5">
             <Link
               to="/about"
-              className="whitespace-nowrap text-[13px] font-medium text-gray-600 transition-colors hover:text-gray-900 xl:text-sm min-[1280px]:text-[15px] min-[1536px]:text-[16px] min-[1920px]:text-[18px]"
+              className="navbar__about whitespace-nowrap text-[13px] font-medium text-gray-600 transition-colors hover:text-gray-900 xl:text-sm min-[1280px]:text-[15px] min-[1536px]:text-[16px] min-[1920px]:text-[18px]"
             >
               About Us
             </Link>
 
-            <div className="hidden items-center gap-1 xl:flex">
+            <div className="navbar__social hidden items-center gap-1 xl:flex">
               <a
                 href="#"
                 aria-label="Telegram"
@@ -252,15 +253,15 @@ export default function Navbar() {
               </a>
             </div>
 
-            <button className="flex h-9 shrink-0 items-center justify-center gap-1.5 rounded-full bg-[#2365AA] px-3.5 text-xs font-medium text-white transition-colors hover:bg-[#152a45] xl:h-10 xl:gap-2 xl:px-4 xl:text-sm min-[1280px]:text-[15px] min-[1536px]:text-[16px] min-[1920px]:text-[18px]">
-              <span className="whitespace-nowrap">Let's Connect</span>
+            <button className="navbar__cta flex h-9 shrink-0 items-center justify-center gap-1.5 rounded-full bg-[#2365AA] px-3.5 text-xs font-medium text-white transition-colors hover:bg-[#152a45] xl:h-10 xl:gap-2 xl:px-4 xl:text-sm min-[1280px]:text-[15px] min-[1536px]:text-[16px] min-[1920px]:text-[18px]">
+              <Link to='/contact'><span className="whitespace-nowrap">Let's Connect</span></Link>
               <img src={letsConnectIcon} alt="Arrow Right" className="h-6 w-6 xl:h-7 xl:w-7" />
             </button>
           </div>
 
           <button
             type="button"
-            className="inline-flex items-center justify-center justify-self-end rounded-md p-2 text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900 lg:hidden"
+            className="navbar__mobile-toggle inline-flex items-center justify-center justify-self-end rounded-md p-2 text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900 lg:hidden"
             aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={mobileMenuOpen}
             onClick={() => setMobileMenuOpen((open) => !open)}

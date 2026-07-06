@@ -26,14 +26,11 @@ export default function HeroSection() {
           </div>
 
           <h1 className="hero-h1">
-            AI Native Product<br />
-            Engineering Firm
+            AI Native Product Engineering Firm
           </h1>
 
           <p className="hero-sub">
-            Build scalable, fine-tuned local LLM<br />
-            solutions with a trusted AI/ML<br />
-            implementation partner.
+            Build scalable, fine-tuned local LLM solutions with a trusted AI/ML implementation partner.
           </p>
 
           <div className="hero-stars-row">
@@ -60,9 +57,7 @@ export default function HeroSection() {
 
         <div className="hero-right">
           <div className="hero-cards-container">
-            <div className="hero-card hero-card--we">
-              We
-            </div>
+            <div className="hero-card hero-card--we">We</div>
 
             <div className="hero-card hero-card--future">
               <img src={futureIcon} alt="" className="hero-card__future-icon" />
@@ -85,15 +80,15 @@ export default function HeroSection() {
               <span>Create</span>
             </div>
           </div>
-        </div>
-      </div>
 
-      <div className="hero-empower">
-        <h2>
-          Empowering Businesses<br />
-          with AI/ML Solutions
-        </h2>
-        <p>That Build Trust and Drive Transformation</p>
+          <div className="hero-empower">
+            <h2>
+              Empowering Businesses<br />
+              with AI/ML Solutions
+            </h2>
+            <p>That Build Trust and Drive Transformation</p>
+          </div>
+        </div>
       </div>
 
       <div className="hero-bottom-label">

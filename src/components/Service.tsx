@@ -144,7 +144,9 @@ export default function Service() {
     if (!tabsEl) return;
 
     const syncPanelHeight = () => {
-      if (window.innerWidth >= 1024) {
+      if (window.innerWidth >= 2012) {
+        setPanelHeight(1040);
+      } else if (window.innerWidth >= 1024) {
         setPanelHeight(tabsEl.offsetHeight);
       } else {
         setPanelHeight(null);
@@ -172,14 +174,16 @@ export default function Service() {
         className="service-section__vector"
       />
 
-      <div className="mx-auto w-full max-w-site service-section__inner">
-        <h2 className="service-section__heading-label">
-          <span className="text-black">Our </span>
-          <span className="text-[#2365AA]">Services</span>
-        </h2>
-        <p className="service-section__heading-title">
-          AI Solutions for Automation, Growth, and Innovation
-        </p>
+      <div className="service-section__inner">
+        <div className="service-section__header">
+          <h2 className="service-section__heading-label">
+            <span className="text-black">Our </span>
+            <span className="text-[#2365AA]">Services</span>
+          </h2>
+          <p className="service-section__heading-title">
+            AI Solutions for Automation, Growth, and Innovation
+          </p>
+        </div>
 
         <div className="service-section__layout">
           <div

@@ -5,7 +5,7 @@ import Home from './pages/home';
 import ServiceDetails from './pages/ServiceDetails';
 import AboutUs from './pages/AboutUs';
 import FooterSection from './components/footerSection';
-
+import Contact from './pages/Contact';
 export default function App() {
   return (
     <BrowserRouter>
@@ -14,7 +14,7 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/ServiceDetails" element={<ServiceDetails />} />
-        {/* other routes */}
+        <Route path="/contact" element={<Contact />} />
       </Routes>
       <FooterSection />
     </BrowserRouter>

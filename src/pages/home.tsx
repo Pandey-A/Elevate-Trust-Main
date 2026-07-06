@@ -9,6 +9,7 @@ import LatestWorks from "../components/LatestWorks";
 import Testimonials from "../components/testimonials";
 import FlyCTA from "../components/FlyCTA";
 import Service from "../components/Service";
+
 export default function Home() {
   return (
     <main className="min-h-[calc(200vh-4rem)] bg-[#113D77]">
@@ -16,10 +17,10 @@ export default function Home() {
       <ClientStrip />
       <Service />
       <StoriesOfImpact />
-      <AILandscape />
+      <LatestWorks />
       <WorkImpact />
       <WhyPartner />
-      <LatestWorks />
+      <AILandscape />
       <Testimonials />
       <FlyCTA />
     </main>

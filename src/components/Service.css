@@ -14,7 +14,7 @@
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1024px) and (max-width: 2011px) {
   .service-section {
     padding: 4rem 2.5rem;
   }
@@ -47,7 +47,7 @@
   object-position: right bottom;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1024px) and (max-width: 2011px) {
   .service-section__vector {
     width: min(640px, 42vw);
     opacity: 0.6;
@@ -91,7 +91,7 @@
   width: 100%;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1024px) and (max-width: 2011px) {
   .service-section__layout {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
@@ -124,7 +124,7 @@
   display: none;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1024px) and (max-width: 2011px) {
   .service-section__tabs {
     width: 280px;
     flex-direction: column;
@@ -161,7 +161,7 @@
     color 0.25s ease;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1024px) and (max-width: 2011px) {
   .service-section__tab {
     min-width: 0;
     width: 100%;
@@ -205,7 +205,7 @@
   min-height: 0;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1024px) and (max-width: 2011px) {
   .service-section__panel {
     display: flex;
     flex-direction: column;
@@ -233,7 +233,7 @@
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1024px) and (max-width: 2011px) {
   .service-section__card {
     flex: 1;
     height: 100%;
@@ -253,7 +253,7 @@
   min-height: 0;
 }
 
-@media (min-width: 1280px) {
+@media (min-width: 1024px) and (max-width: 2011px) {
   .service-section__card-body {
     max-width: calc(100% - 11rem);
   }
@@ -314,7 +314,7 @@
   margin: 0;
 }
 
-@media (min-width: 1920px) {
+@media (min-width: 1024px) and (max-width: 2011px) {
   .service-section__heading-title {
     font-size: clamp(1.5rem, 2.2vw, 2.25rem);
   }
@@ -347,7 +347,7 @@
   z-index: 1;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1024px) and (max-width: 2011px) {
   .service-section__card-illustration {
     position: absolute;
     right: 2rem;
@@ -358,11 +358,234 @@
   }
 }
 
-@media (min-width: 1280px) {
+/* Our Services — exact Figma match @ 2012px (#961:3688) */
+@media (min-width: 2012px) {
+  .service-section {
+    width: 100%;
+    max-width: none;
+    min-height: 1542px;
+    margin-inline: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #f3f8fc;
+  }
+
+  .service-section__vector {
+    width: 720px;
+    opacity: 0.6;
+    right: calc((100vw - 2012px) / 2);
+  }
+
+  .service-section__inner {
+    position: relative;
+    width: 2012px;
+    max-width: 2012px;
+    min-height: 1542px;
+    margin-inline: auto;
+    padding: 0;
+    display: block;
+  }
+
+  .service-section__header {
+    position: relative;
+    width: 100%;
+    height: 277px;
+    text-align: center;
+  }
+
+  .service-section__heading-label {
+    position: absolute;
+    top: 113px;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0;
+    font-family: "Lay Grotesk Trial", "Lay Grotesk - Trial", sans-serif;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.1;
+    text-transform: uppercase;
+    letter-spacing: 0;
+    white-space: nowrap;
+  }
+
+  .service-section__heading-title {
+    position: absolute;
+    top: 169px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 736px;
+    margin: 0;
+    font-family: "Lay Grotesk Trial", "Lay Grotesk - Trial", sans-serif;
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 1.12;
+    text-align: center;
+    color: #272935;
+  }
+
+  .service-section__layout {
+    position: relative;
+    display: block;
+    width: 100%;
+    min-height: 1265px;
+    margin: 0;
+  }
+
+  .service-section__tabs {
+    position: absolute;
+    left: 159px;
+    top: 100px;
+    width: 536px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow: visible;
+    margin: 0;
+    padding: 0;
+    scroll-snap-type: none;
+  }
+
+  .service-section__tab {
+    position: relative;
+    flex-shrink: 0;
+    width: 441px;
+    height: 140px;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border-radius: 30px;
+    border: none;
+    gap: 0;
+    scroll-snap-align: none;
+  }
+
+  .service-section__tab--active {
+    width: 536px;
+    height: 139px;
+    background-color: #2365aa;
+    border: none;
+    color: #ffffff;
+    box-shadow: none;
+  }
+
+  .service-section__tab--inactive {
+    background-color: #ffffff;
+    color: #272935;
+  }
+
+  .service-section__tab-icon {
+    position: absolute;
+    left: 41px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 87px;
+    height: 71px;
+  }
+
+  .service-section__tab-label {
+    position: absolute;
+    left: 190px;
+    right: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    flex: none;
+    font-family: "Lay Grotesk Trial", "Lay Grotesk - Trial", sans-serif;
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 34px;
+  }
+
+  .service-section__panel {
+    position: absolute;
+    left: 610px;
+    top: 99px;
+    width: 1243px;
+    height: 1040px;
+    display: block;
+  }
+
+  .service-section__card {
+    width: 1243px;
+    height: 1040px;
+    min-height: 1040px;
+    padding: 69px 67px 44px;
+    border-radius: 30px;
+    border: none;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(11.4px);
+    -webkit-backdrop-filter: blur(11.4px);
+    box-shadow: none;
+  }
+
+  .service-section__card-body {
+    max-width: 829px;
+    gap: 0;
+    overflow: visible;
+  }
+
+  .service-section__card-title {
+    margin: 0 0 53px;
+    font-family: "Lay Grotesk Trial", "Lay Grotesk - Trial", sans-serif;
+    font-size: 35px;
+    font-weight: 600;
+    line-height: 1.2;
+    color: #272935;
+  }
+
+  .service-section__card-desc {
+    margin: 0 0 49px;
+    font-family: "Lay Grotesk Trial", "Lay Grotesk - Trial", sans-serif;
+    font-size: 25px;
+    font-weight: 500;
+    line-height: 1.39;
+    color: #848b9b;
+  }
+
+  .service-section__features {
+    gap: 23px;
+  }
+
+  .service-section__feature {
+    gap: 19px;
+    align-items: flex-start;
+  }
+
+  .service-section__feature-check {
+    width: 33px;
+    height: 33px;
+    margin-top: 2px;
+    border-width: 2px;
+  }
+
+  .service-section__feature-check svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .service-section__feature-title {
+    margin: 0 0 10px;
+    font-family: "Lay Grotesk Trial", "Lay Grotesk - Trial", sans-serif;
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 34px;
+    color: #272935;
+  }
+
+  .service-section__feature-text {
+    max-width: 777px;
+    font-family: "Lay Grotesk Trial", "Lay Grotesk - Trial", sans-serif;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1.39;
+    color: #848b9b;
+  }
+
   .service-section__card-illustration {
-    width: 9rem;
-    height: 9rem;
-    right: 2.5rem;
-    bottom: 2.5rem;
+    position: absolute;
+    right: 41px;
+    bottom: 44px;
+    width: 290px;
+    height: 237px;
+    margin: 0;
   }
 }

@@ -1,5 +1,5 @@
 .ai-landscape {
-  background: #f5f7fb;
+  background: #113D77;
 }
 
 .ai-card {
@@ -18,12 +18,12 @@
 }
 
 .ai-card--light {
-  background: #dae8f3;
+  background: #EFF7FC;
   box-shadow: 0 4px 24px rgba(17, 61, 119, 0.06);
 }
 
 .ai-card--blue {
-  background: #2365aa;
+  background: #2365AA;
   color: #fff;
 }
 
@@ -161,9 +161,9 @@
   align-items: center;
   justify-content: center;
   border-radius: 9999px;
-  border: 1.5px solid #c8d6e5;
+  border: 1.5px solid #FFFFFF;
   background: transparent;
-  color: #3a3a4a;
+  color: #FFFFFF;
   cursor: pointer;
   transition:
     background-color 0.25s ease,
@@ -188,14 +188,14 @@
   flex: 1;
   height: 4px;
   border-radius: 4px;
-  background: #dde4ed;
+  background: #A1B1CB;
   overflow: hidden;
 }
 
 .ai-landscape__progress-fill {
   height: 100%;
   border-radius: 4px;
-  background: #113d77;
+  background: #FFFFFF;
   transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
 

@@ -2,12 +2,8 @@ import elevateBadgeIcon from "../assets/testimonial/Group 84.svg";
 import blogImage1 from "../assets/testimonial/Rectangle 90.svg";
 import blogImage2 from "../assets/testimonial/Rectangle 90 (1).svg";
 import blogImage3 from "../assets/testimonial/Rectangle 90 (2).svg";
-import partner3i from "../assets/testimonial/3i-Infotech-Logo 1.svg";
-import partnerGenai from "../assets/testimonial/genai_logo-main 1.svg";
-import partnerTeksoft from "../assets/testimonial/image 10.svg";
-import partnerMagnor from "../assets/homepage-icons/magnor.png";
-import partnerGeoNomads from "../assets/homepage-icons/geo-nomads.png";
 import viewAllArrow from "../assets/nav/lets-connect.svg";
+import { activePartners } from "../data/activePartners";
 import WhoWeAre from "./WhoWeAre";
 
 const blogPosts = [
@@ -26,14 +22,6 @@ const blogPosts = [
     image: blogImage3,
     title: "Structuring an Al Knowledge Assistant- And Why It Matters",
   },
-];
-
-const partners = [
-  { name: "Magnor", logo: partnerMagnor },
-  { name: "3i Infotech", logo: partner3i },
-  { name: "GENAI Consulting", logo: partnerGenai },
-  { name: "Teksoft Solutions", logo: partnerTeksoft },
-  { name: "GeoNomads", logo: partnerGeoNomads },
 ];
 
 export default function Testimonials() {
@@ -97,7 +85,7 @@ export default function Testimonials() {
             <h2 className="text-3xl font-bold text-[#272935] sm:text-4xl lg:text-[52px] xl:text-[58px] 2xl:text-[64px] min-[1920px]:text-[68px]">Our Active Partners</h2>
 
             <div className="mt-10 flex flex-wrap items-center justify-center gap-10 sm:gap-12 lg:mt-12 lg:gap-16 xl:gap-20">
-              {partners.map((partner) => (
+              {activePartners.map((partner) => (
                 <img
                   key={partner.name}
                   src={partner.logo}

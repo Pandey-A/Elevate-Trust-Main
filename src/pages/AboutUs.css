@@ -261,7 +261,7 @@
   
   /* ── DESK PROFILES SECTION ─────────────────── */
   .about-desk-section {
-    background-color: #F0F8FA;
+    background-color: #EFF7FC;
     padding: 80px 24px;
     width: 100%;
   }
@@ -331,10 +331,10 @@
   }
   
   .desk-bubble {
-    background-color: #2365AA;
+    background-color: #FFFFFF;
     border-radius: 0 24px 24px 24px;
     padding: 40px;
-    color: #FFFFFF;
+    color: #272935;
     position: relative;
   }
   
@@ -346,14 +346,14 @@
     left: -20px;
     width: 0;
     height: 0;
-    border-top: 25px solid #2365AA;
+    border-top: 25px solid #FFFFFF;
     border-left: 20px solid transparent;
   }
   
   .desk-bubble p {
     font-size: 14px;
     line-height: 1.7;
-    color: #E2E8F0;
+    color: #272935;
     margin: 0 0 20px 0;
     font-weight: 300;
   }
@@ -383,9 +383,10 @@
       top: -20px;
       left: 40px;
       border-top: none;
-      border-bottom: 25px solid #2365AA;
+      border-bottom: 25px solid #FFFFFF;
       border-left: 20px solid transparent;
       border-right: 20px solid transparent;
     }
   }
+
   

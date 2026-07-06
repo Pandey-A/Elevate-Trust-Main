@@ -180,10 +180,10 @@ export default function AILandscape() {
       <div className="mx-auto max-w-site w-full">
         <div className="text-center">
           <p className="section-eyebrow font-semibold uppercase tracking-[0.18em]">
-            <span className="text-[#1a1a2e]">Smart Solutions for a </span>
+            <span className="text-[#FFFFFF]">Smart Solutions for a </span>
             <span className="text-[#2e7ad1]">Smarter Tomorrow</span>
           </p>
-          <h2 className="mt-3 text-3xl font-bold text-[#1a1a2e] sm:text-4xl lg:text-[44px] lg:leading-[1.15] xl:text-[50px] 2xl:text-[56px] min-[1920px]:text-[62px]">
+          <h2 className="mt-3 text-3xl font-bold text-[#FFFFFF] sm:text-4xl lg:text-[44px] lg:leading-[1.15] xl:text-[50px] 2xl:text-[56px] min-[1920px]:text-[62px]">
             Our AI Landscape
           </h2>
         </div>

@@ -8,7 +8,7 @@ import tiktokLogo from "../assets/footer/TiktokLogo.svg";
 import xLogo from "../assets/footer/xlogo.svg";
 import worldMapBackground from "../assets/footer/worldmapfooter.svg";
 import elevateFooterServiceLogo from "../assets/footer/elevateservicelogo.svg";
-import maskGroup from "../assets/homepage-icons/Mask-group.svg";
+import maskGroup from "../assets/homepage-icons/Mask-group.png";
 import paperplanefooter from "../assets/footer/PaperPlaneTilt.svg";
 import "./footerSection.css";
 
@@ -127,7 +127,7 @@ export default function FooterSection() {
             </div>
           </FooterColumn>
 
-          <FooterColumn title="Partners">
+          <FooterColumn title="">
             <img
               src={maskGroup}
               alt="Partner logos"
