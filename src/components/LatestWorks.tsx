@@ -35,48 +35,44 @@ const works: WorkItem[] = [
   {
     num: "/001",
     title:
-      "RFP Query and Compliance Check automation in the Government & procurement industry",
+      "Tender Query & Compliance Automation for Indian Government",
     businessChallenge:
-      "The client needed a smarter way to manage RFPs and ensure every procurement decision met strict compliance rules. Manual reviews were slow, error-prone and made it hard to get real-time visibility into vendor compliance status.",
+      "Manual RFP analysis is labour-intensive and prone to conflicting departmental interpretations, leaving vendors to  struggle with ambiguous clauses in massive documents. This lack of automated conformance checks creates  compliance risks and leads to repetitive, redundant pre-bid queries that stall the procurement timeline.",
     techs: ["Figma", "AI ML", "Generative AI", "Python", "Grok", "Open AI"],
-    demos: [
-      { label: "1. Tender Query Automation with Human in loop Demo", href: "#" },
-      { label: "2. RFP Compliance check automation & audit automation", href: "#" },
-    ],
     solutionOverview:
-      "Delivered a centralized compliance engine that automates RFP query handling, flags non-compliant responses instantly, and provides dashboards for procurement teams to track vendor eligibility in real time.",
+      "The solution is an AI-driven system that automates document analysis by cross-referencing RFPs, SBDs, and  historical query-response records. It leverages institutional knowledge to provide consistent, high-quality responses  and performs automated compliance checks to identify missing or ambiguous clauses before documents are  released.",
     businessOutcome:
-      "Reduced manual RFP review time by 65%, improved compliance accuracy, and enabled faster, data-driven procurement decisions across government workflows.",
+      "By replacing manual cross-referencing with AI-powered intelligence, the system eliminates significant delays and  reduces interpretive ambiguity. This transformation ensures higher response quality, strengthens institutional  memory, and mitigates compliance risks through proactive, automated document validation.",
     image: latestWorksIllust001,
   },
   {
     num: "/002",
-    title: "Talent Matching automation using Generative AI for the Healthcare Industry",
+    title: "Talent Matching automation using Agentic AI in HR Tech Industry",
     businessChallenge:
-      "HR teams often review large numbers of resumes, making the hiring process time-consuming and prone to human errors. An efficient and unbiased recruitment system helps streamline candidate selection and improve hiring accuracy.",
+      "The client faced significant operational bottlenecks due to manual CV screening and slow hiring cycles, resulting in  inconsistent candidate evaluations. There was a critical need for a scalable, multi-tenant solution that prioritized  transparency, exploitability, and data privacy to maintain trust in the hiring process.",
     techs: ["Figma", "AI ML", "Generative AI", "Python", "Grok", "Open AI"],
     solutionOverview:
-      "The AI matching engine recommends candidates based on matching scores, processes multiple talent pools efficiently, and improves accuracy through customizable and feedback-driven learning.",
+      "The engagement followed a four-phase execution strategy, starting with foundational AI/NLP matching and  progressing to an intelligent scoring engine with real-time recalculation. The tech stack leveraged Generative AI and  agentic orchestration to enable internal talent rediscovery and human-readable AI explanations within the existing  ATS and applied to candidates. This solution enables hiring managers to change the criteria in real time and get the  updated matching candidate.",
     businessOutcome:
-      "The AI-powered recruitment system reduces manual hiring efforts, understands skills across multiple industries, minimizes biased hiring, and scales efficiently to support business growth and increased revenue.",
+      "The implementation resulted in faster hiring decisions, improved evaluation consistency, and enhanced trust  through explainable AI and ethical design. The customer was able to sell the solution to 20 new customers in the  quarter.",
     image: landscape2,
   },
   {
     num: "/003",
     title: "Predictive maintenance using IoT devices and sensors for the oil industry",
     businessChallenge:
-      "Oil platforms rely on thousands of sensors, but manual monitoring is slow and reactive. Unexpected equipment failures lead to costly downtime, safety risks, and inefficient maintenance scheduling across remote sites.",
+      "In oil industry undetected leaks and equipment malfunctions cause a shift from proactive to reactive maintenance,  resulting in massive revenue losses from unplanned downtime and escalating repair costs. Beyond the financial  impact, these silent failures lead to severe environmental liabilities, safety hazards, and the erosion of investor  confidence due to poor ESG performance.",
     techs: ["Figma", "AI ML", "Generative AI", "Python", "Grok", "Open AI"],
     solutionOverview:
-      "Built an edge-AI predictive maintenance platform that ingests IoT sensor streams, detects anomalies in real time, and triggers automated alerts before critical failures occur.",
+      "The solution leverages a specialized AI and IoT framework for real-time anomaly detection, using high-precision sensor integrations to capture early signs of leakages and machine malfunctions.",
     solutionBullets: [
-      "Real-time Predictive Maintenance: Using Edge AI for IoT devices, we enabled instant anomaly detection directly at the source.",
-      "Edge AI Processing: Reduced latency and bandwidth by analyzing sensor data on-site instead of sending everything to the cloud.",
-      "Automated Alerts & Reporting: Failure predictions triggered instant SMS/Email alerts to maintenance crews.",
-      "Custom Sensor Integration via REST APIs: Seamlessly connecting legacy oil rig sensors into our unified analytics dashboard.",
+      "Predictive monitoring with automated alerting ensures that subtle deviations in pressure or vibration are flagged before they escalate into critical failures.",
+      "A centralized command dashboard provides a unified view for technical teams to track asset health and coordinate preventative maintenance.",
+      "Field engineers use the mobile-enabled interface to receive instant notifications and update the status of equipment repairs in real-time.",
+      "Automated diagnostic reports enable post-incident analysis to continuously refine detection accuracy and optimize operational safety.",
     ],
     businessOutcome:
-      "Enabled proactive event response with 99.2% accuracy, reduced manual oversight workloads by 80%, and cut unplanned downtime across oil field operations.",
+      "By implementing real-time AI anomaly detection, the system eliminates unplanned downtime and prevents costly  secondary equipment damage. This proactive approach significantly reduces environmental liability and  operational risk, ensuring high-performance asset longevity and regulatory compliance.",
     image: landscape3,
   },
   {
@@ -93,25 +89,22 @@ const works: WorkItem[] = [
   },
   {
     num: "/005",
-    title: "Customer Support Automation using Agentic AI in the Shipment Industry",
+    title: "Solar Rooftop Detection using Satellite Imagery & Deep Learning Segmentation",
     businessChallenge:
-      "The shipping industry often struggles with fragmented visibility across multiple carriers and legacy tracking  systems, leading to delayed updates and manual overhead. There was a critical need for an automated, unified  system that could monitor thousands of shipments in real-time, detect potential delays early, and reduce the  administrative burden on logistics coordinators.",
+      "Manual identification of solar-suitable rooftops from aerial imagery was an unscalable surveyors could assess only  hundreds of properties per week. Inconsistent evaluations and high labour costs made city-scale mapping  commercially unviable. There was an urgent need for an automated, high-accuracy pipeline capable of processing  thousands of satellite images rapidly and reliably.",
     techs: ["Figma", "AI ML", "Generative AI", "Python", "Grok", "Open AI"],
     solutionOverview:
-      "The solution features an agentic AI framework designed to orchestrate and automate shipment tracking across  diverse carrier platforms. By integrating real-time data feeds with predictive modeling, the system identifies transit  risks and automatically triggers notifications for stakeholders. A centralized dashboard provides an intelligent  overview of the entire shipping pipeline, allowing teams to manage exceptions rather than manually monitoring  every movement.",
+      "ElevateTrust built a deep learning semantic segmentation pipeline using a CNN-based U-Net architecture trained  on labelled satellite imagery. The model produces binarised roof masks, applies post-processing morphological  operations to remove noise and small artefacts, and then overlays detected rooftops onto the source image. The  inference engine integrates with Google Maps imagery APIs and outputs GIS-compatible data for downstream solar  feasibility scoring, fully automated end-to-end",
     businessOutcome:
-      "The implementation has significantly reduced the time spent on manual tracking and increased the accuracy of  delivery estimates. By automating proactive status updates and risk assessments, the client has minimized transit  disruptions, improved carrier accountability, and enhanced overall customer satisfaction through superior  transparency and reliability.",
+      "Achieved 91%+ IoU accuracy across diverse residential geographies. Reduced rooftop survey effort by over 85%,  enabling the client to map solar potential for 50,000+ properties in under 48 hours. The solution is embedded in  the client's solar lead generation platform, directly accelerating customer acquisition and accelerating clean energy  deployment at scale.",
     image: landscape3,
   },
   {
     num: "/006",
-    title: "Illicit behaviour detection using Video analytics in manufacturing industry",
+    title: "Illicit behaviour detection using Video analytics in the transport industry",
     businessChallenge:
       "A major challenge for the company was high flagging incidents, where drivers would accept direct cash payments  without engaging the taxi meter, leading to significant revenue leakage. Identifying these illicit behaviors manually  from hours of video recordings was time-consuming, inefficient, and prone to human bias, creating an urgent need  for an automated, scalable detection solution.",
     techs: ["Figma", "AI ML", "Generative AI", "Python", "Grok", "Open AI"],
-    demos: [
-      { label: "1. Demo: Video Analytics and monitoring demo", href: "#" }
-    ],
     solutionOverview:
       "The solution involves a real-time illicit behavior detection system powered by CNN models and integrated via the  Samsara API to analyze video feeds for meter-bypass events. It features a comprehensive dashboard where  management can track high-flagging incidents by driver, trip location, and frequency. This human-in-the-loop  framework allows for streamlined auditing, while an AI matching engine continuously refines its detection accuracy  based on feedback from verified cases.",
     businessOutcome:

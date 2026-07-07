@@ -237,7 +237,7 @@ export default function AILandscape() {
             </div>
           </div>
 
-          <div className="mx-auto mt-10 flex w-full max-w-3xl xl:max-w-4xl items-center gap-6 px-2">
+          <div className="ai-landscape__controls">
             <button
               type="button"
               onClick={goPrev}
@@ -245,7 +245,7 @@ export default function AILandscape() {
               aria-label="Previous card"
               className="ai-landscape__nav-btn"
             >
-              <ArrowLeft className="h-5 w-5" strokeWidth={2} />
+              <ArrowLeft className="h-4 w-4 lg:h-5 lg:w-5" strokeWidth={2.25} />
             </button>
 
             <div className="ai-landscape__progress">
@@ -262,7 +262,7 @@ export default function AILandscape() {
               aria-label="Next card"
               className="ai-landscape__nav-btn"
             >
-              <ArrowRight className="h-5 w-5" strokeWidth={2} />
+              <ArrowRight className="h-4 w-4 lg:h-5 lg:w-5" strokeWidth={2.25} />
             </button>
           </div>
         </div>

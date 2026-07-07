@@ -687,7 +687,7 @@
     width: 2012px;
     max-width: 2012px;
     margin-inline: auto;
-    padding: 0;
+    padding: 0 0 96px;
   }
 
   .latest-works__header {
@@ -1105,5 +1105,11 @@
     object-position: left bottom;
     animation: none;
     filter: none;
+  }
+}
+
+@media (min-width: 2596px) {
+  .latest-works .site-container.latest-works__container {
+    padding-bottom: 128px;
   }
 }

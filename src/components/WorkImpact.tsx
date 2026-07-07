@@ -90,8 +90,6 @@ export default function WorkImpact() {
           </div>
         </div>
 
-        {/* ── Decorative bar ── */}
-        <span className="work-impact__bar" aria-hidden />
       </div>
     </section>
   );

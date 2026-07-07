@@ -237,10 +237,10 @@ export default function StoriesOfImpact() {
                         </p>
 
                         <div className="relative mt-5 flex items-end justify-between gap-3 sm:mt-6">
-                          <div>
+                          {/* <div>
                             <p className="section-body-lg font-bold text-[#272935]">{story.name}</p>
                             <p className="section-body-sm mt-0.5 text-[#272935]/65">{story.title}</p>
-                          </div>
+                          </div> */}
                           <span className="stories-quote-mark" aria-hidden>
                             &rdquo;
                           </span>

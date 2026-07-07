@@ -153,10 +153,20 @@
   transition: none;
 }
 
+.ai-landscape__controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  width: 100%;
+  max-width: 280px;
+  margin: 2.5rem auto 0;
+}
+
 .ai-landscape__nav-btn {
   display: flex;
-  height: 44px;
-  width: 44px;
+  height: 36px;
+  width: 36px;
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
@@ -186,20 +196,31 @@
 
 .ai-landscape__progress {
   flex: 1;
+  min-width: 0;
   height: 4px;
-  border-radius: 4px;
-  background: #A1B1CB;
+  border-radius: 999px;
+  background: rgba(161, 177, 203, 0.75);
   overflow: hidden;
 }
 
 .ai-landscape__progress-fill {
   height: 100%;
-  border-radius: 4px;
+  border-radius: 999px;
   background: #FFFFFF;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.35);
   transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @media (min-width: 640px) {
+  .ai-landscape__controls {
+    max-width: 360px;
+    gap: 16px;
+  }
+
+  .ai-landscape__progress {
+    height: 5px;
+  }
+
   .ai-card {
     width: 300px;
     min-height: 400px;
@@ -224,6 +245,22 @@
 }
 
 @media (min-width: 1024px) {
+  .ai-landscape__controls {
+    max-width: 480px;
+    gap: 18px;
+  }
+
+  .ai-landscape__nav-btn {
+    height: 40px;
+    width: 40px;
+    border-width: 2px;
+  }
+
+  .ai-landscape__progress {
+    height: 5px;
+    background: #A1B1CB;
+  }
+
   .ai-card {
     width: 320px;
     min-height: 420px;
@@ -240,6 +277,15 @@
 }
 
 @media (min-width: 1440px) {
+  .ai-landscape__controls {
+    max-width: 580px;
+    gap: 20px;
+  }
+
+  .ai-landscape__progress {
+    height: 6px;
+  }
+
   .ai-card {
     width: 340px;
     min-height: 440px;
@@ -260,6 +306,10 @@
 }
 
 @media (min-width: 1536px) {
+  .ai-landscape__controls {
+    max-width: 640px;
+  }
+
   .ai-card {
     width: 360px;
     min-height: 460px;
@@ -267,6 +317,22 @@
 
   .ai-card__title {
     font-size: 1.5rem;
+  }
+}
+
+@media (min-width: 1920px) {
+  .ai-landscape__controls {
+    max-width: 720px;
+    gap: 22px;
+  }
+
+  .ai-landscape__nav-btn {
+    height: 44px;
+    width: 44px;
+  }
+
+  .ai-landscape__progress {
+    height: 6px;
   }
 }
 

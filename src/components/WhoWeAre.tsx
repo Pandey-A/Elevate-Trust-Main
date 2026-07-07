@@ -13,7 +13,7 @@ const stats: StatItem[] = [
   },
   {
     number: "5+",
-    label: "Global Regions Served\n(US, UK, Canada, NZ, Dubai)",
+    label: "Global Regions Served (US, UK, Canada, NZ, Dubai)",
   },
   {
     number: "24/7",

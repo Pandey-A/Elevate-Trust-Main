@@ -83,7 +83,8 @@ export default function HeroSection() {
 
           <div className="hero-empower">
             <h2>
-              Empowering Businesses<br />
+              Empowering<br />
+              Businesses<br />
               with AI/ML Solutions
             </h2>
             <p>That Build Trust and Drive Transformation</p>

@@ -12,6 +12,10 @@
   .who-we-are {
     padding: 72px var(--site-padding-x, 24px);
   }
+
+  .who-we-are__description {
+    max-width: min(1040px, 100%);
+  }
 }
 
 /* Background Vector Graphic */
@@ -48,7 +52,7 @@
 
 /* Description styling */
 .who-we-are__description {
-  max-width: min(900px, 100%);
+  max-width: min(820px, 100%);
   margin: 0 auto 48px auto;
   display: flex;
   flex-direction: column;
@@ -58,7 +62,7 @@
 .who-we-are__paragraph {
   font-size: var(--fs-body);
   line-height: 1.8;
-  color: rgba(255, 255, 255, 0.72);
+  color: #a1b1cb;
   text-align: center;
   margin: 0;
 }
@@ -183,5 +187,107 @@
 
   .who-we-are__stat-label {
     font-size: 13px;
+  }
+}
+
+/* Who We Are — exact Figma match @ 2012px */
+@media (min-width: 2012px) {
+  .who-we-are {
+    padding: 100px 0 120px;
+  }
+
+  .who-we-are__decor-vector {
+    right: calc(50% - 1006px + 40px);
+    top: -60px;
+    width: 520px;
+  }
+
+  .who-we-are__container {
+    width: 2012px;
+    max-width: 2012px;
+    margin-inline: auto;
+  }
+
+  .who-we-are__title {
+    font-family: "Lay Grotesk Trial", "Lay Grotesk - Trial", sans-serif;
+    font-size: 56px;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: 0;
+    margin: 0 0 50px;
+  }
+
+  .who-we-are__description {
+    width: 100%;
+    max-width: 1180px;
+    margin: 0 auto 80px;
+    padding: 0;
+    box-sizing: border-box;
+    gap: 40px;
+  }
+
+  .who-we-are__paragraph {
+    font-family: "Lay Grotesk Trial", "Lay Grotesk - Trial", sans-serif;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 1.25;
+    letter-spacing: 0;
+    text-align: center;
+    color: #a1b1cb;
+  }
+
+  .who-we-are__stats-grid {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 31px;
+    width: 100%;
+    padding: 0 159px;
+    box-sizing: border-box;
+  }
+
+  .who-we-are__stat-card {
+    width: 400px;
+    height: 260px;
+    min-height: 260px;
+    flex: 0 0 400px;
+    border-radius: 30px;
+    padding: 48px 36px;
+    box-sizing: border-box;
+    justify-content: center;
+    box-shadow: none;
+  }
+
+  .who-we-are__stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.14);
+  }
+
+  .who-we-are__stat-num {
+    font-family: "Lay Grotesk Trial", "Lay Grotesk - Trial", sans-serif;
+    font-size: 64px;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: 0;
+    color: #113d77;
+    margin: 0 0 16px;
+  }
+
+  .who-we-are__stat-label {
+    font-family: "Lay Grotesk Trial", "Lay Grotesk - Trial", sans-serif;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 1.25;
+    letter-spacing: 0;
+    text-align: center;
+    color: #113d77;
+    white-space: normal;
+  }
+}
+
+@media (min-width: 2596px) {
+  .who-we-are__container {
+    width: 2012px;
+    max-width: 2012px;
   }
 }
