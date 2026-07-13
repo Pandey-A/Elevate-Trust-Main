@@ -1,0 +1,355 @@
+import { useEffect, useRef, useState, type ChangeEvent } from "react";
+import { Link } from "react-router-dom";
+import {
+  ArrowUpRight,
+  ChevronDown,
+  Clock,
+  CircleDollarSign,
+  Armchair,
+  Mail,
+  MapPin,
+  Phone,
+} from "lucide-react";
+import FlyCTA from "../components/FlyCTA";
+import worldMapBackground from "../assets/homepage-icons/Group(3).png";
+import careersIllustration from "../assets/homepage-icons/carrers.png";
+import youtubeLogo from "../assets/footer/YoutubeLogo.svg";
+import facebookLogo from "../assets/footer/FacebookLogo.svg";
+import linkedinLogo from "../assets/footer/LinkedinLogo.svg";
+import instagramLogo from "../assets/footer/InstagramLogo.svg";
+import tiktokLogo from "../assets/footer/TiktokLogo.svg";
+import xLogo from "../assets/footer/xlogo.svg";
+import "./Careers.css";
+
+type Job = {
+  title: string;
+  tag: string;
+  description: string;
+  type: string;
+  salary: string;
+  location: string;
+};
+
+type JobGroup = {
+  category: string;
+  subtitle: string;
+  jobs: Job[];
+};
+
+const jobGroups: JobGroup[] = [
+  {
+    category: "Design",
+    subtitle: "Open position in our design team.",
+    jobs: [
+      {
+        title: "Product Designer",
+        tag: "Designer",
+        description:
+          "We are looking for a mid-level product designer to join our team.",
+        type: "Full-time",
+        salary: "80k - 100k",
+        location: "Remotely",
+      },
+      {
+        title: "Product Designer",
+        tag: "Designer",
+        description:
+          "We are looking for a mid-level product designer to join our team.",
+        type: "Full-time",
+        salary: "80k - 100k",
+        location: "Remotely",
+      },
+    ],
+  },
+  {
+    category: "Software Development",
+    subtitle: "Open position in our software team.",
+    jobs: [
+      {
+        title: "Product Designer",
+        tag: "Software",
+        description:
+          "We are looking for a mid-level product designer to join our team.",
+        type: "Full-time",
+        salary: "80k - 100k",
+        location: "Remotely",
+      },
+      {
+        title: "Product Designer",
+        tag: "Software",
+        description:
+          "We are looking for a mid-level product designer to join our team.",
+        type: "Full-time",
+        salary: "80k - 100k",
+        location: "Remotely",
+      },
+      {
+        title: "Product Designer",
+        tag: "Software",
+        description:
+          "We are looking for a mid-level product designer to join our team.",
+        type: "Full-time",
+        salary: "80k - 100k",
+        location: "Remotely",
+      },
+    ],
+  },
+];
+
+const socialLinks = [
+  { src: youtubeLogo, alt: "YouTube", href: "#" },
+  { src: facebookLogo, alt: "Facebook", href: "#" },
+  { src: linkedinLogo, alt: "LinkedIn", href: "#" },
+  { src: instagramLogo, alt: "Instagram", href: "#" },
+  { src: tiktokLogo, alt: "TikTok", href: "#" },
+  { src: xLogo, alt: "X", href: "#" },
+];
+
+export default function Careers() {
+  const [fileName, setFileName] = useState("No File Selcted");
+  const [filter, setFilter] = useState("Remotely");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    setFileName(file ? file.name : "No File Selcted");
+  };
+
+  return (
+    <div className="careers-page">
+      <section className="careers-hero">
+        <img
+          src={worldMapBackground}
+          alt=""
+          className="careers-hero__bg"
+          aria-hidden="true"
+        />
+        <div className="careers-hero__content">
+          <div className="careers-hero__text">
+            <h1 className="careers-hero__title">
+              Start doing work that matters
+            </h1>
+            <p className="careers-hero__subtitle">
+              Our philosophy is simple hire a team of diverse, passionate people
+              and foster a culture that empowers you to do your best work.
+            </p>
+          </div>
+          <img
+            src={careersIllustration}
+            alt=""
+            className="careers-hero__illustration"
+            aria-hidden="true"
+          />
+        </div>
+      </section>
+
+      <nav className="careers-breadcrumbs" aria-label="Breadcrumb">
+        <Link to="/">Home</Link>
+        <span className="careers-breadcrumbs__sep" aria-hidden="true">
+          »
+        </span>
+        <Link to="/ServiceDetails">Our Services</Link>
+        <span className="careers-breadcrumbs__sep" aria-hidden="true">
+          »
+        </span>
+        <span>Custom AI/ML Solutions</span>
+      </nav>
+
+      <section className="careers-enquiry">
+        <div className="careers-enquiry__panel">
+          <div className="careers-enquiry__info">
+            <h2 className="careers-enquiry__info-title">
+              Let’s build your digital future
+            </h2>
+            <p className="careers-enquiry__info-text">
+              Our philosophy is simple hire a team of diverse, passionate people
+              and foster a culture that empowers you to do your best work.
+            </p>
+
+            <ul className="careers-enquiry__contacts">
+              <li className="careers-enquiry__contacts-row">
+                <div>
+                  <span className="careers-enquiry__icon" aria-hidden="true">
+                    <Phone size={20} strokeWidth={2} />
+                  </span>
+                  <a href="tel:+919243322064">+91-9243322064</a>
+                </div>
+                <div>
+                  <span className="careers-enquiry__icon" aria-hidden="true">
+                    <Mail size={20} strokeWidth={2} />
+                  </span>
+                  <a href="mailto:info@elevatetrust.ai">info@elevatetrust.ai</a>
+                </div>
+              </li>
+              <li>
+                <span className="careers-enquiry__icon" aria-hidden="true">
+                  <MapPin size={20} strokeWidth={2} />
+                </span>
+                <span>Pimple Saudagar, Pune Maharashtra</span>
+              </li>
+            </ul>
+
+            <div className="careers-enquiry__socials">
+              {socialLinks.map((item) => (
+                <a key={item.alt} href={item.href} aria-label={item.alt}>
+                  <img src={item.src} alt="" />
+                </a>
+              ))}
+            </div>
+          </div>
+
+          <div className="careers-enquiry__form-card">
+            <h2 className="careers-enquiry__form-title">Send a message</h2>
+            <p className="careers-enquiry__form-subtitle">Career Enquiry</p>
+
+            <form
+              className="careers-form"
+              onSubmit={(event) => event.preventDefault()}
+            >
+              <label className="careers-form__field careers-form__field--full">
+                <span>Full Name</span>
+                <input type="text" name="fullName" />
+              </label>
+
+              <label className="careers-form__field">
+                <span>Email</span>
+                <input type="email" name="email" />
+              </label>
+
+              <label className="careers-form__field">
+                <span>Phone Number</span>
+                <input type="tel" name="phone" />
+              </label>
+
+              <label className="careers-form__field">
+                <span>Job Title</span>
+                <input type="text" name="jobTitle" />
+              </label>
+
+              <label className="careers-form__field">
+                <span>Education</span>
+                <input type="text" name="education" />
+              </label>
+
+              <label className="careers-form__field">
+                <span>Expertise</span>
+                <input type="text" name="expertise" />
+              </label>
+
+              <div className="careers-form__field careers-form__upload">
+                <span>Upload CV</span>
+                <div className="careers-form__upload-row">
+                  <span className="careers-form__upload-name">{fileName}</span>
+                  <button
+                    type="button"
+                    className="careers-form__browse"
+                    onClick={() => fileInputRef.current?.click()}
+                  >
+                    Browse
+                  </button>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept=".pdf,.doc,.docx"
+                    className="careers-form__file-input"
+                    onChange={handleFileChange}
+                  />
+                </div>
+              </div>
+
+              <label className="careers-form__field careers-form__field--full careers-form__field--textarea">
+                <span>Expertise</span>
+                <textarea name="message" rows={3} />
+              </label>
+
+              <div className="careers-form__actions">
+                <button type="submit" className="careers-form__submit">
+                  <span>Send</span>
+                  <span className="careers-form__submit-circle">
+                    <ArrowUpRight size={16} strokeWidth={2.5} />
+                  </span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <section className="careers-jobs">
+        <div className="careers-jobs__header">
+          <h2 className="careers-jobs__title">Start doing work that matters</h2>
+          <p className="careers-jobs__subtitle">
+            We create custom AI solutions for Predictive Analytics, such as
+            predicting customer churn, building recommendation systems,.
+          </p>
+
+          <div className="careers-jobs__filter">
+            <select
+              value={filter}
+              onChange={(event) => setFilter(event.target.value)}
+              aria-label="Filter jobs"
+            >
+              <option value="Remotely">Remotely</option>
+              <option value="Full-time">Full-time</option>
+              <option value="Design">Design</option>
+              <option value="Software">Software</option>
+            </select>
+            <ChevronDown size={16} strokeWidth={2} aria-hidden="true" />
+          </div>
+        </div>
+
+        <div className="careers-jobs__list">
+          {jobGroups.map((group, groupIndex) => (
+            <div key={group.category}>
+              {groupIndex > 0 && <hr className="careers-jobs__divider" />}
+              <div className="careers-jobs__group">
+                <div className="careers-jobs__group-info">
+                  <h3>{group.category}</h3>
+                  <p>{group.subtitle}</p>
+                </div>
+                <div className="careers-jobs__cards">
+                  {group.jobs.map((job, index) => (
+                    <article
+                      key={`${group.category}-${index}`}
+                      className="careers-job-card"
+                    >
+                      <div className="careers-job-card__top">
+                        <h4>{job.title}</h4>
+                        <span className="careers-job-card__tag">{job.tag}</span>
+                      </div>
+                      <p className="careers-job-card__desc">{job.description}</p>
+                      <div className="careers-job-card__meta">
+                        <span>
+                          <Clock size={22} strokeWidth={1.75} aria-hidden />
+                          {job.type}
+                        </span>
+                        <span>
+                          <CircleDollarSign
+                            size={22}
+                            strokeWidth={1.75}
+                            aria-hidden
+                          />
+                          {job.salary}
+                        </span>
+                        <span>
+                          <Armchair size={22} strokeWidth={1.75} aria-hidden />
+                          {job.location}
+                        </span>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <FlyCTA />
+    </div>
+  );
+}

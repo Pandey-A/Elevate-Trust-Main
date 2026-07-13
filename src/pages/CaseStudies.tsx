@@ -1,0 +1,192 @@
+import { useEffect } from "react";
+import { Link } from "react-router-dom";
+import { ArrowUpRight } from "lucide-react";
+import FlyCTA from "../components/FlyCTA";
+import worldMapBackground from "../assets/homepage-icons/Group(3).png";
+import storiesVector from "../assets/homepage-icons/stories-vector.png";
+import partnerGlobe from "../assets/homepage-icons/partner-globe.png";
+import csRfp from "../assets/case-studies/cs-rfp.png";
+import csTalent from "../assets/case-studies/cs-talent.png";
+import csPredictive1 from "../assets/case-studies/cs-predictive-1.png";
+import csSupportBpo from "../assets/case-studies/cs-support-bpo.png";
+import csPredictive2 from "../assets/case-studies/cs-predictive-2.png";
+import csSupportShipment from "../assets/case-studies/cs-support-shipment.png";
+import csPredictive3 from "../assets/case-studies/cs-predictive-3.png";
+import csVendorFraud from "../assets/case-studies/cs-vendor-fraud.png";
+import csSolar from "../assets/case-studies/cs-solar.png";
+import "./CaseStudies.css";
+
+type CaseStudy = {
+  title: string;
+  description: string;
+  image: string;
+  imageClassName?: string;
+  titleClassName?: string;
+};
+
+const caseStudies: CaseStudy[] = [
+  {
+    title:
+      "RFP Query and Compliance Check automation in the Government & procurement industry",
+    description:
+      "AI-driven system that automates document analysis by cross-referencing RFPs, SBDs, and historical query-response records. It leverages institutional knowledge to provide consistent, high-quality responses and performs automated compliance checks to identify missing or ambiguous clauses before documents are released",
+    image: csRfp,
+    titleClassName: "cs-card__title--lg",
+  },
+  {
+    title: "Talent Matching automation using Agentic AI in HR Tech Industry",
+    description:
+      "The engagement followed a four-phase execution strategy, starting with foundational AI/NLP matching and progressing to an intelligent scoring engine with real-time recalculation. The tech stack leveraged Generative AI and agentic orchestration to enable internal talent rediscovery and human-readable AI explanations within the existing ATS and applied to candidates. This solution enables hiring managers to change the criteria in real time and get the updated matching candidate.",
+    image: csTalent,
+    titleClassName: "cs-card__title--lg",
+  },
+  {
+    title:
+      "Predictive maintenance using IoT devices and sensors for the oil industry",
+    description:
+      "Leverages a specialized AI and IoT framework for real-time anomaly detection, using high-precision sensor integrations to capture early signs of leakages and machine malfunctions.",
+    image: csPredictive1,
+  },
+  {
+    title: "Customer Support Automation using Agentic AI BPO Industry",
+    description:
+      "An agentic-based generative AI solution was built to reduce manual content searching and integrate past successful solutions for agent recommendations. The system offers deep customization for organization-specific workflows and utilizes a Kubernetes-based deployment to ensure the solution scales effectively with demand",
+    image: csSupportBpo,
+  },
+  {
+    title:
+      "Predictive maintenance using IoT devices and sensors for the oil industry",
+    description:
+      "Leverages a specialized AI and IoT framework for real-time anomaly detection, using high-precision sensor integrations to capture early signs of leakages and machine malfunctions.",
+    image: csPredictive2,
+  },
+  {
+    title:
+      "Customer Support Automation using Agentic AI in the Shipment Industry",
+    description:
+      "An agentic-based generative AI solution was built to reduce manual content searching and integrate past successful solutions for agent recommendations. The system offers deep customization for organization-specific workflows and utilizes a Kubernetes-based deployment to ensure the solution scales effectively with demand",
+    image: csSupportShipment,
+  },
+  {
+    title:
+      "Predictive maintenance using IoT devices and sensors for the oil industry",
+    description:
+      "The solution involves a real-time illicit behaviour detection system powered by CNN models and integrated via the Samsara API to analyse video feeds for meter-bypass events. It features a comprehensive dashboard where management can track high-flagging incidents by driver, trip location, and frequency. This human-in-the-loop framework allows for streamlined auditing, while an AI matching engine continuously refines its detection accuracy based on feedback from verified cases",
+    image: csPredictive3,
+    imageClassName: "cs-card__media--cover",
+  },
+  {
+    title:
+      "Vendor Material Fraud Detection using AI Video Analytics in the Construction Industry",
+    description:
+      "ElevateTrust developed an AI video analytics system using CCTV cameras at delivery points to automatically measure material volume in real time. CNN-based models combined with 3D point cloud depth analysis estimate the actual quantity in each truck load. The system compares AI-measured quantities against vendor-declared amounts, flags discrepancies instantly, captures timestamped video",
+    image: csVendorFraud,
+    imageClassName: "cs-card__media--cover",
+  },
+  {
+    title:
+      "Solar Rooftop Detection using Satellite Imagery & Deep Learning Segmentation",
+    description:
+      "ElevateTrust built a deep learning semantic segmentation pipeline using a CNN-based U-Net architecture trained on labelled satellite imagery. The model produces binarised roof masks, applies post-processing morphological operations to remove noise and small artefacts, and then overlays detected rooftops onto the source image. The inference engine integrates with Google Maps imagery APIs and outputs GIS-compatible data for downstream solar feasibility scoring, fully automated end-to-end.",
+    image: csSolar,
+    imageClassName: "cs-card__media--cover",
+  },
+];
+
+export default function CaseStudies() {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  return (
+    <div className="cs-page">
+      <section className="cs-hero">
+        <img
+          src={worldMapBackground}
+          alt=""
+          className="cs-hero__bg"
+          aria-hidden="true"
+        />
+        <div className="cs-hero__content">
+          <h1 className="cs-hero__title">
+            Custom AI/ML Solutions for Strategic Business Outcomes
+          </h1>
+          <p className="cs-hero__subtitle">
+            We collaborate with clients to elevate AI solutions aimed at achieving
+            strategic business goals. Our knowledge covers many industries,
+            tackling difficult issues using AI methods designed for both
+            structured and unstructured data. We are skilled in developing
+            traditional Machine Learning and Deep Learning algorithms.
+          </p>
+          <Link to="/contact" className="cs-hero__btn">
+            <span>Contact Us</span>
+            <span className="cs-hero__btn-circle">
+              <ArrowUpRight size={16} strokeWidth={2.5} />
+            </span>
+          </Link>
+        </div>
+      </section>
+
+      <nav className="cs-breadcrumbs" aria-label="Breadcrumb">
+        <Link to="/">Home</Link>
+        <span className="cs-breadcrumbs__sep" aria-hidden="true">
+          »
+        </span>
+        <Link to="/ServiceDetails">Our Services</Link>
+        <span className="cs-breadcrumbs__sep" aria-hidden="true">
+          »
+        </span>
+        <span>Custom AI/ML Solutions</span>
+      </nav>
+
+      <section className="cs-section">
+        <div className="cs-section__decor" aria-hidden="true">
+          <img
+            src={storiesVector}
+            alt=""
+            className="cs-section__decor-vector"
+          />
+          <img
+            src={partnerGlobe}
+            alt=""
+            className="cs-section__decor-globe"
+          />
+        </div>
+
+        <div className="cs-section__inner">
+          <div className="cs-section__header">
+            <h2 className="cs-section__title">Case Studies</h2>
+            <p className="cs-section__subtitle">
+              We create custom AI solutions for Predictive Analytics, such as
+              predicting customer churn, building recommendation systems,.
+            </p>
+          </div>
+
+          <div className="cs-grid">
+            {caseStudies.map((study, index) => (
+              <article key={index} className="cs-card">
+                <div className={`cs-card__media ${study.imageClassName ?? ""}`}>
+                  <img src={study.image} alt="" />
+                </div>
+                <div className="cs-card__body">
+                  <h3
+                    className={`cs-card__title ${study.titleClassName ?? ""}`}
+                  >
+                    {study.title}
+                  </h3>
+                  <p className="cs-card__desc">{study.description}</p>
+                  <a href="#" className="cs-card__link">
+                    <span>Read the case study</span>
+                    <ArrowUpRight size={18} strokeWidth={2.5} />
+                  </a>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <FlyCTA />
+    </div>
+  );
+}

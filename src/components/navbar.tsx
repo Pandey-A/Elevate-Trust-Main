@@ -10,10 +10,14 @@ import letsConnectIcon from '../assets/nav/lets-connect.svg';
 import './navbar.css';
 
 const SERVICE_DETAILS_PATH = '/ServiceDetails';
+const TECHNOLOGIES_PATH = '/technologies';
+const INDUSTRIES_PATH = '/industries';
+
+type MegaMenuId = 'services' | 'technology-trends' | 'industries';
 
 type MegaMenuNavLink = {
   label: string;
-  megaMenu: true;
+  megaMenu: MegaMenuId;
 };
 
 type DropdownNavLink = {
@@ -29,45 +33,90 @@ type SimpleNavLink = {
 
 type NavLink = MegaMenuNavLink | DropdownNavLink | SimpleNavLink;
 
+type MegaMenuConfig = {
+  title: string;
+  itemHref: string;
+  leftColumn: string[];
+  rightColumn: string[];
+};
+
 function isMegaMenuLink(link: NavLink): link is MegaMenuNavLink {
-  return 'megaMenu' in link && link.megaMenu;
+  return 'megaMenu' in link;
 }
 
 function isDropdownLink(link: NavLink): link is DropdownNavLink {
   return 'dropdown' in link;
 }
 
-const ourServicesMenu = {
-  title: 'Our Services',
-  leftColumn: [
-    'AI/ML Solution',
-    'Generative AI',
-    'Audio/Video Analytics',
-    'Cloud/On-Premise Deployment',
-    'IOT based business process automation',
-  ],
-  rightColumn: [
-    'Web Design & Development',
-    'Mobile App Development',
-    'Custom Software Development',
-    'ERP Solutions',
-  ],
+function toSlug(label: string) {
+  return label.toLowerCase().replace(/\s+/g, '-');
+}
+
+const megaMenus: Record<MegaMenuId, MegaMenuConfig> = {
+  services: {
+    title: 'Our Services',
+    itemHref: SERVICE_DETAILS_PATH,
+    leftColumn: [
+      'AI/ML Solution',
+      'Generative AI',
+      'Audio/Video Analytics',
+      'Cloud/On-Premise Deployment',
+      'IOT based business process automation',
+    ],
+    rightColumn: [
+      'Web Design & Development',
+      'Mobile App Development',
+      'Custom Software Development',
+      'ERP Solutions',
+    ],
+  },
+  'technology-trends': {
+    title: 'Technology trends',
+    itemHref: TECHNOLOGIES_PATH,
+    leftColumn: [
+      'AI Native SDLC',
+      'AI',
+      'Data',
+      'Cloud',
+      'Cybersecurity',
+    ],
+    rightColumn: [
+      'IT Bizops',
+      'Devops',
+      'On premise',
+      'Digital workspace',
+    ],
+  },
+  industries: {
+    title: 'Industries',
+    itemHref: INDUSTRIES_PATH,
+    leftColumn: [
+      'Healthcare and Life Sciences',
+      'Financial Services & FinTech',
+      'E-commerce & Retail',
+      'Education & E-Learning',
+    ],
+    rightColumn: [
+      'Logistics & Supply Chain',
+      'Manufacturing & Industry 4.0',
+      'Social Media & Entertainment',
+      'Public Sector & Government',
+    ],
+  },
 };
 
 const navLinks: NavLink[] = [
   {
     label: 'Our Services',
-    megaMenu: true,
+    megaMenu: 'services',
   },
   {
     label: 'Technology Trends',
-    href: '/technologies',
-    dropdown: ['AI/ML', 'Blockchain', 'IoT']
+    megaMenu: 'technology-trends',
   },
   {
     label: 'Industries',
-    href: '/industries',
-    dropdown: ['Finance', 'Healthcare', 'Retail']
+    megaMenu: 'industries',
   },
   {
     label: 'Resources',
@@ -106,41 +155,61 @@ export default function Navbar() {
     setMobileExpanded((current) => (current === label ? null : label));
   };
 
-  const isServiceDetailsActive = location.pathname === SERVICE_DETAILS_PATH;
+  const isMegaMenuActive = (menuId: MegaMenuId) => {
+    if (menuId === 'services') return location.pathname === SERVICE_DETAILS_PATH;
+    if (menuId === 'technology-trends') {
+      return location.pathname === TECHNOLOGIES_PATH || location.pathname.startsWith(`${TECHNOLOGIES_PATH}/`);
+    }
+    if (menuId === 'industries') {
+      return location.pathname === INDUSTRIES_PATH || location.pathname.startsWith(`${INDUSTRIES_PATH}/`);
+    }
+    return false;
+  };
 
-  const renderServicesMenu = (onNavigate?: () => void) => (
-    <div className="px-1 pt-1">
-      <p className="mb-4 text-base font-bold text-[#272935]">{ourServicesMenu.title}</p>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-1">
-        <ul className="space-y-3">
-          {ourServicesMenu.leftColumn.map((item) => (
-            <li key={item}>
-              <Link
-                to={SERVICE_DETAILS_PATH}
-                className="text-sm text-[#4B5563] hover:text-[#272935] transition-colors leading-snug"
-                onClick={onNavigate}
-              >
-                {item}
-              </Link>
-            </li>
-          ))}
-        </ul>
-        <ul className="space-y-3">
-          {ourServicesMenu.rightColumn.map((item) => (
-            <li key={item}>
-              <Link
-                to={SERVICE_DETAILS_PATH}
-                className="text-sm text-[#4B5563] hover:text-[#272935] transition-colors leading-snug"
-                onClick={onNavigate}
-              >
-                {item}
-              </Link>
-            </li>
-          ))}
-        </ul>
+  const getItemPath = (menu: MegaMenuConfig, item: string) => {
+    if (menu.itemHref === SERVICE_DETAILS_PATH) return SERVICE_DETAILS_PATH;
+    if (menu.itemHref === INDUSTRIES_PATH) return INDUSTRIES_PATH;
+    if (menu.itemHref === TECHNOLOGIES_PATH) return `${TECHNOLOGIES_PATH}/ai`;
+    return `${menu.itemHref}/${toSlug(item)}`;
+  };
+
+  const renderMegaMenu = (menuId: MegaMenuId, onNavigate?: () => void) => {
+    const menu = megaMenus[menuId];
+
+    return (
+      <div className="px-1 pt-1">
+        <p className="mb-4 text-base font-bold text-[#272935]">{menu.title}</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-1">
+          <ul className="space-y-3">
+            {menu.leftColumn.map((item) => (
+              <li key={item}>
+                <Link
+                  to={getItemPath(menu, item)}
+                  className="text-sm text-[#4B5563] hover:text-[#272935] transition-colors leading-snug"
+                  onClick={onNavigate}
+                >
+                  {item}
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <ul className="space-y-3">
+            {menu.rightColumn.map((item) => (
+              <li key={item}>
+                <Link
+                  to={getItemPath(menu, item)}
+                  className="text-sm text-[#4B5563] hover:text-[#272935] transition-colors leading-snug"
+                  onClick={onNavigate}
+                >
+                  {item}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <nav className="navbar relative z-50 w-full bg-white border-b border-gray-200">
@@ -166,7 +235,7 @@ export default function Navbar() {
                   >
                     <span
                       className={`navbar__link flex cursor-default items-center gap-0.5 whitespace-nowrap rounded-md px-1.5 py-1 text-[13px] font-medium transition-colors xl:px-2 xl:text-sm min-[1280px]:text-[15px] min-[1536px]:text-[16px] min-[1920px]:text-[18px]
-                        ${isServiceDetailsActive || activeDropdown === link.label
+                        ${isMegaMenuActive(link.megaMenu) || activeDropdown === link.label
                           ? 'text-[#272935]'
                           : 'text-gray-600 hover:text-gray-900'
                         }`}
@@ -178,7 +247,7 @@ export default function Navbar() {
                     {activeDropdown === link.label && (
                       <div className="absolute top-full left-0 pt-2 z-50">
                         <div className="min-w-[520px] bg-white rounded-2xl shadow-[0_12px_40px_rgba(0,0,0,0.12)] border border-gray-100 px-8 py-7">
-                          {renderServicesMenu()}
+                          {renderMegaMenu(link.megaMenu)}
                         </div>
                       </div>
                     )}
@@ -300,7 +369,7 @@ export default function Navbar() {
                       </button>
                       {mobileExpanded === link.label && (
                         <div className="pb-4 pl-1">
-                          {renderServicesMenu(closeMobileMenu)}
+                          {renderMegaMenu(link.megaMenu, closeMobileMenu)}
                         </div>
                       )}
                     </>
