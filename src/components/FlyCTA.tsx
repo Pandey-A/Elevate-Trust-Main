@@ -1,9 +1,9 @@
-import { ArrowUpRight } from "lucide-react";
 import worldMapFooter from "../assets/footer/worldmapfooter.svg";
 import fly1 from "../assets/homepage-icons/fly-1.png";
 import fly2 from "../assets/homepage-icons/fly-2.png";
 import fly3 from "../assets/homepage-icons/fly-3.png";
 import fly4 from "../assets/homepage-icons/fly-4.png";
+import blueArrow from "../assets/homepage-icons/blue-arrow.png";
 
 import "./FlyCTA.css";
 
@@ -43,9 +43,12 @@ export default function FlyCTA() {
           <div className="fly-cta__btn-wrapper">
             <a href="#" className="fly-cta__btn">
               <span>Let's Get Started</span>
-              <span className="fly-cta__btn-icon">
-                <ArrowUpRight className="h-4 w-4" strokeWidth={2.5} />
-              </span>
+              <img
+                src={blueArrow}
+                alt=""
+                aria-hidden
+                className="fly-cta__btn-icon"
+              />
             </a>
           </div>
 

@@ -81,11 +81,11 @@
 
 @media (min-width: 1920px) {
   .ai-card__list li {
-    font-size: 1.0625rem;
+    font-size: 0.875rem;
   }
 
   .ai-card__title {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
   }
 }
 

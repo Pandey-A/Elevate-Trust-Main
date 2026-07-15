@@ -125,31 +125,31 @@
 
 @media (min-width: 1280px) {
   .why-partner__card-text {
-    font-size: 0.95rem;
+    font-size: 0.85rem;
     line-height: 1.7;
   }
 
   .why-partner__card-title {
-    font-size: 2rem;
+    font-size: 1.5rem;
   }
 
   .why-partner__btn {
     padding: 10px 18px 10px 22px;
-    font-size: 0.9rem;
+    font-size: 0.82rem;
   }
 }
 
 @media (min-width: 1920px) {
   .why-partner__card-text {
-    font-size: 1.1875rem;
+    font-size: 0.95rem;
   }
 
   .why-partner__card-title {
-    font-size: 2.375rem;
+    font-size: 1.75rem;
   }
 
   .why-partner__btn {
-    font-size: 1.0625rem;
+    font-size: 0.875rem;
   }
 }
 
@@ -186,11 +186,6 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
-.why-partner__card--dark .why-partner__btn-icon {
-  background: #113d77;
-  color: #fff;
-}
-
 /* light card button: white bg with subtle border */
 .why-partner__card--light .why-partner__btn {
   background: #fff;
@@ -202,23 +197,12 @@
   box-shadow: 0 4px 16px rgba(17, 61, 119, 0.1);
 }
 
-.why-partner__card--light .why-partner__btn-icon {
-  background: #2365aa;
-  color: #fff;
-}
-
 .why-partner__btn-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: block;
   width: 24px;
   height: 24px;
-  border-radius: 50%;
-}
-
-.why-partner__btn-icon svg {
-  width: 13px;
-  height: 13px;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 
 /* ── Card illustration ── */

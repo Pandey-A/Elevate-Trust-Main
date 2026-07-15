@@ -1,5 +1,350 @@
-/* Navbar — exact Figma match @ 2012px (Headeer #1216:5561) */
+/* Navbar — laptop / desktop below 2012 (flex layout, no Figma absolute) */
+@media (min-width: 1024px) and (max-width: 2011px) {
+  .navbar {
+    position: relative;
+    z-index: 50;
+    width: 100%;
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+    box-shadow: none;
+    overflow: visible;
+  }
 
+  .navbar .site-container.navbar__shell {
+    width: 100%;
+    max-width: var(--site-max-width, 1440px);
+    margin-inline: auto;
+    padding-inline: var(--site-padding-x, 24px);
+    overflow: visible;
+  }
+
+  .navbar__inner.grid {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    height: 64px;
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+  }
+
+  .navbar__logo {
+    position: static;
+    transform: none;
+    flex-shrink: 0;
+  }
+
+  .navbar__logo img {
+    width: auto;
+    height: 32px;
+    object-fit: contain;
+  }
+
+  .navbar__nav.hidden.lg\:flex,
+  .navbar__nav {
+    position: static !important;
+    left: auto !important;
+    top: auto !important;
+    transform: none !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    max-width: 100%;
+    overflow: visible;
+    gap: 0;
+  }
+
+  .navbar__nav > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: 2px;
+    max-width: 100%;
+    min-width: 0;
+    overflow: visible;
+  }
+
+  .navbar__link {
+    position: static;
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    font-family: "Lay Grotesk Trial", "Lay Grotesk - Trial", sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.2;
+    padding: 4px 5px;
+    white-space: nowrap;
+    text-decoration: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    flex-shrink: 0;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  .navbar__link svg {
+    width: 10px;
+    height: 10px;
+    flex-shrink: 0;
+  }
+
+  .navbar__right.hidden.lg\:flex,
+  .navbar__right {
+    position: static !important;
+    top: auto !important;
+    right: auto !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    width: auto;
+    height: auto;
+    flex-shrink: 0;
+  }
+
+  .navbar__about {
+    position: static;
+    display: inline-flex;
+    align-items: center;
+    height: auto;
+    margin: 0;
+    padding: 4px 2px;
+    font-family: "Lay Grotesk Trial", "Lay Grotesk - Trial", sans-serif;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    line-height: 1.2;
+    color: #4b5563 !important;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .navbar__social {
+    position: static;
+    display: none !important;
+    align-items: center;
+    height: auto;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+  }
+
+  .navbar__social a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 0;
+  }
+
+  .navbar__social img {
+    width: 16px !important;
+    height: 16px !important;
+    display: block;
+  }
+
+  .navbar__cta {
+    position: static;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: auto;
+    min-width: 0;
+    height: 36px !important;
+    min-height: 36px;
+    max-height: 36px;
+    margin: 0;
+    padding: 0 12px !important;
+    border: none;
+    border-radius: 999px;
+    background: #2365aa;
+    color: #ffffff !important;
+    font-family: "Lay Grotesk Trial", "Lay Grotesk - Trial", sans-serif;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    line-height: 1.2;
+    cursor: pointer;
+    box-sizing: border-box;
+    flex-shrink: 0;
+  }
+
+  .navbar__cta:hover {
+    background: #1a5490;
+  }
+
+  .navbar__cta img {
+    width: 18px !important;
+    height: 18px !important;
+    flex-shrink: 0;
+  }
+
+  .navbar__mobile-toggle {
+    display: none;
+  }
+
+  /* ~1280–1439 */
+  @media (min-width: 1280px) {
+    .navbar__inner.grid {
+      gap: 14px;
+      height: 68px;
+    }
+
+    .navbar__logo img {
+      height: 34px;
+    }
+
+    .navbar__nav > div {
+      gap: 4px;
+    }
+
+    .navbar__link {
+      font-size: 13px;
+      padding: 4px 6px;
+      gap: 3px;
+    }
+
+    .navbar__link svg {
+      width: 11px;
+      height: 11px;
+    }
+
+    .navbar__about {
+      font-size: 13px !important;
+    }
+
+    .navbar__right {
+      gap: 12px;
+    }
+
+    .navbar__cta {
+      height: 38px !important;
+      min-height: 38px;
+      max-height: 38px;
+      padding: 0 14px !important;
+      font-size: 13px !important;
+      gap: 8px;
+    }
+
+    .navbar__cta img {
+      width: 20px !important;
+      height: 20px !important;
+    }
+  }
+
+  /* ~1440–1679: more room, show socials */
+  @media (min-width: 1440px) {
+    .navbar__inner.grid {
+      gap: 16px;
+      height: 72px;
+    }
+
+    .navbar__logo img {
+      height: 36px;
+    }
+
+    .navbar__nav > div {
+      gap: 6px;
+    }
+
+    .navbar__link {
+      font-size: 14px;
+      padding: 5px 7px;
+      gap: 4px;
+    }
+
+    .navbar__link svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    .navbar__about {
+      font-size: 14px !important;
+      padding: 4px 4px;
+    }
+
+    .navbar__social {
+      display: flex !important;
+      gap: 10px;
+    }
+
+    .navbar__social img {
+      width: 18px !important;
+      height: 18px !important;
+    }
+
+    .navbar__right {
+      gap: 14px;
+    }
+
+    .navbar__cta {
+      height: 40px !important;
+      min-height: 40px;
+      max-height: 40px;
+      padding: 0 16px !important;
+      font-size: 14px !important;
+      gap: 10px;
+    }
+  }
+
+  /* ~1680–2011 */
+  @media (min-width: 1680px) {
+    .navbar__inner.grid {
+      gap: 20px;
+      height: 76px;
+    }
+
+    .navbar__logo img {
+      height: 40px;
+    }
+
+    .navbar__nav > div {
+      gap: 10px;
+    }
+
+    .navbar__link {
+      font-size: 15px;
+      padding: 6px 8px;
+      gap: 5px;
+    }
+
+    .navbar__about {
+      font-size: 15px !important;
+    }
+
+    .navbar__social {
+      gap: 12px;
+    }
+
+    .navbar__social img {
+      width: 20px !important;
+      height: 20px !important;
+    }
+
+    .navbar__right {
+      gap: 16px;
+    }
+
+    .navbar__cta {
+      height: 44px !important;
+      min-height: 44px;
+      max-height: 44px;
+      padding: 0 18px !important;
+      font-size: 15px !important;
+    }
+
+    .navbar__cta img {
+      width: 22px !important;
+      height: 22px !important;
+    }
+  }
+}
+
+/* Navbar — exact Figma match @ 2012px only (Headeer #1216:5561) */
 @media (min-width: 2012px) {
   .navbar {
     position: relative;
@@ -44,7 +389,8 @@
     display: flex !important;
   }
 
-  .navbar__social.hidden.xl\:flex {
+  .navbar__social.hidden.xl\:flex,
+  .navbar__social {
     display: flex !important;
   }
 
@@ -62,6 +408,9 @@
     display: flex !important;
     align-items: center;
     gap: 31px;
+    overflow: visible;
+    min-width: 0;
+    max-width: none;
   }
 
   .navbar__link {
@@ -90,6 +439,7 @@
     display: flex;
     align-items: center;
     gap: 31px;
+    max-width: none;
   }
 
   .navbar__right {
@@ -124,7 +474,7 @@
     display: flex !important;
     align-items: center;
     height: 53px;
-    gap: 35px;
+    gap: 12px;
     margin: 0;
     padding: 0;
   }
@@ -147,7 +497,7 @@
     display: inline-flex !important;
     align-items: center;
     justify-content: center;
-    gap: 5px;
+    gap: 10px;
     width: 195px;
     height: 53px !important;
     min-height: 53px;

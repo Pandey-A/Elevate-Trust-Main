@@ -20,6 +20,7 @@ type CaseStudy = {
   title: string;
   description: string;
   image: string;
+  href?: string;
   imageClassName?: string;
   titleClassName?: string;
 };
@@ -31,6 +32,7 @@ const caseStudies: CaseStudy[] = [
     description:
       "AI-driven system that automates document analysis by cross-referencing RFPs, SBDs, and historical query-response records. It leverages institutional knowledge to provide consistent, high-quality responses and performs automated compliance checks to identify missing or ambiguous clauses before documents are released",
     image: csRfp,
+    href: "/case-studies/rfp-query-compliance",
     titleClassName: "cs-card__title--lg",
   },
   {
@@ -175,10 +177,17 @@ export default function CaseStudies() {
                     {study.title}
                   </h3>
                   <p className="cs-card__desc">{study.description}</p>
-                  <a href="#" className="cs-card__link">
-                    <span>Read the case study</span>
-                    <ArrowUpRight size={18} strokeWidth={2.5} />
-                  </a>
+                  {study.href ? (
+                    <Link to={study.href} className="cs-card__link">
+                      <span>Read the case study</span>
+                      <ArrowUpRight size={18} strokeWidth={2.5} />
+                    </Link>
+                  ) : (
+                    <a href="#" className="cs-card__link">
+                      <span>Read the case study</span>
+                      <ArrowUpRight size={18} strokeWidth={2.5} />
+                    </a>
+                  )}
                 </div>
               </article>
             ))}

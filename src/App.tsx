@@ -9,6 +9,7 @@ import Contact from './pages/Contact';
 import TechnologyTrends from './pages/TechnologyTrends';
 import Industries from './pages/Industries';
 import CaseStudies from './pages/CaseStudies';
+import CaseStudyDetail from './pages/CaseStudyDetail';
 import Careers from './pages/Careers';
 export default function App() {
   return (
@@ -24,6 +25,7 @@ export default function App() {
         <Route path="/industries" element={<Industries />} />
         <Route path="/industries/:slug" element={<Industries />} />
         <Route path="/case-studies" element={<CaseStudies />} />
+        <Route path="/case-studies/rfp-query-compliance" element={<CaseStudyDetail />} />
         <Route path="/careers" element={<Careers />} />
       </Routes>
       <FooterSection />

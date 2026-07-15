@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
+import blueArrow from "../assets/homepage-icons/blue-arrow.png";
 import arupaLogo from "../assets/client-strip/Arupa.svg";
 import complyCoreLogo from "../assets/client-strip/ComplyCore.svg";
 import qjumpersLogo from "../assets/client-strip/Qjumpers.svg";
@@ -176,9 +177,12 @@ export default function StoriesOfImpact() {
             className="btn-cta mt-5 bg-white text-[#113D77] hover:bg-white/90"
           >
             View all
-            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#113D77]">
-              <ArrowUpRight className="h-3.5 w-3.5 text-white" strokeWidth={2.5} />
-            </span>
+            <img
+              src={blueArrow}
+              alt=""
+              aria-hidden
+              className="h-7 w-7 object-contain"
+            />
           </a>
         </div>
 

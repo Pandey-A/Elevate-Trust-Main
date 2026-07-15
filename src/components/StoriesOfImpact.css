@@ -95,11 +95,11 @@
 
 @media (min-width: 1920px) {
   .stories-card {
-    width: 380px;
+    width: 340px;
   }
 
   .stories-card .section-body {
-    font-size: var(--fs-body-lg);
+    font-size: var(--fs-body);
   }
 }
 

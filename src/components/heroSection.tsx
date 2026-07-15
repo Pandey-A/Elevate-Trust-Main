@@ -4,6 +4,8 @@ import elevateMainLogo from "../assets/homepage-icons/elevatestarting-logo.svg";
 import heroBg from "../assets/homepage-icons/Hero-bg.png";
 import futureIcon from "../assets/homepage-icons/future.png";
 import editModeIcon from "../assets/homepage-icons/editmode.png";
+import smartArrow from "../assets/homepage-icons/smart-arrow.png";
+import blueArrow from "../assets/homepage-icons/blue-arrow.png";
 import userLoveIcon from "../assets/homepage-icons/user-love-01.svg";
 
 export default function HeroSection() {
@@ -47,10 +49,7 @@ export default function HeroSection() {
           <button id="hero-cta" className="hero-cta-btn">
             <span>Consult our strategy team</span>
             <span className="hero-cta-btn__circle">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2365AA" strokeWidth="3">
-                <line x1="7" y1="17" x2="17" y2="7" />
-                <polyline points="7 7 17 7 17 17" />
-              </svg>
+              <img src={smartArrow} alt="" aria-hidden className="hero-cta-btn__arrow" />
             </span>
           </button>
         </div>
@@ -65,12 +64,12 @@ export default function HeroSection() {
             </div>
 
             <div className="hero-card hero-card--arrow">
-              <div className="hero-card__arrow-circle">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="3">
-                  <line x1="7" y1="17" x2="17" y2="7" />
-                  <polyline points="7 7 17 7 17 17" />
-                </svg>
-              </div>
+              <img
+                src={blueArrow}
+                alt=""
+                aria-hidden
+                className="hero-card__arrow-img"
+              />
             </div>
 
             <div className="hero-card hero-card--create">

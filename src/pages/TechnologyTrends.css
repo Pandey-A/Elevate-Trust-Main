@@ -500,3 +500,90 @@
     font-size: 20px;
   }
 }
+
+/* ── Laptop scaling (1024–2011px) ─────────────── */
+@media (min-width: 1024px) and (max-width: 2011px) {
+  .tt-hero__title {
+    font-size: clamp(26px, 3vw, 34px);
+  }
+
+  .tt-hero__subtitle {
+    font-size: clamp(13px, 1.1vw, 15px);
+  }
+
+  .tt-hero__btn {
+    font-size: 14px;
+    padding: 10px 12px 10px 22px;
+  }
+
+  .tt-breadcrumbs {
+    font-size: clamp(13px, 1vw, 15px);
+  }
+
+  .tt-intro__title {
+    font-size: clamp(26px, 3.2vw, 40px);
+  }
+
+  .tt-horizons__heading {
+    font-size: clamp(16px, 1.6vw, 22px);
+  }
+
+  .tt-horizon-card__banner {
+    height: clamp(220px, 18vw, 280px);
+    padding: 22px 24px 24px;
+    border-radius: 22px;
+  }
+
+  .tt-horizon-card__tag {
+    font-size: clamp(24px, 2vw, 30px);
+  }
+
+  .tt-horizon-card__title {
+    font-size: clamp(18px, 1.5vw, 24px);
+  }
+
+  .tt-horizon-card__desc {
+    font-size: clamp(14px, 1.2vw, 18px);
+  }
+
+  .tt-horizon-card__patterns-title {
+    font-size: clamp(18px, 1.6vw, 24px);
+    line-height: 1.4;
+  }
+
+  .tt-horizon-card__list li {
+    font-size: clamp(13px, 1.2vw, 16px);
+    line-height: 1.5;
+  }
+
+  .tt-trends__title {
+    font-size: clamp(24px, 2.8vw, 34px);
+    margin-bottom: clamp(20px, 2.5vw, 32px);
+  }
+
+  .tt-trends__tab {
+    font-size: clamp(15px, 1.4vw, 20px);
+    min-height: 56px;
+    padding: 14px 22px;
+    border-radius: 16px;
+    line-height: 1.3;
+  }
+
+  .tt-trend-card__header {
+    font-size: clamp(14px, 1.3vw, 18px);
+    padding: 10px 18px;
+    line-height: 1.4;
+  }
+
+  .tt-trend-card__body {
+    font-size: clamp(13px, 1.2vw, 16px);
+    line-height: 1.5;
+    padding: 14px 18px 18px;
+  }
+
+  .tt-trends__download {
+    font-size: 15px;
+    padding: 7px 10px 7px 22px;
+  }
+}
+

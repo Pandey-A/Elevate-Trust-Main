@@ -6,7 +6,7 @@ import elevateLogo from '../assets/nav/elevate-logo.svg';
 import linkedinIcon from '../assets/nav/Linkedin-logo.svg';
 import instagramIcon from '../assets/nav/Instagram-logo.svg';
 import telegramIcon from '../assets/nav/Telegram-logo.svg';
-import letsConnectIcon from '../assets/nav/lets-connect.svg';
+import smartArrow from '../assets/homepage-icons/smart-arrow.png';
 import './navbar.css';
 
 const SERVICE_DETAILS_PATH = '/ServiceDetails';
@@ -224,29 +224,42 @@ export default function Navbar() {
           </Link>
 
           <div className="navbar__nav hidden min-w-0 lg:flex items-center justify-center">
-            <div className="flex items-center gap-0 xl:gap-0.5">
+            <div className="flex items-center gap-1 min-[1440px]:gap-1.5 min-[1680px]:gap-2.5">
               {navLinks.map((link) => (
                 isMegaMenuLink(link) ? (
                   <div
                     key={link.label}
-                    className="relative"
+                    className="relative shrink-0"
                     onMouseEnter={() => setActiveDropdown(link.label)}
                     onMouseLeave={() => setActiveDropdown(null)}
                   >
-                    <span
-                      className={`navbar__link flex cursor-default items-center gap-0.5 whitespace-nowrap rounded-md px-1.5 py-1 text-[13px] font-medium transition-colors xl:px-2 xl:text-sm min-[1280px]:text-[15px] min-[1536px]:text-[16px] min-[1920px]:text-[18px]
+                    <button
+                      type="button"
+                      className={`navbar__link flex cursor-pointer items-center gap-0.5 whitespace-nowrap rounded-md px-1 py-1 text-[12px] font-medium transition-colors sm:px-1.5
                         ${isMegaMenuActive(link.megaMenu) || activeDropdown === link.label
                           ? 'text-[#272935]'
                           : 'text-gray-600 hover:text-gray-900'
                         }`}
+                      aria-expanded={activeDropdown === link.label}
+                      onClick={() =>
+                        setActiveDropdown((current) =>
+                          current === link.label ? null : link.label
+                        )
+                      }
                     >
                       {link.label}
-                      <ChevronDown className="h-3 w-3 shrink-0 xl:h-3.5 xl:w-3.5" />
-                    </span>
+                      <ChevronDown className="h-3 w-3 shrink-0" />
+                    </button>
 
                     {activeDropdown === link.label && (
-                      <div className="absolute top-full left-0 pt-2 z-50">
-                        <div className="min-w-[520px] bg-white rounded-2xl shadow-[0_12px_40px_rgba(0,0,0,0.12)] border border-gray-100 px-8 py-7">
+                      <div className="absolute top-full left-1/2 z-50 pt-2 -translate-x-1/2 min-[1440px]:left-0 min-[1440px]:translate-x-0">
+                        <div
+                          className={`bg-white rounded-[16px] shadow-[0_12px_40px_rgba(0,0,0,0.12)] border border-gray-100 px-6 py-6 opacity-100 max-h-[70vh] overflow-auto ${
+                            link.megaMenu === 'services'
+                              ? 'w-[min(899px,90vw)] min-[2012px]:h-[378px] min-[2012px]:w-[899px]'
+                              : 'w-[min(831px,90vw)] min-[2012px]:h-[395px] min-[2012px]:w-[831px]'
+                          }`}
+                        >
                           {renderMegaMenu(link.megaMenu)}
                         </div>
                       </div>
@@ -255,21 +268,40 @@ export default function Navbar() {
                 ) : (
                 <div
                   key={link.label}
-                  className="relative"
+                  className="relative shrink-0"
                   onMouseEnter={() => isDropdownLink(link) && setActiveDropdown(link.label)}
                   onMouseLeave={() => setActiveDropdown(null)}
                 >
-                  <Link
-                    to={link.href}
-                    className={`navbar__link flex items-center gap-0.5 whitespace-nowrap rounded-md px-1.5 py-1 text-[13px] font-medium transition-colors xl:px-2 xl:text-sm min-[1280px]:text-[15px] min-[1536px]:text-[16px] min-[1920px]:text-[18px]
-                      ${location.pathname === link.href
-                        ? 'text-[#272935]'
-                        : 'text-gray-600 hover:text-gray-900'
-                      }`}
-                  >
-                    {link.label}
-                    {isDropdownLink(link) && <ChevronDown className="h-3 w-3 shrink-0 xl:h-3.5 xl:w-3.5" />}
-                  </Link>
+                  {isDropdownLink(link) ? (
+                    <button
+                      type="button"
+                      className={`navbar__link flex cursor-pointer items-center gap-0.5 whitespace-nowrap rounded-md px-1 py-1 text-[12px] font-medium transition-colors sm:px-1.5
+                        ${activeDropdown === link.label
+                          ? 'text-[#272935]'
+                          : 'text-gray-600 hover:text-gray-900'
+                        }`}
+                      aria-expanded={activeDropdown === link.label}
+                      onClick={() =>
+                        setActiveDropdown((current) =>
+                          current === link.label ? null : link.label
+                        )
+                      }
+                    >
+                      {link.label}
+                      <ChevronDown className="h-3 w-3 shrink-0" />
+                    </button>
+                  ) : (
+                    <Link
+                      to={link.href}
+                      className={`navbar__link flex items-center gap-0.5 whitespace-nowrap rounded-md px-1 py-1 text-[12px] font-medium transition-colors sm:px-1.5
+                        ${location.pathname === link.href
+                          ? 'text-[#272935]'
+                          : 'text-gray-600 hover:text-gray-900'
+                        }`}
+                    >
+                      {link.label}
+                    </Link>
+                  )}
 
                   {isDropdownLink(link) && activeDropdown === link.label && (
                     <div className="absolute top-full left-0 mt-1 w-56 bg-white rounded-lg shadow-lg border border-gray-100 py-2 z-50">
@@ -278,6 +310,7 @@ export default function Navbar() {
                           key={item}
                           to={`${link.href}/${item.toLowerCase().replace(/\s+/g, '-')}`}
                           className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900"
+                          onClick={() => setActiveDropdown(null)}
                         >
                           {item}
                         </Link>
@@ -290,15 +323,15 @@ export default function Navbar() {
             </div>
           </div>
 
-          <div className="navbar__right hidden items-center justify-end gap-2.5 lg:flex xl:gap-3.5">
+          <div className="navbar__right hidden items-center justify-end gap-2.5 lg:flex">
             <Link
               to="/about"
-              className="navbar__about whitespace-nowrap text-[13px] font-medium text-gray-600 transition-colors hover:text-gray-900 xl:text-sm min-[1280px]:text-[15px] min-[1536px]:text-[16px] min-[1920px]:text-[18px]"
+              className="navbar__about whitespace-nowrap text-[12px] font-medium text-gray-600 transition-colors hover:text-gray-900"
             >
               About Us
             </Link>
 
-            <div className="navbar__social hidden items-center gap-1 xl:flex">
+            <div className="navbar__social hidden items-center gap-2.5 min-[1440px]:flex">
               <a
                 href="#"
                 aria-label="Telegram"
@@ -322,9 +355,9 @@ export default function Navbar() {
               </a>
             </div>
 
-            <button className="navbar__cta flex h-9 shrink-0 items-center justify-center gap-1.5 rounded-full bg-[#2365AA] px-3.5 text-xs font-medium text-white transition-colors hover:bg-[#152a45] xl:h-10 xl:gap-2 xl:px-4 xl:text-sm min-[1280px]:text-[15px] min-[1536px]:text-[16px] min-[1920px]:text-[18px]">
+            <button className="navbar__cta flex h-9 shrink-0 items-center justify-center gap-2 rounded-full bg-[#2365AA] px-3 text-xs font-medium text-white transition-colors hover:bg-[#152a45]">
               <Link to='/contact'><span className="whitespace-nowrap">Let's Connect</span></Link>
-              <img src={letsConnectIcon} alt="Arrow Right" className="h-6 w-6 xl:h-7 xl:w-7" />
+              <img src={smartArrow} alt="" aria-hidden className="h-5 w-5 object-contain" />
             </button>
           </div>
 
@@ -446,10 +479,10 @@ export default function Navbar() {
 
               <button
                 type="button"
-                className="flex w-full gap-2 px-4 py-3 bg-[#2365AA] text-white text-base font-medium rounded-full hover:bg-[#152a45] transition-colors justify-center items-center"
+                className="flex w-full gap-2.5 px-4 py-3 bg-[#2365AA] text-white text-base font-medium rounded-full hover:bg-[#152a45] transition-colors justify-center items-center"
               >
                 <span>Let's Connect</span>
-                <img src={letsConnectIcon} alt="" className="w-6 h-6" />
+                <img src={smartArrow} alt="" aria-hidden className="h-6 w-6 object-contain" />
               </button>
             </div>
           </div>

@@ -88,14 +88,11 @@
 }
 
 .fly-cta__btn-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  display: block;
   width: 28px;
   height: 28px;
-  border-radius: 50%;
-  background-color: #113d77;
-  color: #ffffff;
+  object-fit: contain;
+  flex-shrink: 0;
   transition: transform 0.3s ease;
 }
 
@@ -124,16 +121,16 @@
 
 @media (min-width: 1920px) {
   .fly-cta__title {
-    font-size: clamp(36px, 3.2vw, 56px);
+    font-size: clamp(30px, 2.8vw, 42px);
   }
 
   .fly-cta__desc {
-    font-size: var(--fs-body-xl);
-    max-width: min(760px, 100%);
+    font-size: var(--fs-body-lg);
+    max-width: min(680px, 100%);
   }
 
   .fly-cta__btn {
-    font-size: var(--fs-body-xl);
+    font-size: var(--fs-body-lg);
   }
 }
 

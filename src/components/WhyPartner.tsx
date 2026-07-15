@@ -1,5 +1,4 @@
-import { ArrowUpRight } from "lucide-react";
-
+import blueArrow from "../assets/homepage-icons/blue-arrow.png";
 import partners1 from "../assets/homepage-icons/partners-1.svg";
 import partners2 from "../assets/homepage-icons/partners-2.svg";
 
@@ -36,9 +35,12 @@ export default function WhyPartner() {
               </p>
               <a href="#" className="why-partner__btn">
                 Read More
-                <span className="why-partner__btn-icon">
-                  <ArrowUpRight strokeWidth={2.5} />
-                </span>
+                <img
+                  src={blueArrow}
+                  alt=""
+                  aria-hidden
+                  className="why-partner__btn-icon"
+                />
               </a>
             </div>
             <div className="why-partner__card-bottom">
@@ -64,9 +66,12 @@ export default function WhyPartner() {
               </p>
               <a href="#" className="why-partner__btn">
                 Read More
-                <span className="why-partner__btn-icon">
-                  <ArrowUpRight strokeWidth={2.5} />
-                </span>
+                <img
+                  src={blueArrow}
+                  alt=""
+                  aria-hidden
+                  className="why-partner__btn-icon"
+                />
               </a>
             </div>
             <div className="why-partner__card-bottom">

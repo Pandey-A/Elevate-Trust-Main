@@ -344,3 +344,82 @@
     left: -100px;
   }
 }
+
+/* ── Laptop scaling (1024–2011px) ─────────────── */
+@media (min-width: 1024px) and (max-width: 2011px) {
+  .cs-hero {
+    min-height: clamp(260px, 28vw, 400px);
+    padding: clamp(64px, 7vw, 100px) var(--site-padding-x, 24px)
+      clamp(40px, 5vw, 64px);
+  }
+
+  .cs-hero__title {
+    font-size: clamp(24px, 2.8vw, 34px);
+    margin-bottom: 14px;
+  }
+
+  .cs-hero__subtitle {
+    font-size: clamp(13px, 1.1vw, 15px);
+    margin-bottom: 24px;
+  }
+
+  .cs-hero__btn {
+    font-size: 14px;
+    padding: 8px 10px 8px 22px;
+  }
+
+  .cs-breadcrumbs {
+    font-size: clamp(14px, 1vw, 16px);
+    padding-top: 20px;
+  }
+
+  .cs-section {
+    padding: 16px 0 56px;
+  }
+
+  .cs-section__header {
+    margin-bottom: clamp(28px, 3vw, 44px);
+  }
+
+  .cs-section__title {
+    font-size: clamp(26px, 2.8vw, 34px);
+    margin-bottom: 12px;
+  }
+
+  .cs-section__subtitle {
+    font-size: clamp(14px, 1.3vw, 18px);
+  }
+
+  .cs-card__body {
+    padding: clamp(18px, 2vw, 28px) clamp(20px, 2.2vw, 32px)
+      clamp(20px, 2.2vw, 30px);
+  }
+
+  .cs-card__title {
+    font-size: clamp(17px, 1.5vw, 22px);
+    margin-bottom: 12px;
+  }
+
+  .cs-card__title--lg {
+    font-size: clamp(18px, 1.6vw, 24px);
+  }
+
+  .cs-card__desc {
+    font-size: clamp(13px, 1.1vw, 16px);
+    margin-bottom: 20px;
+    line-height: 1.5;
+  }
+
+  .cs-card__link {
+    font-size: clamp(14px, 1.2vw, 17px);
+  }
+
+  .cs-card__media {
+    height: clamp(200px, 22vw, 320px);
+  }
+
+  .cs-card {
+    border-radius: 16px;
+  }
+}
+

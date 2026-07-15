@@ -42,7 +42,7 @@
 
 /* Heading styling */
 .who-we-are__title {
-  font-size: clamp(32px, 3vw, 44px);
+  font-size: clamp(28px, 2.5vw, 38px);
   font-weight: 800;
   letter-spacing: -0.02em;
   color: #ffffff;
@@ -95,7 +95,7 @@
 }
 
 .who-we-are__stat-num {
-  font-size: clamp(40px, 3.5vw, 52px);
+  font-size: clamp(32px, 2.8vw, 44px);
   font-weight: 800;
   color: #113d77;
   line-height: 1;
@@ -114,12 +114,12 @@
 
 @media (min-width: 1920px) {
   .who-we-are__title {
-    font-size: clamp(40px, 3.2vw, 56px);
+    font-size: clamp(34px, 2.8vw, 44px);
   }
 
   .who-we-are__paragraph,
   .who-we-are__stat-label {
-    font-size: var(--fs-body-xl);
+    font-size: var(--fs-body-lg);
   }
 }
 
@@ -191,7 +191,7 @@
 }
 
 /* Who We Are — exact Figma match @ 2012px */
-@media (min-width: 2012px) {
+@media (min-width: 1920px) {
   .who-we-are {
     padding: 100px 0 120px;
   }
@@ -282,6 +282,20 @@
     text-align: center;
     color: #113d77;
     white-space: normal;
+  }
+}
+
+@media (min-width: 2012px) {
+  .who-we-are__title {
+    font-size: 56px;
+  }
+
+  .who-we-are__paragraph {
+    font-size: 20px;
+  }
+
+  .who-we-are__stat-label {
+    font-size: 20px;
   }
 }
 

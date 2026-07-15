@@ -337,3 +337,61 @@
     min-height: 0;
   }
 }
+
+/* ── Laptop scaling (1024–2011px) ─────────────── */
+@media (min-width: 1024px) and (max-width: 2011px) {
+  .ind-filters__tab {
+    font-size: clamp(13px, 1.15vw, 16px);
+    min-height: 56px;
+    padding: 14px 16px;
+    border-radius: 16px;
+  }
+
+  .ind-intro__title {
+    font-size: clamp(24px, 2.8vw, 34px);
+    margin-bottom: clamp(20px, 2.5vw, 32px);
+  }
+
+  .ind-intro__body p {
+    font-size: clamp(13px, 1.1vw, 15px);
+  }
+
+  .ind-benefits__title {
+    font-size: clamp(24px, 2.8vw, 34px);
+    margin-bottom: clamp(20px, 2.5vw, 32px);
+  }
+
+  .ind-benefit-card__title {
+    font-size: clamp(16px, 1.4vw, 20px);
+  }
+
+  .ind-benefit-card__icon {
+    width: clamp(64px, 6vw, 88px);
+    height: clamp(64px, 6vw, 88px);
+  }
+
+  .ind-enhance__title {
+    font-size: clamp(24px, 2.8vw, 34px);
+  }
+
+  .ind-enhance__subtitle {
+    font-size: clamp(13px, 1.1vw, 15px);
+  }
+
+  .ind-enhance__card-title {
+    font-size: clamp(15px, 1.2vw, 18px);
+  }
+
+  .ind-enhance__card-text {
+    font-size: clamp(12px, 1vw, 14px);
+  }
+
+  .ind-specialize__title {
+    font-size: clamp(20px, 2vw, 28px);
+  }
+
+  .ind-specialize__list li {
+    font-size: clamp(12px, 1vw, 14px);
+  }
+}
+

@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import { ArrowUpRight } from "lucide-react";
+import smartArrow from "../assets/homepage-icons/smart-arrow.png";
 import { useState } from "react";
 
 import landscape2 from "../assets/homepage-icons/landscape-2.png";
@@ -157,9 +157,12 @@ export default function LatestWorks() {
           <div className="latest-works__btn-wrapper">
             <a href="#" className="latest-works__btn">
               <span>View all case studies</span>
-              <span className="latest-works__btn-icon">
-                <ArrowUpRight className="h-4 w-4" strokeWidth={2.5} />
-              </span>
+              <img
+                src={smartArrow}
+                alt=""
+                aria-hidden
+                className="latest-works__btn-icon"
+              />
             </a>
           </div>
         </div>

@@ -191,15 +191,15 @@
 
 @media (min-width: 1920px) {
   .work-impact__btn {
-    font-size: 1.0625rem;
+    font-size: 0.875rem;
   }
 
   .work-impact__card-text {
-    font-size: 1.125rem;
+    font-size: 0.95rem;
   }
 
   .work-impact__heading {
-    font-size: clamp(3.25rem, 3.5vw, 4.5rem);
+    font-size: clamp(2.75rem, 3vw, 3.5rem);
   }
 }
 

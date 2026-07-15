@@ -2,7 +2,7 @@ import elevateBadgeIcon from "../assets/testimonial/Group 84.svg";
 import blogImage1 from "../assets/testimonial/Rectangle 90.svg";
 import blogImage2 from "../assets/testimonial/Rectangle 90 (1).svg";
 import blogImage3 from "../assets/testimonial/Rectangle 90 (2).svg";
-import viewAllArrow from "../assets/nav/lets-connect.svg";
+import smartArrow from "../assets/homepage-icons/smart-arrow.png";
 import { activePartners } from "../data/activePartners";
 import WhoWeAre from "./WhoWeAre";
 
@@ -43,9 +43,7 @@ export default function Testimonials() {
               className="btn-cta mt-5 bg-[#2365AA] text-white hover:bg-[#1a5490]"
             >
               View All
-              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white">
-                <img src={viewAllArrow} alt="" aria-hidden className="h-3.5 w-3.5" />
-              </span>
+              <img src={smartArrow} alt="" aria-hidden className="h-7 w-7 object-contain" />
             </a>
           </div>
 
