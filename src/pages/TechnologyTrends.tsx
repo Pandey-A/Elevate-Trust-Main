@@ -263,12 +263,14 @@ export default function TechnologyTrends() {
             {horizons.map((horizon) => (
               <article key={horizon.tag + horizon.titleLines[0]} className="tt-horizon-card">
                 <div className="tt-horizon-card__banner">
-                  <p className="tt-horizon-card__tag">{horizon.tag}</p>
-                  <h3 className="tt-horizon-card__title">
-                    {horizon.titleLines[0]}
-                    <br />
-                    {horizon.titleLines[1]}
-                  </h3>
+                  <div className="tt-horizon-card__banner-top">
+                    <p className="tt-horizon-card__tag">{horizon.tag}</p>
+                    <h3 className="tt-horizon-card__title">
+                      {horizon.titleLines[0]}
+                      <br />
+                      {horizon.titleLines[1]}
+                    </h3>
+                  </div>
                   <p className="tt-horizon-card__desc">
                     {horizon.descriptionLines[0]}
                     <br />
