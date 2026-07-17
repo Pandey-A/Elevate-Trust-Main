@@ -7,6 +7,8 @@ import AboutUs from './pages/AboutUs';
 import FooterSection from './components/footerSection';
 import Contact from './pages/Contact';
 import TechnologyTrends from './pages/TechnologyTrends';
+import CloudComputing from './pages/CloudComputing';
+import Cybersecurity from './pages/Cybersecurity';
 import Industries from './pages/Industries';
 import CaseStudies from './pages/CaseStudies';
 import CaseStudyDetail from './pages/CaseStudyDetail';
@@ -22,6 +24,8 @@ export default function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/technologies" element={<TechnologyTrends />} />
         <Route path="/technologies/ai" element={<TechnologyTrends />} />
+        <Route path="/technologies/cloud" element={<CloudComputing />} />
+        <Route path="/technologies/cybersecurity" element={<Cybersecurity />} />
         <Route path="/industries" element={<Industries />} />
         <Route path="/industries/:slug" element={<Industries />} />
         <Route path="/case-studies" element={<CaseStudies />} />

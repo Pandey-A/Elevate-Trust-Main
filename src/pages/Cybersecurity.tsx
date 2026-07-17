@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
 import FlyCTA from "../components/FlyCTA";
 import worldMapBackground from "../assets/homepage-icons/Group(3).png";
-import architectureDiagram from "../assets/technology-trends/ai-architecture-diagram.png";
+import architectureDiagram from "../assets/technology-trends/Technology-cyber.png";
 import checkIcon from "../assets/technology-trends/check-icon.svg";
 import downloadIcon from "../assets/technology-trends/download-device-icon.svg";
 
@@ -22,179 +22,179 @@ type TrendCard = {
 const horizons: Horizon[] = [
   {
     tag: "H3",
-    titleLines: ["Multimodal,", "multitasking learning"],
-    descriptionLines: ["Intelligent systems, Self-", "supervised"],
+    titleLines: ["Autonomous defense,", "predictive security"],
+    descriptionLines: ["Self-healing systems,", "threat anticipation"],
     patterns: [
-      "AgentOps, multiagent orchestration",
-      "Personalized over learning",
-      "Embodied AI",
-      "Human-robot collaboration",
-      "Simulation-trained agents",
-      "Digital-twin/physics simulation",
-      "Comprehensive AI assurance",
-      "Contextual, empathetic, multimodal collaborators",
-      "Immersive (XR) interfaces",
+      "Autonomous security operations centers",
+      "Predictive threat intelligence",
+      "Quantum-resistant cryptography",
+      "AI-driven attack surface management",
+      "Self-healing network architectures",
+      "Cognitive security orchestration",
+      "Digital immune systems",
+      "Adaptive zero-trust fabrics",
+      "Security-by-design ecosystems",
     ],
   },
   {
     tag: "H2",
-    titleLines: ["Transfer learning,", "responsible AI"],
-    descriptionLines: ["Next-wave evolution, Less", "data, explainable systems"],
+    titleLines: ["Extended detection,", "proactive resilience"],
+    descriptionLines: ["Next-gen defense layers,", "unified security platforms"],
     patterns: [
-      "LLMOps, agentic orchestration",
-      "Multimodal understanding/generation",
-      "Efficient transformer variants (MoE)",
-      "Agentic LLM systems",
-      "Scalable SLM systems",
-      "Multiagent workflows",
-      "Programmable guardrails",
-      "Proactive AI assurance",
-      "Copilot-style assistants",
-      "Prompt/RAG workflows",
+      "XDR (Extended Detection & Response)",
+      "Cloud-native application protection",
+      "Security mesh architectures",
+      "DevSecOps pipeline integration",
+      "Threat hunting automation",
+      "Supply chain security frameworks",
+      "Privacy-enhancing technologies",
+      "Continuous compliance validation",
+      "Breach and attack simulation",
+      "Identity threat detection and response",
     ],
   },
   {
-    tag: "H3",
-    titleLines: ["Conventional AI and", "data science"],
-    descriptionLines: ["Core foundations,", "Augmenting intelligence"],
+    tag: "H1",
+    titleLines: ["Foundational security", "and risk management"],
+    descriptionLines: ["Core defenses,", "baseline protections"],
     patterns: [
-      "MLOps platforms",
-      "GPU/accelerator clusters",
-      "Transformer-based architectures",
-      "Classical computer vision/natural language processing",
-      "Goal-directed automation",
-      "Scripted agents",
-      "Responsible AI governance",
-      "Model monitoring",
-      "Productivity automations",
+      "Endpoint detection and response (EDR)",
+      "SIEM/SOAR platforms",
+      "Vulnerability management programs",
+      "Multi-factor authentication",
+      "Network segmentation strategies",
+      "Security awareness training",
+      "Incident response playbooks",
+      "Data loss prevention (DLP)",
+      "Firewall and IDS/IPS management",
     ],
   },
 ];
 
 const trendTabs = [
-  "AI cloud",
-  "AI models and engineering",
-  "Agentic AI",
-  "AI assurance",
-  "AI applications",
+  "Threat landscape",
+  "Security operations",
+  "Identity & access",
+  "Data protection",
+  "Compliance & governance",
 ] as const;
 
 const trendsByTab: Record<(typeof trendTabs)[number], TrendCard[]> = {
-  "AI cloud": [
+  "Threat landscape": [
     {
       label: "Trend 1",
-      text: "AI platforms become smarter, specialized, and multimodal",
+      text: "AI-powered attacks increase sophistication and speed of threat campaigns",
     },
     {
       label: "Trend 2",
-      text: "Autonomous, agentic AI platforms reshape enterprise operations",
+      text: "Ransomware evolves with double-extortion and supply chain vectors",
     },
     {
       label: "Trend 3",
-      text: "GPU-as-service emerges as the new infrastructure model",
+      text: "Nation-state actors expand targets to critical infrastructure",
     },
     {
       label: "Trend 4",
-      text: "Alternate hardware drives cost-efficient AI inference",
+      text: "Social engineering attacks leverage deepfakes and generative AI",
     },
     {
       label: "Trend 5",
-      text: "Smaller language models gain relevance",
+      text: "IoT and OT environments become primary attack surfaces",
     },
   ],
-  "AI models and engineering": [
+  "Security operations": [
     {
       label: "Trend 1",
-      text: "Foundation models evolve toward domain-specialized architectures",
+      text: "AI-augmented SOCs reduce mean time to detect and respond",
     },
     {
       label: "Trend 2",
-      text: "Efficient fine-tuning and evaluation become core engineering practices",
+      text: "Security orchestration automates repetitive incident workflows",
     },
     {
       label: "Trend 3",
-      text: "Retrieval-augmented pipelines standardize enterprise AI delivery",
+      text: "Threat intelligence platforms enable proactive defense postures",
     },
     {
       label: "Trend 4",
-      text: "Model ops expands into continuous assurance and observability",
+      text: "Purple teaming bridges offensive and defensive security practices",
     },
     {
       label: "Trend 5",
-      text: "Open and proprietary model ecosystems coexist in hybrid stacks",
+      text: "Managed detection and response services scale expert capabilities",
     },
   ],
-  "Agentic AI": [
+  "Identity & access": [
     {
       label: "Trend 1",
-      text: "Multiagent orchestration moves from pilots to production",
+      text: "Zero-trust architectures become the standard security framework",
     },
     {
       label: "Trend 2",
-      text: "Tool-using agents automate complex cross-system workflows",
+      text: "Passwordless authentication eliminates credential-based attacks",
     },
     {
       label: "Trend 3",
-      text: "Memory and planning layers improve long-horizon reliability",
+      text: "Decentralized identity empowers user-controlled digital credentials",
     },
     {
       label: "Trend 4",
-      text: "Human-in-the-loop controls remain essential for high-stakes tasks",
+      text: "Privileged access management extends to cloud and machine identities",
     },
     {
       label: "Trend 5",
-      text: "Agent marketplaces emerge for reusable enterprise capabilities",
+      text: "Continuous adaptive trust replaces static access policies",
     },
   ],
-  "AI assurance": [
+  "Data protection": [
     {
       label: "Trend 1",
-      text: "Responsible AI shifts from policy to measurable controls",
+      text: "Encryption-in-use technologies protect data during processing",
     },
     {
       label: "Trend 2",
-      text: "Programmable guardrails become standard deployment layers",
+      text: "Data security posture management provides visibility across environments",
     },
     {
       label: "Trend 3",
-      text: "Continuous model monitoring detects drift and misuse early",
+      text: "Privacy-preserving computation enables secure cross-organization analytics",
     },
     {
       label: "Trend 4",
-      text: "Explainability requirements expand across regulated industries",
+      text: "Quantum-safe algorithms prepare organizations for cryptographic transitions",
     },
     {
       label: "Trend 5",
-      text: "Assurance tooling integrates directly into MLOps pipelines",
+      text: "Automated data classification drives contextual protection policies",
     },
   ],
-  "AI applications": [
+  "Compliance & governance": [
     {
       label: "Trend 1",
-      text: "Copilot experiences become embedded across business software",
+      text: "Continuous compliance monitoring replaces point-in-time audits",
     },
     {
       label: "Trend 2",
-      text: "Industry solutions prioritize measurable workflow outcomes",
+      text: "Security frameworks converge across global regulatory standards",
     },
     {
       label: "Trend 3",
-      text: "Multimodal interfaces reshape customer and employee journeys",
+      text: "Third-party risk management incorporates real-time cyber ratings",
     },
     {
       label: "Trend 4",
-      text: "AI-native products replace bolt-on feature strategies",
+      text: "Board-level cyber governance becomes a fiduciary obligation",
     },
     {
       label: "Trend 5",
-      text: "Domain copilots accelerate specialist productivity at scale",
+      text: "AI governance frameworks address emerging algorithmic risks",
     },
   ],
 };
 
-export default function TechnologyTrends() {
+export default function Cybersecurity() {
   const [activeTab, setActiveTab] =
-    useState<(typeof trendTabs)[number]>("AI cloud");
+    useState<(typeof trendTabs)[number]>("Threat landscape");
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -206,7 +206,7 @@ export default function TechnologyTrends() {
       <section
         className="relative w-full flex items-center justify-center overflow-hidden bg-[#113d77]"
         style={{ minHeight: "clamp(280px, 32vw, 492px)" }}
-        aria-label="Artificial Intelligence"
+        aria-label="Cybersecurity"
       >
         <img
           src={worldMapBackground}
@@ -216,14 +216,14 @@ export default function TechnologyTrends() {
         />
         <div className="relative z-10 flex flex-col items-center text-center max-w-[min(820px,92%)] px-5 pt-[clamp(72px,8vw,120px)] pb-[clamp(48px,6vw,80px)]">
           <h1 className="m-0 text-white font-bold leading-[1.29] tracking-tight text-[clamp(32px,4vw,48px)] lg:text-[clamp(26px,3vw,34px)] 2xl:text-[clamp(32px,4vw,48px)]">
-            Artificial Intelligence
+            Cybersecurity
           </h1>
           <p className="mt-[clamp(16px,2vw,24px)] max-w-[783px] font-['Ubuntu',sans-serif] text-[#a1b1cb] font-normal leading-6 text-[clamp(14px,1.4vw,18px)] lg:text-[clamp(13px,1.1vw,15px)] 2xl:text-[clamp(14px,1.4vw,18px)]">
-            Artificial intelligence (AI) is accelerating through transformative
-            breakthroughs in agentic systems, multimodal processing, and frontier
-            cognitive architectures — innovations that are reshaping the
-            enterprise landscape as we know it. What began as a promising
-            experiment has now matured into demonstrable business impact.
+            Cybersecurity is evolving at an unprecedented pace as organizations
+            face increasingly sophisticated threats — from AI-powered attacks and
+            ransomware to nation-state campaigns and supply chain compromises.
+            Building resilient defenses now requires proactive intelligence,
+            zero-trust architectures, and autonomous security operations.
           </p>
           <Link
             to="/contact"
@@ -252,27 +252,23 @@ export default function TechnologyTrends() {
             Technology Trends
           </Link>
           <span className="text-[#848b9b]">»</span>
-          <span className="text-[#272935]">Artificial Intelligence</span>
+          <span className="text-[#272935]">Cybersecurity</span>
         </nav>
 
         {/* Intro / Architecture Section */}
         <section
           className="grid grid-cols-1 lg:grid-cols-[0.95fr_1.05fr] gap-[clamp(32px,4vw,56px)] lg:gap-[clamp(40px,5vw,80px)] items-center pb-[clamp(48px,6vw,80px)]"
-          aria-label="Enterprise AI architecture"
+          aria-label="Cybersecurity architecture"
         >
           <h2 className="m-0 font-bold leading-[1.12] text-[#272935] max-w-[16ch] text-[clamp(28px,4.2vw,64px)] lg:text-[clamp(26px,3.2vw,40px)] 2xl:text-[clamp(28px,4.2vw,64px)]">
-            Enterprise AI architecture and technology: Designing the autonomous
-            future
+            Enterprise cybersecurity architecture: Defending the digital frontier
           </h2>
           <div className="relative w-full max-w-[875px] mx-auto">
             <img
               src={architectureDiagram}
-              alt="Explore our expertise across AI and related technology domains"
+              alt="Explore our expertise across cybersecurity and related technology domains"
               className="block w-full h-auto"
             />
-            <span className="absolute left-[17%] top-[28%] px-1.5 py-0.5 bg-[#fdfdfe] text-[#1d212b] text-sm font-semibold leading-[1.2] whitespace-nowrap pointer-events-none hidden sm:block">
-              On Premise
-            </span>
           </div>
         </section>
 
@@ -324,15 +320,15 @@ export default function TechnologyTrends() {
       {/* Key Trends Section */}
       <section
         className="bg-[#f4f7f9] rounded-[20px] max-sm:rounded-none py-[clamp(40px,5vw,72px)] pb-[clamp(48px,6vw,88px)]"
-        aria-label="Key trends across AI subdomains"
+        aria-label="Key trends across cybersecurity subdomains"
       >
         <div className="w-full max-w-[1692px] mx-auto px-6">
-          <h2 className="m-0 mb-[clamp(28px,3.5vw,48px)] lg:mb-[clamp(20px,2.5vw,32px)] 2xl:mb-[clamp(28px,3.5vw,48px)] max-w-[18ch] font-bold leading-[1.12] text-[#272935] text-[clamp(28px,3.5vw,48px)] lg:text-[clamp(24px,2.8vw,34px)] 2xl:text-[clamp(28px,3.5vw,48px)]">
-            Key trends across AI subdomains
+          <h2 className="m-0 mb-[clamp(28px,3.5vw,48px)] lg:mb-[clamp(20px,2.5vw,32px)] 2xl:mb-[clamp(28px,3.5vw,48px)] max-w-[20ch] font-bold leading-[1.12] text-[#272935] text-[clamp(28px,3.5vw,48px)] lg:text-[clamp(24px,2.8vw,34px)] 2xl:text-[clamp(28px,3.5vw,48px)]">
+            Key trends across cybersecurity subdomains
           </h2>
           <div className="grid grid-cols-1 lg:grid-cols-[minmax(220px,420px)_minmax(0,1fr)] gap-[clamp(24px,3vw,40px)] lg:gap-[clamp(24px,2.5vw,40px)] items-start">
             {/* Tabs */}
-            <div className="flex flex-col gap-2.5" role="tablist" aria-label="AI subdomains">
+            <div className="flex flex-col gap-2.5" role="tablist" aria-label="Cybersecurity subdomains">
               {trendTabs.map((tab) => (
                 <button
                   key={tab}

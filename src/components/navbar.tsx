@@ -169,7 +169,7 @@ export default function Navbar() {
   const getItemPath = (menu: MegaMenuConfig, item: string) => {
     if (menu.itemHref === SERVICE_DETAILS_PATH) return SERVICE_DETAILS_PATH;
     if (menu.itemHref === INDUSTRIES_PATH) return INDUSTRIES_PATH;
-    if (menu.itemHref === TECHNOLOGIES_PATH) return `${TECHNOLOGIES_PATH}/ai`;
+    if (menu.itemHref === TECHNOLOGIES_PATH) return `${TECHNOLOGIES_PATH}/${toSlug(item)}`;
     return `${menu.itemHref}/${toSlug(item)}`;
   };
 

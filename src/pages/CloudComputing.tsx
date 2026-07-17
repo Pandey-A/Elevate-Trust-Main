@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
 import FlyCTA from "../components/FlyCTA";
 import worldMapBackground from "../assets/homepage-icons/Group(3).png";
-import architectureDiagram from "../assets/technology-trends/ai-architecture-diagram.png";
+import architectureDiagram from "../assets/technology-trends/Technology-cloud.png";
 import checkIcon from "../assets/technology-trends/check-icon.svg";
 import downloadIcon from "../assets/technology-trends/download-device-icon.svg";
 
@@ -22,179 +22,179 @@ type TrendCard = {
 const horizons: Horizon[] = [
   {
     tag: "H3",
-    titleLines: ["Multimodal,", "multitasking learning"],
-    descriptionLines: ["Intelligent systems, Self-", "supervised"],
+    titleLines: ["Autonomous cloud,", "self-healing systems"],
+    descriptionLines: ["Intelligent orchestration,", "zero-touch operations"],
     patterns: [
-      "AgentOps, multiagent orchestration",
-      "Personalized over learning",
-      "Embodied AI",
-      "Human-robot collaboration",
-      "Simulation-trained agents",
-      "Digital-twin/physics simulation",
-      "Comprehensive AI assurance",
-      "Contextual, empathetic, multimodal collaborators",
-      "Immersive (XR) interfaces",
+      "Self-optimizing cloud fabrics",
+      "Intent-driven infrastructure",
+      "Autonomous scaling and remediation",
+      "AI-powered capacity planning",
+      "Quantum-ready cloud architectures",
+      "Decentralized cloud meshes",
+      "Predictive incident prevention",
+      "Sustainable, carbon-aware workloads",
+      "Immersive cloud-native experiences",
     ],
   },
   {
     tag: "H2",
-    titleLines: ["Transfer learning,", "responsible AI"],
-    descriptionLines: ["Next-wave evolution, Less", "data, explainable systems"],
+    titleLines: ["Multi-cloud,", "cloud-native platforms"],
+    descriptionLines: ["Next-gen infrastructure,", "platform engineering"],
     patterns: [
-      "LLMOps, agentic orchestration",
-      "Multimodal understanding/generation",
-      "Efficient transformer variants (MoE)",
-      "Agentic LLM systems",
-      "Scalable SLM systems",
-      "Multiagent workflows",
-      "Programmable guardrails",
-      "Proactive AI assurance",
-      "Copilot-style assistants",
-      "Prompt/RAG workflows",
+      "Kubernetes-native operations",
+      "Multi-cloud governance frameworks",
+      "Platform-as-a-Product delivery",
+      "FinOps and cost intelligence",
+      "Serverless-first architectures",
+      "Edge-cloud convergence",
+      "GitOps-driven deployments",
+      "Policy-as-code guardrails",
+      "Cloud-native security posture",
+      "Internal developer portals",
     ],
   },
   {
-    tag: "H3",
-    titleLines: ["Conventional AI and", "data science"],
-    descriptionLines: ["Core foundations,", "Augmenting intelligence"],
+    tag: "H1",
+    titleLines: ["Infrastructure and", "migration foundations"],
+    descriptionLines: ["Core capabilities,", "modernizing workloads"],
     patterns: [
-      "MLOps platforms",
-      "GPU/accelerator clusters",
-      "Transformer-based architectures",
-      "Classical computer vision/natural language processing",
-      "Goal-directed automation",
-      "Scripted agents",
-      "Responsible AI governance",
-      "Model monitoring",
-      "Productivity automations",
+      "Cloud migration factories",
+      "IaC (Terraform/Pulumi) adoption",
+      "Containerization strategies",
+      "Hybrid cloud connectivity",
+      "Disaster recovery automation",
+      "Compliance-ready landing zones",
+      "CI/CD pipeline modernization",
+      "Monitoring and observability stacks",
+      "Cost optimization frameworks",
     ],
   },
 ];
 
 const trendTabs = [
-  "AI cloud",
-  "AI models and engineering",
-  "Agentic AI",
-  "AI assurance",
-  "AI applications",
+  "Cloud infrastructure",
+  "Cloud-native development",
+  "Multi-cloud & hybrid",
+  "Cloud security",
+  "Cloud economics",
 ] as const;
 
 const trendsByTab: Record<(typeof trendTabs)[number], TrendCard[]> = {
-  "AI cloud": [
+  "Cloud infrastructure": [
     {
       label: "Trend 1",
-      text: "AI platforms become smarter, specialized, and multimodal",
+      text: "Infrastructure as Code becomes the default deployment paradigm",
     },
     {
       label: "Trend 2",
-      text: "Autonomous, agentic AI platforms reshape enterprise operations",
+      text: "Edge computing extends cloud capabilities to distributed endpoints",
     },
     {
       label: "Trend 3",
-      text: "GPU-as-service emerges as the new infrastructure model",
+      text: "Serverless architectures reduce operational overhead at scale",
     },
     {
       label: "Trend 4",
-      text: "Alternate hardware drives cost-efficient AI inference",
+      text: "GPU cloud services accelerate AI/ML workload processing",
     },
     {
       label: "Trend 5",
-      text: "Smaller language models gain relevance",
+      text: "Green cloud initiatives drive sustainable infrastructure design",
     },
   ],
-  "AI models and engineering": [
+  "Cloud-native development": [
     {
       label: "Trend 1",
-      text: "Foundation models evolve toward domain-specialized architectures",
+      text: "Microservices architectures enable independent scaling and deployment",
     },
     {
       label: "Trend 2",
-      text: "Efficient fine-tuning and evaluation become core engineering practices",
+      text: "Platform engineering teams provide golden paths for developers",
     },
     {
       label: "Trend 3",
-      text: "Retrieval-augmented pipelines standardize enterprise AI delivery",
+      text: "Service meshes standardize inter-service communication patterns",
     },
     {
       label: "Trend 4",
-      text: "Model ops expands into continuous assurance and observability",
+      text: "Container orchestration matures with advanced scheduling capabilities",
     },
     {
       label: "Trend 5",
-      text: "Open and proprietary model ecosystems coexist in hybrid stacks",
+      text: "Developer experience platforms reduce cognitive load on engineering teams",
     },
   ],
-  "Agentic AI": [
+  "Multi-cloud & hybrid": [
     {
       label: "Trend 1",
-      text: "Multiagent orchestration moves from pilots to production",
+      text: "Multi-cloud strategies become standard for enterprise resilience",
     },
     {
       label: "Trend 2",
-      text: "Tool-using agents automate complex cross-system workflows",
+      text: "Unified control planes manage workloads across cloud boundaries",
     },
     {
       label: "Trend 3",
-      text: "Memory and planning layers improve long-horizon reliability",
+      text: "Data sovereignty requirements drive regional cloud deployments",
     },
     {
       label: "Trend 4",
-      text: "Human-in-the-loop controls remain essential for high-stakes tasks",
+      text: "Hybrid architectures bridge legacy systems with cloud-native services",
     },
     {
       label: "Trend 5",
-      text: "Agent marketplaces emerge for reusable enterprise capabilities",
+      text: "Cloud-agnostic tooling reduces vendor lock-in risks",
     },
   ],
-  "AI assurance": [
+  "Cloud security": [
     {
       label: "Trend 1",
-      text: "Responsible AI shifts from policy to measurable controls",
+      text: "Zero-trust network architectures become cloud security baseline",
     },
     {
       label: "Trend 2",
-      text: "Programmable guardrails become standard deployment layers",
+      text: "Cloud security posture management automates compliance validation",
     },
     {
       label: "Trend 3",
-      text: "Continuous model monitoring detects drift and misuse early",
+      text: "Shift-left security integrates protection into CI/CD pipelines",
     },
     {
       label: "Trend 4",
-      text: "Explainability requirements expand across regulated industries",
+      text: "Identity-first security replaces perimeter-based approaches",
     },
     {
       label: "Trend 5",
-      text: "Assurance tooling integrates directly into MLOps pipelines",
+      text: "Confidential computing protects data during processing in cloud",
     },
   ],
-  "AI applications": [
+  "Cloud economics": [
     {
       label: "Trend 1",
-      text: "Copilot experiences become embedded across business software",
+      text: "FinOps practices mature into enterprise-wide cost governance",
     },
     {
       label: "Trend 2",
-      text: "Industry solutions prioritize measurable workflow outcomes",
+      text: "AI-driven optimization automatically right-sizes cloud resources",
     },
     {
       label: "Trend 3",
-      text: "Multimodal interfaces reshape customer and employee journeys",
+      text: "Spot and preemptible instances reduce compute costs significantly",
     },
     {
       label: "Trend 4",
-      text: "AI-native products replace bolt-on feature strategies",
+      text: "Commitment-based pricing models evolve for dynamic workloads",
     },
     {
       label: "Trend 5",
-      text: "Domain copilots accelerate specialist productivity at scale",
+      text: "Unit economics tracking aligns cloud spend with business outcomes",
     },
   ],
 };
 
-export default function TechnologyTrends() {
+export default function CloudComputing() {
   const [activeTab, setActiveTab] =
-    useState<(typeof trendTabs)[number]>("AI cloud");
+    useState<(typeof trendTabs)[number]>("Cloud infrastructure");
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -206,7 +206,7 @@ export default function TechnologyTrends() {
       <section
         className="relative w-full flex items-center justify-center overflow-hidden bg-[#113d77]"
         style={{ minHeight: "clamp(280px, 32vw, 492px)" }}
-        aria-label="Artificial Intelligence"
+        aria-label="Cloud Computing"
       >
         <img
           src={worldMapBackground}
@@ -216,14 +216,14 @@ export default function TechnologyTrends() {
         />
         <div className="relative z-10 flex flex-col items-center text-center max-w-[min(820px,92%)] px-5 pt-[clamp(72px,8vw,120px)] pb-[clamp(48px,6vw,80px)]">
           <h1 className="m-0 text-white font-bold leading-[1.29] tracking-tight text-[clamp(32px,4vw,48px)] lg:text-[clamp(26px,3vw,34px)] 2xl:text-[clamp(32px,4vw,48px)]">
-            Artificial Intelligence
+            Cloud Computing
           </h1>
           <p className="mt-[clamp(16px,2vw,24px)] max-w-[783px] font-['Ubuntu',sans-serif] text-[#a1b1cb] font-normal leading-6 text-[clamp(14px,1.4vw,18px)] lg:text-[clamp(13px,1.1vw,15px)] 2xl:text-[clamp(14px,1.4vw,18px)]">
-            Artificial intelligence (AI) is accelerating through transformative
-            breakthroughs in agentic systems, multimodal processing, and frontier
-            cognitive architectures — innovations that are reshaping the
-            enterprise landscape as we know it. What began as a promising
-            experiment has now matured into demonstrable business impact.
+            Cloud computing is revolutionizing how enterprises build, deploy, and
+            scale their digital infrastructure — from multi-cloud strategies and
+            serverless architectures to edge computing and platform engineering.
+            What started as simple virtualization has evolved into a comprehensive
+            ecosystem powering autonomous, intelligent operations.
           </p>
           <Link
             to="/contact"
@@ -252,27 +252,23 @@ export default function TechnologyTrends() {
             Technology Trends
           </Link>
           <span className="text-[#848b9b]">»</span>
-          <span className="text-[#272935]">Artificial Intelligence</span>
+          <span className="text-[#272935]">Cloud Computing</span>
         </nav>
 
         {/* Intro / Architecture Section */}
         <section
           className="grid grid-cols-1 lg:grid-cols-[0.95fr_1.05fr] gap-[clamp(32px,4vw,56px)] lg:gap-[clamp(40px,5vw,80px)] items-center pb-[clamp(48px,6vw,80px)]"
-          aria-label="Enterprise AI architecture"
+          aria-label="Cloud architecture"
         >
           <h2 className="m-0 font-bold leading-[1.12] text-[#272935] max-w-[16ch] text-[clamp(28px,4.2vw,64px)] lg:text-[clamp(26px,3.2vw,40px)] 2xl:text-[clamp(28px,4.2vw,64px)]">
-            Enterprise AI architecture and technology: Designing the autonomous
-            future
+            Enterprise cloud architecture and technology: Building the scalable future
           </h2>
           <div className="relative w-full max-w-[875px] mx-auto">
             <img
               src={architectureDiagram}
-              alt="Explore our expertise across AI and related technology domains"
+              alt="Explore our expertise across cloud computing and related technology domains"
               className="block w-full h-auto"
             />
-            <span className="absolute left-[17%] top-[28%] px-1.5 py-0.5 bg-[#fdfdfe] text-[#1d212b] text-sm font-semibold leading-[1.2] whitespace-nowrap pointer-events-none hidden sm:block">
-              On Premise
-            </span>
           </div>
         </section>
 
@@ -324,15 +320,15 @@ export default function TechnologyTrends() {
       {/* Key Trends Section */}
       <section
         className="bg-[#f4f7f9] rounded-[20px] max-sm:rounded-none py-[clamp(40px,5vw,72px)] pb-[clamp(48px,6vw,88px)]"
-        aria-label="Key trends across AI subdomains"
+        aria-label="Key trends across cloud subdomains"
       >
         <div className="w-full max-w-[1692px] mx-auto px-6">
           <h2 className="m-0 mb-[clamp(28px,3.5vw,48px)] lg:mb-[clamp(20px,2.5vw,32px)] 2xl:mb-[clamp(28px,3.5vw,48px)] max-w-[18ch] font-bold leading-[1.12] text-[#272935] text-[clamp(28px,3.5vw,48px)] lg:text-[clamp(24px,2.8vw,34px)] 2xl:text-[clamp(28px,3.5vw,48px)]">
-            Key trends across AI subdomains
+            Key trends across cloud subdomains
           </h2>
           <div className="grid grid-cols-1 lg:grid-cols-[minmax(220px,420px)_minmax(0,1fr)] gap-[clamp(24px,3vw,40px)] lg:gap-[clamp(24px,2.5vw,40px)] items-start">
             {/* Tabs */}
-            <div className="flex flex-col gap-2.5" role="tablist" aria-label="AI subdomains">
+            <div className="flex flex-col gap-2.5" role="tablist" aria-label="Cloud subdomains">
               {trendTabs.map((tab) => (
                 <button
                   key={tab}
