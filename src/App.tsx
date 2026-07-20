@@ -9,6 +9,12 @@ import Contact from './pages/Contact';
 import TechnologyTrends from './pages/TechnologyTrends';
 import CloudComputing from './pages/CloudComputing';
 import Cybersecurity from './pages/Cybersecurity';
+import AiNativeSdlc from './pages/AiNativeSdlc';
+import DataTrends from './pages/DataTrends';
+import ItBizops from './pages/ItBizops';
+import Devops from './pages/Devops';
+import OnPremise from './pages/OnPremise';
+import DigitalWorkspace from './pages/DigitalWorkspace';
 import Industries from './pages/Industries';
 import CaseStudies from './pages/CaseStudies';
 import CaseStudyDetail from './pages/CaseStudyDetail';
@@ -24,8 +30,14 @@ export default function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/technologies" element={<TechnologyTrends />} />
         <Route path="/technologies/ai" element={<TechnologyTrends />} />
+        <Route path="/technologies/ai-native-sdlc" element={<AiNativeSdlc />} />
+        <Route path="/technologies/data" element={<DataTrends />} />
         <Route path="/technologies/cloud" element={<CloudComputing />} />
         <Route path="/technologies/cybersecurity" element={<Cybersecurity />} />
+        <Route path="/technologies/it-bizops" element={<ItBizops />} />
+        <Route path="/technologies/devops" element={<Devops />} />
+        <Route path="/technologies/on-premise" element={<OnPremise />} />
+        <Route path="/technologies/digital-workspace" element={<DigitalWorkspace />} />
         <Route path="/industries" element={<Industries />} />
         <Route path="/industries/:slug" element={<Industries />} />
         <Route path="/case-studies" element={<CaseStudies />} />

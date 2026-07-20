@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
 import FlyCTA from "../components/FlyCTA";
 import worldMapBackground from "../assets/homepage-icons/Group(3).png";
-import architectureDiagram from "../assets/technology-trends/Trends-cloud.png";
+import architectureDiagram from "../assets/technology-trends/Trends-it.png";
 import checkIcon from "../assets/technology-trends/check-icon.svg";
 import downloadIcon from "../assets/technology-trends/download-device-icon.svg";
 
@@ -22,179 +22,178 @@ type TrendCard = {
 const horizons: Horizon[] = [
   {
     tag: "H3",
-    titleLines: ["Autonomous cloud,", "self-healing systems"],
-    descriptionLines: ["Intelligent orchestration,", "zero-touch operations"],
+    titleLines: ["Autonomous IT,", "self-running operations"],
+    descriptionLines: ["Intelligent BizOps,", "zero-touch service"],
     patterns: [
-      "Self-optimizing cloud fabrics",
-      "Intent-driven infrastructure",
-      "Autonomous scaling and remediation",
-      "AI-powered capacity planning",
-      "Quantum-ready cloud architectures",
-      "Decentralized cloud meshes",
-      "Predictive incident prevention",
-      "Sustainable, carbon-aware workloads",
-      "Immersive cloud-native experiences",
+      "AIOps-driven incident prevention",
+      "Autonomous service request fulfillment",
+      "Self-optimizing IT cost and capacity",
+      "Intent-based service management",
+      "Predictive vendor and contract intelligence",
+      "Digital twin models of IT estates",
+      "Closed-loop business process automation",
+      "Experience-driven operations metrics",
+      "Cognitive knowledge management",
     ],
   },
   {
     tag: "H2",
-    titleLines: ["Multi-cloud,", "cloud-native platforms"],
-    descriptionLines: ["Next-gen infrastructure,", "platform engineering"],
+    titleLines: ["Integrated BizOps,", "value-aligned IT"],
+    descriptionLines: ["Next-gen operating models,", "platform services"],
     patterns: [
-      "Kubernetes-native operations",
-      "Multi-cloud governance frameworks",
-      "Platform-as-a-Product delivery",
-      "FinOps and cost intelligence",
-      "Serverless-first architectures",
-      "Edge-cloud convergence",
-      "GitOps-driven deployments",
-      "Policy-as-code guardrails",
-      "Cloud-native security posture",
-      "Internal developer portals",
+      "ITSM and DevOps convergence",
+      "Service catalogs as products",
+      "FinOps for enterprise IT spend",
+      "Enterprise architecture as a service",
+      "Automated change and release boards",
+      "Employee experience platforms",
+      "Process mining for IT workflows",
+      "Cross-functional value stream management",
+      "Observability for business services",
     ],
   },
   {
     tag: "H1",
-    titleLines: ["Infrastructure and", "migration foundations"],
-    descriptionLines: ["Core capabilities,", "modernizing workloads"],
+    titleLines: ["IT operations", "and service foundations"],
+    descriptionLines: ["Core capabilities,", "stable delivery"],
     patterns: [
-      "Cloud migration factories",
-      "IaC (Terraform/Pulumi) adoption",
-      "Containerization strategies",
-      "Hybrid cloud connectivity",
-      "Disaster recovery automation",
-      "Compliance-ready landing zones",
-      "CI/CD pipeline modernization",
-      "Monitoring and observability stacks",
-      "Cost optimization frameworks",
+      "ITIL-aligned service management",
+      "Ticket and incident workflows",
+      "CMDB and asset management baselines",
+      "Change advisory processes",
+      "SLA and uptime reporting",
+      "Vendor and license management",
+      "Helpdesk and knowledge bases",
+      "Capacity and availability planning",
+      "Operational runbook maturity",
     ],
   },
 ];
 
 const trendTabs = [
-  "Cloud infrastructure",
-  "Cloud-native development",
-  "Multi-cloud & hybrid",
-  "Cloud security",
-  "Cloud economics",
+  "IT service management",
+  "AIOps & automation",
+  "Business alignment",
+  "Cost & FinOps",
+  "Experience operations",
 ] as const;
 
 const trendsByTab: Record<(typeof trendTabs)[number], TrendCard[]> = {
-  "Cloud infrastructure": [
+  "IT service management": [
     {
       label: "Trend 1",
-      text: "Infrastructure as Code becomes the default deployment paradigm",
+      text: "Service management platforms evolve into intelligent orchestration hubs",
     },
     {
       label: "Trend 2",
-      text: "Edge computing extends cloud capabilities to distributed endpoints",
+      text: "Self-service portals resolve routine requests without human intervention",
     },
     {
       label: "Trend 3",
-      text: "Serverless architectures reduce operational overhead at scale",
+      text: "CMDB accuracy improves through continuous discovery and reconciliation",
     },
     {
       label: "Trend 4",
-      text: "GPU cloud services accelerate AI/ML workload processing",
+      text: "Change risk scoring reduces failed releases and emergency changes",
     },
     {
       label: "Trend 5",
-      text: "Green cloud initiatives drive sustainable infrastructure design",
+      text: "Knowledge articles are generated and refreshed automatically from incidents",
     },
   ],
-  "Cloud-native development": [
+  "AIOps & automation": [
     {
       label: "Trend 1",
-      text: "Microservices architectures enable independent scaling and deployment",
+      text: "AIOps correlates alerts across tools to surface true business impact",
     },
     {
       label: "Trend 2",
-      text: "Platform engineering teams provide golden paths for developers",
+      text: "Runbook automation remediates known issues before users feel pain",
     },
     {
       label: "Trend 3",
-      text: "Service meshes standardize inter-service communication patterns",
+      text: "Predictive capacity models prevent performance and cost surprises",
     },
     {
       label: "Trend 4",
-      text: "Container orchestration matures with advanced scheduling capabilities",
+      text: "ChatOps and virtual agents become primary employee IT interfaces",
     },
     {
       label: "Trend 5",
-      text: "Developer experience platforms reduce cognitive load on engineering teams",
+      text: "Closed-loop automation links detection, diagnosis, and resolution",
     },
   ],
-  "Multi-cloud & hybrid": [
+  "Business alignment": [
     {
       label: "Trend 1",
-      text: "Multi-cloud strategies become standard for enterprise resilience",
+      text: "Value stream metrics connect IT work to revenue and customer outcomes",
     },
     {
       label: "Trend 2",
-      text: "Unified control planes manage workloads across cloud boundaries",
+      text: "Product operating models replace project-centric IT delivery",
     },
     {
       label: "Trend 3",
-      text: "Data sovereignty requirements drive regional cloud deployments",
+      text: "Enterprise architecture guides technology choices with business context",
     },
     {
       label: "Trend 4",
-      text: "Hybrid architectures bridge legacy systems with cloud-native services",
+      text: "Shared OKRs align technology, operations, and business stakeholders",
     },
     {
       label: "Trend 5",
-      text: "Cloud-agnostic tooling reduces vendor lock-in risks",
+      text: "Process mining reveals friction between IT processes and business goals",
     },
   ],
-  "Cloud security": [
+  "Cost & FinOps": [
     {
       label: "Trend 1",
-      text: "Zero-trust network architectures become cloud security baseline",
+      text: "FinOps practices extend from cloud into full enterprise IT portfolios",
     },
     {
       label: "Trend 2",
-      text: "Cloud security posture management automates compliance validation",
+      text: "Unit economics link technology spend to products and customer journeys",
     },
     {
       label: "Trend 3",
-      text: "Shift-left security integrates protection into CI/CD pipelines",
+      text: "Automated rightsizing and license optimization become continuous",
     },
     {
       label: "Trend 4",
-      text: "Identity-first security replaces perimeter-based approaches",
+      text: "Showback and chargeback models improve accountability for IT demand",
     },
     {
       label: "Trend 5",
-      text: "Confidential computing protects data during processing in cloud",
+      text: "Vendor intelligence supports smarter renewals and consolidation",
     },
   ],
-  "Cloud economics": [
+  "Experience operations": [
     {
       label: "Trend 1",
-      text: "FinOps practices mature into enterprise-wide cost governance",
+      text: "Digital employee experience becomes a board-level operations KPI",
     },
     {
       label: "Trend 2",
-      text: "AI-driven optimization automatically right-sizes cloud resources",
+      text: "Journey analytics reveal where technology friction slows productivity",
     },
     {
       label: "Trend 3",
-      text: "Spot and preemptible instances reduce compute costs significantly",
+      text: "Proactive support prevents tickets by fixing issues before they escalate",
     },
     {
       label: "Trend 4",
-      text: "Commitment-based pricing models evolve for dynamic workloads",
+      text: "Unified workplaces blend IT, HR, and facilities service channels",
     },
     {
       label: "Trend 5",
-      text: "Unit economics tracking aligns cloud spend with business outcomes",
+      text: "Sentiment and telemetry together guide continuous experience improvement",
     },
   ],
 };
 
-export default function CloudComputing() {
+export default function ItBizops() {
   const [activeTab, setActiveTab] =
-    useState<(typeof trendTabs)[number]>("Cloud infrastructure");
+    useState<(typeof trendTabs)[number]>("IT service management");
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -202,11 +201,10 @@ export default function CloudComputing() {
 
   return (
     <div className="font-['Lay_Grotesk_Trial',sans-serif] bg-white text-[#272935]">
-      {/* Hero Section */}
       <section
         className="relative w-full flex items-center justify-center overflow-hidden bg-[#113d77]"
         style={{ minHeight: "clamp(280px, 32vw, 492px)" }}
-        aria-label="Cloud Computing"
+        aria-label="IT BizOps"
       >
         <img
           src={worldMapBackground}
@@ -216,14 +214,13 @@ export default function CloudComputing() {
         />
         <div className="relative z-10 flex flex-col items-center text-center max-w-[min(820px,92%)] px-5 pt-[clamp(72px,8vw,120px)] pb-[clamp(48px,6vw,80px)]">
           <h1 className="m-0 text-white font-bold leading-[1.29] tracking-tight text-[clamp(32px,4vw,48px)] lg:text-[clamp(26px,3vw,34px)] 2xl:text-[clamp(32px,4vw,48px)]">
-            Cloud Computing
+            IT BizOps
           </h1>
           <p className="mt-[clamp(16px,2vw,24px)] max-w-[783px] font-['Ubuntu',sans-serif] text-[#a1b1cb] font-normal leading-6 text-[clamp(14px,1.4vw,18px)] lg:text-[clamp(13px,1.1vw,15px)] 2xl:text-[clamp(14px,1.4vw,18px)]">
-            Cloud computing is revolutionizing how enterprises build, deploy, and
-            scale their digital infrastructure — from multi-cloud strategies and
-            serverless architectures to edge computing and platform engineering.
-            What started as simple virtualization has evolved into a comprehensive
-            ecosystem powering autonomous, intelligent operations.
+            IT BizOps is reshaping how technology operations create business value —
+            from intelligent service management and AIOps automation to FinOps
+            accountability and employee experience. What began as ticket-driven
+            support has evolved into a strategic operating model for the enterprise.
           </p>
           <Link
             to="/contact"
@@ -237,9 +234,7 @@ export default function CloudComputing() {
         </div>
       </section>
 
-      {/* Breadcrumbs + Content Container */}
       <div className="w-full max-w-[1692px] mx-auto px-6">
-        {/* Breadcrumbs */}
         <nav
           className="flex flex-wrap items-center gap-2.5 pt-[clamp(28px,3vw,48px)] pb-[clamp(20px,2.5vw,36px)] text-[clamp(14px,1.2vw,18px)] lg:text-[clamp(13px,1vw,15px)] 2xl:text-[clamp(14px,1.2vw,18px)] font-normal leading-[1.2] text-[#272935]"
           aria-label="Breadcrumb"
@@ -252,27 +247,25 @@ export default function CloudComputing() {
             Technology Trends
           </Link>
           <span className="text-[#848b9b]">»</span>
-          <span className="text-[#272935]">Cloud Computing</span>
+          <span className="text-[#272935]">IT BizOps</span>
         </nav>
 
-        {/* Intro / Architecture Section */}
         <section
           className="grid grid-cols-1 lg:grid-cols-[0.95fr_1.05fr] gap-[clamp(32px,4vw,56px)] lg:gap-[clamp(40px,5vw,80px)] items-center pb-[clamp(48px,6vw,80px)]"
-          aria-label="Cloud architecture"
+          aria-label="IT BizOps architecture"
         >
           <h2 className="m-0 font-bold leading-[1.12] text-[#272935] max-w-[16ch] text-[clamp(28px,4.2vw,64px)] lg:text-[clamp(26px,3.2vw,40px)] 2xl:text-[clamp(28px,4.2vw,64px)]">
-            Enterprise cloud architecture and technology: Building the scalable future
+            IT BizOps architecture and operating model: Aligning technology with outcomes
           </h2>
           <div className="relative w-full max-w-[875px] mx-auto">
             <img
               src={architectureDiagram}
-              alt="Explore our expertise across cloud computing and related technology domains"
+              alt="Explore our expertise across IT BizOps and related technology domains"
               className="block w-full h-auto"
             />
           </div>
         </section>
 
-        {/* Horizons Section */}
         <section className="pb-[clamp(56px,7vw,100px)]" aria-label="Market dynamics">
           <h2 className="m-0 mb-[clamp(28px,3.5vw,48px)] max-w-[826px] font-medium leading-[1.57] text-[#848b9b] text-[clamp(20px,2.2vw,28px)] lg:text-[clamp(16px,1.6vw,22px)] 2xl:text-[clamp(20px,2.2vw,28px)]">
             Market dynamics across the three horizons
@@ -317,21 +310,20 @@ export default function CloudComputing() {
         </section>
       </div>
 
-      {/* Key Trends Section */}
       <section
         className="rounded-[20px] bg-[#f4f7f9] py-[clamp(40px,5vw,72px)] pb-[clamp(48px,6vw,88px)] max-sm:rounded-none"
-        aria-label="Key trends across cloud subdomains"
+        aria-label="Key trends across IT BizOps subdomains"
       >
         <div className="mx-auto w-full max-w-[1692px] px-6">
           <h2 className="m-0 mb-[clamp(24px,3vw,40px)] font-bold leading-[1.12] tracking-normal text-[#272935] text-[clamp(22px,2.5vw,40px)]">
-            Key trends across cloud subdomains
+            Key trends across IT BizOps subdomains
           </h2>
 
           <div className="grid grid-cols-1 items-start gap-[clamp(20px,2.5vw,32px)] lg:grid-cols-[minmax(240px,32%)_minmax(0,1fr)] lg:items-stretch xl:grid-cols-[minmax(280px,380px)_minmax(0,1fr)] 2xl:grid-cols-[minmax(320px,420px)_minmax(0,1fr)]">
             <div
               className="flex w-full max-w-[420px] flex-col gap-2.5 lg:h-full lg:max-w-none"
               role="tablist"
-              aria-label="Cloud subdomains"
+              aria-label="IT BizOps subdomains"
             >
               {trendTabs.map((tab) => (
                 <button
