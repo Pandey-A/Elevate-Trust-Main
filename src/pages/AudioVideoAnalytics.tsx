@@ -152,7 +152,7 @@ export default function AudioVideoAnalytics() {
           className="pointer-events-none absolute left-1/2 top-[58%] w-[min(94%,1600px)] -translate-x-1/2 -translate-y-1/2 opacity-55"
         />
         <div className="relative z-10 flex max-w-[min(860px,92%)] flex-col items-center px-5 pb-[clamp(48px,6vw,80px)] pt-[clamp(72px,8vw,120px)] text-center">
-          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.16em] text-[#8eb4df]">
+          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.16em] text-[#8eb4df] 2xl:text-base">
             Audio &amp; Video
           </p>
           <h1 className="m-0 text-[clamp(28px,3.8vw,48px)] font-bold leading-[1.29] tracking-tight text-white lg:text-[clamp(26px,3vw,34px)] 2xl:text-[clamp(32px,4vw,48px)]">
@@ -181,7 +181,7 @@ export default function AudioVideoAnalytics() {
       <section className="w-full bg-white">
         <div className="mx-auto w-full max-w-[1692px] px-5 pb-[clamp(48px,6vw,80px)] pt-3 sm:px-8 lg:px-10 xl:px-12">
           <nav
-            className="mb-[clamp(28px,3vw,48px)] flex flex-wrap items-center gap-2.5 pt-[clamp(20px,2.5vw,36px)] text-[clamp(13px,1.2vw,18px)] font-normal leading-[1.2] text-[#272935]"
+            className="mb-[clamp(28px,3vw,48px)] flex flex-wrap items-center gap-2.5 pt-[clamp(20px,2.5vw,36px)] text-[clamp(13px,1.2vw,18px)] font-normal leading-[1.2] text-[#272935] 2xl:text-[18px]"
             aria-label="Breadcrumb"
           >
             <Link
@@ -207,7 +207,7 @@ export default function AudioVideoAnalytics() {
               <br />
               Core Offering
             </h2>
-            <p className="mx-auto mt-5 max-w-[42rem] text-[clamp(13px,1.2vw,16px)] leading-7 text-[#9CA3AF] sm:mt-6">
+            <p className="mx-auto mt-5 max-w-[48rem] text-[clamp(13px,1.2vw,16px)] leading-7 text-[#9CA3AF] sm:mt-6 2xl:text-[18px] 2xl:leading-8">
               Production-ready capabilities that turn existing cameras into
               intelligent edge systems — with precision, real-time insights, and
               flexible deployment.
@@ -223,10 +223,10 @@ export default function AudioVideoAnalytics() {
                   className="mb-5 h-auto w-full max-h-[210px] rounded-[20px] object-cover object-center sm:mb-6 sm:max-h-[220px] lg:max-h-[230px]"
                   aria-hidden
                 />
-                <h3 className="text-[clamp(16px,1.3vw,20px)] font-bold leading-snug text-[#1F2432]">
+                <h3 className="text-[clamp(16px,1.3vw,20px)] font-bold leading-snug text-[#1F2432] 2xl:text-[22px]">
                   {item.title}
                 </h3>
-                <p className="mt-3 text-[clamp(12px,1.1vw,14px)] leading-6 text-[#9CA3AF] sm:mt-4">
+                <p className="mt-3 text-[clamp(12px,1.1vw,14px)] leading-6 text-[#9CA3AF] sm:mt-4 2xl:text-[18px] 2xl:leading-8">
                   {item.description}
                 </p>
               </article>
@@ -240,13 +240,13 @@ export default function AudioVideoAnalytics() {
         <div className="mx-auto w-full max-w-[1692px] px-5 py-[clamp(40px,5vw,72px)] sm:px-8 lg:px-10 xl:px-12">
           <div className="mb-[clamp(28px,3.5vw,48px)] grid grid-cols-1 items-center gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-12">
             <div>
-              <p className="mb-2 text-sm font-semibold uppercase tracking-[0.16em] text-[#2365aa]">
+              <p className="mb-2 text-sm font-semibold uppercase tracking-[0.16em] text-[#2365aa] 2xl:text-base">
                 Audio &amp; Video
               </p>
               <h2 className="m-0 text-[clamp(26px,3.5vw,48px)] font-bold leading-[1.15] text-[#1F2432]">
                 Elevate your Camera&apos;s Potential
               </h2>
-              <p className="mt-5 max-w-[40rem] text-[clamp(13px,1.2vw,16px)] leading-7 text-[#848b9b] sm:mt-6">
+              <p className="mt-5 max-w-[46rem] text-[clamp(13px,1.2vw,16px)] leading-7 text-[#848b9b] sm:mt-6 2xl:text-[18px] 2xl:leading-8">
                 for your business today with 100+ custom AI use cases tailored to
                 various industries.
               </p>
@@ -271,10 +271,10 @@ export default function AudioVideoAnalytics() {
                   <span className="relative mb-4 inline-flex h-9 w-9 items-center justify-center rounded-full bg-white text-xs font-bold text-[#113d77]">
                     {String(index + 1).padStart(2, "0")}
                   </span>
-                  <h3 className="relative m-0 min-h-[2.6em] text-[clamp(16px,1.3vw,20px)] font-bold leading-snug">
+                  <h3 className="relative m-0 min-h-[2.6em] text-[clamp(16px,1.3vw,20px)] font-bold leading-snug 2xl:text-[22px]">
                     {solution.title}
                   </h3>
-                  <p className="relative mt-auto pt-2 text-xs font-medium uppercase tracking-[0.08em] text-white/60">
+                  <p className="relative mt-auto pt-2 text-xs font-medium uppercase tracking-[0.08em] text-white/60 2xl:text-sm">
                     Applications
                   </p>
                 </header>
@@ -282,7 +282,7 @@ export default function AudioVideoAnalytics() {
                   {solution.applications.map((app) => (
                     <li
                       key={app}
-                      className="flex items-start gap-2.5 text-[clamp(12px,1.05vw,14px)] leading-[1.5] text-[#687181]"
+                      className="flex items-start gap-2.5 text-[clamp(12px,1.05vw,14px)] leading-[1.5] text-[#687181] 2xl:text-[17px] 2xl:leading-7"
                     >
                       <img
                         src={elevateIcon}
@@ -307,7 +307,7 @@ export default function AudioVideoAnalytics() {
             <h2 className="m-0 text-[clamp(26px,3.5vw,48px)] font-bold leading-[1.15] text-[#1F2432]">
               Value Added
             </h2>
-            <p className="mt-4 text-[clamp(13px,1.2vw,16px)] leading-7 text-[#9CA3AF]">
+            <p className="mt-4 text-[clamp(13px,1.2vw,16px)] leading-7 text-[#9CA3AF] 2xl:text-[18px] 2xl:leading-8">
               Proven outcomes from video analytics deployments across attendance,
               security, deepfake detection, and insurance inspection.
             </p>
@@ -331,7 +331,7 @@ export default function AudioVideoAnalytics() {
                   <span className="mb-3 inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#2365aa] text-sm font-semibold text-white">
                     {index + 1}
                   </span>
-                  <p className="m-0 flex-1 text-[clamp(13px,1.15vw,15px)] leading-6 text-[#5a5a5a]">
+                  <p className="m-0 flex-1 text-[clamp(13px,1.15vw,15px)] leading-6 text-[#5a5a5a] 2xl:text-[18px] 2xl:leading-8">
                     {item}
                   </p>
                 </article>

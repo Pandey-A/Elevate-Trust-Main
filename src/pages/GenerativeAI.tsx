@@ -225,7 +225,7 @@ export default function GenerativeAI() {
       <section className="w-full bg-white">
         <div className="mx-auto w-full max-w-[1692px] px-5 pb-[clamp(48px,6vw,80px)] pt-3 sm:px-8 lg:px-10 xl:px-12">
           <nav
-            className="mb-[clamp(28px,3vw,48px)] flex flex-wrap items-center gap-2.5 pt-[clamp(20px,2.5vw,36px)] text-[clamp(13px,1.2vw,18px)] font-normal leading-[1.2] text-[#272935]"
+            className="mb-[clamp(28px,3vw,48px)] flex flex-wrap items-center gap-2.5 pt-[clamp(20px,2.5vw,36px)] text-[clamp(13px,1.2vw,18px)] font-normal leading-[1.2] text-[#272935] 2xl:text-[18px]"
             aria-label="Breadcrumb"
           >
             <Link
@@ -251,7 +251,7 @@ export default function GenerativeAI() {
               <br />
               Core Offerings
             </h2>
-            <p className="mx-auto mt-5 max-w-[42rem] text-[clamp(13px,1.2vw,16px)] leading-7 text-[#9CA3AF] sm:mt-6">
+            <p className="mx-auto mt-5 max-w-[48rem] text-[clamp(13px,1.2vw,16px)] leading-7 text-[#9CA3AF] sm:mt-6 2xl:text-[18px] 2xl:leading-8">
               Purpose-built agents and copilots that turn Gen AI into measurable
               business outcomes — across analytics, engineering, support,
               healthcare, HR, knowledge, and financial services.
@@ -267,10 +267,10 @@ export default function GenerativeAI() {
                   className="mb-5 h-auto w-full rounded-[20px] object-cover sm:mb-6"
                   aria-hidden
                 />
-                <h3 className="text-[clamp(16px,1.3vw,20px)] font-bold leading-snug text-[#1F2432]">
+                <h3 className="text-[clamp(16px,1.3vw,20px)] font-bold leading-snug text-[#1F2432] 2xl:text-[22px]">
                   {item.title}
                 </h3>
-                <p className="mt-3 text-[clamp(12px,1.1vw,14px)] leading-6 text-[#9CA3AF] sm:mt-4">
+                <p className="mt-3 text-[clamp(12px,1.1vw,14px)] leading-6 text-[#9CA3AF] sm:mt-4 2xl:text-[18px] 2xl:leading-8">
                   {item.description}
                 </p>
               </article>
@@ -286,7 +286,7 @@ export default function GenerativeAI() {
             <h2 className="m-0 text-[clamp(26px,3.5vw,48px)] font-bold leading-[1.15] text-[#1F2432]">
               Gen AI &amp; LLM Consulting and Solution Architectures
             </h2>
-            <p className="mt-5 max-w-[40rem] text-[clamp(13px,1.2vw,16px)] leading-7 text-[#848b9b] sm:mt-6">
+            <p className="mt-5 max-w-[46rem] text-[clamp(13px,1.2vw,16px)] leading-7 text-[#848b9b] sm:mt-6 2xl:text-[18px] 2xl:leading-8">
               Expertise in Gen AI strategy and consulting — including use case
               recognition, feasibility evaluation, technology assessment, technical
               architecting, and AI deployment tailored to your goals and challenges.
@@ -295,7 +295,7 @@ export default function GenerativeAI() {
               {consultingPoints.map((point) => (
                 <li
                   key={point}
-                  className="flex items-start gap-3 text-[clamp(14px,1.2vw,18px)] font-medium leading-[1.5] text-[#5a5a5a]"
+                  className="flex items-start gap-3 text-[clamp(14px,1.2vw,18px)] font-medium leading-[1.5] text-[#5a5a5a] 2xl:text-[20px]"
                 >
                   <img
                     src={checkIcon}
@@ -327,7 +327,7 @@ export default function GenerativeAI() {
               <h2 className="m-0 text-[clamp(26px,3.5vw,48px)] font-bold leading-[1.15] text-[#1F2432]">
                 Value Added
               </h2>
-              <p className="mt-4 max-w-[28rem] text-[clamp(13px,1.2vw,16px)] leading-7 text-[#9CA3AF]">
+              <p className="mt-4 max-w-[34rem] text-[clamp(13px,1.2vw,16px)] leading-7 text-[#9CA3AF] 2xl:text-[18px] 2xl:leading-8">
                 Proven Gen AI deliveries across analytics, support, knowledge
                 retrieval, and sales enablement.
               </p>
@@ -350,7 +350,7 @@ export default function GenerativeAI() {
                   <span className="mb-3 inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#2365aa] text-sm font-semibold text-white">
                     {index + 1}
                   </span>
-                  <p className="m-0 text-[clamp(13px,1.15vw,15px)] leading-6 text-[#5a5a5a]">
+                  <p className="m-0 text-[clamp(13px,1.15vw,15px)] leading-6 text-[#5a5a5a] 2xl:text-[18px] 2xl:leading-8">
                     {item}
                   </p>
                 </article>
@@ -371,7 +371,7 @@ export default function GenerativeAI() {
               <h2 className="m-0 text-[clamp(24px,3.2vw,40px)] font-bold leading-[1.15] text-[#1F2432]">
                 AI Agent Generalize Framework to Build &amp; Launch in Minutes
               </h2>
-              <p className="mt-4 max-w-[36rem] text-[clamp(13px,1.2vw,16px)] leading-7 text-[#848b9b]">
+              <p className="mt-4 max-w-[42rem] text-[clamp(13px,1.2vw,16px)] leading-7 text-[#848b9b] 2xl:text-[18px] 2xl:leading-8">
                 A reusable agentic framework that connects LLMs, tools, knowledge
                 bases, and human-in-the-loop controls — so you can adapt agents to
                 new domains faster without rebuilding from scratch.
@@ -387,7 +387,7 @@ export default function GenerativeAI() {
           </div>
 
           <div className="mb-[clamp(24px,3vw,40px)] max-w-[760px]">
-            <p className="mb-2 text-sm font-semibold uppercase tracking-[0.16em] text-[#2365aa]">
+            <p className="mb-2 text-sm font-semibold uppercase tracking-[0.16em] text-[#2365aa] 2xl:text-base">
               Success Stories
             </p>
             <h3 className="m-0 text-[clamp(24px,3vw,40px)] font-bold leading-[1.15] text-[#272935]">
@@ -407,10 +407,10 @@ export default function GenerativeAI() {
                     <span className="relative mb-8 inline-flex h-11 w-11 items-center justify-center rounded-full bg-white text-sm font-bold text-[#113d77]">
                       {String(storyIndex + 1).padStart(2, "0")}
                     </span>
-                    <h4 className="relative m-0 max-w-[260px] text-[clamp(21px,2vw,30px)] font-bold leading-[1.2]">
+                    <h4 className="relative m-0 max-w-[300px] text-[clamp(21px,2vw,30px)] font-bold leading-[1.2] 2xl:text-[32px]">
                       {story.label}
                     </h4>
-                    <p className="relative mt-4 text-sm leading-6 text-white/65">
+                    <p className="relative mt-4 text-sm leading-6 text-white/65 2xl:text-[17px] 2xl:leading-7">
                       From operational friction to a scalable, production-ready
                       agentic solution.
                     </p>
@@ -433,7 +433,7 @@ export default function GenerativeAI() {
                             <span className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#eaf3fa] text-xs font-bold text-[#2365aa]">
                               {sectionIndex + 1}
                             </span>
-                            <h5 className="m-0 text-sm font-bold uppercase tracking-[0.08em] text-[#272935]">
+                            <h5 className="m-0 text-sm font-bold uppercase tracking-[0.08em] text-[#272935] 2xl:text-base">
                               {title}
                             </h5>
                           </div>
@@ -441,7 +441,7 @@ export default function GenerativeAI() {
                             {items.map((item) => (
                               <li
                                 key={item}
-                                className="flex items-start gap-2.5 text-[clamp(12px,1vw,14px)] leading-[1.55] text-[#687181]"
+                                className="flex items-start gap-2.5 text-[clamp(12px,1vw,14px)] leading-[1.55] text-[#687181] 2xl:text-[17px] 2xl:leading-7"
                               >
                                 <img
                                   src={elevateIcon}
@@ -458,14 +458,14 @@ export default function GenerativeAI() {
                     </div>
 
                     <div className="mt-7 border-t border-[#e4ebf1] pt-6">
-                      <p className="mb-4 text-sm font-bold uppercase tracking-[0.08em] text-[#2365aa]">
+                      <p className="mb-4 text-sm font-bold uppercase tracking-[0.08em] text-[#2365aa] 2xl:text-base">
                         Business outcomes
                       </p>
                       <div className="grid gap-3 sm:grid-cols-3">
                         {story.results.map((result) => (
                           <div
                             key={result}
-                            className="flex min-h-[76px] items-center rounded-[14px] bg-[#EFF7FC] px-4 py-3 text-[clamp(12px,1vw,14px)] font-semibold leading-[1.45] text-[#27384f]"
+                            className="flex min-h-[76px] items-center rounded-[14px] bg-[#EFF7FC] px-4 py-3 text-[clamp(12px,1vw,14px)] font-semibold leading-[1.45] text-[#27384f] 2xl:min-h-[92px] 2xl:px-5 2xl:text-[17px]"
                           >
                             {result}
                           </div>
@@ -487,7 +487,7 @@ export default function GenerativeAI() {
             <h2 className="m-0 text-[clamp(26px,3.5vw,48px)] font-bold leading-[1.15] text-[#1F2432]">
               Generative AI Technology Stack
             </h2>
-            <p className="mt-4 text-[clamp(13px,1.2vw,16px)] leading-7 text-[#9CA3AF]">
+            <p className="mt-4 text-[clamp(13px,1.2vw,16px)] leading-7 text-[#9CA3AF] 2xl:text-[18px] 2xl:leading-8">
               Cloud platforms, LLM ecosystems, and agent frameworks we use to design,
               deploy, and scale production-ready Gen AI solutions.
             </p>
