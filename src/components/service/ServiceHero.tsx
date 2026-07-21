@@ -31,7 +31,7 @@ export default function ServiceHero() {
           </p>
 
           <a
-            href="#"
+            href="/contact"
             className="btn-cta mt-1 shrink-0 bg-[#2365AA] text-white hover:bg-[#1d5694] pl-5 pr-3"
           >
             Contact Us

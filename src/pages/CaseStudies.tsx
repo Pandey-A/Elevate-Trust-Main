@@ -134,7 +134,7 @@ export default function CaseStudies() {
         <span className="cs-breadcrumbs__sep" aria-hidden="true">
           »
         </span>
-        <Link to="/ServiceDetails">Our Services</Link>
+        <Link to="/Services/ai-ml">Our Services</Link>
         <span className="cs-breadcrumbs__sep" aria-hidden="true">
           »
         </span>

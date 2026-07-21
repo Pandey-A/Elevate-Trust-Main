@@ -47,7 +47,9 @@ export default function PredictiveAnalyticsOfferings() {
             Home
           </Link>
           <span className="mx-1.5">»</span>
-          <span>Our Services</span>
+          <Link to="/Services/ai-ml" className="hover:text-[#6B7280]">
+            Our Services
+          </Link>
           <span className="mx-1.5">»</span>
           <span className="text-[#6B7280]">Custom AI/ML Solutions</span>
         </nav>

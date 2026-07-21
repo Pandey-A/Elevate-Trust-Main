@@ -86,7 +86,7 @@ export default function CaseStudyDetail() {
         <span className="csd-breadcrumbs__sep" aria-hidden="true">
           »
         </span>
-        <Link to="/ServiceDetails">Our Services</Link>
+        <Link to="/Services/ai-ml">Our Services</Link>
         <span className="csd-breadcrumbs__sep" aria-hidden="true">
           »
         </span>

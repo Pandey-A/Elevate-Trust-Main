@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './components/navbar';
 import Home from './pages/home';
 import ServiceDetails from './pages/ServiceDetails';
+import GenerativeAI from './pages/GenerativeAI';
+import AudioVideoAnalytics from './pages/AudioVideoAnalytics';
 import AboutUs from './pages/AboutUs';
 import FooterSection from './components/footerSection';
 import Contact from './pages/Contact';
@@ -26,6 +28,9 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<AboutUs />} />
+        <Route path="/Services/ai-ml" element={<ServiceDetails />} />
+        <Route path="/Services/generative-ai" element={<GenerativeAI />} />
+        <Route path="/Services/audio-video-analytics" element={<AudioVideoAnalytics />} />
         <Route path="/ServiceDetails" element={<ServiceDetails />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/technologies" element={<TechnologyTrends />} />

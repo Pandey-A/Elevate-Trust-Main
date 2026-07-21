@@ -9,9 +9,18 @@ import telegramIcon from '../assets/nav/Telegram-logo.svg';
 import smartArrow from '../assets/homepage-icons/smart-arrow.png';
 import './navbar.css';
 
-const SERVICE_DETAILS_PATH = '/ServiceDetails';
+const SERVICES_PATH = '/Services';
+const SERVICE_AI_ML_PATH = '/Services/ai-ml';
+const SERVICE_GENERATIVE_AI_PATH = '/Services/generative-ai';
+const SERVICE_AUDIO_VIDEO_PATH = '/Services/audio-video-analytics';
 const TECHNOLOGIES_PATH = '/technologies';
 const INDUSTRIES_PATH = '/industries';
+
+const serviceItemPaths: Record<string, string> = {
+  'AI/ML Solution': SERVICE_AI_ML_PATH,
+  'Generative AI': SERVICE_GENERATIVE_AI_PATH,
+  'Audio/Video Analytics': SERVICE_AUDIO_VIDEO_PATH,
+};
 
 type MegaMenuId = 'services' | 'technology-trends' | 'industries';
 
@@ -55,7 +64,7 @@ function toSlug(label: string) {
 const megaMenus: Record<MegaMenuId, MegaMenuConfig> = {
   services: {
     title: 'Our Services',
-    itemHref: SERVICE_DETAILS_PATH,
+    itemHref: SERVICES_PATH,
     leftColumn: [
       'AI/ML Solution',
       'Generative AI',
@@ -156,7 +165,13 @@ export default function Navbar() {
   };
 
   const isMegaMenuActive = (menuId: MegaMenuId) => {
-    if (menuId === 'services') return location.pathname === SERVICE_DETAILS_PATH;
+    if (menuId === 'services') {
+      return (
+        location.pathname === SERVICES_PATH ||
+        location.pathname.startsWith(`${SERVICES_PATH}/`) ||
+        location.pathname === '/ServiceDetails'
+      );
+    }
     if (menuId === 'technology-trends') {
       return location.pathname === TECHNOLOGIES_PATH || location.pathname.startsWith(`${TECHNOLOGIES_PATH}/`);
     }
@@ -167,7 +182,9 @@ export default function Navbar() {
   };
 
   const getItemPath = (menu: MegaMenuConfig, item: string) => {
-    if (menu.itemHref === SERVICE_DETAILS_PATH) return SERVICE_DETAILS_PATH;
+    if (menu.itemHref === SERVICES_PATH) {
+      return serviceItemPaths[item] ?? SERVICE_AI_ML_PATH;
+    }
     if (menu.itemHref === INDUSTRIES_PATH) return INDUSTRIES_PATH;
     if (menu.itemHref === TECHNOLOGIES_PATH) return `${TECHNOLOGIES_PATH}/${toSlug(item)}`;
     return `${menu.itemHref}/${toSlug(item)}`;
