@@ -66,6 +66,7 @@
     font-size: 14px;
     font-weight: 500;
     cursor: pointer;
+    text-decoration: none;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     transition: background 0.3s ease;

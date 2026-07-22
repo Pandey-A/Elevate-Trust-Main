@@ -62,15 +62,14 @@ export default function CaseStudyDetail() {
           aria-hidden="true"
         />
         <div className="csd-hero__content">
+          <p className="csd-hero__eyebrow">Case Study</p>
           <h1 className="csd-hero__title">
-            Custom AI/ML Solutions for Strategic Business Outcomes
+            RFP Query &amp; Compliance Check Automation
           </h1>
           <p className="csd-hero__subtitle">
-            We collaborate with clients to elevate AI solutions aimed at achieving
-            strategic business goals. Our knowledge covers many industries,
-            tackling difficult issues using AI methods designed for both
-            structured and unstructured data. We are skilled in developing
-            traditional Machine Learning and Deep Learning algorithms.
+            How ElevateTrust.AI helped a large procurement organization automate
+            RFP analysis, reduce ambiguous clauses, and deliver consistent,
+            high-quality pre-bid responses with AI-powered document intelligence.
           </p>
           <Link to="/contact" className="csd-hero__btn">
             <span>Contact Us</span>
@@ -86,11 +85,11 @@ export default function CaseStudyDetail() {
         <span className="csd-breadcrumbs__sep" aria-hidden="true">
           »
         </span>
-        <Link to="/Services/ai-ml">Our Services</Link>
+        <Link to="/case-studies">Case Studies</Link>
         <span className="csd-breadcrumbs__sep" aria-hidden="true">
           »
         </span>
-        <span>Custom AI/ML Solutions</span>
+        <span>RFP Query &amp; Compliance Check</span>
       </nav>
 
       <section className="csd-main">

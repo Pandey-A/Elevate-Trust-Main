@@ -1,0 +1,116 @@
+import DigitalServicePage, {
+  digitalServiceImages,
+} from "./DigitalServicePage";
+
+const {
+  website,
+  genSoftware,
+  genData,
+  genOptimize,
+  genKnowledge,
+  audioInsights,
+  audioIntegration,
+  processFrame1,
+  processFrame3,
+  processFrame5,
+  processFrame7,
+  webDesignDev,
+} = digitalServiceImages;
+
+export default function WebDesignDevelopment() {
+  return (
+    <DigitalServicePage
+      breadcrumb="Web Design & Development"
+      heroTitle="Web Design & Development for Business Growth"
+      heroSubtitle="Friendly, responsive, and high-performing websites that look great, load fast, and help you achieve measurable business goals."
+      heroImage={website}
+      introTitle="Web Design & Development"
+      introBody="Enhance your online presence with our web development and design services. We create friendly, responsive, and intuitive websites that will help you achieve your business goals. Our team focuses on both design and user experience, ensuring that your website looks great and performs exceptionally well. We're here to bring your digital vision to life."
+      sectionTitle="Website Capabilities"
+      sectionSubtitle="From marketing sites to content platforms — built for speed, SEO foundations, and long-term maintainability."
+      offerings={[
+        {
+          title: "Corporate & marketing websites",
+          description:
+            "Brand-forward sites that communicate your value clearly and convert visitors into conversations.",
+          icon: genSoftware,
+        },
+        {
+          title: "Responsive front-end builds",
+          description:
+            "Modern UI implementation with clean components, accessibility, and cross-browser reliability.",
+          icon: genOptimize,
+        },
+        {
+          title: "CMS & content platforms",
+          description:
+            "Editable content structures so marketing teams can publish without engineering bottlenecks.",
+          icon: genKnowledge,
+        },
+        {
+          title: "Performance & SEO foundations",
+          description:
+            "Fast load times, structured content, and technical SEO basics that support discoverability.",
+          icon: genData,
+        },
+        {
+          title: "Integrations & forms",
+          description:
+            "CRM, analytics, chat, and lead-capture workflows wired into your existing stack.",
+          icon: audioIntegration,
+        },
+        {
+          title: "Ongoing enhancement",
+          description:
+            "Iterative improvements based on analytics, A/B insights, and evolving business needs.",
+          icon: audioInsights,
+        },
+      ]}
+      processTitle="How We Build Web Experiences"
+      processSubtitle="A delivery model that balances design quality with engineering discipline."
+      processSteps={[
+        {
+          title: "Plan",
+          text: "Define sitemap, goals, and success metrics with stakeholders.",
+          icon: processFrame1,
+        },
+        {
+          title: "Design",
+          text: "Craft responsive layouts and interaction patterns for key journeys.",
+          icon: processFrame3,
+        },
+        {
+          title: "Develop",
+          text: "Implement scalable front-end and backend foundations with clean code.",
+          icon: processFrame5,
+        },
+        {
+          title: "Launch & optimize",
+          text: "Ship confidently, then refine using performance and conversion data.",
+          icon: processFrame7,
+        },
+      ]}
+      capabilitiesTitle="What You Get With ElevateTrust"
+      capabilities={[
+        "Custom responsive websites tailored to your brand and audience",
+        "Strong UX focus for navigation, readability, and conversion",
+        "Secure, maintainable codebases ready for future features",
+        "Analytics-ready instrumentation for continuous improvement",
+        "Flexible CMS options for content ownership",
+        "Support for redesigns, migrations, and modernization",
+      ]}
+      capabilitiesImage={webDesignDev}
+      valueTitle="Value Added"
+      valueSubtitle="Web outcomes that strengthen credibility and create a reliable digital front door for your business."
+      valuePoints={[
+        "Faster time-to-launch with reusable patterns and clear scope control.",
+        "Mobile-first experiences that protect engagement on every device.",
+        "Technical foundations that keep future feature work affordable.",
+        "Design and engineering collaboration that avoids handoff gaps.",
+        "Lead-capture and CRM integrations that connect marketing to sales.",
+        "Performance-minded builds that improve perceived quality and SEO readiness.",
+      ]}
+      showTechStacks
+    />
+  );
+}

@@ -26,7 +26,7 @@ export default function AboutUs() {
             trusted partner for comprehensive AI implementation. Our core team consists of experts who
             fast-track machine learning, Deep Learning, Generative AI, and agentic-based solutions.
           </p>
-          <button className="about-hero-btn">
+          <Link to="/contact" className="about-hero-btn">
             <span>CONTACT US</span>
             <span className="about-hero-btn__circle">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" strokeWidth="3">
@@ -34,7 +34,7 @@ export default function AboutUs() {
                 <polyline points="7 7 17 7 17 17" />
               </svg>
             </span>
-          </button>
+          </Link>
         </div>
       </section>
 

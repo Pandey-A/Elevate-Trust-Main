@@ -1,60 +1,135 @@
 import type { ReactNode } from "react";
+import { Link } from "react-router-dom";
 import elevateFooterLogo from "../assets/footer/elevatelogo.svg";
 import facebookLogo from "../assets/footer/FacebookLogo.svg";
 import youtubeLogo from "../assets/footer/YoutubeLogo.svg";
 import linkedinLogo from "../assets/footer/LinkedinLogo.svg";
 import instagramLogo from "../assets/footer/InstagramLogo.svg";
-import tiktokLogo from "../assets/footer/TiktokLogo.svg";
 import xLogo from "../assets/footer/xlogo.svg";
 import worldMapBackground from "../assets/footer/worldmapfooter.svg";
 import elevateFooterServiceLogo from "../assets/footer/elevateservicelogo.svg";
-import maskGroup from "../assets/homepage-icons/Mask-group.png";
 import paperplanefooter from "../assets/footer/PaperPlaneTilt.svg";
+import partnerTeksoft from "../assets/footer/teksoft.png";
+import partnerGeoNomads from "../assets/footer/geo-nomads-geo.png";
+import partner3i from "../assets/footer/3i.png";
+import partnerMagnor from "../assets/footer/magnor-1.png";
+import { digitalServicePaths } from "../data/digitalServices";
 import "./footerSection.css";
 
-const services = [
-  "Overview",
-  "AI/ML Solution",
-  "Generative AI",
-  "Video Analytics",
-  "Cloud Deployment",
+type FooterLinkItem = {
+  label: string;
+  href?: string;
+};
+
+const footerPartners = [
+  { name: "Teksoft Solutions", logo: partnerTeksoft },
+  { name: "GeoNomads", logo: partnerGeoNomads },
+  { name: "3i Infotech", logo: partner3i },
+  { name: "Magnor", logo: partnerMagnor },
 ];
 
-const otherServices = [
-  "UI/UX Design Content",
-  "Web Design & Development",
-  "Mobile App Development",
-  "Custom Software Development",
-  "Ecommerce Development",
-  "Digital Marketing Services",
-  "ERP Solutions",
+const services: FooterLinkItem[] = [
+  { label: "Overview", href: "/Services/ai-ml" },
+  { label: "AI/ML Solution", href: "/Services/ai-ml" },
+  { label: "Generative AI", href: "/Services/generative-ai" },
+  { label: "Video Analytics", href: "/Services/audio-video-analytics" },
+  { label: "Cloud Deployment", href: "/Services/cloud-on-premise-deployment" },
 ];
 
-const aboutCompany = ["Overview", "Blog", "Career", "Contact Us"];
+const otherServices: FooterLinkItem[] = [
+  { label: "UI/UX Design Content", href: digitalServicePaths["UI/UX Design Content"] },
+  {
+    label: "Web Design & Development",
+    href: digitalServicePaths["Web Design & Development"],
+  },
+  {
+    label: "Mobile App Development",
+    href: digitalServicePaths["Mobile App Development"],
+  },
+  {
+    label: "Custom Software Development",
+    href: digitalServicePaths["Custom Software Development"],
+  },
+  {
+    label: "Ecommerce Development",
+    href: digitalServicePaths["Ecommerce Development"],
+  },
+  {
+    label: "Digital Marketing Services",
+    href: digitalServicePaths["Digital Marketing Services"],
+  },
+  { label: "ERP Solutions", href: digitalServicePaths["ERP Solutions"] },
+];
+
+const aboutCompany: FooterLinkItem[] = [
+  { label: "Overview", href: "/about" },
+  { label: "Blog" },
+  { label: "Career", href: "/careers" },
+  { label: "Contact Us", href: "/contact" },
+];
 
 const socialLinks = [
-  { label: "YouTube", icon: youtubeLogo, href: "#" },
-  { label: "Facebook", icon: facebookLogo, href: "#" },
-  { label: "LinkedIn", icon: linkedinLogo, href: "#" },
-  { label: "Instagram", icon: instagramLogo, href: "#" },
-  { label: "TikTok", icon: tiktokLogo, href: "#" },
-  { label: "X", icon: xLogo, href: "#" },
+  {
+    label: "YouTube",
+    icon: youtubeLogo,
+    href: "https://www.youtube.com/@ElevateTrust.Ai0",
+  },
+  {
+    label: "Facebook",
+    icon: facebookLogo,
+    href: "https://www.facebook.com/people/Elevate-Trust-AI/61589302541342/",
+  },
+  {
+    label: "LinkedIn",
+    icon: linkedinLogo,
+    href: "https://www.linkedin.com/company/elevatetrustai",
+  },
+  {
+    label: "Instagram",
+    icon: instagramLogo,
+    href: "https://www.instagram.com/elevatetrustai/",
+  },
+  {
+    label: "X",
+    icon: xLogo,
+    href: "https://x.com/ElevateTrustai",
+  },
 ];
 
-function FooterList({ items }: { items: string[] }) {
+function FooterList({ items }: { items: FooterLinkItem[] }) {
   return (
     <ul className="footer__list">
       {items.map((item) => (
-        <li key={item}>
-          <a href="#" className="footer__link">
-            <img
-              src={elevateFooterServiceLogo}
-              alt=""
-              aria-hidden="true"
-              className="footer__link-icon"
-            />
-            <span>{item}</span>
-          </a>
+        <li key={item.label}>
+          {item.href ? (
+            <Link
+              to={item.href}
+              className="footer__link"
+              onClick={() => {
+                window.scrollTo(0, 0);
+                document.documentElement.scrollTop = 0;
+                document.body.scrollTop = 0;
+              }}
+            >
+              <img
+                src={elevateFooterServiceLogo}
+                alt=""
+                aria-hidden="true"
+                className="footer__link-icon"
+              />
+              <span>{item.label}</span>
+            </Link>
+          ) : (
+            <span className="footer__link footer__link--muted">
+              <img
+                src={elevateFooterServiceLogo}
+                alt=""
+                aria-hidden="true"
+                className="footer__link-icon"
+              />
+              <span>{item.label}</span>
+            </span>
+          )}
         </li>
       ))}
     </ul>
@@ -89,11 +164,20 @@ export default function FooterSection() {
       <div className="site-container footer__inner">
         <div className="footer__grid">
           <div className="footer__brand">
-            <img
-              src={elevateFooterLogo}
-              alt="Elevate Trust logo"
-              className="footer__brand-logo"
-            />
+            <Link
+              to="/"
+              onClick={() => {
+                window.scrollTo(0, 0);
+                document.documentElement.scrollTop = 0;
+                document.body.scrollTop = 0;
+              }}
+            >
+              <img
+                src={elevateFooterLogo}
+                alt="Elevate Trust logo"
+                className="footer__brand-logo"
+              />
+            </Link>
             <p className="footer__brand-text">
               We partner with innovators to develop state-of-the-art AI solutions
               designed to drive strategic business outcomes. Our expertise covers a
@@ -121,18 +205,46 @@ export default function FooterSection() {
         <div className="footer__grid">
           <FooterColumn title="Contact">
             <div className="footer__contact-list">
-              <p>+91-9243322064</p>
-              <p>info@elevatetrust.ai</p>
-              <p>Pimple Saudagar, Pune Maharashtra</p>
+              <p>
+                <a href="tel:+919243322064" className="footer__contact-link">
+                  +91-9243322064
+                </a>
+              </p>
+              <p>
+                <a
+                  href="mailto:info@elevatetrust.ai"
+                  className="footer__contact-link"
+                >
+                  info@elevatetrust.ai
+                </a>
+              </p>
+              <p>
+                <Link
+                  to="/contact"
+                  className="footer__contact-link"
+                  onClick={() => {
+                    window.scrollTo(0, 0);
+                    document.documentElement.scrollTop = 0;
+                    document.body.scrollTop = 0;
+                  }}
+                >
+                  Pimple Saudagar, Pune Maharashtra
+                </Link>
+              </p>
             </div>
           </FooterColumn>
 
-          <FooterColumn title="">
-            <img
-              src={maskGroup}
-              alt="Partner logos"
-              className="footer__partners"
-            />
+          <FooterColumn title="Partners">
+            <div className="footer__partners">
+              {footerPartners.map((partner) => (
+                <img
+                  key={partner.name}
+                  src={partner.logo}
+                  alt={partner.name}
+                  className="footer__partner-logo"
+                />
+              ))}
+            </div>
           </FooterColumn>
 
           <div className="footer__column footer__column--wide">
@@ -165,6 +277,8 @@ export default function FooterSection() {
               <a
                 key={social.label}
                 href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
                 aria-label={social.label}
                 className="footer__social-link"
               >

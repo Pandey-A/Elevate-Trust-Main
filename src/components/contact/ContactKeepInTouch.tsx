@@ -5,7 +5,7 @@ export default function ContactKeepInTouch() {
   const [agreed, setAgreed] = useState(false);
 
   return (
-    <div className="mt-12 w-full sm:mt-14">
+    <div id="contact-form" className="mt-12 w-full sm:mt-14">
       <h2 className="text-left text-xl font-bold text-[#1F2432] sm:text-2xl">
         Keep in touch
       </h2>

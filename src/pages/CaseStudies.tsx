@@ -110,15 +110,14 @@ export default function CaseStudies() {
           aria-hidden="true"
         />
         <div className="cs-hero__content">
+          <p className="cs-hero__eyebrow">Resources</p>
           <h1 className="cs-hero__title">
-            Custom AI/ML Solutions for Strategic Business Outcomes
+            Case Studies That Show Real AI Impact
           </h1>
           <p className="cs-hero__subtitle">
-            We collaborate with clients to elevate AI solutions aimed at achieving
-            strategic business goals. Our knowledge covers many industries,
-            tackling difficult issues using AI methods designed for both
-            structured and unstructured data. We are skilled in developing
-            traditional Machine Learning and Deep Learning algorithms.
+            Explore how ElevateTrust.AI partners with enterprises to solve complex
+            problems — from agentic automation and predictive maintenance to video
+            analytics and document intelligence — with measurable business outcomes.
           </p>
           <Link to="/contact" className="cs-hero__btn">
             <span>Contact Us</span>
@@ -134,11 +133,11 @@ export default function CaseStudies() {
         <span className="cs-breadcrumbs__sep" aria-hidden="true">
           »
         </span>
-        <Link to="/Services/ai-ml">Our Services</Link>
+        <span>Resources</span>
         <span className="cs-breadcrumbs__sep" aria-hidden="true">
           »
         </span>
-        <span>Custom AI/ML Solutions</span>
+        <span>Case Studies</span>
       </nav>
 
       <section className="cs-section">
@@ -157,10 +156,11 @@ export default function CaseStudies() {
 
         <div className="cs-section__inner">
           <div className="cs-section__header">
-            <h2 className="cs-section__title">Case Studies</h2>
+            <h2 className="cs-section__title">Our Success Stories</h2>
             <p className="cs-section__subtitle">
-              We create custom AI solutions for Predictive Analytics, such as
-              predicting customer churn, building recommendation systems,.
+              Real client engagements across government, healthcare, logistics,
+              energy, HR tech, and more — showcasing how our AI solutions deliver
+              efficiency, accuracy, and scale in production.
             </p>
           </div>
 

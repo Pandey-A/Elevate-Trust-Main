@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import worldMapFooter from "../assets/footer/worldmapfooter.svg";
 import fly1 from "../assets/homepage-icons/fly-1.png";
 import fly2 from "../assets/homepage-icons/fly-2.png";
@@ -41,7 +42,7 @@ export default function FlyCTA() {
           </h2>
 
           <div className="fly-cta__btn-wrapper">
-            <a href="#" className="fly-cta__btn">
+            <Link to="/contact" className="fly-cta__btn">
               <span>Let's Get Started</span>
               <img
                 src={blueArrow}
@@ -49,7 +50,7 @@ export default function FlyCTA() {
                 aria-hidden
                 className="fly-cta__btn-icon"
               />
-            </a>
+            </Link>
           </div>
 
           <p className="fly-cta__desc">

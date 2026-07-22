@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+import { Link } from "react-router-dom";
 import "./heroSection.css";
 import elevateMainLogo from "../assets/homepage-icons/elevatestarting-logo.svg";
 import heroBg from "../assets/homepage-icons/Hero-bg.png";
@@ -46,12 +47,12 @@ export default function HeroSection() {
             <span className="hero-review-count">20+ Customers review</span>
           </div>
 
-          <button id="hero-cta" className="hero-cta-btn">
+          <Link to="/contact" id="hero-cta" className="hero-cta-btn">
             <span>Consult our strategy team</span>
             <span className="hero-cta-btn__circle">
               <img src={smartArrow} alt="" aria-hidden className="hero-cta-btn__arrow" />
             </span>
-          </button>
+          </Link>
         </div>
 
         <div className="hero-right">

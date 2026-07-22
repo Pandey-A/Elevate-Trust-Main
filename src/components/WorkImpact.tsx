@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
 
 import works1 from "../assets/homepage-icons/works-1.svg";
@@ -63,12 +64,12 @@ export default function WorkImpact() {
               our impact
             </h2>
 
-            <a href="#" className="work-impact__btn">
+            <Link to="/case-studies" className="work-impact__btn">
               <span>READ MORE</span>
               <span className="work-impact__btn-icon">
                 <ArrowUpRight strokeWidth={2.5} />
               </span>
-            </a>
+            </Link>
           </div>
 
           {/* ── Right: 3 cards ── */}

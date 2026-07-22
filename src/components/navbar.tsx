@@ -3,23 +3,55 @@ import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ChevronDown, Menu, X } from 'lucide-react';
 import elevateLogo from '../assets/nav/elevate-logo.svg';
-import linkedinIcon from '../assets/nav/Linkedin-logo.svg';
-import instagramIcon from '../assets/nav/Instagram-logo.svg';
-import telegramIcon from '../assets/nav/Telegram-logo.svg';
+import linkedinIcon from '../assets/nav/linkedin.png';
+import twitterIcon from '../assets/nav/twitter.png';
+import instagramIcon from '../assets/nav/instagram.png';
 import smartArrow from '../assets/homepage-icons/smart-arrow.png';
+import { SITE_INDUSTRIES } from '../data/industries';
+import { digitalServicePaths } from '../data/digitalServices';
 import './navbar.css';
+
+const SOCIAL_LINKS = [
+  {
+    label: 'LinkedIn',
+    href: 'https://www.linkedin.com/company/elevatetrustai',
+    icon: linkedinIcon,
+  },
+  {
+    label: 'Twitter',
+    href: 'https://x.com/ElevateTrustai',
+    icon: twitterIcon,
+  },
+  {
+    label: 'Instagram',
+    href: 'https://www.instagram.com/elevatetrustai/',
+    icon: instagramIcon,
+  },
+] as const;
 
 const SERVICES_PATH = '/Services';
 const SERVICE_AI_ML_PATH = '/Services/ai-ml';
 const SERVICE_GENERATIVE_AI_PATH = '/Services/generative-ai';
 const SERVICE_AUDIO_VIDEO_PATH = '/Services/audio-video-analytics';
+const SERVICE_CLOUD_ON_PREMISE_PATH = '/Services/cloud-on-premise-deployment';
 const TECHNOLOGIES_PATH = '/technologies';
 const INDUSTRIES_PATH = '/industries';
+
+const RESOURCES_PATH = '/resources';
+const CASE_STUDIES_PATH = '/case-studies';
 
 const serviceItemPaths: Record<string, string> = {
   'AI/ML Solution': SERVICE_AI_ML_PATH,
   'Generative AI': SERVICE_GENERATIVE_AI_PATH,
   'Audio/Video Analytics': SERVICE_AUDIO_VIDEO_PATH,
+  'Cloud/On-Premise Deployment': SERVICE_CLOUD_ON_PREMISE_PATH,
+  ...digitalServicePaths,
+};
+
+const resourceItemPaths: Record<string, string> = {
+  'Case Studies': CASE_STUDIES_PATH,
+  Demo: `${RESOURCES_PATH}/demo`,
+  Blogs: `${RESOURCES_PATH}/blogs`,
 };
 
 type MegaMenuId = 'services' | 'technology-trends' | 'industries';
@@ -70,12 +102,14 @@ const megaMenus: Record<MegaMenuId, MegaMenuConfig> = {
       'Generative AI',
       'Audio/Video Analytics',
       'Cloud/On-Premise Deployment',
-      'IOT based business process automation',
+      'UI/UX Design Content',
+      'Web Design & Development',
     ],
     rightColumn: [
-      'Web Design & Development',
       'Mobile App Development',
       'Custom Software Development',
+      'Ecommerce Development',
+      'Digital Marketing Services',
       'ERP Solutions',
     ],
   },
@@ -99,18 +133,8 @@ const megaMenus: Record<MegaMenuId, MegaMenuConfig> = {
   industries: {
     title: 'Industries',
     itemHref: INDUSTRIES_PATH,
-    leftColumn: [
-      'Healthcare and Life Sciences',
-      'Financial Services & FinTech',
-      'E-commerce & Retail',
-      'Education & E-Learning',
-    ],
-    rightColumn: [
-      'Logistics & Supply Chain',
-      'Manufacturing & Industry 4.0',
-      'Social Media & Entertainment',
-      'Public Sector & Government',
-    ],
+    leftColumn: [...SITE_INDUSTRIES.slice(0, 4)],
+    rightColumn: [...SITE_INDUSTRIES.slice(4)],
   },
 };
 
@@ -120,21 +144,33 @@ const navLinks: NavLink[] = [
     megaMenu: 'services',
   },
   {
-    label: 'Technology Trends',
-    megaMenu: 'technology-trends',
-  },
-  {
     label: 'Industries',
     megaMenu: 'industries',
   },
   {
-    label: 'Resources',
-    href: '/resources',
-    dropdown: ['Blog', 'Whitepapers', 'Webinars']
+    label: 'Technology Trends',
+    megaMenu: 'technology-trends',
   },
-  { label: 'Case Studies', href: '/case-studies' },
+  {
+    label: 'Resources',
+    href: RESOURCES_PATH,
+    dropdown: ['Case Studies', 'Demo', 'Blogs'],
+  },
   { label: 'Careers', href: '/careers' },
 ];
+
+function getResourceItemPath(item: string) {
+  return resourceItemPaths[item] ?? `${RESOURCES_PATH}/${toSlug(item)}`;
+}
+
+function isResourcesPathActive(pathname: string) {
+  return (
+    pathname === RESOURCES_PATH ||
+    pathname.startsWith(`${RESOURCES_PATH}/`) ||
+    pathname === CASE_STUDIES_PATH ||
+    pathname.startsWith(`${CASE_STUDIES_PATH}/`)
+  );
+}
 
 export default function Navbar() {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
@@ -185,7 +221,9 @@ export default function Navbar() {
     if (menu.itemHref === SERVICES_PATH) {
       return serviceItemPaths[item] ?? SERVICE_AI_ML_PATH;
     }
-    if (menu.itemHref === INDUSTRIES_PATH) return INDUSTRIES_PATH;
+    if (menu.itemHref === INDUSTRIES_PATH) {
+      return `${INDUSTRIES_PATH}/${toSlug(item)}`;
+    }
     if (menu.itemHref === TECHNOLOGIES_PATH) return `${TECHNOLOGIES_PATH}/${toSlug(item)}`;
     return `${menu.itemHref}/${toSlug(item)}`;
   };
@@ -293,7 +331,8 @@ export default function Navbar() {
                     <button
                       type="button"
                       className={`navbar__link flex cursor-pointer items-center gap-0.5 whitespace-nowrap rounded-md px-1 py-1 text-[12px] font-medium transition-colors sm:px-1.5
-                        ${activeDropdown === link.label
+                        ${activeDropdown === link.label ||
+                          (link.label === 'Resources' && isResourcesPathActive(location.pathname))
                           ? 'text-[#272935]'
                           : 'text-gray-600 hover:text-gray-900'
                         }`}
@@ -321,17 +360,23 @@ export default function Navbar() {
                   )}
 
                   {isDropdownLink(link) && activeDropdown === link.label && (
-                    <div className="absolute top-full left-0 mt-1 w-56 bg-white rounded-lg shadow-lg border border-gray-100 py-2 z-50">
-                      {link.dropdown.map((item) => (
-                        <Link
-                          key={item}
-                          to={`${link.href}/${item.toLowerCase().replace(/\s+/g, '-')}`}
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900"
-                          onClick={() => setActiveDropdown(null)}
-                        >
-                          {item}
-                        </Link>
-                      ))}
+                    <div className="absolute top-full left-0 z-50 pt-2">
+                      <div className="w-56 rounded-lg border border-gray-100 bg-white py-2 shadow-lg">
+                        {link.dropdown.map((item) => (
+                          <Link
+                            key={item}
+                            to={
+                              link.label === 'Resources'
+                                ? getResourceItemPath(item)
+                                : `${link.href}/${toSlug(item)}`
+                            }
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900"
+                            onClick={() => setActiveDropdown(null)}
+                          >
+                            {item}
+                          </Link>
+                        ))}
+                      </div>
                     </div>
                   )}
                 </div>
@@ -349,33 +394,27 @@ export default function Navbar() {
             </Link>
 
             <div className="navbar__social hidden items-center gap-2.5 min-[1440px]:flex">
-              <a
-                href="#"
-                aria-label="Telegram"
-                className="text-gray-800 hover:text-gray-600 transition-colors"
-              >
-                <img src={telegramIcon} alt="Telegram" className="h-4 w-4" />
-              </a>
-              <a
-                href="#"
-                aria-label="LinkedIn"
-                className="text-gray-800 hover:text-gray-600 transition-colors"
-              >
-                <img src={linkedinIcon} alt="LinkedIn" className="h-4 w-4" />
-              </a>
-              <a
-                href="#"
-                aria-label="Instagram"
-                className="text-gray-800 hover:text-gray-600 transition-colors"
-              >
-                <img src={instagramIcon} alt="Instagram" className="h-4 w-4" />
-              </a>
+              {SOCIAL_LINKS.map((social) => (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={social.label}
+                  className="text-gray-800 transition-opacity hover:opacity-70"
+                >
+                  <img src={social.icon} alt={social.label} className="h-4 w-4 object-contain" />
+                </a>
+              ))}
             </div>
 
-            <button className="navbar__cta flex h-9 shrink-0 items-center justify-center gap-2 rounded-full bg-[#2365AA] px-3 text-xs font-medium text-white transition-colors hover:bg-[#152a45]">
-              <Link to='/contact'><span className="whitespace-nowrap">Let's Connect</span></Link>
+            <Link
+              to="/contact"
+              className="navbar__cta flex h-9 shrink-0 items-center justify-center gap-2 rounded-full bg-[#2365AA] px-3 text-xs font-medium text-white transition-colors hover:bg-[#152a45]"
+            >
+              <span className="whitespace-nowrap">Let's Connect</span>
               <img src={smartArrow} alt="" aria-hidden className="h-5 w-5 object-contain" />
-            </button>
+            </Link>
           </div>
 
           <button
@@ -450,7 +489,11 @@ export default function Navbar() {
                           {link.dropdown.map((item) => (
                             <Link
                               key={item}
-                              to={`${link.href}/${item.toLowerCase().replace(/\s+/g, '-')}`}
+                              to={
+                                link.label === 'Resources'
+                                  ? getResourceItemPath(item)
+                                  : `${link.href}/${toSlug(item)}`
+                              }
                               className="block py-2 text-sm text-gray-600 hover:text-gray-900"
                               onClick={closeMobileMenu}
                             >
@@ -483,24 +526,28 @@ export default function Navbar() {
               </Link>
 
               <div className="flex items-center gap-4 py-4">
-                <a href="#" aria-label="Telegram" className="text-gray-800 hover:text-gray-600">
-                  <img src={telegramIcon} alt="Telegram" className="w-6 h-6" />
-                </a>
-                <a href="#" aria-label="LinkedIn" className="text-gray-800 hover:text-gray-600">
-                  <img src={linkedinIcon} alt="LinkedIn" className="w-6 h-6" />
-                </a>
-                <a href="#" aria-label="Instagram" className="text-gray-800 hover:text-gray-600">
-                  <img src={instagramIcon} alt="Instagram" className="w-6 h-6" />
-                </a>
+                {SOCIAL_LINKS.map((social) => (
+                  <a
+                    key={social.label}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={social.label}
+                    className="text-gray-800 transition-opacity hover:opacity-70"
+                  >
+                    <img src={social.icon} alt={social.label} className="h-6 w-6 object-contain" />
+                  </a>
+                ))}
               </div>
 
-              <button
-                type="button"
+              <Link
+                to="/contact"
                 className="flex w-full gap-2.5 px-4 py-3 bg-[#2365AA] text-white text-base font-medium rounded-full hover:bg-[#152a45] transition-colors justify-center items-center"
+                onClick={closeMobileMenu}
               >
                 <span>Let's Connect</span>
                 <img src={smartArrow} alt="" aria-hidden className="h-6 w-6 object-contain" />
-              </button>
+              </Link>
             </div>
           </div>
         </div>

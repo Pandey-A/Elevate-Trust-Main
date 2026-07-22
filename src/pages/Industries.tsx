@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useMemo } from "react";
+import { Link, useParams } from "react-router-dom";
 import { ArrowUpRight, Check } from "lucide-react";
 import FlyCTA from "../components/FlyCTA";
 import worldMapBackground from "../assets/homepage-icons/Group(3).png";
@@ -8,8 +8,6 @@ import benefitIcon2 from "../assets/homepage-icons/partners-2.svg";
 import benefitIcon3 from "../assets/homepage-icons/Frame.png";
 import benefitIcon4 from "../assets/homepage-icons/landscape-1.svg";
 import healthcareIndImage from "../assets/homepage-icons/healthcare-ind.png";
-import "./TechnologyTrends.css";
-import "./Industries.css";
 
 type IndustryId =
   | "healthcare-and-life-sciences"
@@ -291,128 +289,191 @@ const industries: IndustryContent[] = [
   },
 ];
 
-export default function Industries() {
-  const [activeId, setActiveId] = useState<IndustryId>(
-    "healthcare-and-life-sciences",
-  );
+function normalizeSlug(value: string | undefined) {
+  if (!value) return "";
+  return decodeURIComponent(value).toLowerCase();
+}
 
-  const active =
-    industries.find((item) => item.id === activeId) ?? industries[0];
+export default function Industries() {
+  const { slug } = useParams<{ slug?: string }>();
+
+  const active = useMemo(() => {
+    const normalized = normalizeSlug(slug);
+    return (
+      industries.find((item) => item.id === normalized) ?? industries[0]
+    );
+  }, [slug]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+  }, [active.id]);
 
   return (
-    <div className="tt-page ind-page">
-      <section className="tt-hero" aria-label={active.label}>
+    <div className="bg-white font-['Lay_Grotesk_Trial',sans-serif] text-[#272935]">
+      {/* Hero */}
+      <section
+        className="relative flex w-full items-center justify-center overflow-hidden bg-[#113d77]"
+        style={{ minHeight: "clamp(280px, 32vw, 492px)" }}
+        aria-label={active.label}
+      >
         <img
           src={worldMapBackground}
           alt=""
           aria-hidden
-          className="tt-hero__map"
+          className="pointer-events-none absolute left-1/2 top-[58%] w-[min(94%,1600px)] -translate-x-1/2 -translate-y-1/2 opacity-55"
         />
-        <div className="tt-hero__content">
-          <h1 className="tt-hero__title">{active.heroTitle}</h1>
-          <p className="tt-hero__subtitle">{active.heroSubtitle}</p>
-          <Link to="/contact" className="tt-hero__btn">
+        <div className="relative z-10 flex max-w-[min(860px,92%)] flex-col items-center px-5 pb-[clamp(48px,6vw,80px)] pt-[clamp(72px,8vw,120px)] text-center">
+          <h1 className="m-0 text-[clamp(28px,3.8vw,48px)] font-bold leading-[1.29] tracking-tight text-white lg:text-[clamp(26px,3vw,34px)] 2xl:text-[clamp(32px,4vw,48px)]">
+            {active.heroTitle}
+          </h1>
+          <p className="mt-[clamp(16px,2vw,24px)] max-w-[783px] font-['Ubuntu',sans-serif] text-[clamp(14px,1.4vw,18px)] font-normal leading-6 text-[#a1b1cb] lg:text-[clamp(13px,1.1vw,15px)] 2xl:text-[clamp(14px,1.4vw,18px)]">
+            {active.heroSubtitle}
+          </p>
+          <Link
+            to="/contact"
+            className="mt-[clamp(24px,3vw,40px)] inline-flex items-center gap-1.5 rounded-full bg-[#2365aa] py-3 pl-[26px] pr-3.5 text-base font-normal uppercase leading-[1.2] text-white no-underline transition-colors hover:bg-[#1a5490] lg:py-2.5 lg:pl-[22px] lg:pr-2.5 lg:text-sm 2xl:py-3 2xl:pl-[26px] 2xl:pr-3.5 2xl:text-base"
+          >
             Contact Us
-            <span className="tt-hero__btn-icon" aria-hidden>
+            <span className="inline-flex h-[37px] w-[37px] items-center justify-center rounded-full bg-white text-[#2365aa]">
               <ArrowUpRight size={18} strokeWidth={2.5} />
             </span>
           </Link>
         </div>
       </section>
 
-      <div className="tt-container">
-        <nav className="tt-breadcrumbs" aria-label="Breadcrumb">
-          <Link to="/">Home</Link>
-          <span className="tt-breadcrumbs__sep" aria-hidden>
-            »
-          </span>
-          <Link to="/industries">Industries</Link>
-          <span className="tt-breadcrumbs__sep" aria-hidden>
-            »
-          </span>
-          <span className="tt-breadcrumbs__current">{active.label}</span>
+      {/* Breadcrumbs + Intro */}
+      <div className="mx-auto w-full max-w-[1692px] px-5 sm:px-8 lg:px-10 xl:px-12">
+        <nav
+          className="flex flex-wrap items-center gap-2.5 pb-[clamp(20px,2.5vw,36px)] pt-[clamp(28px,3vw,48px)] text-[clamp(13px,1.2vw,18px)] font-normal leading-[1.2] text-[#272935] lg:text-[clamp(13px,1vw,15px)] 2xl:text-[clamp(14px,1.2vw,18px)]"
+          aria-label="Breadcrumb"
+        >
+          <Link
+            to="/"
+            className="text-inherit no-underline transition-colors hover:text-[#2365aa]"
+          >
+            Home
+          </Link>
+          <span className="text-[#848b9b]">»</span>
+          <Link
+            to="/industries"
+            className="text-inherit no-underline transition-colors hover:text-[#2365aa]"
+          >
+            Industries
+          </Link>
+          <span className="text-[#848b9b]">»</span>
+          <span>{active.label}</span>
         </nav>
 
-        <section className="ind-filters" aria-label="Industry categories">
-          <div className="ind-filters__grid" role="tablist">
-            {industries.map((industry) => (
-              <button
-                key={industry.id}
-                type="button"
-                role="tab"
-                aria-selected={activeId === industry.id}
-                className={`ind-filters__tab${activeId === industry.id ? " is-active" : ""}`}
-                onClick={() => setActiveId(industry.id)}
-              >
-                {industry.label}
-              </button>
-            ))}
-          </div>
-        </section>
-
-        <section className="ind-intro" aria-label={active.sectionTitle}>
-          <h2 className="ind-intro__title">{active.sectionTitle}</h2>
-          <div className="ind-intro__body">
+        <section
+          className="pb-[clamp(48px,6vw,80px)] text-center"
+          aria-label={active.sectionTitle}
+        >
+          <h2 className="mx-auto mb-[clamp(24px,3vw,48px)] max-w-[18ch] text-[clamp(28px,3.5vw,48px)] font-bold leading-[1.12] text-[#272935] lg:text-[clamp(24px,2.8vw,34px)] 2xl:text-[clamp(28px,3.5vw,48px)]">
+            {active.sectionTitle}
+          </h2>
+          <div className="mx-auto flex max-w-[1100px] flex-col gap-4 sm:gap-[18px]">
             {active.paragraphs.map((paragraph) => (
-              <p key={paragraph.slice(0, 48)}>{paragraph}</p>
+              <p
+                key={paragraph.slice(0, 48)}
+                className="m-0 font-['Ubuntu',sans-serif] text-[clamp(14px,1.4vw,18px)] font-normal leading-[1.7] text-[#848b9b] lg:text-[clamp(13px,1.1vw,15px)] 2xl:text-[clamp(14px,1.4vw,18px)]"
+              >
+                {paragraph}
+              </p>
             ))}
           </div>
         </section>
       </div>
 
-      <section className="ind-benefits" aria-label={active.benefitsTitle}>
-        <div className="tt-container">
-          <h2 className="ind-benefits__title">{active.benefitsTitle}</h2>
-          <div className="ind-benefits__grid">
+      {/* Key Benefits */}
+      <section
+        className="rounded-[20px] bg-[#f4f7f9] py-[clamp(40px,5vw,72px)] pb-[clamp(48px,6vw,88px)] max-sm:rounded-none"
+        aria-label={active.benefitsTitle}
+      >
+        <div className="mx-auto w-full max-w-[1692px] px-5 sm:px-8 lg:px-10 xl:px-12">
+          <h2 className="m-0 mb-[clamp(24px,3vw,48px)] text-center text-[clamp(28px,3.5vw,48px)] font-bold leading-[1.12] text-[#272935] lg:text-[clamp(24px,2.8vw,34px)] 2xl:text-[clamp(28px,3.5vw,48px)]">
+            {active.benefitsTitle}
+          </h2>
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-[clamp(20px,2vw,28px)]">
             {active.benefits.map((benefit) => (
-              <article key={benefit.title} className="ind-benefit-card">
-                <div className="ind-benefit-card__icon">
-                  <img src={benefit.icon} alt="" aria-hidden />
+              <article
+                key={benefit.title}
+                className="box-border flex min-h-0 items-center gap-[clamp(16px,1.5vw,28px)] rounded-[20px] border border-[#e6e6e6] bg-white px-[clamp(22px,2.2vw,36px)] py-[clamp(20px,2vw,32px)] sm:min-h-[160px]"
+              >
+                <div className="flex h-[clamp(72px,8vw,120px)] w-[clamp(72px,8vw,120px)] shrink-0 items-center justify-center lg:h-[clamp(64px,6vw,88px)] lg:w-[clamp(64px,6vw,88px)] 2xl:h-[clamp(88px,8vw,120px)] 2xl:w-[clamp(88px,8vw,120px)]">
+                  <img
+                    src={benefit.icon}
+                    alt=""
+                    aria-hidden
+                    className="h-full w-full object-contain"
+                  />
                 </div>
-                <h3 className="ind-benefit-card__title">{benefit.title}</h3>
+                <h3 className="m-0 text-[clamp(18px,1.6vw,28px)] font-bold leading-[1.3] text-[#272935] lg:text-[clamp(16px,1.4vw,20px)] 2xl:text-[clamp(18px,1.6vw,28px)]">
+                  {benefit.title}
+                </h3>
               </article>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="ind-enhance" aria-label={active.enhanceTitle}>
-        <div className="tt-container">
-          <header className="ind-enhance__header">
-            <h2 className="ind-enhance__title">{active.enhanceTitle}</h2>
-            <p className="ind-enhance__subtitle">{active.enhanceSubtitle}</p>
+      {/* Enhance */}
+      <section
+        className="bg-white py-[clamp(48px,6vw,88px)] pb-[clamp(32px,4vw,56px)]"
+        aria-label={active.enhanceTitle}
+      >
+        <div className="mx-auto w-full max-w-[1692px] px-5 sm:px-8 lg:px-10 xl:px-12">
+          <header className="mx-auto mb-[clamp(32px,4vw,64px)] max-w-[920px] text-center">
+            <h2 className="m-0 mb-[clamp(16px,2vw,24px)] text-[clamp(28px,3.5vw,48px)] font-bold leading-[1.2] text-[#272935] lg:text-[clamp(24px,2.8vw,34px)] 2xl:text-[clamp(28px,3.5vw,48px)]">
+              {active.enhanceTitle}
+            </h2>
+            <p className="m-0 font-['Ubuntu',sans-serif] text-[clamp(14px,1.4vw,18px)] font-normal leading-[1.7] text-[#848b9b] lg:text-[clamp(13px,1.1vw,15px)] 2xl:text-[clamp(14px,1.4vw,18px)]">
+              {active.enhanceSubtitle}
+            </p>
           </header>
 
-          <div className="ind-enhance__grid">
+          <div className="grid grid-cols-1 items-start gap-x-[clamp(20px,2.5vw,40px)] gap-y-[clamp(28px,3vw,48px)] sm:grid-cols-2 xl:grid-cols-4">
             {active.enhanceCards.map((card) => (
-              <article key={card.title} className="ind-enhance__card">
-                <h3 className="ind-enhance__card-title">{card.title}</h3>
-                <p className="ind-enhance__card-text">{card.text}</p>
+              <article key={card.title} className="min-w-0">
+                <h3 className="m-0 mb-3 text-[clamp(16px,1.35vw,22px)] font-bold leading-[1.35] text-[#272935] lg:text-[clamp(15px,1.2vw,18px)] 2xl:text-[clamp(16px,1.35vw,22px)]">
+                  {card.title}
+                </h3>
+                <p className="m-0 font-['Ubuntu',sans-serif] text-[clamp(13px,1.15vw,16px)] font-normal leading-[1.65] text-[#848b9b] lg:text-[clamp(12px,1vw,14px)] 2xl:text-[clamp(13px,1.15vw,16px)]">
+                  {card.text}
+                </p>
               </article>
             ))}
 
-            <div className="ind-enhance__visual">
+            <div className="flex min-h-[180px] items-center justify-center sm:col-span-2 xl:col-span-2 xl:row-start-2 xl:col-start-3">
               <img
                 src={healthcareIndImage}
-                alt="Healthcare technology illustration"
+                alt={`${active.label} technology illustration`}
+                className="mx-auto block h-auto w-full max-w-[520px] object-contain"
               />
             </div>
           </div>
         </div>
       </section>
 
-      <section className="ind-specialize" aria-label="Industry specialization">
-        <div className="tt-container">
-          <div className="ind-specialize__panel">
-            <h2 className="ind-specialize__title">{active.specializeTitle}</h2>
-            <ul className="ind-specialize__list">
+      {/* Specialize */}
+      <section
+        className="bg-white pb-[clamp(48px,6vw,88px)] pt-[clamp(24px,3vw,40px)]"
+        aria-label="Industry specialization"
+      >
+        <div className="mx-auto w-full max-w-[1692px] px-5 sm:px-8 lg:px-10 xl:px-12">
+          <div className="grid grid-cols-1 items-start gap-[clamp(28px,3vw,48px)] rounded-[24px] bg-[#f4f7f9] px-[clamp(24px,3vw,48px)] py-[clamp(28px,3.5vw,56px)] max-sm:rounded-none md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] md:gap-[clamp(32px,4vw,64px)]">
+            <h2 className="m-0 text-[clamp(22px,2.4vw,36px)] font-bold leading-[1.35] text-[#272935] lg:text-[clamp(20px,2vw,28px)] 2xl:text-[clamp(22px,2.4vw,36px)]">
+              {active.specializeTitle}
+            </h2>
+            <ul className="m-0 flex list-none flex-col gap-[clamp(16px,1.8vw,24px)] p-0">
               {active.specializeItems.map((item) => (
-                <li key={item}>
-                  <span className="ind-specialize__check" aria-hidden>
+                <li
+                  key={item}
+                  className="flex items-start gap-3.5 font-['Ubuntu',sans-serif] text-[clamp(13px,1.15vw,16px)] font-normal leading-[1.65] text-[#272935] lg:text-[clamp(12px,1vw,14px)] 2xl:text-[clamp(13px,1.15vw,16px)]"
+                >
+                  <span
+                    className="mt-0.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#2365aa] text-white"
+                    aria-hidden
+                  >
                     <Check size={14} strokeWidth={3} />
                   </span>
                   <span>{item}</span>

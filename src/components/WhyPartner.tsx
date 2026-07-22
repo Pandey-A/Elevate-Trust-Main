@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import blueArrow from "../assets/homepage-icons/blue-arrow.png";
 import partners1 from "../assets/homepage-icons/partners-1.svg";
 import partners2 from "../assets/homepage-icons/partners-2.svg";
@@ -33,7 +34,7 @@ export default function WhyPartner() {
                 operates in an ethically upright manner to grow an organization
                 and win the business.
               </p>
-              <a href="#" className="why-partner__btn">
+              <Link to="/about" className="why-partner__btn">
                 Read More
                 <img
                   src={blueArrow}
@@ -41,7 +42,7 @@ export default function WhyPartner() {
                   aria-hidden
                   className="why-partner__btn-icon"
                 />
-              </a>
+              </Link>
             </div>
             <div className="why-partner__card-bottom">
               <img
@@ -64,7 +65,7 @@ export default function WhyPartner() {
                 machine learning, Deep Learning, Generative AI and
                 agentic-based solutions.
               </p>
-              <a href="#" className="why-partner__btn">
+              <Link to="/Services/ai-ml" className="why-partner__btn">
                 Read More
                 <img
                   src={blueArrow}
@@ -72,7 +73,7 @@ export default function WhyPartner() {
                   aria-hidden
                   className="why-partner__btn-icon"
                 />
-              </a>
+              </Link>
             </div>
             <div className="why-partner__card-bottom">
               <img

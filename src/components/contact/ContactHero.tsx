@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Mail, MapPin, Phone } from "lucide-react";
 import letsConnectIcon from "../../assets/nav/lets-connect.svg";
 import worldMapBackground from "../../assets/homepage-icons/wordmap.svg";
@@ -8,7 +9,7 @@ const contactItems = [
   {
     icon: MapPin,
     label: "Pimple Saudagar, Pune Maharashtra",
-    href: "#",
+    href: "/contact",
   },
 ];
 
@@ -36,26 +37,36 @@ export default function ContactHero() {
           <ul className="flex w-full flex-col items-center gap-3 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-x-8 sm:gap-y-3 lg:gap-x-12">
             {contactItems.map(({ icon: Icon, label, href }) => (
               <li key={label}>
-                <a
-                  href={href}
-                  className="inline-flex items-center gap-1.5 font-ubuntu text-[12px] font-normal leading-relaxed text-white/50 transition hover:text-white/70 sm:text-[13px] md:text-[14px] lg:text-[13px]"
-                >
-                  <Icon className="h-3.5 w-3.5 shrink-0 stroke-[1.75] sm:h-4 sm:w-4" aria-hidden />
-                  <span>{label}</span>
-                </a>
+                {href.startsWith("/") ? (
+                  <Link
+                    to={href}
+                    className="inline-flex items-center gap-1.5 font-ubuntu text-[12px] font-normal leading-relaxed text-white/50 transition hover:text-white/70 sm:text-[13px] md:text-[14px] lg:text-[13px]"
+                  >
+                    <Icon className="h-3.5 w-3.5 shrink-0 stroke-[1.75] sm:h-4 sm:w-4" aria-hidden />
+                    <span>{label}</span>
+                  </Link>
+                ) : (
+                  <a
+                    href={href}
+                    className="inline-flex items-center gap-1.5 font-ubuntu text-[12px] font-normal leading-relaxed text-white/50 transition hover:text-white/70 sm:text-[13px] md:text-[14px] lg:text-[13px]"
+                  >
+                    <Icon className="h-3.5 w-3.5 shrink-0 stroke-[1.75] sm:h-4 sm:w-4" aria-hidden />
+                    <span>{label}</span>
+                  </a>
+                )}
               </li>
             ))}
           </ul>
 
-          <a
-            href="#"
+          <Link
+            to="/about"
             className="inline-flex shrink-0 items-center gap-2 rounded-full bg-[#2365AA] px-3 py-1.5 pl-4 pr-2 text-[10px] font-semibold uppercase tracking-wide text-white transition hover:bg-[#1d5694] sm:py-2 sm:text-xs"
           >
             Company Profile
             <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white sm:h-7 sm:w-7">
               <img src={letsConnectIcon} alt="" aria-hidden className="h-4 w-4 sm:h-auto sm:w-auto" />
             </span>
-          </a>
+          </Link>
         </div>
       </div>
     </section>

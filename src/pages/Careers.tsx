@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ChangeEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type ChangeEvent } from "react";
 import { Link } from "react-router-dom";
 import {
   ArrowUpRight,
@@ -19,82 +19,9 @@ import linkedinLogo from "../assets/footer/LinkedinLogo.svg";
 import instagramLogo from "../assets/footer/InstagramLogo.svg";
 import tiktokLogo from "../assets/footer/TiktokLogo.svg";
 import xLogo from "../assets/footer/xlogo.svg";
+import { useAdminJobs } from "../hooks/useAdminData";
+import { groupJobsByCategory } from "../lib/adminStorage";
 import "./Careers.css";
-
-type Job = {
-  title: string;
-  tag: string;
-  description: string;
-  type: string;
-  salary: string;
-  location: string;
-};
-
-type JobGroup = {
-  category: string;
-  subtitle: string;
-  jobs: Job[];
-};
-
-const jobGroups: JobGroup[] = [
-  {
-    category: "Design",
-    subtitle: "Open position in our design team.",
-    jobs: [
-      {
-        title: "Product Designer",
-        tag: "Designer",
-        description:
-          "We are looking for a mid-level product designer to join our team.",
-        type: "Full-time",
-        salary: "80k - 100k",
-        location: "Remotely",
-      },
-      {
-        title: "Product Designer",
-        tag: "Designer",
-        description:
-          "We are looking for a mid-level product designer to join our team.",
-        type: "Full-time",
-        salary: "80k - 100k",
-        location: "Remotely",
-      },
-    ],
-  },
-  {
-    category: "Software Development",
-    subtitle: "Open position in our software team.",
-    jobs: [
-      {
-        title: "Product Designer",
-        tag: "Software",
-        description:
-          "We are looking for a mid-level product designer to join our team.",
-        type: "Full-time",
-        salary: "80k - 100k",
-        location: "Remotely",
-      },
-      {
-        title: "Product Designer",
-        tag: "Software",
-        description:
-          "We are looking for a mid-level product designer to join our team.",
-        type: "Full-time",
-        salary: "80k - 100k",
-        location: "Remotely",
-      },
-      {
-        title: "Product Designer",
-        tag: "Software",
-        description:
-          "We are looking for a mid-level product designer to join our team.",
-        type: "Full-time",
-        salary: "80k - 100k",
-        location: "Remotely",
-      },
-    ],
-  },
-];
 
 const socialLinks = [
   { src: youtubeLogo, alt: "YouTube", href: "#" },
@@ -106,9 +33,27 @@ const socialLinks = [
 ];
 
 export default function Careers() {
+  const jobs = useAdminJobs();
   const [fileName, setFileName] = useState("No File Selcted");
-  const [filter, setFilter] = useState("Remotely");
+  const [filter, setFilter] = useState("All");
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const jobGroups = useMemo(() => {
+    const grouped = groupJobsByCategory(jobs);
+    if (filter === "All") return grouped;
+    return grouped
+      .map((group) => ({
+        ...group,
+        jobs: group.jobs.filter(
+          (job) =>
+            job.location === filter ||
+            job.type === filter ||
+            job.tag === filter ||
+            job.category === filter,
+        ),
+      }))
+      .filter((group) => group.jobs.length > 0);
+  }, [jobs, filter]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -152,11 +97,11 @@ export default function Careers() {
         <span className="careers-breadcrumbs__sep" aria-hidden="true">
           »
         </span>
-        <Link to="/Services/ai-ml">Our Services</Link>
+        <span>Who we are</span>
         <span className="careers-breadcrumbs__sep" aria-hidden="true">
           »
         </span>
-        <span>Custom AI/ML Solutions</span>
+        <span>Careers</span>
       </nav>
 
       <section className="careers-enquiry">
@@ -283,8 +228,8 @@ export default function Careers() {
         <div className="careers-jobs__header">
           <h2 className="careers-jobs__title">Start doing work that matters</h2>
           <p className="careers-jobs__subtitle">
-            We create custom AI solutions for Predictive Analytics, such as
-            predicting customer churn, building recommendation systems,.
+            Explore open roles across design, engineering, and AI — join a team
+            building production-ready solutions for real business outcomes.
           </p>
 
           <div className="careers-jobs__filter">
@@ -293,59 +238,64 @@ export default function Careers() {
               onChange={(event) => setFilter(event.target.value)}
               aria-label="Filter jobs"
             >
+              <option value="All">All</option>
               <option value="Remotely">Remotely</option>
               <option value="Full-time">Full-time</option>
               <option value="Design">Design</option>
               <option value="Software">Software</option>
+              <option value="Software Development">Software Development</option>
             </select>
             <ChevronDown size={16} strokeWidth={2} aria-hidden="true" />
           </div>
         </div>
 
         <div className="careers-jobs__list">
-          {jobGroups.map((group, groupIndex) => (
-            <div key={group.category}>
-              {groupIndex > 0 && <hr className="careers-jobs__divider" />}
-              <div className="careers-jobs__group">
-                <div className="careers-jobs__group-info">
-                  <h3>{group.category}</h3>
-                  <p>{group.subtitle}</p>
-                </div>
-                <div className="careers-jobs__cards">
-                  {group.jobs.map((job, index) => (
-                    <article
-                      key={`${group.category}-${index}`}
-                      className="careers-job-card"
-                    >
-                      <div className="careers-job-card__top">
-                        <h4>{job.title}</h4>
-                        <span className="careers-job-card__tag">{job.tag}</span>
-                      </div>
-                      <p className="careers-job-card__desc">{job.description}</p>
-                      <div className="careers-job-card__meta">
-                        <span>
-                          <Clock size={22} strokeWidth={1.75} aria-hidden />
-                          {job.type}
-                        </span>
-                        <span>
-                          <CircleDollarSign
-                            size={22}
-                            strokeWidth={1.75}
-                            aria-hidden
-                          />
-                          {job.salary}
-                        </span>
-                        <span>
-                          <Armchair size={22} strokeWidth={1.75} aria-hidden />
-                          {job.location}
-                        </span>
-                      </div>
-                    </article>
-                  ))}
+          {jobGroups.length > 0 ? (
+            jobGroups.map((group, groupIndex) => (
+              <div key={group.category}>
+                {groupIndex > 0 && <hr className="careers-jobs__divider" />}
+                <div className="careers-jobs__group">
+                  <div className="careers-jobs__group-info">
+                    <h3>{group.category}</h3>
+                    <p>{group.subtitle}</p>
+                  </div>
+                  <div className="careers-jobs__cards">
+                    {group.jobs.map((job) => (
+                      <article key={job.id} className="careers-job-card">
+                        <div className="careers-job-card__top">
+                          <h4>{job.title}</h4>
+                          <span className="careers-job-card__tag">{job.tag}</span>
+                        </div>
+                        <p className="careers-job-card__desc">{job.description}</p>
+                        <div className="careers-job-card__meta">
+                          <span>
+                            <Clock size={22} strokeWidth={1.75} aria-hidden />
+                            {job.type}
+                          </span>
+                          <span>
+                            <CircleDollarSign
+                              size={22}
+                              strokeWidth={1.75}
+                              aria-hidden
+                            />
+                            {job.salary}
+                          </span>
+                          <span>
+                            <Armchair size={22} strokeWidth={1.75} aria-hidden />
+                            {job.location}
+                          </span>
+                        </div>
+                      </article>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))
+          ) : (
+            <p className="careers-jobs__subtitle">
+              No open positions match this filter.
+            </p>
+          )}
         </div>
       </section>
 

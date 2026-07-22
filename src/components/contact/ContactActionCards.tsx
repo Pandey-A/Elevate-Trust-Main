@@ -1,13 +1,16 @@
+import { Link } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
 
 const actionCards = [
   {
     title: "Talk to AI",
     subtitle: "Instant Answers",
+    href: "/contact",
   },
   {
     title: "Reach Us",
     subtitle: "Get contacted by our team",
+    href: "/contact#contact-form",
   },
 ];
 
@@ -21,13 +24,13 @@ export default function ContactActionCards() {
         >
           <div className="flex w-full flex-1 items-center justify-between rounded-b-2xl bg-[#272935] px-6 py-4 sm:px-7 sm:py-5">
             <h2 className="text-base font-bold text-white sm:text-lg">{card.title}</h2>
-            <button
-              type="button"
+            <Link
+              to={card.href}
               className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-[#9CA3AF] transition hover:text-[#272935] sm:h-10 sm:w-10"
               aria-label={`Open ${card.title}`}
             >
               <ChevronRight className="h-5 w-5" strokeWidth={2} />
-            </button>
+            </Link>
           </div>
 
           <div className="flex w-full flex-1 items-center px-6 py-3.5 sm:px-7 sm:py-4">

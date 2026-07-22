@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+import { Link } from "react-router-dom";
 import smartArrow from "../assets/homepage-icons/smart-arrow.png";
 import { useState } from "react";
 
@@ -155,7 +156,7 @@ export default function LatestWorks() {
           <h2 className="latest-works__title">Latest Works</h2>
 
           <div className="latest-works__btn-wrapper">
-            <a href="#" className="latest-works__btn">
+            <Link to="/case-studies" className="latest-works__btn">
               <span>View all case studies</span>
               <img
                 src={smartArrow}
@@ -163,7 +164,7 @@ export default function LatestWorks() {
                 aria-hidden
                 className="latest-works__btn-icon"
               />
-            </a>
+            </Link>
           </div>
         </div>
 

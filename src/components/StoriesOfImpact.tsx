@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import blueArrow from "../assets/homepage-icons/blue-arrow.png";
 import arupaLogo from "../assets/client-strip/Arupa.svg";
@@ -172,8 +173,8 @@ export default function StoriesOfImpact() {
             Stories of Impact
           </h2>
 
-          <a
-            href="#"
+          <Link
+            to="/case-studies"
             className="btn-cta mt-5 bg-white text-[#113D77] hover:bg-white/90"
           >
             View all
@@ -183,7 +184,7 @@ export default function StoriesOfImpact() {
               aria-hidden
               className="h-7 w-7 object-contain"
             />
-          </a>
+          </Link>
         </div>
 
         <div className="relative mt-10 lg:mt-12">
