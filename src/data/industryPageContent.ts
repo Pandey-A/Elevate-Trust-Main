@@ -45,6 +45,13 @@ import knowledgeIcon from "../assets/OurServices/GenAI-knowledge.png";
 import financeIcon from "../assets/OurServices/GenAI-Finance.png";
 import healthcareIcon from "../assets/OurServices/GenAI-healthcare.png";
 import hrIcon from "../assets/OurServices/GenAI-HR.png";
+import fintechChallengesImage from "../assets/OurServices/fintech-2.jpg";
+import ecommerceChallengesImage from "../assets/OurServices/ecommerce.jpeg";
+import educationChallengesImage from "../assets/OurServices/education.jpg";
+import logisticsChallengesImage from "../assets/OurServices/logistics.jpeg";
+import manufacturingChallengesImage from "../assets/OurServices/Future-of-Manufacturing-with-Industry-4.0.jpg";
+import socialMediaChallengesImage from "../assets/OurServices/socialmedia.jpg";
+import publicSectorChallengesImage from "../assets/OurServices/publicsector.jpeg";
 
 const solutionIcons = [
   dataIcon,
@@ -101,6 +108,7 @@ export const industryPagesBySlug: Record<string, IndustryPageContent> = {
     challengesTitle: "Navigating Risk, Trust, and Compliance in Digital Finance",
     challengesBody:
       "Financial institutions must balance customer experience with security and regulatory compliance while combating increasingly sophisticated fraud techniques. ElevateTrust helps banks, insurers, lenders, and payment platforms detect threats early, verify identities with confidence, and automate compliance workflows without slowing growth.",
+    challengesImage: fintechChallengesImage,
     challenges: [
       { title: "Identity Fraud", text: "Stop synthetic identities and impersonation attempts before accounts are opened or funds are moved.", icon: Fingerprint },
       { title: "KYC Verification", text: "Speed up onboarding while keeping document checks accurate, auditable, and policy-aligned.", icon: BadgeCheck },
@@ -179,6 +187,7 @@ export const industryPagesBySlug: Record<string, IndustryPageContent> = {
     challengesTitle: "Meeting Rising Expectations Across Digital Retail",
     challengesBody:
       "Retail businesses face rapidly changing customer expectations, rising operational costs, inventory complexity, and the need for personalized shopping experiences. ElevateTrust helps brands turn AI into better discovery, support, forecasting, and retention outcomes.",
+    challengesImage: ecommerceChallengesImage,
     challenges: [
       { title: "Customer Support", text: "Handle volume spikes while keeping responses accurate, brand-aligned, and fast.", icon: Bot },
       { title: "Product Discovery", text: "Help shoppers find the right products faster across catalogs and channels.", icon: Search },
@@ -257,6 +266,7 @@ export const industryPagesBySlug: Record<string, IndustryPageContent> = {
     challengesTitle: "Modernizing Learning Without Losing the Human Touch",
     challengesBody:
       "Education providers need more personalization, faster content creation, stronger engagement, and better accessibility. ElevateTrust helps institutions and edtech platforms use AI to support teachers, learners, and administrators at scale.",
+    challengesImage: educationChallengesImage,
     challenges: [
       { title: "Personalized Learning", text: "Adapt content and pacing to different learner levels and goals.", icon: GraduationCap },
       { title: "Assessment", text: "Create and evaluate quizzes or assignments more efficiently and consistently.", icon: ClipboardCheck },
@@ -335,6 +345,7 @@ export const industryPagesBySlug: Record<string, IndustryPageContent> = {
     challengesTitle: "Improving Visibility and Efficiency Across the Supply Chain",
     challengesBody:
       "Logistics teams need better tracking, smarter routing, warehouse intelligence, and predictive operations. ElevateTrust helps supply chain organizations use AI to reduce delays, improve asset visibility, and automate document-heavy workflows.",
+    challengesImage: logisticsChallengesImage,
     challenges: [
       { title: "Fleet Tracking", text: "Maintain clearer visibility across vehicles, routes, and delivery status.", icon: Truck },
       { title: "Warehouse Operations", text: "Reduce bottlenecks in picking, packing, and inventory movement.", icon: Warehouse },
@@ -413,6 +424,7 @@ export const industryPagesBySlug: Record<string, IndustryPageContent> = {
     challengesTitle: "Bringing Intelligence to Modern Manufacturing Floors",
     challengesBody:
       "Manufacturers must improve quality, reduce downtime, protect workers, and gain production visibility. ElevateTrust helps industrial teams apply computer vision, predictive maintenance, and operational AI to build smarter factories.",
+    challengesImage: manufacturingChallengesImage,
     challenges: [
       { title: "Quality Inspection", text: "Catch defects earlier and reduce reliance on slow manual inspection cycles.", icon: Eye },
       { title: "Equipment Downtime", text: "Predict failures and reduce unplanned stoppages across production lines.", icon: AlertTriangle },
@@ -491,6 +503,7 @@ export const industryPagesBySlug: Record<string, IndustryPageContent> = {
     challengesTitle: "Defending Trust Across Digital Content Platforms",
     challengesBody:
       "Social platforms and entertainment companies face deepfakes, harmful content, copyright abuse, and rising moderation costs. ElevateTrust helps media organizations protect communities, creators, and brand safety with advanced AI moderation and forensics.",
+    challengesImage: socialMediaChallengesImage,
     challenges: [
       { title: "Fake Videos", text: "Detect manipulated media before it spreads across feeds and communities.", icon: Video },
       { title: "Content Moderation", text: "Review high volumes of UGC without sacrificing speed or consistency.", icon: Eye },
@@ -569,6 +582,7 @@ export const industryPagesBySlug: Record<string, IndustryPageContent> = {
     challengesTitle: "Strengthening Public Safety and Digital Governance",
     challengesBody:
       "Public sector organizations need better situational awareness, faster emergency response, stronger digital identity, and more efficient citizen services. ElevateTrust helps government teams apply AI responsibly across safety, surveillance, and service delivery.",
+    challengesImage: publicSectorChallengesImage,
     challenges: [
       { title: "Crime Detection", text: "Identify suspicious activity earlier across monitored public environments.", icon: ShieldAlert },
       { title: "Public Safety", text: "Improve awareness and response readiness across cities and critical sites.", icon: ShieldCheck },

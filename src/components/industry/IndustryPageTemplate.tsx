@@ -4,7 +4,6 @@ import { ArrowUpRight, type LucideProps } from "lucide-react";
 import FlyCTA from "../FlyCTA";
 import worldMapBackground from "../../assets/homepage-icons/Group(3).png";
 import virtualAssistant from "../../assets/OurServices/virtual-assistant.png";
-import roadmapImage from "../../assets/OurServices/roadmap-light.png";
 import techStackImage from "../../assets/OurServices/techstack-light.png";
 import checkIcon from "../../assets/technology-trends/check-icon.svg";
 
@@ -35,6 +34,8 @@ export type IndustryPageContent = {
   heroSubtitle: string;
   challengesTitle: string;
   challengesBody: string;
+  /** Visual shown beside the challenges intro (industry-specific asset). */
+  challengesImage: string;
   challenges: IndustryCard[];
   helpsIntro: string;
   helps: IndustryCard[];
@@ -128,11 +129,11 @@ export default function IndustryPageTemplate({ content }: Props) {
                 {content.challengesBody}
               </p>
             </div>
-            <div className="overflow-hidden rounded-[20px] border border-[#e2ebf3] bg-[#EFF7FC] p-4 sm:p-6">
+            <div className="overflow-hidden rounded-[20px] border border-[#e2ebf3] bg-[#EFF7FC]">
               <img
-                src={roadmapImage}
-                alt=""
-                className="mx-auto block h-auto w-full max-w-[520px] object-contain"
+                src={content.challengesImage}
+                alt={`${content.label} industry visual`}
+                className="mx-auto block aspect-[4/3] h-auto w-full object-cover"
               />
             </div>
           </div>

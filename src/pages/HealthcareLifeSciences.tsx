@@ -23,7 +23,7 @@ import FlyCTA from "../components/FlyCTA";
 import worldMapBackground from "../assets/homepage-icons/Group(3).png";
 import healthcareAgentIcon from "../assets/OurServices/GenAI-healthcare.png";
 import virtualAssistant from "../assets/OurServices/virtual-assistant.png";
-import roadmapImage from "../assets/OurServices/roadmap-light.png";
+import healthcareChallengesImage from "../assets/OurServices/healthcare.jpeg";
 import techStackImage from "../assets/OurServices/techstack-light.png";
 import knowledgeIcon from "../assets/OurServices/GenAI-knowledge.png";
 import dataIcon from "../assets/OurServices/GenAI-Data.png";
@@ -305,11 +305,11 @@ export default function HealthcareLifeSciences() {
                 strengthen security, and deliver better patient experiences.
               </p>
             </div>
-            <div className="overflow-hidden rounded-[20px] border border-[#e2ebf3] bg-[#EFF7FC] p-4 sm:p-6">
+            <div className="overflow-hidden rounded-[20px] border border-[#e2ebf3] bg-[#EFF7FC]">
               <img
-                src={roadmapImage}
-                alt="Healthcare AI transformation roadmap"
-                className="mx-auto block h-auto w-full max-w-[520px] object-contain"
+                src={healthcareChallengesImage}
+                alt="Healthcare AI transformation visual"
+                className="mx-auto block aspect-[4/3] h-auto w-full object-cover"
               />
             </div>
           </div>
