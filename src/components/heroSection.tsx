@@ -1,8 +1,7 @@
-import type { CSSProperties } from "react";
 import { Link } from "react-router-dom";
 import "./heroSection.css";
 import elevateMainLogo from "../assets/homepage-icons/elevatestarting-logo.svg";
-import heroBg from "../assets/homepage-icons/Hero-bg.png";
+import heroBg from "../assets/homepage-icons/globe-bg-withINDIA.png";
 import futureIcon from "../assets/homepage-icons/future.png";
 import editModeIcon from "../assets/homepage-icons/editmode.png";
 import smartArrow from "../assets/homepage-icons/smart-arrow.png";
@@ -11,11 +10,10 @@ import userLoveIcon from "../assets/homepage-icons/user-love-01.svg";
 
 export default function HeroSection() {
   return (
-    <section
-      id="hero"
-      className="hero-section"
-      style={{ "--hero-bg-image": `url(${heroBg})` } as CSSProperties}
-    >
+    <section id="hero" className="hero-section">
+      <div className="hero-map" aria-hidden="true">
+        <img src={heroBg} alt="" className="hero-map__img" />
+      </div>
 
       <div className="hero-top-logo">
         <img src={elevateMainLogo} alt="Elevate Trust" />

@@ -40,7 +40,6 @@ const emptyJobForm = {
   tag: "",
   description: "",
   type: "Full-time",
-  salary: "",
   location: "Remotely",
   category: "Software Development",
   categorySubtitle: "Open position in our software team.",
@@ -113,7 +112,6 @@ export default function AdminDashboard() {
       tag: job.tag,
       description: job.description,
       type: job.type,
-      salary: job.salary,
       location: job.location,
       category: job.category,
       categorySubtitle: job.categorySubtitle,
@@ -179,7 +177,6 @@ export default function AdminDashboard() {
       tag: jobForm.tag.trim() || jobForm.category.trim(),
       description: jobForm.description.trim(),
       type: jobForm.type.trim() || "Full-time",
-      salary: jobForm.salary.trim() || "Competitive",
       location: jobForm.location.trim() || "Remotely",
       category: jobForm.category.trim(),
       categorySubtitle:
@@ -519,17 +516,6 @@ export default function AdminDashboard() {
                     />
                   </label>
                   <label className="flex flex-col gap-1.5 text-sm font-medium text-[#5a5a5a]">
-                    Salary
-                    <input
-                      value={jobForm.salary}
-                      onChange={(event) =>
-                        setJobForm((prev) => ({ ...prev, salary: event.target.value }))
-                      }
-                      className="rounded-[12px] border border-[#d7e6f3] bg-[#f8fbfd] px-3.5 py-3 outline-none focus:border-[#2365aa]"
-                      placeholder="80k - 100k"
-                    />
-                  </label>
-                  <label className="flex flex-col gap-1.5 text-sm font-medium text-[#5a5a5a]">
                     Location
                     <input
                       value={jobForm.location}
@@ -603,7 +589,7 @@ export default function AdminDashboard() {
                           {job.description}
                         </p>
                         <p className="mt-2 text-xs text-[#848b9b]">
-                          {job.type} · {job.salary} · {job.location}
+                          {job.type} · {job.location}
                         </p>
                       </div>
                       <div className="flex gap-2">

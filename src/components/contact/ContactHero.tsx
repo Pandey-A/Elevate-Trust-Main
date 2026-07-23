@@ -16,7 +16,7 @@ const contactItems = [
 export default function ContactHero() {
   return (
     <section className="relative h-[20rem] w-full overflow-hidden bg-[#113D77] sm:h-[22rem] md:h-[23rem] lg:h-[25rem]">
-      {/* Map — same layer as ServiceHero */}
+      {/* Map, same layer as ServiceHero */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-x-0 z-[1] flex items-end justify-center overflow-hidden"

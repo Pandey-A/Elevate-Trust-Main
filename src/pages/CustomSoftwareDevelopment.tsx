@@ -22,12 +22,12 @@ export default function CustomSoftwareDevelopment() {
     <DigitalServicePage
       breadcrumb="Custom Software Development"
       heroTitle="Custom Software Development for High-Impact Systems"
-      heroSubtitle="Scalable, secure, and efficient software tailored to your operations — from startups to enterprise platforms ready for tomorrow."
+      heroSubtitle="Scalable, secure, and efficient software tailored to your operations, from startups to enterprise platforms ready for tomorrow."
       heroImage={customSoftware}
       introTitle="Custom Software Development"
       introBody="Your organization will benefit from our exclusive software development solution for your business. Our team develops scalable, secure, and efficient software for your organization and builds software that fulfills your specific needs. Our qualified staff develops innovative software products for every type of organization from startups to enterprises that are efficient and effective in enhancing their operations and productivity and ultimately, corporate growth. Let us take your concepts and turn them into software systems that attain high-impact, scalability, and readiness for tomorrow."
       sectionTitle="Custom Build Capabilities"
-      sectionSubtitle="Purpose-built systems that fit your workflows — not the other way around."
+      sectionSubtitle="Purpose-built systems that fit your workflows, not the other way around."
       offerings={[
         {
           title: "Business process platforms",

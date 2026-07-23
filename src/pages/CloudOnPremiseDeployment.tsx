@@ -395,7 +395,7 @@ export default function CloudOnPremiseDeployment() {
             </h2>
             <p className="mx-auto mt-4 max-w-[46rem] text-[clamp(13px,1.2vw,16px)] leading-7 text-[#848b9b] 2xl:text-[18px] 2xl:leading-8">
               A continuous operating model that takes models from experiment to
-              production — covering training, versioning, packaging, staging,
+              production, covering training, versioning, packaging, staging,
               cloud or on-premise release, and ongoing monitoring.
             </p>
           </header>
@@ -522,7 +522,7 @@ export default function CloudOnPremiseDeployment() {
         </div>
       </section>
 
-      {/* Technology Stack — interactive blue explorer */}
+      {/* Technology Stack, interactive blue explorer */}
       <section className="w-full bg-white" aria-label="Technology stack">
         <div className="mx-auto w-full max-w-[1692px] px-5 py-[clamp(40px,5vw,80px)] sm:px-8 lg:px-10 xl:px-12">
           <header className="mx-auto mb-[clamp(24px,3vw,40px)] max-w-[48rem] text-center">

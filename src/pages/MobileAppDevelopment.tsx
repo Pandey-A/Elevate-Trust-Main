@@ -22,7 +22,7 @@ export default function MobileAppDevelopment() {
     <DigitalServicePage
       breadcrumb="Mobile App Development"
       heroTitle="Mobile App Development That Drives Engagement"
-      heroSubtitle="Custom iOS and Android experiences built for performance, retention, and growth — from first idea to App Store launch."
+      heroSubtitle="Custom iOS and Android experiences built for performance, retention, and growth, from first idea to App Store launch."
       heroImage={appDev}
       introTitle="Mobile App Development"
       introBody="Identify ways to develop your business through our custom mobile app development services. We develop apps with user performance in mind for a specific platform like iOS or Android apps. We help you maximize customer engagement and generate growth in your business, from your initial idea until someone is downloading the app. Partner with us to make your dream app a reality, with ease."
@@ -104,7 +104,7 @@ export default function MobileAppDevelopment() {
       valueSubtitle="Mobile products that convert downloads into lasting engagement and business impact."
       valuePoints={[
         "Clear MVP scoping that reduces wasted build cycles.",
-        "UX crafted for mobile context — speed, clarity, and retention.",
+        "UX crafted for mobile context, speed, clarity, and retention.",
         "Engineering practices that keep releases predictable.",
         "Backend integrations that unlock your existing systems.",
         "Analytics that inform the next feature investments.",

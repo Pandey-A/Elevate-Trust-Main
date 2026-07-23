@@ -12,7 +12,7 @@ export default function DetailedCoreOfferings() {
     <section className="w-full bg-white">
       <div className="mx-auto w-full max-w-site px-5 py-10 sm:px-8 md:px-10 lg:px-20 lg:py-16">
         <div className="grid grid-cols-1 items-center gap-10 md:gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-16 xl:gap-20">
-          {/* Left — heading + outcome paragraphs */}
+          {/* Left, heading + outcome paragraphs */}
           <div className="text-center lg:text-left">
             <h2 className="text-[1.75rem] font-bold leading-[1.2]   text-[#1F2432] sm:text-[2rem] md:text-[2.25rem] lg:text-[60px] lg:leading-[62px]">
               Core Offerings
@@ -31,7 +31,7 @@ export default function DetailedCoreOfferings() {
             </div>
           </div>
 
-          {/* Right — illustration */}
+          {/* Right, illustration */}
           <div className="flex justify-center lg:justify-end">
             <img
               src={detailIllustration}

@@ -18,7 +18,6 @@ export type AdminJob = {
   tag: string;
   description: string;
   type: string;
-  salary: string;
   location: string;
   category: string;
   categorySubtitle: string;
@@ -198,7 +197,6 @@ export const DEFAULT_JOBS: AdminJob[] = [
     tag: "Designer",
     description: "We are looking for a mid-level product designer to join our team.",
     type: "Full-time",
-    salary: "80k - 100k",
     location: "Remotely",
     category: "Design",
     categorySubtitle: "Open position in our design team.",
@@ -209,7 +207,6 @@ export const DEFAULT_JOBS: AdminJob[] = [
     tag: "Designer",
     description: "We are looking for a mid-level product designer to join our team.",
     type: "Full-time",
-    salary: "80k - 100k",
     location: "Remotely",
     category: "Design",
     categorySubtitle: "Open position in our design team.",
@@ -220,7 +217,6 @@ export const DEFAULT_JOBS: AdminJob[] = [
     tag: "Software",
     description: "We are looking for a mid-level software engineer to join our AI team.",
     type: "Full-time",
-    salary: "80k - 100k",
     location: "Remotely",
     category: "Software Development",
     categorySubtitle: "Open position in our software team.",
@@ -231,7 +227,6 @@ export const DEFAULT_JOBS: AdminJob[] = [
     tag: "Software",
     description: "We are looking for a frontend engineer experienced with React and Tailwind.",
     type: "Full-time",
-    salary: "80k - 100k",
     location: "Remotely",
     category: "Software Development",
     categorySubtitle: "Open position in our software team.",
@@ -242,7 +237,6 @@ export const DEFAULT_JOBS: AdminJob[] = [
     tag: "Software",
     description: "We are looking for an ML engineer to build and deploy production AI systems.",
     type: "Full-time",
-    salary: "90k - 120k",
     location: "Remotely",
     category: "Software Development",
     categorySubtitle: "Open position in our software team.",

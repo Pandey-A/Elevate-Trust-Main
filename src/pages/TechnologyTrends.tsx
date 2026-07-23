@@ -221,7 +221,7 @@ export default function TechnologyTrends() {
           <p className="mt-[clamp(16px,2vw,24px)] max-w-[783px] font-['Ubuntu',sans-serif] text-[#a1b1cb] font-normal leading-6 text-[clamp(14px,1.4vw,18px)] lg:text-[clamp(13px,1.1vw,15px)] 2xl:text-[clamp(14px,1.4vw,18px)]">
             Artificial intelligence (AI) is accelerating through transformative
             breakthroughs in agentic systems, multimodal processing, and frontier
-            cognitive architectures — innovations that are reshaping the
+            cognitive architectures, innovations that are reshaping the
             enterprise landscape as we know it. What began as a promising
             experiment has now matured into demonstrable business impact.
           </p>

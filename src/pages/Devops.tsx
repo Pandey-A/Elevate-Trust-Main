@@ -218,7 +218,7 @@ export default function Devops() {
           </h1>
           <p className="mt-[clamp(16px,2vw,24px)] max-w-[783px] font-['Ubuntu',sans-serif] text-[#a1b1cb] font-normal leading-6 text-[clamp(14px,1.4vw,18px)] lg:text-[clamp(13px,1.1vw,15px)] 2xl:text-[clamp(14px,1.4vw,18px)]">
             DevOps is accelerating how enterprises deliver software with speed and
-            reliability — from CI/CD and platform engineering to DevSecOps, SRE,
+            reliability, from CI/CD and platform engineering to DevSecOps, SRE,
             and observability. What started as cultural collaboration has matured
             into an intelligent delivery ecosystem for continuous value.
           </p>

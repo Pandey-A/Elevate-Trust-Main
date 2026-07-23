@@ -17,6 +17,7 @@ import techStackImage from "../assets/OurServices/techstack-light.png";
 import elevateIcon from "../assets/service/AI-process/elevateIcon.svg";
 import checkIcon from "../assets/technology-trends/check-icon.svg";
 import virtualAgentImage from "../assets/OurServices/virtual-assistant.png";
+import genAiSdlcCaseImage from "../assets/case-studies/c7-1.png";
 
 const coreOfferings = [
   {
@@ -70,10 +71,10 @@ const coreOfferings = [
 ];
 
 const valueAdded = [
-  "Delivered automated data analytics solution using LLM for a data backup & storage company — reducing long product analytics cycles significantly.",
-  "Delivered customer support virtual agent solutions by developing a custom agentic framework — enabling faster adoption of agents across new domains.",
-  "Delivered on-premise finetuned LLM-based knowledge retrieval bot for a game company — reducing repeated tickets from 40% to 10%.",
-  "Delivered sales training voice bot using LLM for an Ed-tech product company — helping sales teams practice complex scenarios and ramp faster.",
+  "Delivered automated data analytics solution using LLM for a data backup & storage company, reducing long product analytics cycles significantly.",
+  "Delivered customer support virtual agent solutions by developing a custom agentic framework, enabling faster adoption of agents across new domains.",
+  "Delivered on-premise finetuned LLM-based knowledge retrieval bot for a game company, reducing repeated tickets from 40% to 10%.",
+  "Delivered sales training voice bot using LLM for an Ed-tech product company, helping sales teams practice complex scenarios and ramp faster.",
 ];
 
 const consultingPoints = [
@@ -140,7 +141,7 @@ const successStories = [
       "Needed to FastTrack new sales rep onboarding and product fluency.",
     ],
     situation: [
-      "New sales reps needed 1–2 months to understand products and services.",
+      "New sales reps needed 1-2 months to understand products and services.",
       "Information discovery during customer calls was slow and manual.",
       "Heavy dependency on Product/Tech teams for accurate answers.",
     ],
@@ -205,7 +206,7 @@ export default function GenerativeAI() {
           </h1>
           <p className="mt-[clamp(16px,2vw,24px)] max-w-[783px] font-['Ubuntu',sans-serif] text-[clamp(14px,1.4vw,18px)] font-normal leading-6 text-[#a1b1cb] lg:text-[clamp(13px,1.1vw,15px)] 2xl:text-[clamp(14px,1.4vw,18px)]">
             From TF-IDF and word2vec to transformers, early LLMs like BERT and T5,
-            and today&apos;s GPT, Gemini, Ollama, and agentic flows — we have
+            and today&apos;s GPT, Gemini, Ollama, and agentic flows, we have
             delivered value from fine-tuned on-premise NER models to a generic
             agentic framework for state-of-the-art implementations.
           </p>
@@ -253,7 +254,7 @@ export default function GenerativeAI() {
             </h2>
             <p className="mx-auto mt-5 max-w-[48rem] text-[clamp(13px,1.2vw,16px)] leading-7 text-[#9CA3AF] sm:mt-6 2xl:text-[18px] 2xl:leading-8">
               Purpose-built agents and copilots that turn Gen AI into measurable
-              business outcomes — across analytics, engineering, support,
+              business outcomes, across analytics, engineering, support,
               healthcare, HR, knowledge, and financial services.
             </p>
           </header>
@@ -287,7 +288,7 @@ export default function GenerativeAI() {
               Gen AI &amp; LLM Consulting and Solution Architectures
             </h2>
             <p className="mt-5 max-w-[46rem] text-[clamp(13px,1.2vw,16px)] leading-7 text-[#848b9b] sm:mt-6 2xl:text-[18px] 2xl:leading-8">
-              Expertise in Gen AI strategy and consulting — including use case
+              Expertise in Gen AI strategy and consulting, including use case
               recognition, feasibility evaluation, technology assessment, technical
               architecting, and AI deployment tailored to your goals and challenges.
             </p>
@@ -373,7 +374,7 @@ export default function GenerativeAI() {
               </h2>
               <p className="mt-4 max-w-[42rem] text-[clamp(13px,1.2vw,16px)] leading-7 text-[#848b9b] 2xl:text-[18px] 2xl:leading-8">
                 A reusable agentic framework that connects LLMs, tools, knowledge
-                bases, and human-in-the-loop controls — so you can adapt agents to
+                bases, and human-in-the-loop controls, so you can adapt agents to
                 new domains faster without rebuilding from scratch.
               </p>
             </div>
@@ -477,6 +478,57 @@ export default function GenerativeAI() {
               </article>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Featured Case Study */}
+      <section className="w-full bg-[#f8fbfd]" aria-label="Featured case study">
+        <div className="mx-auto w-full max-w-[1692px] px-5 py-[clamp(40px,5vw,72px)] sm:px-8 lg:px-10 xl:px-12">
+          <header className="mb-[clamp(24px,3vw,40px)] max-w-[48rem]">
+            <p className="mb-2 text-sm font-semibold uppercase tracking-[0.16em] text-[#2365aa] 2xl:text-base">
+              Case Study
+            </p>
+            <h2 className="m-0 text-[clamp(26px,3.5vw,48px)] font-bold leading-[1.15] text-[#1F2432]">
+              GenAI-Enabled SDLC Enablement
+            </h2>
+          </header>
+
+          <article className="overflow-hidden rounded-[24px] border border-[#e8eef3] bg-white shadow-[0_20px_50px_-28px_rgba(17,61,119,0.35)] lg:rounded-[28px]">
+            <div className="grid grid-cols-1 items-center lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
+              <Link
+                to="/case-studies/genai-enabled-sdlc"
+                className="group relative flex items-center justify-center overflow-hidden bg-[#EFF7FC] p-3 sm:p-4 lg:p-5"
+                aria-label="Read GenAI-Enabled SDLC case study"
+              >
+                <img
+                  src={genAiSdlcCaseImage}
+                  alt="Expected effort savings across GenAI-enabled SDLC roles"
+                  className="block h-auto w-full rounded-[12px] object-contain object-center shadow-[0_12px_32px_-16px_rgba(17,61,119,0.4)] transition-transform duration-500 group-hover:scale-[1.02]"
+                />
+              </Link>
+
+              <div className="flex flex-col justify-center p-6 sm:p-8 lg:p-10 xl:p-12">
+                <h3 className="m-0 text-[clamp(20px,2.2vw,28px)] font-bold leading-tight text-[#1F2432]">
+                  Concise Client Enablement Plan
+                </h3>
+                <p className="mt-4 text-[clamp(13px,1.2vw,16px)] leading-7 text-[#5a5a5a] 2xl:text-[17px]">
+                  A phase-wise GenAI adoption plan across the SDLC with tool guidance,
+                  a 12-week rollout, ROI modelling, governance, and role-based training.
+                  Standardises Cursor and Claude Code by phase to cut repetitive work
+                  while improving delivery speed and engineering quality.
+                </p>
+                <Link
+                  to="/case-studies/genai-enabled-sdlc"
+                  className="mt-6 inline-flex w-fit items-center gap-1.5 rounded-full bg-[#2365aa] py-2.5 pl-[22px] pr-2.5 text-sm font-normal uppercase tracking-[0.02em] text-white no-underline transition-colors hover:bg-[#1a5490] sm:text-base"
+                >
+                  Read the case study
+                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white text-[#2365aa]">
+                    <ArrowUpRight size={16} strokeWidth={2.5} />
+                  </span>
+                </Link>
+              </div>
+            </div>
+          </article>
         </div>
       </section>
 

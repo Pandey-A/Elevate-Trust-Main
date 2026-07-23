@@ -27,7 +27,7 @@ export default function UiUxDesign() {
       introTitle="UI/UX Design Content"
       introBody="Improve your online presence with professional UI/UX services. We create designs that are easy to use and create experiences that delight and draw users in. We design everything from the wireframe to the final design; everything we create has a purpose for the user. Let your product shine through in a user-centered, responsive, sleek design that is customized for your brand."
       sectionTitle="What We Design"
-      sectionSubtitle="End-to-end experience design for web, mobile, and product teams — from discovery to high-fidelity delivery."
+      sectionSubtitle="End-to-end experience design for web, mobile, and product teams, from discovery to high-fidelity delivery."
       offerings={[
         {
           title: "Product discovery & research",
@@ -50,7 +50,7 @@ export default function UiUxDesign() {
         {
           title: "Interactive prototypes",
           description:
-            "Clickable prototypes that validate flows before build — ideal for stakeholder demos and usability tests.",
+            "Clickable prototypes that validate flows before build, ideal for stakeholder demos and usability tests.",
           icon: genCustomer,
         },
         {

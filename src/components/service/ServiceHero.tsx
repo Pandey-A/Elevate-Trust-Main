@@ -4,7 +4,7 @@ import worldMapBackground from "../../assets/homepage-icons/Group(3).png";
 export default function ServiceHero() {
   return (
     <section className="relative h-[20rem] w-full overflow-hidden bg-[#113D77] sm:h-[22rem] md:h-[23rem] lg:h-[25rem] xl:h-[28rem]">
-      {/* Map — img pinned to bottom via flex items-end */}
+      {/* Map, img pinned to bottom via flex items-end */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-x-0 z-[1] flex items-end justify-center  overflow-hidden"

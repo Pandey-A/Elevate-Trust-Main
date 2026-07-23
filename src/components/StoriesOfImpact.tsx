@@ -26,7 +26,7 @@ const stories = [
     logoClassName: "h-[28px] w-auto max-w-[140px] sm:h-[32px] sm:max-w-[160px]",
     profile: storyProfile2,
     quote:
-      "We have been incredibly impressed with the capabilities of this product. The adaptive learning algorithms and advanced automation significantly improved our operational efficiency and customer engagement.",
+      "Working with Elevate trust to develop our marketing compliance platform was an excellent experience. The team quickly understood our product vision and translated complex requirements into a strong, practical technical solution. We appreciated their expertise, thoughtful approach, and commitment throughout the development process. They played an important role in bringing our vision to life, and we are grateful for their support and contribution.",
     name: "Amet Consec",
     title: "CEO at INFOTRACK",
   },
@@ -44,7 +44,7 @@ const stories = [
     logoClassName: "h-[28px] w-auto max-w-[140px] sm:h-[32px] sm:max-w-[160px]",
     profile: storyProfile1,
     quote:
-      "The collaboration with Elevate Trust brought clarity to our AI roadmap. From proof of concept to production, every milestone was delivered with precision and deep technical expertise.",
+      "Working with Elevate trust to develop our marketing compliance platform was an excellent experience. The team quickly understood our product vision and translated complex requirements into a strong, practical technical solution. We appreciated their expertise, thoughtful approach, and commitment throughout the development process. They played an important role in bringing our vision to life, and we are grateful for their support and contribution.",
     name: "Amet Consec",
     title: "CTO at ComplyCore",
   },

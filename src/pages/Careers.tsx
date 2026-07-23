@@ -4,7 +4,6 @@ import {
   ArrowUpRight,
   ChevronDown,
   Clock,
-  CircleDollarSign,
   Armchair,
   Mail,
   MapPin,
@@ -17,19 +16,17 @@ import youtubeLogo from "../assets/footer/YoutubeLogo.svg";
 import facebookLogo from "../assets/footer/FacebookLogo.svg";
 import linkedinLogo from "../assets/footer/LinkedinLogo.svg";
 import instagramLogo from "../assets/footer/InstagramLogo.svg";
-import tiktokLogo from "../assets/footer/TiktokLogo.svg";
 import xLogo from "../assets/footer/xlogo.svg";
 import { useAdminJobs } from "../hooks/useAdminData";
 import { groupJobsByCategory } from "../lib/adminStorage";
 import "./Careers.css";
 
 const socialLinks = [
-  { src: youtubeLogo, alt: "YouTube", href: "#" },
-  { src: facebookLogo, alt: "Facebook", href: "#" },
-  { src: linkedinLogo, alt: "LinkedIn", href: "#" },
-  { src: instagramLogo, alt: "Instagram", href: "#" },
-  { src: tiktokLogo, alt: "TikTok", href: "#" },
-  { src: xLogo, alt: "X", href: "#" },
+  { src: youtubeLogo, alt: "YouTube", href: "https://www.youtube.com/@ElevateTrust.Ai0" },
+  { src: facebookLogo, alt: "Facebook", href: "https://www.facebook.com/people/Elevate-Trust-AI/61589302541342/" },
+  { src: linkedinLogo, alt: "LinkedIn", href: "https://www.linkedin.com/company/elevatetrustai" },
+  { src: instagramLogo, alt: "Instagram", href: "https://www.instagram.com/elevatetrustai/" },
+  { src: xLogo, alt: "X", href: "https://x.com/ElevateTrustai" },
 ];
 
 export default function Careers() {
@@ -140,7 +137,7 @@ export default function Careers() {
 
             <div className="careers-enquiry__socials">
               {socialLinks.map((item) => (
-                <a key={item.alt} href={item.href} aria-label={item.alt}>
+                <a key={item.alt} href={item.href} target="_blank" rel="noopener noreferrer" aria-label={item.alt}>
                   <img src={item.src} alt="" />
                 </a>
               ))}
@@ -199,7 +196,7 @@ export default function Careers() {
                   <input
                     ref={fileInputRef}
                     type="file"
-                    accept=".pdf,.doc,.docx"
+                    accept=".pdf.doc.docx"
                     className="careers-form__file-input"
                     onChange={handleFileChange}
                   />
@@ -228,7 +225,7 @@ export default function Careers() {
         <div className="careers-jobs__header">
           <h2 className="careers-jobs__title">Start doing work that matters</h2>
           <p className="careers-jobs__subtitle">
-            Explore open roles across design, engineering, and AI — join a team
+            Explore open roles across design, engineering, and AI, join a team
             building production-ready solutions for real business outcomes.
           </p>
 
@@ -273,17 +270,20 @@ export default function Careers() {
                             {job.type}
                           </span>
                           <span>
-                            <CircleDollarSign
-                              size={22}
-                              strokeWidth={1.75}
-                              aria-hidden
-                            />
-                            {job.salary}
-                          </span>
-                          <span>
                             <Armchair size={22} strokeWidth={1.75} aria-hidden />
                             {job.location}
                           </span>
+                        </div>
+                        <div className="mt-5">
+                          <Link
+                            to={`/careers/apply/${job.id}`}
+                            className="inline-flex items-center gap-1.5 py-2.5 pl-5 pr-2.5 bg-[#2365aa] rounded-full text-white font-normal text-sm leading-[1.2] uppercase no-underline hover:bg-[#1a5490] transition-colors"
+                          >
+                            Apply Now
+                            <span className="inline-flex items-center justify-center w-[32px] h-[32px] rounded-full bg-white text-[#2365aa]">
+                              <ArrowUpRight size={15} strokeWidth={2.5} />
+                            </span>
+                          </Link>
                         </div>
                       </article>
                     ))}

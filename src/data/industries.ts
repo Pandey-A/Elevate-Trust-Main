@@ -1,4 +1,4 @@
-/** Site industries — keep in sync with navbar Industries mega-menu. */
+/** Site industries, keep in sync with navbar Industries mega-menu. */
 export const SITE_INDUSTRIES = [
   "Healthcare and Life Sciences",
   "Financial Services & FinTech",

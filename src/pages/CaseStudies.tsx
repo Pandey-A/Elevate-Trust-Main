@@ -14,6 +14,7 @@ import csSupportShipment from "../assets/case-studies/cs-support-shipment.png";
 import csPredictive3 from "../assets/case-studies/cs-predictive-3.png";
 import csVendorFraud from "../assets/case-studies/cs-vendor-fraud.png";
 import csSolar from "../assets/case-studies/cs-solar.png";
+import c7EffortSavings from "../assets/case-studies/c7-1.png";
 import "./CaseStudies.css";
 
 type CaseStudy = {
@@ -40,6 +41,7 @@ const caseStudies: CaseStudy[] = [
     description:
       "The engagement followed a four-phase execution strategy, starting with foundational AI/NLP matching and progressing to an intelligent scoring engine with real-time recalculation. The tech stack leveraged Generative AI and agentic orchestration to enable internal talent rediscovery and human-readable AI explanations within the existing ATS and applied to candidates. This solution enables hiring managers to change the criteria in real time and get the updated matching candidate.",
     image: csTalent,
+    href: "/case-studies/talent-matching",
     titleClassName: "cs-card__title--lg",
   },
   {
@@ -48,12 +50,16 @@ const caseStudies: CaseStudy[] = [
     description:
       "Leverages a specialized AI and IoT framework for real-time anomaly detection, using high-precision sensor integrations to capture early signs of leakages and machine malfunctions.",
     image: csPredictive1,
+    href: "/case-studies/predictive-maintenance",
+    titleClassName: "cs-card__title--lg",
   },
   {
     title: "Customer Support Automation using Agentic AI BPO Industry",
     description:
       "An agentic-based generative AI solution was built to reduce manual content searching and integrate past successful solutions for agent recommendations. The system offers deep customization for organization-specific workflows and utilizes a Kubernetes-based deployment to ensure the solution scales effectively with demand",
     image: csSupportBpo,
+    href: "/case-studies/support-automation-bpo",
+    titleClassName: "cs-card__title--lg",
   },
   {
     title:
@@ -61,21 +67,27 @@ const caseStudies: CaseStudy[] = [
     description:
       "Leverages a specialized AI and IoT framework for real-time anomaly detection, using high-precision sensor integrations to capture early signs of leakages and machine malfunctions.",
     image: csPredictive2,
+    href: "/case-studies/predictive-maintenance",
+    titleClassName: "cs-card__title--lg",
   },
   {
     title:
       "Customer Support Automation using Agentic AI in the Shipment Industry",
     description:
-      "An agentic-based generative AI solution was built to reduce manual content searching and integrate past successful solutions for agent recommendations. The system offers deep customization for organization-specific workflows and utilizes a Kubernetes-based deployment to ensure the solution scales effectively with demand",
+      "An agentic AI framework that orchestrates shipment tracking across carrier platforms, surfaces transit risks early, and keeps stakeholders informed through automated notifications and exception-focused dashboards.",
     image: csSupportShipment,
+    href: "/case-studies/support-automation-shipment",
+    titleClassName: "cs-card__title--lg",
   },
   {
     title:
-      "Predictive maintenance using IoT devices and sensors for the oil industry",
+      "Illicit behaviour detection using Video analytics in the transport industry",
     description:
       "The solution involves a real-time illicit behaviour detection system powered by CNN models and integrated via the Samsara API to analyse video feeds for meter-bypass events. It features a comprehensive dashboard where management can track high-flagging incidents by driver, trip location, and frequency. This human-in-the-loop framework allows for streamlined auditing, while an AI matching engine continuously refines its detection accuracy based on feedback from verified cases",
     image: csPredictive3,
+    href: "/case-studies/illicit-behaviour-detection",
     imageClassName: "cs-card__media--cover",
+    titleClassName: "cs-card__title--lg",
   },
   {
     title:
@@ -83,7 +95,9 @@ const caseStudies: CaseStudy[] = [
     description:
       "ElevateTrust developed an AI video analytics system using CCTV cameras at delivery points to automatically measure material volume in real time. CNN-based models combined with 3D point cloud depth analysis estimate the actual quantity in each truck load. The system compares AI-measured quantities against vendor-declared amounts, flags discrepancies instantly, captures timestamped video",
     image: csVendorFraud,
+    href: "/case-studies/vendor-fraud-detection",
     imageClassName: "cs-card__media--cover",
+    titleClassName: "cs-card__title--lg",
   },
   {
     title:
@@ -91,7 +105,18 @@ const caseStudies: CaseStudy[] = [
     description:
       "ElevateTrust built a deep learning semantic segmentation pipeline using a CNN-based U-Net architecture trained on labelled satellite imagery. The model produces binarised roof masks, applies post-processing morphological operations to remove noise and small artefacts, and then overlays detected rooftops onto the source image. The inference engine integrates with Google Maps imagery APIs and outputs GIS-compatible data for downstream solar feasibility scoring, fully automated end-to-end.",
     image: csSolar,
+    href: "/case-studies/solar-rooftop-detection",
     imageClassName: "cs-card__media--cover",
+    titleClassName: "cs-card__title--lg",
+  },
+  {
+    title: "GenAI-Enabled SDLC: Concise Client Enablement Plan",
+    description:
+      "Phase-wise AI adoption across the software lifecycle with tool guidance, a 12-week rollout, ROI modelling, governance, and role-based training. The plan standardises Cursor and Claude Code by phase to reduce repetitive SDLC work while improving delivery speed and engineering quality.",
+    image: c7EffortSavings,
+    href: "/case-studies/genai-enabled-sdlc",
+    imageClassName: "cs-card__media--cover",
+    titleClassName: "cs-card__title--lg",
   },
 ];
 
@@ -116,8 +141,8 @@ export default function CaseStudies() {
           </h1>
           <p className="cs-hero__subtitle">
             Explore how ElevateTrust.AI partners with enterprises to solve complex
-            problems — from agentic automation and predictive maintenance to video
-            analytics and document intelligence — with measurable business outcomes.
+            problems, from agentic automation and predictive maintenance to video
+            analytics and document intelligence, with measurable business outcomes.
           </p>
           <Link to="/contact" className="cs-hero__btn">
             <span>Contact Us</span>
@@ -159,7 +184,7 @@ export default function CaseStudies() {
             <h2 className="cs-section__title">Our Success Stories</h2>
             <p className="cs-section__subtitle">
               Real client engagements across government, healthcare, logistics,
-              energy, HR tech, and more — showcasing how our AI solutions deliver
+              energy, HR tech, and more, showcasing how our AI solutions deliver
               efficiency, accuracy, and scale in production.
             </p>
           </div>

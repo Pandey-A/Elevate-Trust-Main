@@ -218,7 +218,7 @@ export default function OnPremise() {
           </h1>
           <p className="mt-[clamp(16px,2vw,24px)] max-w-[783px] font-['Ubuntu',sans-serif] text-[#a1b1cb] font-normal leading-6 text-[clamp(14px,1.4vw,18px)] lg:text-[clamp(13px,1.1vw,15px)] 2xl:text-[clamp(14px,1.4vw,18px)]">
             On-premise infrastructure is reinventing itself for hybrid and sovereign
-            realities — from private cloud and Kubernetes on bare metal to edge
+            realities, from private cloud and Kubernetes on bare metal to edge
             colo, zero-trust fabrics, and autonomous datacenter operations. What
             started as traditional hardware estates is evolving into a modern,
             software-defined foundation.

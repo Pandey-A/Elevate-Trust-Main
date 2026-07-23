@@ -19,10 +19,23 @@ import Devops from './pages/Devops';
 import OnPremise from './pages/OnPremise';
 import DigitalWorkspace from './pages/DigitalWorkspace';
 import Industries from './pages/Industries';
+import HealthcareLifeSciences from './pages/HealthcareLifeSciences';
+import IndustryDetail from './pages/IndustryDetail';
 import CaseStudies from './pages/CaseStudies';
 import CaseStudyDetail from './pages/CaseStudyDetail';
+import GenAiSdlcCaseStudy from './pages/GenAiSdlcCaseStudy';
+import TalentMatchingCaseStudy from './pages/TalentMatchingCaseStudy';
+import IllicitBehaviourCaseStudy from './pages/IllicitBehaviourCaseStudy';
+import SupportShipmentCaseStudy from './pages/SupportShipmentCaseStudy';
+import SupportBpoCaseStudy from './pages/SupportBpoCaseStudy';
+import PredictiveMaintenanceCaseStudy from './pages/PredictiveMaintenanceCaseStudy';
+import VendorFraudCaseStudy from './pages/VendorFraudCaseStudy';
+import SolarRooftopCaseStudy from './pages/SolarRooftopCaseStudy';
 import Careers from './pages/Careers';
+import JobApplication from './pages/JobApplication';
 import Demo from './pages/Demo';
+import Blog from './pages/Blog';
+import BlogPost from './pages/BlogPost';
 import UiUxDesign from './pages/UiUxDesign';
 import WebDesignDevelopment from './pages/WebDesignDevelopment';
 import MobileAppDevelopment from './pages/MobileAppDevelopment';
@@ -68,11 +81,23 @@ function AppShell() {
         <Route path="/technologies/on-premise" element={<OnPremise />} />
         <Route path="/technologies/digital-workspace" element={<DigitalWorkspace />} />
         <Route path="/industries" element={<Industries />} />
-        <Route path="/industries/:slug" element={<Industries />} />
+        <Route path="/industries/healthcare-and-life-sciences" element={<HealthcareLifeSciences />} />
+        <Route path="/industries/:slug" element={<IndustryDetail />} />
         <Route path="/case-studies" element={<CaseStudies />} />
         <Route path="/case-studies/rfp-query-compliance" element={<CaseStudyDetail />} />
+        <Route path="/case-studies/talent-matching" element={<TalentMatchingCaseStudy />} />
+        <Route path="/case-studies/illicit-behaviour-detection" element={<IllicitBehaviourCaseStudy />} />
+        <Route path="/case-studies/support-automation-shipment" element={<SupportShipmentCaseStudy />} />
+        <Route path="/case-studies/support-automation-bpo" element={<SupportBpoCaseStudy />} />
+        <Route path="/case-studies/predictive-maintenance" element={<PredictiveMaintenanceCaseStudy />} />
+        <Route path="/case-studies/vendor-fraud-detection" element={<VendorFraudCaseStudy />} />
+        <Route path="/case-studies/solar-rooftop-detection" element={<SolarRooftopCaseStudy />} />
+        <Route path="/case-studies/genai-enabled-sdlc" element={<GenAiSdlcCaseStudy />} />
         <Route path="/resources/demo" element={<Demo />} />
+        <Route path="/resources/blogs" element={<Blog />} />
+        <Route path="/resources/blogs/:slug" element={<BlogPost />} />
         <Route path="/careers" element={<Careers />} />
+        <Route path="/careers/apply/:jobId" element={<JobApplication />} />
         <Route path="/admin" element={<AdminAuth />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
       </Routes>

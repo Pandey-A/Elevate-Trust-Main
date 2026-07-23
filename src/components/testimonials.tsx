@@ -1,28 +1,11 @@
 import elevateBadgeIcon from "../assets/testimonial/Group 84.svg";
-import blogImage1 from "../assets/testimonial/Rectangle 90.svg";
-import blogImage2 from "../assets/testimonial/Rectangle 90 (1).svg";
-import blogImage3 from "../assets/testimonial/Rectangle 90 (2).svg";
 import smartArrow from "../assets/homepage-icons/smart-arrow.png";
 import { activePartners } from "../data/activePartners";
+import { BLOG_POSTS } from "../data/blogs";
 import WhoWeAre from "./WhoWeAre";
+import { Link } from "react-router-dom";
 
-const blogPosts = [
-  {
-    date: "2026-02-09",
-    image: blogImage1,
-    title: "Building a Foundation Model for Personalized Recommendations",
-  },
-  {
-    date: "2026-03-10",
-    image: blogImage2,
-    title: "Transforming Real Estate Search with Knowledge Graphs: A Technical Deep Dive",
-  },
-  {
-    date: "2025-10-13",
-    image: blogImage3,
-    title: "Structuring an Al Knowledge Assistant- And Why It Matters",
-  },
-];
+const blogPosts = BLOG_POSTS.slice(0, 3);
 
 export default function Testimonials() {
   return (
@@ -38,18 +21,18 @@ export default function Testimonials() {
 
             <h2 className="text-3xl font-bold text-[#272935] sm:text-4xl lg:text-[44px] xl:text-[50px] 2xl:text-[56px] min-[1920px]:text-[62px]">Explore Blogs</h2>
 
-            <a
-              href="#"
+            <Link
+              to="/resources/blogs"
               className="btn-cta mt-5 bg-[#2365AA] text-white hover:bg-[#1a5490]"
             >
               View All
               <img src={smartArrow} alt="" aria-hidden className="h-7 w-7 object-contain" />
-            </a>
+            </Link>
           </div>
 
           <div className="mt-12 grid grid-cols-1 divide-y divide-[#E5E7EB] lg:mt-14 lg:grid-cols-3 lg:divide-x lg:divide-y-0">
             {blogPosts.map((post) => (
-              <article key={post.title} className="px-0 py-8 first:pt-0 last:pb-0 lg:px-8 lg:py-0">
+              <article key={post.slug} className="px-0 py-8 first:pt-0 last:pb-0 lg:px-8 lg:py-0">
                 <div className="mb-4 flex items-center justify-between gap-3">
                   <div className="flex items-center gap-2.5">
                     <img src={elevateBadgeIcon} alt="" aria-hidden className="h-9 w-9 shrink-0" />
@@ -58,16 +41,21 @@ export default function Testimonials() {
                   <time className="section-body-sm shrink-0 text-[#272935]/60">{post.date}</time>
                 </div>
 
-                <div className="overflow-hidden rounded-3xl">
+                <Link to={`/resources/blogs/${post.slug}`} className="block overflow-hidden rounded-3xl">
                   <img
-                    src={post.image}
+                    src={post.cover}
                     alt={post.title}
                     className="aspect-[4/3] w-full object-cover"
                   />
-                </div>
+                </Link>
 
                 <h3 className="section-body-xl mt-5 font-bold leading-snug text-[#272935] sm:text-lg lg:text-xl">
-                  {post.title}
+                  <Link
+                    to={`/resources/blogs/${post.slug}`}
+                    className="text-inherit no-underline transition-colors hover:text-[#2365AA]"
+                  >
+                    {post.title}
+                  </Link>
                 </h3>
               </article>
             ))}

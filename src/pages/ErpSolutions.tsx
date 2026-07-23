@@ -25,7 +25,7 @@ export default function ErpSolutions() {
       heroSubtitle="Customized, scalable, and integrated ERP systems that improve productivity, data management, and decision-making across your organization."
       heroImage={erp}
       introTitle="ERP Solutions"
-      introBody="Improve your operational efficiency with our all-in-one ERP solutions. We provide customized, scalable and integrated systems designed to increase productivity, enhance data management and enable better decision-making. Our ERP services help you complete all business functions — education, finance, human resources, inventory and sales — using one consolidated and integrated platform."
+      introBody="Improve your operational efficiency with our all-in-one ERP solutions. We provide customized, scalable and integrated systems designed to increase productivity, enhance data management and enable better decision-making. Our ERP services help you complete all business functions, education, finance, human resources, inventory and sales, using one consolidated and integrated platform."
       sectionTitle="ERP Modules & Services"
       sectionSubtitle="Connected systems for the functions that keep your business running every day."
       offerings={[

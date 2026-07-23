@@ -63,7 +63,7 @@ const otherServices: FooterLinkItem[] = [
 
 const aboutCompany: FooterLinkItem[] = [
   { label: "Overview", href: "/about" },
-  { label: "Blog" },
+  { label: "Blog", href: "/resources/blogs" },
   { label: "Career", href: "/careers" },
   { label: "Contact Us", href: "/contact" },
 ];

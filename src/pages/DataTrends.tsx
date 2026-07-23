@@ -217,7 +217,7 @@ export default function DataTrends() {
             Data
           </h1>
           <p className="mt-[clamp(16px,2vw,24px)] max-w-[783px] font-['Ubuntu',sans-serif] text-[#a1b1cb] font-normal leading-6 text-[clamp(14px,1.4vw,18px)] lg:text-[clamp(13px,1.1vw,15px)] 2xl:text-[clamp(14px,1.4vw,18px)]">
-            Data is becoming the operating system of the modern enterprise — from
+            Data is becoming the operating system of the modern enterprise, from
             lakehouse platforms and real-time pipelines to governed data products
             and AI-ready feature layers. What started as reporting infrastructure
             has evolved into a strategic fabric for intelligent decisions.

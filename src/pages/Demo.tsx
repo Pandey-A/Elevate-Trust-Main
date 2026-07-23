@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { ArrowUpRight, ChevronLeft, ChevronRight, Play, X } from "lucide-react";
 import FlyCTA from "../components/FlyCTA";
 import worldMapBackground from "../assets/homepage-icons/Group(3).png";
@@ -13,6 +13,75 @@ type IndustryFilter = "All" | IndustryTag;
 
 const industryFilters: IndustryFilter[] = ["All", ...INDUSTRY_TAGS];
 
+/** Only map demos that clearly match an existing case study page. */
+const DEMO_CASE_STUDY_HREF: Record<string, string> = {
+  "demo-sdlc": "/case-studies/genai-enabled-sdlc",
+};
+
+const DEMO_BLURBS: Record<string, string> = {
+  "demo-company-overview":
+    "A quick walkthrough of ElevateTrust.AI capabilities across agents, analytics, and responsible AI delivery. See how we partner with teams to move from idea to production.",
+  "demo-competitor-analysis":
+    "Watch an agent gather competitor signals, summarize market context, and surface actionable insights. Built for retail and fintech teams that need faster competitive intelligence.",
+  "demo-pii":
+    "Detect and anonymize personally identifiable information in documents and datasets. Designed for healthcare, finance, and public-sector privacy workflows.",
+  "demo-redaction":
+    "Automatically redact sensitive fields before content is shared or archived. Helps compliance teams reduce manual review while protecting confidential data.",
+  "demo-weapon":
+    "Real-time weapon detection from camera feeds with clear alerts for security teams. Useful for public venues and high-risk environments.",
+  "demo-fencing":
+    "Virtual fencing that flags unauthorized entry into restricted zones. Supports manufacturing floors, logistics yards, and secured public sites.",
+  "demo-deepfake":
+    "Identify manipulated media with multimodal deepfake detection. Helps platforms and institutions respond faster to synthetic fraud and misuse.",
+  "demo-face":
+    "Match faces across camera streams for verification and access workflows. Suited to campus, education, and controlled-facility use cases.",
+  "demo-llmops":
+    "See how we operate LLM pipelines with monitoring, evaluation, and controlled rollout. Built for teams deploying generative AI in production.",
+  "demo-fire":
+    "Detect fire and smoke early from existing camera infrastructure. Enables faster response across industrial and logistics sites.",
+  "demo-crowd":
+    "Monitor crowd density and movement patterns in real time. Supports safety planning for public spaces, events, and campuses.",
+  "demo-fall":
+    "Detect falls and unusual posture events from video streams. Helps healthcare and public facilities respond quickly to incidents.",
+  "demo-attendance":
+    "Turn standard cameras into an automated attendance system. Reduces manual roll-call effort for education and workplace settings.",
+  "demo-automation":
+    "An agent that drafts and routes email and social responses with human review. Speeds content operations for marketing and support teams.",
+  "demo-crop":
+    "Predict crop price movements using historical and market signals. Supports planning for agribusiness and supply-chain teams.",
+  "demo-sdlc":
+    "Explore GenAI across the software lifecycle with role-based tools, governance, and measurable delivery gains. Pair this demo with our SDLC enablement case study.",
+  "demo-depth":
+    "Estimate depth and spatial structure from visual inputs for inspection and measurement workflows. Useful in industrial and logistics environments.",
+  "demo-medical":
+    "Assist medical coding with AI that suggests codes from clinical documentation. Built for healthcare revenue-cycle and compliance teams.",
+  "demo-unauthorized":
+    "Flag unauthorized access events from camera and access-control signals. Strengthens security operations in finance and public facilities.",
+  "demo-healthcare-analytics":
+    "Surface operational and clinical analytics insights for healthcare teams. Helps leaders prioritize interventions with clearer, faster reporting.",
+};
+
+function getDemoBlurb(demo: AdminDemo) {
+  return (
+    DEMO_BLURBS[demo.id] ??
+    `Live walkthrough of ${demo.title}. Explore how ElevateTrust.AI applies this capability in real business workflows.`
+  );
+}
+
+function getCaseStudyHref(demo: AdminDemo) {
+  return DEMO_CASE_STUDY_HREF[demo.id] ?? null;
+}
+
+function resolveIndustryFromQuery(value: string | null): IndustryFilter {
+  if (!value) return "All";
+  const decoded = decodeURIComponent(value).trim();
+  if (decoded.toLowerCase() === "all") return "All";
+  const match = INDUSTRY_TAGS.find(
+    (tag) => tag.toLowerCase() === decoded.toLowerCase(),
+  );
+  return match ?? "All";
+}
+
 const industryCopy: Record<
   IndustryFilter,
   { title: string; description: string }
@@ -20,7 +89,7 @@ const industryCopy: Record<
   All: {
     title: "Explore demos across every industry we serve",
     description:
-      "Browse live walkthroughs of ElevateTrust.AI agents, video analytics, and responsible AI workflows — then filter by industry to find what matters most.",
+      "Browse live walkthroughs of ElevateTrust.AI agents, video analytics, and responsible AI workflows, then filter by industry to find what matters most.",
   },
   "Healthcare and Life Sciences": {
     title: "AI demos for Healthcare and Life Sciences",
@@ -70,8 +139,11 @@ function youtubeEmbed(videoId: string) {
 
 export default function Demo() {
   const demos = useAdminDemos();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [activeDemo, setActiveDemo] = useState<AdminDemo | null>(null);
-  const [activeIndustry, setActiveIndustry] = useState<IndustryFilter>("All");
+  const [activeIndustry, setActiveIndustry] = useState<IndustryFilter>(() =>
+    resolveIndustryFromQuery(searchParams.get("industry")),
+  );
   const filterRailRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
@@ -82,6 +154,19 @@ export default function Demo() {
       normalizeIndustryTags(demo.industries).includes(activeIndustry),
     );
   }, [activeIndustry, demos]);
+
+  useEffect(() => {
+    setActiveIndustry(resolveIndustryFromQuery(searchParams.get("industry")));
+  }, [searchParams]);
+
+  const selectIndustry = (industry: IndustryFilter) => {
+    setActiveIndustry(industry);
+    if (industry === "All") {
+      setSearchParams({}, { replace: true });
+    } else {
+      setSearchParams({ industry }, { replace: true });
+    }
+  };
 
   const updateFilterScrollState = () => {
     const rail = filterRailRef.current;
@@ -168,7 +253,7 @@ export default function Demo() {
             Demo
           </h1>
           <p className="mt-[clamp(16px,2vw,24px)] max-w-[783px] font-['Ubuntu',sans-serif] text-[clamp(14px,1.4vw,18px)] font-normal leading-6 text-[#a1b1cb] lg:text-[clamp(13px,1.1vw,15px)] 2xl:text-[clamp(14px,1.4vw,18px)]">
-            Advancing Your Business with Smart Tech — explore live walkthroughs
+            Advancing Your Business with Smart Tech, explore live walkthroughs
             of our AI agents, video analytics, and responsible AI capabilities.
           </p>
           <Link
@@ -277,7 +362,7 @@ export default function Demo() {
                       type="button"
                       role="tab"
                       aria-selected={isActive}
-                      onClick={() => setActiveIndustry(industry)}
+                      onClick={() => selectIndustry(industry)}
                       className={`relative shrink-0 cursor-pointer border-0 bg-transparent px-2.5 py-3 text-[10px] font-semibold tracking-wide transition-colors duration-300 sm:px-2 sm:text-[11px] md:px-2.5 md:text-xs lg:px-3 lg:text-[13px] xl:text-sm ${
                         isActive
                           ? "text-[#113d77]"
@@ -321,47 +406,68 @@ export default function Demo() {
 
           {filteredDemos.length > 0 ? (
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 lg:gap-7 xl:gap-8">
-              {filteredDemos.map((demo) => (
-                <button
-                  key={demo.id}
-                  type="button"
-                  onClick={() => setActiveDemo(demo)}
-                  className="group flex cursor-pointer flex-col overflow-hidden rounded-[20px] border border-[#d7e6f3] bg-white p-0 text-left shadow-[0_14px_40px_-28px_rgba(17,61,119,0.35)] transition-all duration-300 hover:-translate-y-1 hover:border-[#2365aa] hover:shadow-[0_18px_44px_-24px_rgba(17,61,119,0.5)]"
-                  aria-label={`Play demo: ${demo.title}`}
-                >
-                  <div className="relative overflow-hidden">
-                    <img
-                      src={youtubeThumb(demo.videoId)}
-                      alt=""
-                      className="aspect-[16/10] h-auto w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                    <span className="absolute inset-0 flex items-center justify-center bg-[#113d77]/0 transition-colors duration-300 group-hover:bg-[#113d77]/25">
-                      <span className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-white/95 text-[#113d77] shadow-[0_10px_30px_-12px_rgba(17,61,119,0.7)] transition-transform duration-300 group-hover:scale-110">
-                        <Play size={22} fill="currentColor" className="ml-0.5" />
-                      </span>
-                    </span>
-                  </div>
-                  <div className="flex flex-1 flex-col px-5 py-5 sm:px-6 sm:py-6">
-                    <h3 className="m-0 text-[clamp(16px,1.3vw,20px)] font-bold leading-snug text-[#1F2432] transition-colors group-hover:text-[#2365aa] 2xl:text-[22px]">
-                      {demo.title}
-                    </h3>
-                    {normalizeIndustryTags(demo.industries).length > 0 ? (
-                      <div className="mt-3 flex flex-wrap gap-1.5">
-                        {normalizeIndustryTags(demo.industries)
-                          .slice(0, 3)
-                          .map((industry) => (
-                          <span
-                            key={industry}
-                            className="rounded-full bg-[#EFF7FC] px-2.5 py-1 text-[11px] font-semibold text-[#2365aa]"
+              {filteredDemos.map((demo) => {
+                const caseStudyHref = getCaseStudyHref(demo);
+                const industries = normalizeIndustryTags(demo.industries);
+
+                return (
+                  <article
+                    key={demo.id}
+                    className="flex flex-col overflow-hidden rounded-[20px] border border-[#d7e6f3] bg-white shadow-[0_14px_40px_-28px_rgba(17,61,119,0.35)] transition-shadow duration-300 hover:shadow-[0_18px_44px_-24px_rgba(17,61,119,0.5)]"
+                  >
+                    <div className="relative overflow-hidden bg-[#e8eef3]">
+                      <img
+                        src={youtubeThumb(demo.videoId)}
+                        alt=""
+                        className="aspect-[16/10] h-auto w-full object-cover"
+                      />
+                    </div>
+
+                    <div className="flex flex-1 flex-col px-5 py-5 sm:px-6 sm:py-6">
+                      <h3 className="m-0 text-[clamp(16px,1.3vw,20px)] font-bold leading-snug text-[#1F2432] 2xl:text-[22px]">
+                        {demo.title}
+                      </h3>
+                      <p className="mt-3 line-clamp-2 text-[clamp(13px,1.1vw,15px)] leading-6 text-[#687181]">
+                        {getDemoBlurb(demo)}
+                      </p>
+
+                      {industries.length > 0 ? (
+                        <div className="mt-3 flex flex-wrap gap-1.5">
+                          {industries.slice(0, 3).map((industry) => (
+                            <span
+                              key={industry}
+                              className="rounded-full bg-[#EFF7FC] px-2.5 py-1 text-[11px] font-semibold text-[#2365aa]"
+                            >
+                              {industry}
+                            </span>
+                          ))}
+                        </div>
+                      ) : null}
+
+                      <div className="mt-auto flex flex-col gap-2.5 pt-5 sm:flex-row sm:flex-wrap">
+                        <button
+                          type="button"
+                          onClick={() => setActiveDemo(demo)}
+                          className="inline-flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-full border-0 bg-[#2365aa] px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#1a5490]"
+                        >
+                          <Play size={15} fill="currentColor" />
+                          See demo
+                        </button>
+
+                        {caseStudyHref ? (
+                          <Link
+                            to={caseStudyHref}
+                            className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-full border border-[#2365aa] bg-white px-4 py-2.5 text-sm font-medium text-[#2365aa] no-underline transition-colors hover:bg-[#EFF7FC]"
                           >
-                            {industry}
-                          </span>
-                        ))}
+                            View case study
+                            <ArrowUpRight size={15} strokeWidth={2.4} />
+                          </Link>
+                        ) : null}
                       </div>
-                    ) : null}
-                  </div>
-                </button>
-              ))}
+                    </div>
+                  </article>
+                );
+              })}
             </div>
           ) : (
             <div className="rounded-[20px] border border-[#d7e6f3] bg-[#EFF7FC] px-6 py-16 text-center">

@@ -22,7 +22,7 @@ export default function DigitalMarketing() {
     <DigitalServicePage
       breadcrumb="Digital Marketing Services"
       heroTitle="Digital Marketing Services That Build Measurable Growth"
-      heroSubtitle="SEO, social, content, and paid media strategies tailored with data — so you reach the right audience and convert attention into leads."
+      heroSubtitle="SEO, social, content, and paid media strategies tailored with data, so you reach the right audience and convert attention into leads."
       heroImage={digitalMarketing}
       introTitle="Digital Marketing Services"
       introBody="Lift your brand's presence online with our leading team of digital marketing professionals. Whether it's SEO, social media, content marketing, or paid media, we tailor strategies for your business using the best data available and methods that reach the right audience, spark interest in your brand, convert any content into tangible leads, and positively affect your brand's visibility. Work with us as partners to engage, develop trust, and have measurable business growth."
@@ -62,7 +62,7 @@ export default function DigitalMarketing() {
         {
           title: "Analytics & attribution",
           description:
-            "Measurement frameworks that show what works — and where to invest next.",
+            "Measurement frameworks that show what works, and where to invest next.",
           icon: genFinance,
         },
       ]}
@@ -101,7 +101,7 @@ export default function DigitalMarketing() {
       ]}
       capabilitiesImage={digitalMarketingAgency}
       valueTitle="Value Added"
-      valueSubtitle="Marketing that compounds — stronger visibility, better leads, and clearer ROI."
+      valueSubtitle="Marketing that compounds, stronger visibility, better leads, and clearer ROI."
       valuePoints={[
         "Strategies tailored to your ICP instead of generic channel playbooks.",
         "Creative and content that build trust for complex B2B and product sales.",

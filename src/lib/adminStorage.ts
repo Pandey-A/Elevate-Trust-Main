@@ -48,7 +48,7 @@ function industriesEqual(a: string[], b: string[]) {
   return a.every((tag, index) => tag === b[index]);
 }
 
-/** Always return site industries only — remap legacy capability tags. */
+/** Always return site industries only, remap legacy capability tags. */
 export function normalizeDemo(demo: AdminDemo): AdminDemo {
   const fromDefaults =
     DEFAULT_DEMOS.find((item) => item.id === demo.id) ??
@@ -145,7 +145,7 @@ export function getDemos(): AdminDemo[] {
     });
 
   if (needsRewrite) {
-    // Persist without notify — callers may be reading during render.
+    // Persist without notify, callers may be reading during render.
     localStorage.setItem(DEMOS_KEY, JSON.stringify(demos));
     localStorage.setItem(DEMOS_SCHEMA_KEY, String(DEMOS_SCHEMA_VERSION));
   }

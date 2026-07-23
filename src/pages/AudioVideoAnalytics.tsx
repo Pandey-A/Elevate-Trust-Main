@@ -23,7 +23,7 @@ const coreOfferings = [
   {
     title: "Superior Accuracy",
     description:
-      "Our proprietary AI technology delivers highly precise and dependable results across people, vehicles, and event detection — reducing false alerts and improving operational trust.",
+      "Our proprietary AI technology delivers highly precise and dependable results across people, vehicles, and event detection, reducing false alerts and improving operational trust.",
     icon: accuracyIcon,
   },
   {
@@ -41,7 +41,7 @@ const coreOfferings = [
   {
     title: "Flexible Deployment Options",
     description:
-      "Choose between cloud-based or on-premises solutions based on data residency, latency, and scale needs — with the same analytics experience across both models.",
+      "Choose between cloud-based or on-premises solutions based on data residency, latency, and scale needs, with the same analytics experience across both models.",
     icon: deploymentIcon,
   },
   {
@@ -209,7 +209,7 @@ export default function AudioVideoAnalytics() {
             </h2>
             <p className="mx-auto mt-5 max-w-[48rem] text-[clamp(13px,1.2vw,16px)] leading-7 text-[#9CA3AF] sm:mt-6 2xl:text-[18px] 2xl:leading-8">
               Production-ready capabilities that turn existing cameras into
-              intelligent edge systems — with precision, real-time insights, and
+              intelligent edge systems, with precision, real-time insights, and
               flexible deployment.
             </p>
           </header>

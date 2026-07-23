@@ -15,6 +15,7 @@ const {
   processFrame5,
   processFrame7,
   webDesignDev,
+  happyFeet,
 } = digitalServiceImages;
 
 export default function WebDesignDevelopment() {
@@ -27,7 +28,7 @@ export default function WebDesignDevelopment() {
       introTitle="Web Design & Development"
       introBody="Enhance your online presence with our web development and design services. We create friendly, responsive, and intuitive websites that will help you achieve your business goals. Our team focuses on both design and user experience, ensuring that your website looks great and performs exceptionally well. We're here to bring your digital vision to life."
       sectionTitle="Website Capabilities"
-      sectionSubtitle="From marketing sites to content platforms — built for speed, SEO foundations, and long-term maintainability."
+      sectionSubtitle="From marketing sites to content platforms, built for speed, SEO foundations, and long-term maintainability."
       offerings={[
         {
           title: "Corporate & marketing websites",
@@ -64,6 +65,25 @@ export default function WebDesignDevelopment() {
           description:
             "Iterative improvements based on analytics, A/B insights, and evolving business needs.",
           icon: audioInsights,
+        },
+      ]}
+      deliveredWork={[
+        {
+          client: "Happy Feet Travellers",
+          title: "Experience-first travel platform",
+          tagline:
+            "Curated group tours & personalized journeys across India and beyond",
+          description:
+            "We designed and developed a modern travel website for Happy Feet Travellers that helps travellers explore personalized tours, upcoming group departures, and mood-based experiences. The site highlights intimate groups, transparent pricing, and comfort-first planning, with clear paths to enquire, browse destinations, and join their travel community.",
+          highlights: [
+            "Immersive homepage with trip enquiry and mood-based exploration",
+            "Upcoming departures and seasonal journeys such as Rann of Kutch",
+            "Personalized tour categories for honeymoon, adventure, family, and more",
+            "Social proof through reviews and a mobile-friendly booking journey",
+          ],
+          image: happyFeet,
+          href: "https://www.happyfeettravellers.com/",
+          linkLabel: "Visit Happy Feet Travellers",
         },
       ]}
       processTitle="How We Build Web Experiences"

@@ -27,6 +27,7 @@ import mobileAppDevImage from "../assets/OurServices/mobile-app-development-img.
 import ecommerceCompanyImage from "../assets/OurServices/E-commerce-company.jpg";
 import digitalMarketingAgencyImage from "../assets/OurServices/digital-marketing-agency-popular-services.png";
 import erpSoftwareImage from "../assets/OurServices/ERP-SOFTWARE-COMPANY-IN-NASHIK.jpg";
+import happyFeetImage from "../assets/OurServices/happyfeet.png";
 import genData from "../assets/OurServices/GenAI-Data.png";
 import genSoftware from "../assets/OurServices/GenAI-Software.png";
 import genOptimize from "../assets/OurServices/GenAI-Optimize.png";
@@ -66,6 +67,17 @@ import coreFrame2 from "../assets/service/core/frame2.svg";
 import coreFrame3 from "../assets/service/core/frame3.svg";
 import coreFrame4 from "../assets/service/core/frame4.svg";
 
+export type DeliveredWorkProject = {
+  title: string;
+  client: string;
+  tagline: string;
+  description: string;
+  highlights: string[];
+  image: string;
+  href: string;
+  linkLabel?: string;
+};
+
 export type DigitalServicePageProps = {
   breadcrumb: string;
   heroTitle: string;
@@ -86,6 +98,7 @@ export type DigitalServicePageProps = {
   capabilities: string[];
   capabilitiesImage?: string;
   showTechStacks?: boolean;
+  deliveredWork?: DeliveredWorkProject[];
 };
 
 const techStacks = [
@@ -116,7 +129,7 @@ const techStacks = [
   {
     name: "MERN",
     summary:
-      "Our go-to stack for modern product UIs — React for interfaces, Node/Express for APIs, and MongoDB for flexible data models.",
+      "Our go-to stack for modern product UIs, React for interfaces, Node/Express for APIs, and MongoDB for flexible data models.",
     bestFor: "Product apps, admin tools, SaaS frontends",
     items: [
       { name: "MongoDB", role: "Document database" },
@@ -165,6 +178,7 @@ export const digitalServiceImages = {
   ecommerceCompany: ecommerceCompanyImage,
   digitalMarketingAgency: digitalMarketingAgencyImage,
   erpSoftware: erpSoftwareImage,
+  happyFeet: happyFeetImage,
   flowchart: flowchartImage,
   genData,
   genSoftware,
@@ -235,6 +249,7 @@ export default function DigitalServicePage({
   capabilities,
   capabilitiesImage = flowchartImage,
   showTechStacks = false,
+  deliveredWork,
 }: DigitalServicePageProps) {
   const [activeStack, setActiveStack] = useState(0);
   const selectedStack = techStacks[activeStack] ?? techStacks[0];
@@ -371,6 +386,94 @@ export default function DigitalServicePage({
         </div>
       </section>
 
+      {deliveredWork && deliveredWork.length > 0 ? (
+        <section className="w-full bg-[#f8fbfd]" aria-label="Delivered Work">
+          <div className="mx-auto w-full max-w-[1692px] px-5 py-[clamp(40px,5vw,72px)] sm:px-8 lg:px-10 xl:px-12">
+            <header className="mb-[clamp(28px,3.5vw,48px)] max-w-[48rem]">
+              <h2 className="m-0 text-[clamp(26px,3.5vw,48px)] font-bold leading-[1.15] text-[#1F2432]">
+                Delivered Work
+              </h2>
+              <p className="mt-4 max-w-[40rem] text-[clamp(13px,1.2vw,16px)] leading-7 text-[#687181] 2xl:text-[18px]">
+                Real websites we design and ship for brands that need a digital presence as thoughtful as their offering.
+              </p>
+            </header>
+
+            <div className="flex flex-col gap-10 lg:gap-14">
+              {deliveredWork.map((project) => (
+                <article
+                  key={project.href}
+                  className="overflow-hidden rounded-[24px] border border-[#e8eef3] bg-[#EFF7FC] shadow-[0_20px_50px_-28px_rgba(17,61,119,0.35)] lg:rounded-[28px]"
+                >
+                  <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
+                    <a
+                      href={project.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group relative flex items-center justify-center overflow-hidden bg-[#e8eef3] p-3 sm:p-4 lg:p-5"
+                      aria-label={`Open ${project.client} website`}
+                    >
+                      <img
+                        src={project.image}
+                        alt={`${project.client} website preview`}
+                        className="block h-auto w-full rounded-[12px] object-contain object-center shadow-[0_12px_32px_-16px_rgba(17,61,119,0.4)] transition-transform duration-500 group-hover:scale-[1.02]"
+                      />
+                      <span className="absolute bottom-5 left-5 inline-flex items-center gap-2 rounded-full bg-white/95 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-[#2365aa] shadow-sm backdrop-blur sm:bottom-7 sm:left-7 sm:text-sm">
+                        View live site
+                        <ArrowUpRight size={16} strokeWidth={2.5} />
+                      </span>
+                    </a>
+
+                    <div className="flex flex-col justify-center p-6 sm:p-8 lg:p-10 xl:p-12">
+                      <p className="m-0 text-sm font-semibold uppercase tracking-[0.14em] text-[#f07c62]">
+                        {project.client}
+                      </p>
+                      <h3 className="mt-2 m-0 text-[clamp(22px,2.4vw,32px)] font-bold leading-tight text-[#1F2432]">
+                        {project.title}
+                      </h3>
+                      <p className="mt-2 text-[clamp(13px,1.15vw,15px)] font-medium text-[#2365aa]">
+                        {project.tagline}
+                      </p>
+                      <p className="mt-4 text-[clamp(13px,1.2vw,16px)] leading-7 text-[#5a5a5a] 2xl:text-[17px]">
+                        {project.description}
+                      </p>
+
+                      <ul className="mt-6 flex list-none flex-col gap-3 p-0">
+                        {project.highlights.map((item) => (
+                          <li
+                            key={item}
+                            className="flex items-start gap-3 text-[clamp(13px,1.15vw,15px)] font-medium leading-[1.45] text-[#5a5a5a]"
+                          >
+                            <img
+                              src={checkIcon}
+                              alt=""
+                              aria-hidden
+                              className="mt-[0.35em] h-3 w-3 shrink-0"
+                            />
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+
+                      <a
+                        href={project.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-8 inline-flex w-fit items-center gap-1.5 rounded-full bg-[#2365aa] py-3 pl-[22px] pr-2.5 text-sm font-normal uppercase leading-[1.2] text-white no-underline transition-colors hover:bg-[#1a5490] sm:text-base sm:pl-[26px] sm:pr-3.5"
+                      >
+                        {project.linkLabel || "Visit Website"}
+                        <span className="inline-flex h-[34px] w-[34px] items-center justify-center rounded-full bg-white text-[#2365aa] sm:h-[37px] sm:w-[37px]">
+                          <ArrowUpRight size={16} strokeWidth={2.5} />
+                        </span>
+                      </a>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
+
       <section className="w-full bg-white">
         <div className="mx-auto w-full max-w-[1692px] px-5 py-[clamp(40px,5vw,72px)] sm:px-8 lg:px-10 xl:px-12">
           <header className="mb-[clamp(28px,3.5vw,44px)] max-w-[48rem]">
@@ -479,7 +582,7 @@ export default function DigitalServicePage({
                 Full Stack Technology Stack
               </h2>
               <p className="mx-auto mt-4 max-w-[40rem] text-[clamp(13px,1.2vw,16px)] leading-7 text-[#687181] 2xl:text-[18px]">
-                Proven stacks we use to build scalable, maintainable products —
+                Proven stacks we use to build scalable, maintainable products,
                 chosen to match your team, timeline, and performance goals.
               </p>
             </header>

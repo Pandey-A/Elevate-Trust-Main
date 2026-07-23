@@ -9,7 +9,7 @@ function scrollToTop() {
   document.body.scrollTop = 0;
   window.scrollTo(0, 0);
 
-  // Extra pass after paint — images/layout can reflow right after navigation
+  // Extra pass after paint, images/layout can reflow right after navigation
   requestAnimationFrame(() => {
     scrollingElement.scrollTop = 0;
     document.documentElement.scrollTop = 0;

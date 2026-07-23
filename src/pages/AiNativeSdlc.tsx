@@ -218,7 +218,7 @@ export default function AiNativeSdlc() {
           </h1>
           <p className="mt-[clamp(16px,2vw,24px)] max-w-[783px] font-['Ubuntu',sans-serif] text-[#a1b1cb] font-normal leading-6 text-[clamp(14px,1.4vw,18px)] lg:text-[clamp(13px,1.1vw,15px)] 2xl:text-[clamp(14px,1.4vw,18px)]">
             AI Native SDLC is transforming how enterprises design, build, test, and
-            ship software — from coding copilots and intelligent testing to
+            ship software, from coding copilots and intelligent testing to
             autonomous delivery agents and governed engineering platforms. What
             began as developer assistance is evolving into an end-to-end,
             AI-orchestrated software lifecycle.
