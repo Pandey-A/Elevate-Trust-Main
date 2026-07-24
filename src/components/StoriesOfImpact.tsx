@@ -5,6 +5,9 @@ import blueArrow from "../assets/homepage-icons/blue-arrow.png";
 import arupaLogo from "../assets/client-strip/Arupa.svg";
 import complyCoreLogo from "../assets/client-strip/ComplyCore.svg";
 import qjumpersLogo from "../assets/client-strip/Qjumpers.svg";
+import happyFeetLogo from "../assets/client-strip/travellers.svg";
+import roshanHirePhoto from "../assets/testimonial/RoshanHireHappyFeet.jpeg";
+import naritaMahajanPhoto from "../assets/testimonial/happyFeetCEO.jpeg";
 
 import storiesVector from "../assets/homepage-icons/stories-vector.png";
 import storyProfile1 from "../assets/homepage-icons/stories-1.svg";
@@ -12,6 +15,24 @@ import storyProfile2 from "../assets/homepage-icons/stories-2.svg";
 import "./StoriesOfImpact.css";
 
 const stories = [
+  {
+    logo: happyFeetLogo,
+    logoClassName: "h-[28px] w-auto max-w-[120px] sm:h-[32px] sm:max-w-[140px]",
+    profile: roshanHirePhoto,
+    quote:
+      "Working with Elevate Trust for our website development was a great experience. They understood our travel business needs and delivered a modern, user-friendly website with excellent support throughout the process. Highly professional team and we truly appreciate their dedication and efforts.",
+    name: "Roshan Hire",
+    title: "Co-Founder, Happy Feet Travellers",
+  },
+  {
+    logo: happyFeetLogo,
+    logoClassName: "h-[28px] w-auto max-w-[120px] sm:h-[32px] sm:max-w-[140px]",
+    profile: naritaMahajanPhoto,
+    quote:
+      "Elevate Trust did an excellent job creating our website. Their team understood our vision, provided creative solutions, and delivered a website that truly represents our brand. Great communication, timely execution, and highly recommended!",
+    name: "Narita Mahajan",
+    title: "Owner, Happy Feet Travellers",
+  },
   {
     logo: arupaLogo,
     logoClassName: "h-[28px] w-auto max-w-[120px] sm:h-[32px] sm:max-w-[140px]",
@@ -27,8 +48,8 @@ const stories = [
     profile: storyProfile2,
     quote:
       "Working with Elevate trust to develop our marketing compliance platform was an excellent experience. The team quickly understood our product vision and translated complex requirements into a strong, practical technical solution. We appreciated their expertise, thoughtful approach, and commitment throughout the development process. They played an important role in bringing our vision to life, and we are grateful for their support and contribution.",
-    name: "Amet Consec",
-    title: "CEO at INFOTRACK",
+    name: "Reshu Choudhary",
+    title: "Co-Founder, ComplyCore",
   },
   {
     logo: arupaLogo,
@@ -45,8 +66,8 @@ const stories = [
     profile: storyProfile1,
     quote:
       "Working with Elevate trust to develop our marketing compliance platform was an excellent experience. The team quickly understood our product vision and translated complex requirements into a strong, practical technical solution. We appreciated their expertise, thoughtful approach, and commitment throughout the development process. They played an important role in bringing our vision to life, and we are grateful for their support and contribution.",
-    name: "Amet Consec",
-    title: "CTO at ComplyCore",
+    name: "Reshu Choudhary",
+    title: "Co-Founder, ComplyCore",
   },
   {
     logo: qjumpersLogo,
@@ -242,10 +263,10 @@ export default function StoriesOfImpact() {
                         </p>
 
                         <div className="relative mt-5 flex items-end justify-between gap-3 sm:mt-6">
-                          {/* <div>
+                          <div>
                             <p className="section-body-lg font-bold text-[#272935]">{story.name}</p>
                             <p className="section-body-sm mt-0.5 text-[#272935]/65">{story.title}</p>
-                          </div> */}
+                          </div>
                           <span className="stories-quote-mark" aria-hidden>
                             &rdquo;
                           </span>
