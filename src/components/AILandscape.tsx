@@ -6,8 +6,6 @@ import landscape2 from "../assets/homepage-icons/landscape-2.png";
 import landscape3 from "../assets/homepage-icons/landscape-3.svg";
 import landscape4 from "../assets/homepage-icons/landscape-4.svg";
 
-import "./AILandscape.css";
-
 interface AICard {
   title: string;
   items: string[];
@@ -17,11 +15,7 @@ interface AICard {
 const cards: AICard[] = [
   {
     title: "Survival Analysis\n& Prediction Model",
-    items: [
-      "Risk Stratification",
-      "Predictive Maintenance",
-      "Customer Churn Prediction",
-    ],
+    items: ["Heart patient Survival Analysis", "Customer attrition model"],
     image: landscape1,
   },
   {
@@ -65,8 +59,8 @@ const cards: AICard[] = [
   {
     title: "Content\nGeneration",
     items: [
-      "Summary Creation",
-      "Keyword Extraction",
+      "Summary Creator",
+      "Keyword Extractor",
       "Content Curation",
       "Quiz and Assessment",
     ],
@@ -104,13 +98,10 @@ export default function AILandscape() {
       const card = track.querySelector("article");
       if (!card) return;
 
-      const gap = parseFloat(getComputedStyle(track).gap) || 20;
+      const gap = parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap) || 20;
       const cardWidth = card.getBoundingClientRect().width;
       const viewportWidth = viewport.getBoundingClientRect().width;
-      const nextVisible = Math.max(
-        1,
-        Math.floor((viewportWidth + gap) / (cardWidth + gap))
-      );
+      const nextVisible = Math.max(1, Math.floor((viewportWidth + gap) / (cardWidth + gap)));
       setVisibleCards(nextVisible);
       setSlideOffset(activeIndex * (cardWidth + gap));
     };
@@ -140,8 +131,7 @@ export default function AILandscape() {
 
   const onPointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
     if (!dragRef.current.active) return;
-    const delta = dragRef.current.startX - event.clientX;
-    setDragOffset(delta);
+    setDragOffset(dragRef.current.startX - event.clientX);
   };
 
   const finishDrag = (event: React.PointerEvent<HTMLDivElement>) => {
@@ -151,16 +141,13 @@ export default function AILandscape() {
     const track = trackRef.current;
     const card = track?.querySelector("article");
     const gap = track
-      ? parseFloat(getComputedStyle(track).gap) || 20
+      ? parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap) || 20
       : 20;
     const step = card ? card.getBoundingClientRect().width + gap : 300;
     const threshold = step * 0.2;
 
-    if (delta > threshold) {
-      setActiveIndex((i) => Math.min(maxIndex, i + 1));
-    } else if (delta < -threshold) {
-      setActiveIndex((i) => Math.max(0, i - 1));
-    }
+    if (delta > threshold) setActiveIndex((i) => Math.min(maxIndex, i + 1));
+    else if (delta < -threshold) setActiveIndex((i) => Math.max(0, i - 1));
 
     dragRef.current.active = false;
     setDragOffset(0);
@@ -174,61 +161,101 @@ export default function AILandscape() {
 
   return (
     <section
-      className="ai-landscape px-4 py-16 sm:px-6 sm:py-20 lg:px-10 lg:py-24 xl:px-12 2xl:px-16"
+      className="bg-[#113D77] px-4 py-14 sm:px-6 sm:py-16 lg:px-10 lg:py-20 xl:px-12 xl:py-24 min-[1920px]:py-[100px]"
       aria-label="Our AI Landscape"
     >
-      <div className="mx-auto max-w-site w-full">
+      <div className="mx-auto w-full max-w-site">
         <div className="text-center">
-          <p className="section-eyebrow font-semibold uppercase tracking-[0.18em]">
-            <span className="text-[#FFFFFF]">Smart Solutions for a </span>
-            <span className="text-[#2e7ad1]">Smarter Tomorrow</span>
+          <p className="section-eyebrow font-semibold uppercase tracking-[0.16em]">
+            <span className="text-white">Smart Solutions for a </span>
+            <span className="text-[#2365AA]">Smarter Tomorrow</span>
           </p>
-          <h2 className="mt-3 text-3xl font-bold text-[#FFFFFF] sm:text-4xl lg:text-[44px] lg:leading-[1.15] xl:text-[50px] 2xl:text-[56px] min-[1920px]:text-[62px]">
+          <h2 className="mt-3 text-3xl font-bold leading-[0.97] text-white sm:text-4xl lg:text-[44px] xl:text-[50px] 2xl:text-[56px] min-[1920px]:text-[75px]">
             Our AI Landscape
           </h2>
         </div>
 
-        <div className="relative mt-12 lg:mt-14">
+        <div className="relative mt-10 sm:mt-12 lg:mt-14">
           <div ref={viewportRef} className="overflow-hidden">
             <div
               ref={trackRef}
-              className={`ai-landscape__track ${isDragging ? "is-dragging" : ""}`}
-              style={{
-                transform: `translate3d(-${currentTransform}px, 0, 0)`,
-              }}
+              className={[
+                "flex items-start gap-4 pb-8 sm:gap-5 lg:gap-6 xl:gap-7",
+                "cursor-grab touch-pan-y will-change-transform",
+                isDragging
+                  ? "cursor-grabbing transition-none"
+                  : "transition-transform duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
+              ].join(" ")}
+              style={{ transform: `translate3d(-${currentTransform}px, 0, 0)` }}
               onPointerDown={onPointerDown}
               onPointerMove={onPointerMove}
               onPointerUp={finishDrag}
               onPointerCancel={finishDrag}
             >
               {cards.map((card, index) => {
-                const variant = index % 2 === 0 ? "blue" : "light";
+                const isBlue = index % 2 === 0;
+                // Figma wave: cards at index 1 & 4 sit lower
+                const isStaggered = index % 3 === 1;
+
                 return (
                   <article
                     key={`ai-card-${index}`}
-                    className={`ai-card ai-card--${variant}${index % 2 !== 0 ? " ai-card--stagger" : ""}`}
+                    className={[
+                      "relative flex shrink-0 flex-col justify-between overflow-hidden select-none",
+                      "w-[260px] min-h-[340px] rounded-[22px] px-5 pt-6 sm:w-[300px] sm:min-h-[380px] sm:rounded-[26px] sm:px-6 sm:pt-7",
+                      "lg:w-[320px] lg:min-h-[400px] lg:rounded-[28px] lg:px-7 lg:pt-8",
+                      "xl:w-[340px] xl:min-h-[430px] xl:rounded-[30px]",
+                      "2xl:w-[360px] 2xl:min-h-[450px]",
+                      "min-[1920px]:w-[378px] min-[1920px]:min-h-[470px] min-[1920px]:rounded-[30px] min-[1920px]:px-8 min-[1920px]:pt-9",
+                      isBlue ? "bg-[#2365AA] text-white" : "bg-[#F4F7F9] text-[#272935]",
+                      isStaggered
+                        ? "translate-y-6 sm:translate-y-7 lg:translate-y-8 xl:translate-y-10 min-[1920px]:translate-y-[88px]"
+                        : "translate-y-0",
+                    ].join(" ")}
                   >
                     <div>
-                      <h3 className="ai-card__title whitespace-pre-line">
+                      <h3
+                        className={[
+                          "m-0 whitespace-pre-line font-semibold leading-[1.06]",
+                          "text-[20px] sm:text-[22px] lg:text-[24px] xl:text-[28px] min-[1920px]:text-[32px]",
+                          isBlue ? "text-white" : "text-[#272935]",
+                        ].join(" ")}
+                      >
                         {card.title}
                       </h3>
-                      <ul className="ai-card__list">
-                        {card.items.map((item, idx) => (
-                          <li key={idx}>
-                            <span className="ai-card__check">
-                              <Check strokeWidth={3} />
+
+                      <ul className="mt-4 m-0 flex list-none flex-col gap-2.5 p-0 sm:mt-5 sm:gap-3 min-[1920px]:mt-6 min-[1920px]:gap-3.5">
+                        {card.items.map((item) => (
+                          <li
+                            key={item}
+                            className={[
+                              "flex items-start gap-2.5 text-[13px] leading-[1.45] sm:text-sm lg:text-[15px] xl:text-base min-[1920px]:text-[20px] min-[1920px]:leading-[1.5]",
+                              isBlue ? "text-white/95" : "text-[#272935]",
+                            ].join(" ")}
+                          >
+                            <span
+                              className={[
+                                "mt-0.5 flex size-[16px] shrink-0 items-center justify-center rounded-full sm:size-[18px] min-[1920px]:size-5",
+                                isBlue
+                                  ? "bg-white/20 text-white"
+                                  : "bg-[#C5D9EC] text-[#2365AA]",
+                              ].join(" ")}
+                            >
+                              <Check className="size-2.5 sm:size-3 min-[1920px]:size-3.5" strokeWidth={3} />
                             </span>
                             {item}
                           </li>
                         ))}
                       </ul>
                     </div>
-                    <div className="ai-card__illustration">
+
+                    <div className="mt-auto flex justify-end pt-5">
                       <img
                         src={card.image}
                         alt=""
                         aria-hidden
                         draggable={false}
+                        className="pointer-events-none h-auto w-[120px] object-contain sm:w-[140px] lg:w-[150px] xl:w-[160px] min-[1920px]:w-[172px]"
                       />
                     </div>
                   </article>
@@ -237,20 +264,20 @@ export default function AILandscape() {
             </div>
           </div>
 
-          <div className="ai-landscape__controls">
+          <div className="mx-auto mt-8 flex w-full max-w-[280px] items-center justify-center gap-3.5 sm:mt-10 sm:max-w-[360px] sm:gap-4 lg:max-w-[480px] lg:gap-[18px] xl:max-w-[580px] 2xl:max-w-[640px] min-[1920px]:mt-12 min-[1920px]:max-w-[720px] min-[1920px]:gap-[22px]">
             <button
               type="button"
               onClick={goPrev}
               disabled={activeIndex === 0}
               aria-label="Previous card"
-              className="ai-landscape__nav-btn"
+              className="flex size-9 shrink-0 items-center justify-center rounded-full border-[1.5px] border-white bg-transparent text-white transition hover:scale-105 hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-30 sm:size-10 lg:size-[44px] lg:border-2 min-[1920px]:size-[57px]"
             >
-              <ArrowLeft className="h-4 w-4 lg:h-5 lg:w-5" strokeWidth={2.25} />
+              <ArrowLeft className="size-4 sm:size-5 min-[1920px]:size-8" strokeWidth={2.25} />
             </button>
 
-            <div className="ai-landscape__progress">
+            <div className="h-1 min-w-0 flex-1 overflow-hidden rounded-full bg-[#A1B1CB]/75 sm:h-[5px] xl:h-1.5">
               <div
-                className="ai-landscape__progress-fill"
+                className="h-full rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.35)] transition-[width] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
                 style={{ width: `${Math.min(100, progressPercent)}%` }}
               />
             </div>
@@ -260,9 +287,9 @@ export default function AILandscape() {
               onClick={goNext}
               disabled={activeIndex >= maxIndex}
               aria-label="Next card"
-              className="ai-landscape__nav-btn"
+              className="flex size-9 shrink-0 items-center justify-center rounded-full border-[1.5px] border-white bg-transparent text-white transition hover:scale-105 hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-30 sm:size-10 lg:size-[44px] lg:border-2 min-[1920px]:size-[57px]"
             >
-              <ArrowRight className="h-4 w-4 lg:h-5 lg:w-5" strokeWidth={2.25} />
+              <ArrowRight className="size-4 sm:size-5 min-[1920px]:size-8" strokeWidth={2.25} />
             </button>
           </div>
         </div>
