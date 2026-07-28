@@ -3,11 +3,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { ArrowUpRight, Eye, EyeOff } from "lucide-react";
 import worldMapBackground from "../../assets/homepage-icons/Group(3).png";
 import agileImage from "../../assets/OurServices/agile-light.png";
+import { getErrorMessage } from "../../lib/api";
 import {
   getAuthSession,
   loginUser,
   registerUser,
-} from "../../lib/adminStorage";
+} from "../../lib/auth";
 
 type Mode = "login" | "signup";
 
@@ -20,12 +21,13 @@ export default function AdminAuth() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     if (getAuthSession()) navigate("/admin/dashboard", { replace: true });
   }, [navigate]);
 
-  const onSubmit = (event: FormEvent) => {
+  const onSubmit = async (event: FormEvent) => {
     event.preventDefault();
     setError("");
     setMessage("");
@@ -36,25 +38,33 @@ export default function AdminAuth() {
     }
 
     try {
+      setSubmitting(true);
+
       if (mode === "signup") {
         if (!name.trim()) {
           setError("Name is required for signup.");
           return;
         }
-        registerUser({
+        const result = await registerUser({
           name: name.trim(),
           email: email.trim(),
           password,
         });
-        setMessage("Account created. You can sign in now.");
+        setMessage(
+          result.message ||
+            "Account created. You can sign in now with your admin credentials.",
+        );
         setMode("login");
+        setPassword("");
         return;
       }
 
-      loginUser(email.trim(), password);
+      await loginUser(email.trim(), password);
       navigate("/admin/dashboard");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong.");
+      setError(getErrorMessage(err, "Something went wrong."));
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -125,8 +135,8 @@ export default function AdminAuth() {
             </h2>
             <p className="mt-2 text-sm leading-6 text-[#848b9b] 2xl:mt-3 2xl:text-base 2xl:leading-7">
               {mode === "login"
-                ? "Any email and password will open the dashboard."
-                : "Register locally in this browser, then sign in."}
+                ? "Sign in with your admin account to manage the website."
+                : "The first registered account becomes admin. Later signups cannot access the dashboard."}
             </p>
 
             <form className="mt-6 flex flex-col gap-4 2xl:mt-8 2xl:gap-5" onSubmit={onSubmit}>
@@ -187,9 +197,14 @@ export default function AdminAuth() {
 
               <button
                 type="submit"
-                className="mt-1 inline-flex cursor-pointer items-center justify-center gap-2 rounded-full border-0 bg-[#2365aa] py-3 pl-6 pr-3 text-sm font-semibold uppercase tracking-wide text-white transition hover:bg-[#1a5490] 2xl:py-3.5 2xl:pl-7 2xl:text-base"
+                disabled={submitting}
+                className="mt-1 inline-flex cursor-pointer items-center justify-center gap-2 rounded-full border-0 bg-[#2365aa] py-3 pl-6 pr-3 text-sm font-semibold uppercase tracking-wide text-white transition hover:bg-[#1a5490] disabled:cursor-not-allowed disabled:opacity-70 2xl:py-3.5 2xl:pl-7 2xl:text-base"
               >
-                {mode === "login" ? "Enter dashboard" : "Create account"}
+                {submitting
+                  ? "Please wait..."
+                  : mode === "login"
+                    ? "Enter dashboard"
+                    : "Create account"}
                 <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white text-[#2365aa] 2xl:h-9 2xl:w-9">
                   <ArrowUpRight size={16} strokeWidth={2.5} />
                 </span>

@@ -1,8 +1,10 @@
-import { useEffect, useMemo, useState, type FormEvent } from "react";
+import { useCallback, useEffect, useMemo, useState, type FormEvent } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import {
   ArrowUpRight,
   Briefcase,
+  ExternalLink,
+  FileText,
   LayoutDashboard,
   LogOut,
   Pencil,
@@ -14,18 +16,27 @@ import { INDUSTRY_TAGS, type AdminDemo, type AdminJob, type IndustryTag } from "
 import { useAdminAuth, useAdminDemos, useAdminJobs } from "../../hooks/useAdminData";
 import {
   createId,
-  deleteDemo,
   deleteJob,
   extractYoutubeId,
-  logoutUser,
-  upsertDemo,
   upsertJob,
   youtubeThumb,
 } from "../../lib/adminStorage";
+import { getErrorMessage } from "../../lib/api";
+import { logoutUser } from "../../lib/auth";
+import {
+  createDemo,
+  deleteDemo,
+  updateDemo,
+} from "../../lib/demosApi";
+import {
+  deleteCareerApplication,
+  fetchCareerApplications,
+  type CareerApplication,
+} from "../../lib/careersApi";
 import brainstormingIcon from "../../assets/OurServices/brainstorming.png";
 import analysisIcon from "../../assets/OurServices/analysis.png";
 
-type Tab = "overview" | "demos" | "jobs";
+type Tab = "overview" | "demos" | "jobs" | "applications";
 
 const emptyDemoForm = {
   id: "",
@@ -48,7 +59,7 @@ const emptyJobForm = {
 export default function AdminDashboard() {
   const navigate = useNavigate();
   const session = useAdminAuth();
-  const demos = useAdminDemos();
+  const { demos, loading: demosLoading, error: demosLoadError } = useAdminDemos();
   const jobs = useAdminJobs();
 
   const [tab, setTab] = useState<Tab>("overview");
@@ -58,10 +69,37 @@ export default function AdminDashboard() {
   const [jobError, setJobError] = useState("");
   const [demoSuccess, setDemoSuccess] = useState("");
   const [jobSuccess, setJobSuccess] = useState("");
+  const [demoSaving, setDemoSaving] = useState(false);
+  const [applications, setApplications] = useState<CareerApplication[]>([]);
+  const [applicationsLoading, setApplicationsLoading] = useState(false);
+  const [applicationsError, setApplicationsError] = useState("");
+  const [deletingApplicationId, setDeletingApplicationId] = useState<number | null>(
+    null,
+  );
+
+  const loadApplications = useCallback(async () => {
+    try {
+      setApplicationsLoading(true);
+      setApplicationsError("");
+      const data = await fetchCareerApplications();
+      setApplications(data);
+    } catch (err) {
+      setApplicationsError(
+        getErrorMessage(err, "Unable to load applications."),
+      );
+    } finally {
+      setApplicationsLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  useEffect(() => {
+    if (!session) return;
+    void loadApplications();
+  }, [session, loadApplications]);
 
   const editingDemo = Boolean(demoForm.id);
   const editingJob = Boolean(jobForm.id);
@@ -75,6 +113,38 @@ export default function AdminDashboard() {
     });
     return counts;
   }, [demos]);
+
+  const formatDate = (value: string) => {
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return value;
+    return date.toLocaleString(undefined, {
+      dateStyle: "medium",
+      timeStyle: "short",
+    });
+  };
+
+  const onDeleteApplication = async (application: CareerApplication) => {
+    if (
+      !window.confirm(
+        `Remove application from ${application.fullName}? This cannot be undone.`,
+      )
+    ) {
+      return;
+    }
+
+    try {
+      setDeletingApplicationId(application.id);
+      setApplicationsError("");
+      await deleteCareerApplication(application.id);
+      setApplications((prev) => prev.filter((item) => item.id !== application.id));
+    } catch (err) {
+      setApplicationsError(
+        getErrorMessage(err, "Unable to delete application."),
+      );
+    } finally {
+      setDeletingApplicationId(null);
+    }
+  };
 
   if (!session) {
     return <Navigate to="/admin" replace />;
@@ -130,7 +200,7 @@ export default function AdminDashboard() {
     });
   };
 
-  const submitDemo = (event: FormEvent) => {
+  const submitDemo = async (event: FormEvent) => {
     event.preventDefault();
     setDemoError("");
     setDemoSuccess("");
@@ -149,16 +219,29 @@ export default function AdminDashboard() {
       return;
     }
 
-    upsertDemo({
-      id: demoForm.id || createId("demo"),
+    const payload = {
       title: demoForm.title.trim(),
-      videoId,
       youtubeUrl: demoForm.youtubeUrl.trim(),
       industries: demoForm.industries,
-    });
+    };
 
-    setDemoSuccess(editingDemo ? "Demo updated successfully." : "Demo added successfully.");
-    resetDemoForm();
+    try {
+      setDemoSaving(true);
+      if (editingDemo) {
+        await updateDemo(demoForm.id, payload);
+        setDemoForm(emptyDemoForm);
+        setDemoSuccess("Demo updated successfully.");
+      } else {
+        await createDemo({ id: createId("demo"), ...payload });
+        setDemoForm(emptyDemoForm);
+        setDemoSuccess("Demo added successfully.");
+      }
+      setDemoError("");
+    } catch (err) {
+      setDemoError(getErrorMessage(err, "Unable to save demo."));
+    } finally {
+      setDemoSaving(false);
+    }
   };
 
   const submitJob = (event: FormEvent) => {
@@ -238,6 +321,7 @@ export default function AdminDashboard() {
                 ["overview", "Overview", LayoutDashboard],
                 ["demos", "Manage Demos", Video],
                 ["jobs", "Manage Jobs", Briefcase],
+                ["applications", "Manage Applications", FileText],
               ] as const
             ).map(([id, label, Icon]) => (
               <button
@@ -260,14 +344,19 @@ export default function AdminDashboard() {
         <main className="min-w-0">
           {tab === "overview" ? (
             <section className="space-y-5 sm:space-y-6 2xl:space-y-8">
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-5 2xl:gap-6">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 sm:gap-5 2xl:gap-6">
                 {[
                   { label: "Total demos", value: demos.length, icon: brainstormingIcon },
                   { label: "Open jobs", value: jobs.length, icon: analysisIcon },
                   {
+                    label: "Applications",
+                    value: applications.length,
+                    icon: brainstormingIcon,
+                  },
+                  {
                     label: "Industry tags used",
                     value: Object.keys(industryCounts).length,
-                    icon: brainstormingIcon,
+                    icon: analysisIcon,
                   },
                 ].map((card) => (
                   <article
@@ -301,6 +390,14 @@ export default function AdminDashboard() {
                   >
                     <Plus size={16} />
                     Add job posting
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setTab("applications")}
+                    className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-[#d7e6f3] bg-[#EFF7FC] px-4 py-2.5 text-sm font-semibold text-[#2365aa] 2xl:px-5 2xl:py-3 2xl:text-base"
+                  >
+                    <FileText size={16} />
+                    View applications
                   </button>
                 </div>
               </div>
@@ -389,12 +486,26 @@ export default function AdminDashboard() {
 
                 <button
                   type="submit"
-                  className="mt-5 inline-flex cursor-pointer items-center gap-2 rounded-full border-0 bg-[#2365aa] px-5 py-3 text-sm font-semibold uppercase text-white hover:bg-[#1a5490]"
+                  disabled={demoSaving}
+                  className="mt-5 inline-flex cursor-pointer items-center gap-2 rounded-full border-0 bg-[#2365aa] px-5 py-3 text-sm font-semibold uppercase text-white hover:bg-[#1a5490] disabled:cursor-not-allowed disabled:opacity-70"
                 >
-                  {editingDemo ? "Update demo" : "Add demo"}
+                  {demoSaving
+                    ? "Saving..."
+                    : editingDemo
+                      ? "Update demo"
+                      : "Add demo"}
                   <ArrowUpRight size={16} />
                 </button>
               </form>
+
+              {demosLoadError ? (
+                <p className="rounded-[12px] bg-[#fde8e8] px-3 py-2 text-sm text-[#b42318]">
+                  {demosLoadError}
+                </p>
+              ) : null}
+              {demosLoading ? (
+                <p className="text-sm text-[#848b9b]">Loading demos...</p>
+              ) : null}
 
               <div className="grid auto-rows-fr grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 xl:grid-cols-3 2xl:grid-cols-4 2xl:gap-6">
                 {demos.map((demo) => (
@@ -432,8 +543,15 @@ export default function AdminDashboard() {
                         </button>
                         <button
                           type="button"
-                          onClick={() => {
-                            if (window.confirm(`Delete "${demo.title}"?`)) deleteDemo(demo.id);
+                          onClick={async () => {
+                            if (!window.confirm(`Delete "${demo.title}"?`)) return;
+                            try {
+                              await deleteDemo(demo.id);
+                            } catch (err) {
+                              setDemoError(
+                                getErrorMessage(err, "Unable to delete demo."),
+                              );
+                            }
                           }}
                           className="inline-flex flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-full border-0 bg-[#fde8e8] px-3 py-2 text-xs font-semibold text-[#b42318]"
                         >
@@ -612,6 +730,139 @@ export default function AdminDashboard() {
                           Delete
                         </button>
                       </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </section>
+          ) : null}
+
+          {tab === "applications" ? (
+            <section className="space-y-5 sm:space-y-6 2xl:space-y-8">
+              <div className="rounded-[20px] border border-[#d7e6f3] bg-white p-5 shadow-[0_14px_40px_-28px_rgba(17,61,119,0.3)] sm:p-6 xl:rounded-[24px] xl:p-7 2xl:p-8">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div>
+                    <h2 className="m-0 text-xl font-bold text-[#1F2432] 2xl:text-2xl">
+                      Manage Applications
+                    </h2>
+                    <p className="mt-1 text-sm text-[#848b9b] 2xl:text-base">
+                      Career enquiry submissions from the public Careers page.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => void loadApplications()}
+                    disabled={applicationsLoading}
+                    className="cursor-pointer rounded-full border border-[#d7e6f3] bg-[#EFF7FC] px-4 py-2 text-xs font-semibold text-[#2365aa] disabled:cursor-not-allowed disabled:opacity-70 sm:text-sm"
+                  >
+                    {applicationsLoading ? "Refreshing..." : "Refresh"}
+                  </button>
+                </div>
+              </div>
+
+              {applicationsError ? (
+                <p className="rounded-[12px] bg-[#fde8e8] px-3 py-2 text-sm text-[#b42318]">
+                  {applicationsError}
+                </p>
+              ) : null}
+
+              {applicationsLoading && applications.length === 0 ? (
+                <p className="text-sm text-[#848b9b]">Loading applications...</p>
+              ) : null}
+
+              {!applicationsLoading && applications.length === 0 && !applicationsError ? (
+                <div className="rounded-[20px] border border-[#d7e6f3] bg-[#EFF7FC] px-6 py-14 text-center">
+                  <p className="m-0 text-sm text-[#687181] 2xl:text-base">
+                    No career applications yet.
+                  </p>
+                </div>
+              ) : null}
+
+              <div className="space-y-3 sm:space-y-4">
+                {applications.map((application) => (
+                  <article
+                    key={application.id}
+                    className="rounded-[18px] border border-[#d7e6f3] bg-white p-4 shadow-[0_12px_30px_-22px_rgba(17,61,119,0.35)] sm:p-5 xl:rounded-[20px] xl:p-6"
+                  >
+                    <div className="flex flex-wrap items-start justify-between gap-3">
+                      <div className="min-w-0 flex-1">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <h3 className="m-0 text-lg font-bold text-[#1F2432]">
+                            {application.fullName}
+                          </h3>
+                          {application.jobTitle ? (
+                            <span className="rounded-full bg-[#EFF7FC] px-2.5 py-1 text-[11px] font-semibold text-[#2365aa]">
+                              {application.jobTitle}
+                            </span>
+                          ) : null}
+                        </div>
+                        <p className="mt-1 text-xs text-[#848b9b]">
+                          Submitted {formatDate(application.createdAt)}
+                        </p>
+
+                        <div className="mt-3 grid grid-cols-1 gap-2 text-sm text-[#5a5a5a] sm:grid-cols-2">
+                          <p className="m-0">
+                            <span className="font-semibold text-[#1F2432]">Email:</span>{" "}
+                            <a
+                              href={`mailto:${application.email}`}
+                              className="text-[#2365aa] no-underline hover:underline"
+                            >
+                              {application.email}
+                            </a>
+                          </p>
+                          <p className="m-0">
+                            <span className="font-semibold text-[#1F2432]">Phone:</span>{" "}
+                            <a
+                              href={`tel:${application.phone}`}
+                              className="text-[#2365aa] no-underline hover:underline"
+                            >
+                              {application.phone}
+                            </a>
+                          </p>
+                          {application.education ? (
+                            <p className="m-0">
+                              <span className="font-semibold text-[#1F2432]">Education:</span>{" "}
+                              {application.education}
+                            </p>
+                          ) : null}
+                          {application.expertise ? (
+                            <p className="m-0">
+                              <span className="font-semibold text-[#1F2432]">Expertise:</span>{" "}
+                              {application.expertise}
+                            </p>
+                          ) : null}
+                        </div>
+
+                        {application.message ? (
+                          <p className="mt-3 text-sm leading-6 text-[#687181]">
+                            {application.message}
+                          </p>
+                        ) : null}
+
+                        {application.cvUrl ? (
+                          <a
+                            href={application.cvUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="mt-4 inline-flex items-center gap-1.5 rounded-full border border-[#d7e6f3] bg-[#EFF7FC] px-3 py-2 text-xs font-semibold text-[#2365aa] no-underline hover:bg-[#e5eef7]"
+                          >
+                            <ExternalLink size={14} />
+                            {application.cvFilename || "View CV"}
+                          </a>
+                        ) : null}
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => void onDeleteApplication(application)}
+                        disabled={deletingApplicationId === application.id}
+                        className="inline-flex cursor-pointer items-center gap-1.5 rounded-full border-0 bg-[#fde8e8] px-3 py-2 text-xs font-semibold text-[#b42318] disabled:cursor-not-allowed disabled:opacity-70"
+                      >
+                        <Trash2 size={14} />
+                        {deletingApplicationId === application.id
+                          ? "Removing..."
+                          : "Remove"}
+                      </button>
                     </div>
                   </article>
                 ))}

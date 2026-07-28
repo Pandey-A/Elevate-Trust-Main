@@ -138,7 +138,7 @@ function youtubeEmbed(videoId: string) {
 }
 
 export default function Demo() {
-  const demos = useAdminDemos();
+  const { demos, loading: demosLoading, error: demosError } = useAdminDemos();
   const [searchParams, setSearchParams] = useSearchParams();
   const [activeDemo, setActiveDemo] = useState<AdminDemo | null>(null);
   const [activeIndustry, setActiveIndustry] = useState<IndustryFilter>(() =>
@@ -404,7 +404,19 @@ export default function Demo() {
             </div>
           </div>
 
-          {filteredDemos.length > 0 ? (
+          {demosError ? (
+            <div className="rounded-[20px] border border-[#f5c2c2] bg-[#fde8e8] px-6 py-10 text-center">
+              <p className="m-0 text-[clamp(14px,1.2vw,16px)] text-[#b42318]">
+                {demosError}
+              </p>
+            </div>
+          ) : demosLoading ? (
+            <div className="rounded-[20px] border border-[#d7e6f3] bg-[#EFF7FC] px-6 py-16 text-center">
+              <p className="m-0 text-[clamp(14px,1.2vw,16px)] text-[#687181]">
+                Loading demos...
+              </p>
+            </div>
+          ) : filteredDemos.length > 0 ? (
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 lg:gap-7 xl:gap-8">
               {filteredDemos.map((demo) => {
                 const caseStudyHref = getCaseStudyHref(demo);

@@ -1,4 +1,11 @@
-import { useEffect, useMemo, useRef, useState, type ChangeEvent } from "react";
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ChangeEvent,
+  type FormEvent,
+} from "react";
 import { Link } from "react-router-dom";
 import {
   ArrowUpRight,
@@ -18,7 +25,9 @@ import linkedinLogo from "../assets/footer/LinkedinLogo.svg";
 import instagramLogo from "../assets/footer/InstagramLogo.svg";
 import xLogo from "../assets/footer/xlogo.svg";
 import { useAdminJobs } from "../hooks/useAdminData";
+import { getErrorMessage } from "../lib/api";
 import { groupJobsByCategory } from "../lib/adminStorage";
+import { submitCareerEnquiry } from "../lib/careersApi";
 import "./Careers.css";
 
 const socialLinks = [
@@ -31,8 +40,11 @@ const socialLinks = [
 
 export default function Careers() {
   const jobs = useAdminJobs();
-  const [fileName, setFileName] = useState("No File Selcted");
+  const [fileName, setFileName] = useState("No File Selected");
   const [filter, setFilter] = useState("All");
+  const [submitting, setSubmitting] = useState(false);
+  const [formError, setFormError] = useState("");
+  const [formSuccess, setFormSuccess] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const jobGroups = useMemo(() => {
@@ -58,7 +70,58 @@ export default function Careers() {
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    setFileName(file ? file.name : "No File Selcted");
+    setFileName(file ? file.name : "No File Selected");
+  };
+
+  const handleEnquirySubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setFormError("");
+    setFormSuccess("");
+
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+    const fullName = String(formData.get("fullName") || "").trim();
+    const email = String(formData.get("email") || "").trim();
+    const phone = String(formData.get("phone") || "").trim();
+    const jobTitle = String(formData.get("jobTitle") || "").trim();
+    const education = String(formData.get("education") || "").trim();
+    const expertise = String(formData.get("expertise") || "").trim();
+    const message = String(formData.get("message") || "").trim();
+    const cv = fileInputRef.current?.files?.[0];
+
+    if (!fullName || !email || !phone) {
+      setFormError("Full name, email, and phone are required.");
+      return;
+    }
+    if (!cv) {
+      setFormError("Please upload your CV (PDF, DOC, or DOCX).");
+      return;
+    }
+
+    try {
+      setSubmitting(true);
+      const result = await submitCareerEnquiry({
+        fullName,
+        email,
+        phone,
+        jobTitle,
+        education,
+        expertise,
+        message,
+        cv,
+      });
+      setFormSuccess(
+        result.message ||
+          "Your application was sent successfully. Our team will contact you soon.",
+      );
+      form.reset();
+      if (fileInputRef.current) fileInputRef.current.value = "";
+      setFileName("No File Selected");
+    } catch (err) {
+      setFormError(getErrorMessage(err, "Unable to submit your application."));
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -150,21 +213,21 @@ export default function Careers() {
 
             <form
               className="careers-form"
-              onSubmit={(event) => event.preventDefault()}
+              onSubmit={handleEnquirySubmit}
             >
               <label className="careers-form__field careers-form__field--full">
                 <span>Full Name</span>
-                <input type="text" name="fullName" />
+                <input type="text" name="fullName" required />
               </label>
 
               <label className="careers-form__field">
                 <span>Email</span>
-                <input type="email" name="email" />
+                <input type="email" name="email" required />
               </label>
 
               <label className="careers-form__field">
                 <span>Phone Number</span>
-                <input type="tel" name="phone" />
+                <input type="tel" name="phone" required />
               </label>
 
               <label className="careers-form__field">
@@ -196,7 +259,8 @@ export default function Careers() {
                   <input
                     ref={fileInputRef}
                     type="file"
-                    accept=".pdf.doc.docx"
+                    name="cv"
+                    accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                     className="careers-form__file-input"
                     onChange={handleFileChange}
                   />
@@ -204,13 +268,28 @@ export default function Careers() {
               </div>
 
               <label className="careers-form__field careers-form__field--full careers-form__field--textarea">
-                <span>Expertise</span>
+                <span>Message</span>
                 <textarea name="message" rows={3} />
               </label>
 
+              {formError ? (
+                <p className="careers-form__field careers-form__field--full m-0 rounded-[12px] bg-[#fde8e8] px-3 py-2 text-sm text-[#b42318]">
+                  {formError}
+                </p>
+              ) : null}
+              {formSuccess ? (
+                <p className="careers-form__field careers-form__field--full m-0 rounded-[12px] bg-[#e8f6ee] px-3 py-2 text-sm text-[#1d5c3a]">
+                  {formSuccess}
+                </p>
+              ) : null}
+
               <div className="careers-form__actions">
-                <button type="submit" className="careers-form__submit">
-                  <span>Send</span>
+                <button
+                  type="submit"
+                  className="careers-form__submit"
+                  disabled={submitting}
+                >
+                  <span>{submitting ? "Sending..." : "Send"}</span>
                   <span className="careers-form__submit-circle">
                     <ArrowUpRight size={16} strokeWidth={2.5} />
                   </span>
