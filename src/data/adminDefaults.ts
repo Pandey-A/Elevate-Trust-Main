@@ -24,7 +24,8 @@ export type AdminJob = {
   categorySubtitle: string;
 };
 
-export const DEFAULT_DEMOS: AdminDemo[] = [
+export const DEFAULT_DEMOS: AdminDemo[] = (
+  [
   {
     id: "demo-company-overview",
     title: "Company Overview",
@@ -189,7 +190,8 @@ export const DEFAULT_DEMOS: AdminDemo[] = [
     youtubeUrl: "https://www.youtube.com/watch?v=gNg-JSWIcDQ",
     industries: ["Healthcare and Life Sciences"],
   },
-];
+] as Omit<AdminDemo, "thumbnailUrl">[]
+).map((demo) => ({ ...demo, thumbnailUrl: null }));
 
 export const DEFAULT_JOBS: AdminJob[] = [
   {
