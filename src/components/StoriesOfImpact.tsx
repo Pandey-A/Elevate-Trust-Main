@@ -72,6 +72,8 @@ const stories = [
   },
 ];
 
+const AUTO_ADVANCE_MS = 4500;
+
 export default function StoriesOfImpact() {
   const trackRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef({ active: false, startX: 0 });
@@ -80,6 +82,7 @@ export default function StoriesOfImpact() {
   const [offset, setOffset] = useState(0);
   const [dragX, setDragX] = useState(0);
   const [dragging, setDragging] = useState(false);
+  const [cardHovered, setCardHovered] = useState(false);
 
   const maxIndex = stories.length - 1;
 
@@ -120,6 +123,19 @@ export default function StoriesOfImpact() {
       window.removeEventListener("resize", onResize);
     };
   }, [activeIndex, measureOffset]);
+
+  useEffect(() => {
+    if (dragging || cardHovered || maxIndex <= 0) return;
+
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReducedMotion) return;
+
+    const id = window.setInterval(() => {
+      setActiveIndex((i) => (i >= maxIndex ? 0 : i + 1));
+    }, AUTO_ADVANCE_MS);
+
+    return () => window.clearInterval(id);
+  }, [activeIndex, dragging, cardHovered, maxIndex]);
 
   const goPrev = () => setActiveIndex((i) => Math.max(0, i - 1));
   const goNext = () => setActiveIndex((i) => Math.min(maxIndex, i + 1));
@@ -224,6 +240,8 @@ export default function StoriesOfImpact() {
                         data-story-card
                         data-focused={focused}
                         onClick={() => setActiveIndex(index)}
+                        onMouseEnter={() => setCardHovered(true)}
+                        onMouseLeave={() => setCardHovered(false)}
                         className={[
                           "relative flex shrink-0 cursor-pointer flex-col overflow-hidden rounded-[20px] sm:rounded-[24px] lg:rounded-[30px]",
                           // Smaller only on laptop (lg/xl < 1536); 2xl+ keeps previous large-screen sizes

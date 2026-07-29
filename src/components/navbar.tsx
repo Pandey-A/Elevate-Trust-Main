@@ -269,7 +269,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="navbar relative z-50 w-full bg-white border-b border-gray-200">
+    <nav className="navbar sticky top-0 z-50 w-full border-b border-gray-200 bg-white">
       <div className="site-container navbar__shell">
         <div className="navbar__inner grid h-14 grid-cols-[auto_1fr_auto] items-center gap-3 sm:h-16 lg:gap-4">
           <Link to="/" className="navbar__logo flex-shrink-0" onClick={closeMobileMenu}>

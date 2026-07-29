@@ -68,6 +68,8 @@ const cards: AICard[] = [
   },
 ];
 
+const AUTO_ADVANCE_MS = 4500;
+
 export default function AILandscape() {
   const trackRef = useRef<HTMLDivElement>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
@@ -78,6 +80,7 @@ export default function AILandscape() {
   const [dragOffset, setDragOffset] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [visibleCards, setVisibleCards] = useState(1);
+  const [cardHovered, setCardHovered] = useState(false);
 
   const maxIndex = Math.max(0, cards.length - visibleCards);
 
@@ -88,6 +91,19 @@ export default function AILandscape() {
   const goNext = useCallback(() => {
     setActiveIndex((i) => Math.min(maxIndex, i + 1));
   }, [maxIndex]);
+
+  useEffect(() => {
+    if (isDragging || cardHovered || maxIndex <= 0) return;
+
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReducedMotion) return;
+
+    const id = window.setInterval(() => {
+      setActiveIndex((i) => (i >= maxIndex ? 0 : i + 1));
+    }, AUTO_ADVANCE_MS);
+
+    return () => window.clearInterval(id);
+  }, [activeIndex, isDragging, cardHovered, maxIndex]);
 
   useEffect(() => {
     const track = trackRef.current;
@@ -200,6 +216,8 @@ export default function AILandscape() {
                 return (
                   <article
                     key={`ai-card-${index}`}
+                    onMouseEnter={() => setCardHovered(true)}
+                    onMouseLeave={() => setCardHovered(false)}
                     className={[
                       "relative flex shrink-0 flex-col justify-between overflow-hidden select-none",
                       "w-[260px] min-h-[340px] rounded-[22px] px-5 pt-6 sm:w-[300px] sm:min-h-[380px] sm:rounded-[26px] sm:px-6 sm:pt-7",

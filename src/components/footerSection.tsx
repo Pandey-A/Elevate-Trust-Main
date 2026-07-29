@@ -9,10 +9,7 @@ import xLogo from "../assets/footer/xlogo.svg";
 import worldMapBackground from "../assets/footer/worldmapfooter.svg";
 import elevateFooterServiceLogo from "../assets/footer/elevateservicelogo.svg";
 import paperplanefooter from "../assets/footer/PaperPlaneTilt.svg";
-import partnerTeksoft from "../assets/footer/teksoft.png";
-import partnerGeoNomads from "../assets/footer/geo-nomads-geo.png";
-import partner3i from "../assets/footer/3i.png";
-import partnerMagnor from "../assets/footer/magnor-1.png";
+import { activePartners } from "../data/activePartners";
 import { digitalServicePaths } from "../data/digitalServices";
 import "./footerSection.css";
 
@@ -20,13 +17,6 @@ type FooterLinkItem = {
   label: string;
   href?: string;
 };
-
-const footerPartners = [
-  { name: "Teksoft Solutions", logo: partnerTeksoft },
-  { name: "GeoNomads", logo: partnerGeoNomads },
-  { name: "3i Infotech", logo: partner3i },
-  { name: "Magnor", logo: partnerMagnor },
-];
 
 const services: FooterLinkItem[] = [
   { label: "Overview", href: "/Services/ai-ml" },
@@ -236,13 +226,21 @@ export default function FooterSection() {
 
           <FooterColumn title="Partners">
             <div className="footer__partners">
-              {footerPartners.map((partner) => (
-                <img
+              {activePartners.map((partner) => (
+                <div
                   key={partner.name}
-                  src={partner.logo}
-                  alt={partner.name}
-                  className="footer__partner-logo"
-                />
+                  className={
+                    "tall" in partner && partner.tall
+                      ? "footer__partner-slot footer__partner-slot--tall"
+                      : "footer__partner-slot"
+                  }
+                >
+                  <img
+                    src={partner.logo}
+                    alt={partner.name}
+                    className="footer__partner-logo"
+                  />
+                </div>
               ))}
             </div>
           </FooterColumn>

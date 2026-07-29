@@ -1,7 +1,8 @@
 /* Navbar — laptop / desktop below 2012 (flex layout, no Figma absolute) */
 @media (min-width: 1024px) and (max-width: 2011px) {
   .navbar {
-    position: relative;
+    position: sticky;
+    top: 0;
     z-index: 50;
     width: 100%;
     background: #ffffff;
@@ -347,7 +348,8 @@
 /* Navbar — exact Figma match @ 2012px only (Headeer #1216:5561) */
 @media (min-width: 2012px) {
   .navbar {
-    position: relative;
+    position: sticky;
+    top: 0;
     z-index: 50;
     width: 100%;
     max-width: none;
