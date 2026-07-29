@@ -1,6 +1,7 @@
 import DigitalServicePage, {
   digitalServiceImages,
 } from "./DigitalServicePage";
+import landingPagesConversion from "../assets/OurServices/landingpages-conversion.png";
 
 const {
   digitalMarketing,
@@ -13,7 +14,6 @@ const {
   processFrame2,
   processFrame3,
   processFrame7,
-  genOptimize,
   digitalMarketingAgency,
 } = digitalServiceImages;
 
@@ -57,7 +57,7 @@ export default function DigitalMarketing() {
           title: "Landing pages & conversion",
           description:
             "Offer-led pages and funnels designed to turn traffic into qualified conversations.",
-          icon: genOptimize,
+          icon: landingPagesConversion,
         },
         {
           title: "Analytics & attribution",

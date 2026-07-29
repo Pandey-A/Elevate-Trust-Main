@@ -1,45 +1,36 @@
-import viewAllArrow from "../../assets/nav/lets-connect.svg";
+import { Link } from "react-router-dom";
+import { ArrowUpRight } from "lucide-react";
 import worldMapBackground from "../../assets/homepage-icons/Group(3).png";
 
 export default function ServiceHero() {
   return (
-    <section className="relative h-[20rem] w-full overflow-hidden bg-[#113D77] sm:h-[22rem] md:h-[23rem] lg:h-[25rem] xl:h-[28rem]">
-      {/* Map, img pinned to bottom via flex items-end */}
-      <div
+    <section className="service-page-hero" aria-label="AI/ML Solutions">
+      <img
+        src={worldMapBackground}
+        alt=""
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 z-[1] flex items-end justify-center  overflow-hidden"
-      >
-        <img
-          src={worldMapBackground}
-          alt=""
-          className="block w-[94%] max-w-none sm:w-[88%] md:w-[80%] lg:w-[70%] mt-30"
-        />
-      </div>
-
-      <div className="relative z-[2] mx-auto flex h-full w-full max-w-site items-center justify-center p-4 lg:p-8 xl:p-10">
-        <div className="flex w-full max-w-[20rem] flex-col items-center gap-3 text-center sm:max-w-[26rem] sm:gap-3.5 md:max-w-[30rem] lg:w-[55%] lg:max-w-[42rem] xl:max-w-[48rem] lg:gap-4">
-          <h1 className="text-[1.25rem] font-bold leading-[1.35] text-white sm:text-[1.5rem] md:text-[1.75rem] lg:text-[2rem] xl:text-[2.25rem] lg:leading-[1.45]">
-            Custom AI/ML Solutions for Strategic Business Outcomes
-          </h1>
-
-          <p className="font-ubuntu text-[0.65rem] font-normal leading-relaxed text-white/50 sm:text-[0.7rem] md:text-[0.75rem] lg:text-[0.85rem] xl:text-base lg:leading-6">
-            We collaborate with clients to elevate AI solutions aimed at achieving
-            strategic business goals. Our knowledge covers many industries,
-            tackling difficult issues using AI methods designed for both
-            structured and unstructured data. We are skilled in developing
-            traditional Machine Learning and Deep Learning algorithms.
-          </p>
-
-          <a
-            href="/contact"
-            className="btn-cta mt-1 shrink-0 bg-[#2365AA] text-white hover:bg-[#1d5694] pl-5 pr-3"
-          >
-            Contact Us
-            <span className="flex h-6 w-6 items-end justify-end rounded-full bg-[#113D77] sm:h-7 sm:w-7">
-              <img src={viewAllArrow} alt="" aria-hidden className="h-4 w-4 sm:h-auto sm:w-auto" />
-            </span>
-          </a>
-        </div>
+        className="service-page-hero__map"
+      />
+      <div className="service-page-hero__content">
+        <h1 className="m-0 text-[clamp(28px,3.8vw,48px)] font-bold leading-[1.29] tracking-tight text-white lg:text-[clamp(26px,3vw,34px)] 2xl:text-[clamp(32px,4vw,48px)]">
+          Custom AI/ML Solutions for Strategic Business Outcomes
+        </h1>
+        <p className="mt-[clamp(12px,1.5vw,20px)] max-w-[783px] font-['Ubuntu',sans-serif] text-[clamp(14px,1.4vw,18px)] font-normal leading-6 text-[#a1b1cb] lg:text-[clamp(13px,1.1vw,15px)] 2xl:text-[clamp(14px,1.4vw,18px)]">
+          We collaborate with clients to elevate AI solutions aimed at achieving
+          strategic business goals. Our knowledge covers many industries,
+          tackling difficult issues using AI methods designed for both
+          structured and unstructured data. We are skilled in developing
+          traditional Machine Learning and Deep Learning algorithms.
+        </p>
+        <Link
+          to="/contact"
+          className="mt-[clamp(16px,2vw,28px)] inline-flex items-center gap-1.5 rounded-full bg-[#2365aa] py-3 pl-[26px] pr-3.5 text-base font-normal uppercase leading-[1.2] text-white no-underline transition-colors hover:bg-[#1a5490] lg:py-2.5 lg:pl-[22px] lg:pr-2.5 lg:text-sm 2xl:py-3 2xl:pl-[26px] 2xl:pr-3.5 2xl:text-base"
+        >
+          Contact Us
+          <span className="inline-flex h-[37px] w-[37px] items-center justify-center rounded-full bg-white text-[#2365aa]">
+            <ArrowUpRight size={18} strokeWidth={2.5} />
+          </span>
+        </Link>
       </div>
     </section>
   );

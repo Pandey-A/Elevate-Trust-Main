@@ -13,12 +13,12 @@ export default function ServiceDetails() {
       <ProcessAutomationFeatures />
 
       <section className="w-full bg-white" aria-label="AI/ML delivery process">
-        <div className="mx-auto w-full max-w-[1692px] px-5 py-[clamp(40px,5vw,72px)] sm:px-8 md:px-10 lg:px-20">
+        <div className="mx-auto w-full max-w-[1692px] px-5 py-[clamp(40px,5vw,72px)] sm:px-8 lg:px-10 xl:px-12">
           <header className="mx-auto mb-[clamp(24px,3vw,40px)] max-w-[48rem] text-center">
-            <h2 className="m-0 text-[clamp(26px,3.5vw,48px)] font-bold leading-[1.15] text-[#1F2432]">
+            <h2 className="m-0 text-[clamp(28px,4vw,56px)] font-bold leading-[1.15] text-[#1F2432]">
               Our AI/ML Delivery Process
             </h2>
-            <p className="mt-4 text-[clamp(13px,1.2vw,16px)] leading-7 text-[#9CA3AF]">
+            <p className="mt-4 text-[clamp(13px,1.2vw,16px)] leading-7 text-[#9CA3AF] 2xl:text-[18px] 2xl:leading-8">
               From discovery and data readiness through model development,
               deployment, optimization, and continuous improvement, we take AI
               solutions from idea to production with a clear, repeatable path.

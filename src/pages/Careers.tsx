@@ -273,7 +273,7 @@ export default function Careers() {
               </label>
 
               {formError ? (
-                <p className="careers-form__field careers-form__field--full m-0 rounded-[12px] bg-[#fde8e8] px-3 py-2 text-sm text-[#b42318]">
+                <p className="careers-form__field careers-form__field--full m-0 rounded-[12px] bg-[#EEF3FB] px-3 py-2 text-sm text-[#2365aa]">
                   {formError}
                 </p>
               ) : null}

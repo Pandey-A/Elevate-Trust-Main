@@ -28,19 +28,19 @@ import ecommerceCompanyImage from "../assets/OurServices/E-commerce-company.jpg"
 import digitalMarketingAgencyImage from "../assets/OurServices/digital-marketing-agency-popular-services.png";
 import erpSoftwareImage from "../assets/OurServices/ERP-SOFTWARE-COMPANY-IN-NASHIK.jpg";
 import happyFeetImage from "../assets/OurServices/happyfeet.png";
-import genData from "../assets/OurServices/GenAI-Data.png";
-import genSoftware from "../assets/OurServices/GenAI-Software.png";
-import genOptimize from "../assets/OurServices/GenAI-Optimize.png";
+import genData from "../assets/OurServices/seo.png";
+import genSoftware from "../assets/OurServices/corporate.png";
+import genOptimize from "../assets/OurServices/modernization.png";
 import genCustomer from "../assets/OurServices/GenAI-customService.png";
 import genHealthcare from "../assets/OurServices/GenAI-healthcare.png";
 import genHr from "../assets/OurServices/GenAI-HR.png";
-import genKnowledge from "../assets/OurServices/GenAI-knowledge.png";
+import genKnowledge from "../assets/OurServices/cms.png";
 import genFinance from "../assets/OurServices/GenAI-Finance.png";
 import audioAccuracy from "../assets/OurServices/Audio-accuracy.png";
 import audioCamera from "../assets/OurServices/Audio-camera.png";
 import audioDeploy from "../assets/OurServices/Audio-deployment.png";
-import audioInsights from "../assets/OurServices/Audio-Insights.png";
-import audioIntegration from "../assets/OurServices/Audio-integration.png";
+import audioInsights from "../assets/OurServices/ongoing.png";
+import audioIntegration from "../assets/OurServices/Api-first.png";
 import audioSimple from "../assets/OurServices/Audio-simple.png";
 import audioBg1 from "../assets/OurServices/Audiobg-1.png";
 import audioBg2 from "../assets/OurServices/Audiobg-2.png";
@@ -260,30 +260,26 @@ export default function DigitalServicePage({
 
   return (
     <div className="bg-white font-['Lay_Grotesk_Trial',sans-serif] text-[#272935]">
-      <section
-        className="relative flex w-full items-center justify-center overflow-hidden bg-[#113d77]"
-        style={{ minHeight: "clamp(280px, 32vw, 492px)" }}
-        aria-label={breadcrumb}
-      >
+      <section className="service-page-hero" aria-label={breadcrumb}>
         <img
           src={worldMapBackground}
           alt=""
           aria-hidden
-          className="pointer-events-none absolute left-1/2 top-[58%] w-[min(94%,1600px)] -translate-x-1/2 -translate-y-1/2 opacity-55"
+          className="service-page-hero__map"
         />
-        <div className="relative z-10 flex max-w-[min(860px,92%)] flex-col items-center px-5 pb-[clamp(48px,6vw,80px)] pt-[clamp(72px,8vw,120px)] text-center">
+        <div className="service-page-hero__content">
           <p className="mb-3 text-sm font-semibold uppercase tracking-[0.16em] text-[#8eb4df] 2xl:text-base">
             Our Services
           </p>
           <h1 className="m-0 text-[clamp(28px,3.8vw,48px)] font-bold leading-[1.29] tracking-tight text-white lg:text-[clamp(26px,3vw,34px)] 2xl:text-[clamp(32px,4vw,48px)]">
             {heroTitle}
           </h1>
-          <p className="mt-[clamp(16px,2vw,24px)] max-w-[783px] font-['Ubuntu',sans-serif] text-[clamp(14px,1.4vw,18px)] font-normal leading-6 text-[#a1b1cb] lg:text-[clamp(13px,1.1vw,15px)] 2xl:text-[clamp(14px,1.4vw,18px)]">
+          <p className="mt-[clamp(12px,1.5vw,20px)] max-w-[783px] font-['Ubuntu',sans-serif] text-[clamp(14px,1.4vw,18px)] font-normal leading-6 text-[#a1b1cb] lg:text-[clamp(13px,1.1vw,15px)] 2xl:text-[clamp(14px,1.4vw,18px)]">
             {heroSubtitle}
           </p>
           <Link
             to="/contact"
-            className="mt-[clamp(24px,3vw,40px)] inline-flex items-center gap-1.5 rounded-full bg-[#2365aa] py-3 pl-[26px] pr-3.5 text-base font-normal uppercase leading-[1.2] text-white no-underline transition-colors hover:bg-[#1a5490] lg:py-2.5 lg:pl-[22px] lg:pr-2.5 lg:text-sm 2xl:py-3 2xl:pl-[26px] 2xl:pr-3.5 2xl:text-base"
+            className="mt-[clamp(16px,2vw,28px)] inline-flex items-center gap-1.5 rounded-full bg-[#2365aa] py-3 pl-[26px] pr-3.5 text-base font-normal uppercase leading-[1.2] text-white no-underline transition-colors hover:bg-[#1a5490] lg:py-2.5 lg:pl-[22px] lg:pr-2.5 lg:text-sm 2xl:py-3 2xl:pl-[26px] 2xl:pr-3.5 2xl:text-base"
           >
             Contact Us
             <span className="inline-flex h-[37px] w-[37px] items-center justify-center rounded-full bg-white text-[#2365aa]">
@@ -366,7 +362,7 @@ export default function DigitalServicePage({
           <div className="grid grid-cols-1 items-stretch gap-8 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-3 lg:gap-8">
             {offerings.map((item) => (
               <article key={item.title} className="flex h-full min-w-0 flex-col">
-                <div className="mb-5 flex aspect-[5/4] w-full items-center justify-center overflow-hidden sm:mb-6">
+                <div className="mb-5 flex aspect-[5/4] w-full items-center justify-center overflow-hidden bg-[#EFF7FC] sm:mb-6">
                   <img
                     src={item.icon}
                     alt=""
@@ -424,7 +420,7 @@ export default function DigitalServicePage({
                     </a>
 
                     <div className="flex flex-col justify-center p-6 sm:p-8 lg:p-10 xl:p-12">
-                      <p className="m-0 text-sm font-semibold uppercase tracking-[0.14em] text-[#f07c62]">
+                      <p className="m-0 text-sm font-semibold uppercase tracking-[0.14em] text-[#2365aa]">
                         {project.client}
                       </p>
                       <h3 className="mt-2 m-0 text-[clamp(22px,2.4vw,32px)] font-bold leading-tight text-[#1F2432]">

@@ -126,17 +126,14 @@ export default function GenAiSdlcCaseStudy() {
   return (
     <div className="bg-white font-['Lay_Grotesk_Trial',sans-serif] text-[#272935]">
       {/* Hero */}
-      <section
-        className="relative flex w-full flex-col items-center justify-center overflow-hidden bg-[#113d77] px-6 py-[clamp(88px,10vw,140px)]"
-        style={{ minHeight: "clamp(320px, 36vw, 576px)" }}
-      >
+      <section className="service-page-hero" aria-label="GenAI-Enabled SDLC Enablement Plan">
         <img
           src={worldMapBackground}
           alt=""
           aria-hidden
-          className="pointer-events-none absolute left-1/2 top-[62%] w-[120%] max-w-[1600px] -translate-x-1/2 -translate-y-1/2 opacity-95"
+          className="service-page-hero__map"
         />
-        <div className="relative z-10 flex max-w-[min(880px,92%)] flex-col items-center text-center">
+        <div className="service-page-hero__content max-w-[min(880px,92%)]">
           <p className="mb-3 text-sm font-semibold uppercase tracking-[0.16em] text-[#8eb4df]">
             Case Study
           </p>

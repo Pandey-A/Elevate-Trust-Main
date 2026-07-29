@@ -8,15 +8,16 @@
 .csd-hero {
   position: relative;
   width: 100%;
-  min-height: clamp(320px, 36vw, 576px);
-  padding: clamp(88px, 10vw, 140px) var(--site-padding-x, 24px)
-    clamp(56px, 7vw, 88px);
+  height: var(--service-hero-height);
+  min-height: var(--service-hero-height);
+  padding: 0 var(--site-padding-x, 24px);
   background-color: #113d77;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 .csd-hero__bg {

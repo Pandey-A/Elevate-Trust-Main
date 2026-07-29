@@ -140,25 +140,21 @@ export default function AudioVideoAnalytics() {
   return (
     <div className="bg-white font-['Lay_Grotesk_Trial',sans-serif] text-[#272935]">
       {/* Hero */}
-      <section
-        className="relative flex w-full items-center justify-center overflow-hidden bg-[#113d77]"
-        style={{ minHeight: "clamp(280px, 32vw, 492px)" }}
-        aria-label="Audio and Video Analytics"
-      >
+      <section className="service-page-hero" aria-label="Audio and Video Analytics">
         <img
           src={worldMapBackground}
           alt=""
           aria-hidden
-          className="pointer-events-none absolute left-1/2 top-[58%] w-[min(94%,1600px)] -translate-x-1/2 -translate-y-1/2 opacity-55"
+          className="service-page-hero__map"
         />
-        <div className="relative z-10 flex max-w-[min(860px,92%)] flex-col items-center px-5 pb-[clamp(48px,6vw,80px)] pt-[clamp(72px,8vw,120px)] text-center">
+        <div className="service-page-hero__content">
           <p className="mb-3 text-sm font-semibold uppercase tracking-[0.16em] text-[#8eb4df] 2xl:text-base">
             Audio &amp; Video
           </p>
           <h1 className="m-0 text-[clamp(28px,3.8vw,48px)] font-bold leading-[1.29] tracking-tight text-white lg:text-[clamp(26px,3vw,34px)] 2xl:text-[clamp(32px,4vw,48px)]">
             Advanced Audio &amp; Video Analytics for Business Innovation
           </h1>
-          <p className="mt-[clamp(16px,2vw,24px)] max-w-[783px] font-['Ubuntu',sans-serif] text-[clamp(14px,1.4vw,18px)] font-normal leading-6 text-[#a1b1cb] lg:text-[clamp(13px,1.1vw,15px)] 2xl:text-[clamp(14px,1.4vw,18px)]">
+          <p className="mt-[clamp(12px,1.5vw,20px)] max-w-[783px] font-['Ubuntu',sans-serif] text-[clamp(14px,1.4vw,18px)] font-normal leading-6 text-[#a1b1cb] lg:text-[clamp(13px,1.1vw,15px)] 2xl:text-[clamp(14px,1.4vw,18px)]">
             We develop custom solutions for text and image/video analytics, which
             include document parsing, understanding meaning in texts, analyzing
             warranties and claims, inspecting visuals for defects in manufacturing,
@@ -167,7 +163,7 @@ export default function AudioVideoAnalytics() {
           </p>
           <Link
             to="/contact"
-            className="mt-[clamp(24px,3vw,40px)] inline-flex items-center gap-1.5 rounded-full bg-[#2365aa] py-3 pl-[26px] pr-3.5 text-base font-normal uppercase leading-[1.2] text-white no-underline transition-colors hover:bg-[#1a5490] lg:py-2.5 lg:pl-[22px] lg:pr-2.5 lg:text-sm 2xl:py-3 2xl:pl-[26px] 2xl:pr-3.5 2xl:text-base"
+            className="mt-[clamp(16px,2vw,28px)] inline-flex items-center gap-1.5 rounded-full bg-[#2365aa] py-3 pl-[26px] pr-3.5 text-base font-normal uppercase leading-[1.2] text-white no-underline transition-colors hover:bg-[#1a5490] lg:py-2.5 lg:pl-[22px] lg:pr-2.5 lg:text-sm 2xl:py-3 2xl:pl-[26px] 2xl:pr-3.5 2xl:text-base"
           >
             Contact Us
             <span className="inline-flex h-[37px] w-[37px] items-center justify-center rounded-full bg-white text-[#2365aa]">

@@ -9,6 +9,7 @@ type DemoApiRow = {
   videoId: string;
   youtubeUrl: string;
   industries: string[];
+  thumbnailUrl?: string | null;
 };
 
 function mapDemo(row: DemoApiRow): AdminDemo {
@@ -22,6 +23,7 @@ function mapDemo(row: DemoApiRow): AdminDemo {
       industries.length > 0
         ? industries
         : (["Financial Services & FinTech"] as IndustryTag[]),
+    thumbnailUrl: row.thumbnailUrl ?? null,
   };
 }
 
@@ -39,17 +41,36 @@ export async function fetchDemos(): Promise<AdminDemo[]> {
   return data.data.map(mapDemo);
 }
 
+function buildDemoFormData(demo: {
+  id?: string;
+  title: string;
+  youtubeUrl: string;
+  industries: IndustryTag[];
+  thumbnailFile?: File | null;
+}): FormData {
+  const form = new FormData();
+  if (demo.id) form.append("id", demo.id);
+  form.append("title", demo.title);
+  form.append("youtubeUrl", demo.youtubeUrl);
+  demo.industries.forEach((tag) => form.append("industries", tag));
+  if (demo.thumbnailFile) form.append("thumbnail", demo.thumbnailFile);
+  return form;
+}
+
 export async function createDemo(demo: {
   id?: string;
   title: string;
   youtubeUrl: string;
   industries: IndustryTag[];
+  thumbnailFile?: File | null;
 }): Promise<AdminDemo> {
   const { data } = await api.post<{
     success: boolean;
     message?: string;
     data: DemoApiRow;
-  }>("/api/demos", demo);
+  }>("/api/demos", buildDemoFormData(demo), {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
 
   if (!data.success || !data.data) {
     throw new Error(data.message || "Unable to create demo.");
@@ -65,13 +86,16 @@ export async function updateDemo(
     title: string;
     youtubeUrl: string;
     industries: IndustryTag[];
+    thumbnailFile?: File | null;
   },
 ): Promise<AdminDemo> {
   const { data } = await api.put<{
     success: boolean;
     message?: string;
     data: DemoApiRow;
-  }>(`/api/demos/${encodeURIComponent(id)}`, demo);
+  }>(`/api/demos/${encodeURIComponent(id)}`, buildDemoFormData(demo), {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
 
   if (!data.success || !data.data) {
     throw new Error(data.message || "Unable to update demo.");

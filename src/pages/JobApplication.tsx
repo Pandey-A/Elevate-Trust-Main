@@ -315,7 +315,7 @@ export default function JobApplication() {
                     type="button"
                     onClick={handleAutofill}
                     disabled={autofillStatus === "loading"}
-                    className="inline-flex items-center gap-2 py-2 px-4 bg-[#f07c62] rounded-full text-white font-medium text-sm hover:bg-[#e06a50] transition-colors disabled:opacity-60"
+                    className="inline-flex items-center gap-2 py-2 px-4 bg-[#2365aa] rounded-full text-white font-medium text-sm hover:bg-[#1a5490] transition-colors disabled:opacity-60"
                   >
                     {autofillStatus === "loading" ? "Extracting…" : "Auto-fill from Resume"}
                   </button>

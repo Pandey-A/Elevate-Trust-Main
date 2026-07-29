@@ -38,29 +38,35 @@ const offerings = [
 export default function PredictiveAnalyticsOfferings() {
   return (
     <section className="w-full bg-white">
-      <div className="mx-auto w-full max-w-site px-5 pb-12 pt-3 sm:px-8 sm:pb-16 md:px-10 lg:px-20 lg:pb-20 lg:pt-6">
+      <div className="mx-auto w-full max-w-[1692px] px-5 pb-[clamp(48px,6vw,80px)] pt-3 sm:px-8 lg:px-10 xl:px-12">
         <nav
-          className="mb-8 text-[10px] text-[#9CA3AF] sm:mb-10 sm:text-xs lg:mb-12"
+          className="mb-[clamp(28px,3vw,48px)] flex flex-wrap items-center gap-2.5 pt-[clamp(20px,2.5vw,36px)] text-[clamp(13px,1.2vw,18px)] font-normal leading-[1.2] text-[#272935] 2xl:text-[18px]"
           aria-label="Breadcrumb"
         >
-          <Link to="/" className="hover:text-[#6B7280]">
+          <Link
+            to="/"
+            className="text-inherit no-underline transition-colors hover:text-[#2365aa]"
+          >
             Home
           </Link>
-          <span className="mx-1.5">»</span>
-          <Link to="/Services/ai-ml" className="hover:text-[#6B7280]">
+          <span className="text-[#848b9b]">»</span>
+          <Link
+            to="/Services/ai-ml"
+            className="text-inherit no-underline transition-colors hover:text-[#2365aa]"
+          >
             Our Services
           </Link>
-          <span className="mx-1.5">»</span>
-          <span className="text-[#6B7280]">Custom AI/ML Solutions</span>
+          <span className="text-[#848b9b]">»</span>
+          <span>AI/ML Solution</span>
         </nav>
 
-        <header className="mx-auto mb-10 max-w-[52rem] text-center sm:mb-12 lg:mb-16">
-          <h2 className="text-[1.75rem] font-bold leading-[1.2] text-[#1F2432] sm:text-[2rem] md:text-[2.5rem] lg:text-[56px] lg:leading-[62px]">
+        <header className="mx-auto mb-[clamp(32px,4vw,56px)] max-w-[52rem] text-center">
+          <h2 className="m-0 text-[clamp(28px,4vw,56px)] font-bold leading-[1.15] text-[#1F2432]">
             Core Offerings
             <br />
             Predictive Analytics
           </h2>
-          <p className="mx-auto mt-5 max-w-[42rem] text-xs leading-6 text-[#9CA3AF] sm:mt-6 sm:text-sm sm:leading-7 lg:mt-8">
+          <p className="mx-auto mt-5 max-w-[48rem] text-[clamp(13px,1.2vw,16px)] leading-7 text-[#9CA3AF] sm:mt-6 2xl:text-[18px] 2xl:leading-8">
             We create custom AI solutions for Predictive Analytics, such as
             predicting customer churn, building recommendation systems,
             maintaining equipment, forecasting in manufacturing, and analyzing
@@ -80,17 +86,17 @@ export default function PredictiveAnalyticsOfferings() {
                 />
               </div>
 
-              <h3 className="text-base font-bold leading-snug text-[#1F2432] sm:text-lg lg:text-[20px] lg:leading-[28px]">
+              <h3 className="m-0 text-[clamp(16px,1.4vw,20px)] font-bold leading-snug text-[#1F2432]">
                 {item.title}
               </h3>
 
               {item.subtitle ? (
-                <p className="mt-1 text-[13px] font-medium leading-snug text-[#1F2432] sm:text-[15px] lg:text-[16px] lg:leading-[22px]">
+                <p className="mt-1 text-[clamp(13px,1.2vw,16px)] font-medium leading-snug text-[#1F2432]">
                   {item.subtitle}
                 </p>
               ) : null}
 
-              <p className="mt-3 text-xs leading-5 text-[#9CA3AF] sm:mt-4 sm:text-sm sm:leading-6">
+              <p className="mt-3 text-[clamp(12px,1.1vw,14px)] leading-6 text-[#9CA3AF] sm:mt-4">
                 {item.description}
               </p>
             </article>

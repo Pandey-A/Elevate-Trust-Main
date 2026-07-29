@@ -21,67 +21,67 @@ import genAiSdlcCaseImage from "../assets/case-studies/c7-1.png";
 
 const coreOfferings = [
   {
-    title: "Data analytics agent",
+    title: "Autonomous data analytics agent",
     description:
-      "Automate exploratory analysis, reporting, and insight generation so product and data teams move from raw datasets to decisions faster.",
+      "Deploy goal-driven agents that plan, query, and synthesize insights from raw datasets reducing analysis cycles from days to minutes.",
     icon: dataAgentIcon,
   },
   {
-    title: "Software development co-pilot",
+    title: "Agentic software development co-pilot",
     description:
-      "Accelerate engineering with AI-assisted coding, review, and documentation workflows tailored to your stack and delivery standards.",
+      "Multi-step coding agents that plan features, write code, run tests, and open pull requests with minimal human intervention.",
     icon: softwareAgentIcon,
   },
   {
-    title: "Maintenance optimization agent",
+    title: "Proactive maintenance agent",
     description:
-      "Predict issues, prioritize work orders, and optimize maintenance cycles with agents that learn from operational and sensor data.",
+      "Agents that reason over sensor and operational data, autonomously prioritize work orders, and trigger preventive actions before failures occur.",
     icon: optimizeAgentIcon,
   },
   {
-    title: "Customer service virtual agent",
+    title: "Agentic customer service",
     description:
-      "Deploy agentic support experiences that retrieve knowledge, draft responses, and reduce ticket handling time across channels.",
+      "Orchestrated agents that retrieve knowledge, draft responses, escalate intelligently, and close tickets end-to-end across channels.",
     icon: customerServiceIcon,
   },
   {
-    title: "Healthcare co-pilots",
+    title: "Healthcare agentic co-pilots",
     description:
-      "Assist clinicians and auditors with documentation, summarization, and workflow support while keeping humans in the loop.",
+      "Clinical documentation and audit agents with human-in-the-loop controls, reducing manual review effort while maintaining compliance.",
     icon: healthcareAgentIcon,
   },
   {
-    title: "HR & Training AI Agents",
+    title: "HR & training agents",
     description:
-      "Speed onboarding, role-based training, and policy Q&A with conversational agents grounded in your internal knowledge base.",
+      "Onboarding and policy agents that reason over internal knowledge bases, personalize learning paths, and answer role-specific questions.",
     icon: hrAgentIcon,
   },
   {
-    title: "Knowledge Management AI Agents",
+    title: "Knowledge orchestration agents",
     description:
-      "Turn documents, FAQs, and tribal knowledge into searchable, trustworthy answers with retrieval-augmented agent frameworks.",
+      "Retrieval-augmented agents that route queries, synthesize multi-source answers, and keep knowledge current with automatic refresh cycles.",
     icon: knowledgeAgentIcon,
   },
   {
-    title: "Financial services AI agents",
+    title: "Financial services agents",
     description:
-      "Support analysts and operations teams with compliant assistants for research, reporting, and customer-facing workflows.",
+      "Compliant agentic assistants for research, regulatory reporting, and customer-facing workflows that require multi-step reasoning and audit trails.",
     icon: financeAgentIcon,
   },
 ];
 
 const valueAdded = [
-  "Delivered automated data analytics solution using LLM for a data backup & storage company, reducing long product analytics cycles significantly.",
-  "Delivered customer support virtual agent solutions by developing a custom agentic framework, enabling faster adoption of agents across new domains.",
-  "Delivered on-premise finetuned LLM-based knowledge retrieval bot for a game company, reducing repeated tickets from 40% to 10%.",
-  "Delivered sales training voice bot using LLM for an Ed-tech product company, helping sales teams practice complex scenarios and ramp faster.",
+  "Delivered an autonomous data analytics agent for a data backup & storage company, compressing product analytics cycles that previously took days into minutes.",
+  "Built a custom agentic framework for customer support orchestration, enabling rapid deployment of new domain agents without rebuilding from scratch.",
+  "Deployed an on-premise agentic knowledge retrieval system for a gaming company, reducing repeated support tickets from 40% to 10%.",
+  "Delivered an agentic sales training voice bot for an EdTech company, enabling reps to practice complex scenarios and ramp up 80% faster.",
 ];
 
 const consultingPoints = [
-  "Use case recognition and feasibility evaluation",
-  "Technology assessment and model selection",
-  "Solution architecture and AI deployment design",
-  "Tailored Gen AI strategy aligned to business goals",
+  "Agentic use case identification and feasibility evaluation",
+  "Agent architecture design single-agent, multi-agent, and hierarchical",
+  "Tool integration, memory, and human-in-the-loop planning",
+  "Governance, observability, and production deployment strategy",
 ];
 
 const successStories = [
@@ -89,24 +89,24 @@ const successStories = [
     id: "customer-support",
     label: "Customer Support AI Agent",
     about: [
-      "Customer support company providing dialog-flow based bot solutions with human agents.",
-      "Building large-scale customer agent platforms to accelerate day-to-day support activities.",
-      "Needed a solution to cut response time and reduce ticket closing cycles.",
+      "Customer support company building large-scale agent platforms.",
+      "Needed to cut response time and reduce ticket-closing cycles.",
+      "Required a solution that scales across new support domains quickly.",
     ],
     situation: [
-      "Agents used numerous tools and information sources to locate the right answers.",
-      "High response time driven by slow information discovery.",
+      "Agents manually searched multiple tools and knowledge sources.",
+      "High response time driven by slow, fragmented information discovery.",
       "Heavy manual effort to assemble accurate responses under load.",
     ],
     solution: [
-      "Built an agentic generative AI solution for support workflows.",
-      "Reduced manual content searching and recommended proven past solutions.",
-      "Customizable to organization-specific processes with Kubernetes-based scale.",
+      "Built an agentic orchestration layer for end-to-end support workflows.",
+      "Agents retrieve, reason, and draft responses with minimal human touch.",
+      "Customizable to org-specific processes with Kubernetes-based scale.",
     ],
     results: [
       "90% reduction in first response time",
       "50% reduction in final response time",
-      "24/7 assistant for L1 teams with ready-to-send draft responses",
+      "24/7 L1 assistant with ready-to-send draft responses",
     ],
   },
   {
@@ -114,8 +114,8 @@ const successStories = [
     label: "Product Assistant AI Agent",
     about: [
       "EdTech product company serving universities and enterprises.",
-      "Focused on accelerating eLearning adoption across large user bases.",
-      "Needed to reduce new-product hand-holding and onboarding friction.",
+      "Needed to reduce onboarding friction and new-product hand-holding.",
+      "Aimed to deliver self-serve product expertise at scale.",
     ],
     situation: [
       "New users required significant guidance to use the product efficiently.",
@@ -123,14 +123,14 @@ const successStories = [
       "Large volumes of docs and FAQs made self-serve onboarding difficult.",
     ],
     solution: [
-      "Built an agentic generative AI product assistant.",
-      "Integrated the knowledge base to answer product questions in real time.",
-      "Customized workflows with scalable Kubernetes deployment.",
+      "Built an agentic product assistant grounded in the knowledge base.",
+      "Agent reasons over multi-step queries and resolves issues in real time.",
+      "Scalable Kubernetes deployment with workflow customization per role.",
     ],
     results: [
       "Real-time query resolution without raising tickets",
       "50% reduction in user onboarding time",
-      "24/7 assistant that helps users get the best product outcomes",
+      "24/7 agentic assistant improving product outcomes continuously",
     ],
   },
   {
@@ -138,21 +138,21 @@ const successStories = [
     label: "Sales Rep AI Agent",
     about: [
       "AI-based LMS company working with large-scale eLearning providers.",
-      "Needed to FastTrack new sales rep onboarding and product fluency.",
+      "Needed to fast-track new sales rep onboarding and product fluency.",
     ],
     situation: [
-      "New sales reps needed 1-2 months to understand products and services.",
-      "Information discovery during customer calls was slow and manual.",
-      "Heavy dependency on Product/Tech teams for accurate answers.",
+      "New sales reps needed 1–2 months to understand products and services.",
+      "Information discovery during live customer calls was slow and manual.",
+      "Heavy dependency on Product and Tech teams for accurate answers.",
     ],
     solution: [
-      "Built an agentic generative AI sales assistant.",
-      "Enabled instant retrieval of relevant data points during live calls.",
+      "Built an agentic sales assistant with real-time retrieval and reasoning.",
+      "Agents surface relevant data points autonomously during live calls.",
       "Reduced dependency on Product/Tech while scaling on Kubernetes.",
     ],
     results: [
       "80% reduction in sales rep ramp-up time",
-      "98% reduction in information access time",
+      "98% reduction in information access time during calls",
       "50% reduction in Tech/Product hours on sales calls",
     ],
   },
@@ -161,21 +161,21 @@ const successStories = [
     label: "Healthcare AI Agent",
     about: [
       "Healthtech company serving hospitals and auditor authorities.",
-      "Needed better audit report creation to cut documentation effort by ~80%.",
+      "Needed agentic audit report creation to cut documentation effort by ~80%.",
     ],
     situation: [
-      "Existing Gen AI + RAG prototypes had accuracy limitations.",
-      "Manual human reviews still added substantial effort.",
-      "Hard to build trust around fully automated documentation.",
+      "Existing Gen AI + RAG prototypes had accuracy and trust limitations.",
+      "Manual human reviews still added substantial effort and delay.",
+      "Hard to build confidence around fully automated documentation agents.",
     ],
     solution: [
-      "Built an agentic generative AI solution with human-in-the-loop controls.",
-      "Reduced manual evaluation while enabling final human submission.",
-      "Custom workflows with feedback-loop learning and Kubernetes scale.",
+      "Built an agentic solution with human-in-the-loop review gates.",
+      "Agents draft, validate, and flag anomalies; humans make final submissions.",
+      "Feedback-loop learning improves agent accuracy over time at scale.",
     ],
     results: [
       "Significant reduction in manual review effort",
-      "Improved platform engagement and trust in automation",
+      "Improved platform trust through auditable agent decisions",
       "Personalized auditor support via continuous feedback learning",
     ],
   },
@@ -189,30 +189,26 @@ export default function GenerativeAI() {
   return (
     <div className="bg-white font-['Lay_Grotesk_Trial',sans-serif] text-[#272935]">
       {/* Hero */}
-      <section
-        className="relative flex w-full items-center justify-center overflow-hidden bg-[#113d77]"
-        style={{ minHeight: "clamp(280px, 32vw, 492px)" }}
-        aria-label="Generative AI"
-      >
+      <section className="service-page-hero" aria-label="Agentic AI">
         <img
           src={worldMapBackground}
           alt=""
           aria-hidden
-          className="pointer-events-none absolute left-1/2 top-[58%] w-[min(94%,1600px)] -translate-x-1/2 -translate-y-1/2 opacity-55"
+          className="service-page-hero__map"
         />
-        <div className="relative z-10 flex max-w-[min(860px,92%)] flex-col items-center px-5 pb-[clamp(48px,6vw,80px)] pt-[clamp(72px,8vw,120px)] text-center">
+        <div className="service-page-hero__content">
           <h1 className="m-0 text-[clamp(28px,3.8vw,48px)] font-bold leading-[1.29] tracking-tight text-white lg:text-[clamp(26px,3vw,34px)] 2xl:text-[clamp(32px,4vw,48px)]">
-            Innovative Generative AI Solutions for Business Transformation
+            Agentic AI Solutions That Reason, Act, and Deliver Business Outcomes
           </h1>
-          <p className="mt-[clamp(16px,2vw,24px)] max-w-[783px] font-['Ubuntu',sans-serif] text-[clamp(14px,1.4vw,18px)] font-normal leading-6 text-[#a1b1cb] lg:text-[clamp(13px,1.1vw,15px)] 2xl:text-[clamp(14px,1.4vw,18px)]">
-            From TF-IDF and word2vec to transformers, early LLMs like BERT and T5,
-            and today&apos;s GPT, Gemini, Ollama, and agentic flows, we have
-            delivered value from fine-tuned on-premise NER models to a generic
-            agentic framework for state-of-the-art implementations.
+          <p className="mt-[clamp(12px,1.5vw,20px)] max-w-[783px] font-['Ubuntu',sans-serif] text-[clamp(14px,1.4vw,18px)] font-normal leading-6 text-[#a1b1cb] lg:text-[clamp(13px,1.1vw,15px)] 2xl:text-[clamp(14px,1.4vw,18px)]">
+            From early retrieval-augmented prototypes to fully autonomous multi-agent
+            systems, we design and deploy agentic AI that plans, reasons over tools,
+            and executes multi-step workflows with the right human-in-the-loop
+            controls built in from the start.
           </p>
           <Link
             to="/contact"
-            className="mt-[clamp(24px,3vw,40px)] inline-flex items-center gap-1.5 rounded-full bg-[#2365aa] py-3 pl-[26px] pr-3.5 text-base font-normal uppercase leading-[1.2] text-white no-underline transition-colors hover:bg-[#1a5490] lg:py-2.5 lg:pl-[22px] lg:pr-2.5 lg:text-sm 2xl:py-3 2xl:pl-[26px] 2xl:pr-3.5 2xl:text-base"
+            className="mt-[clamp(16px,2vw,28px)] inline-flex items-center gap-1.5 rounded-full bg-[#2365aa] py-3 pl-[26px] pr-3.5 text-base font-normal uppercase leading-[1.2] text-white no-underline transition-colors hover:bg-[#1a5490] lg:py-2.5 lg:pl-[22px] lg:pr-2.5 lg:text-sm 2xl:py-3 2xl:pl-[26px] 2xl:pr-3.5 2xl:text-base"
           >
             Contact Us
             <span className="inline-flex h-[37px] w-[37px] items-center justify-center rounded-full bg-white text-[#2365aa]">
@@ -243,19 +239,19 @@ export default function GenerativeAI() {
               Our Services
             </Link>
             <span className="text-[#848b9b]">»</span>
-            <span>Generative AI</span>
+            <span>Agentic AI</span>
           </nav>
 
           <header className="mx-auto mb-[clamp(32px,4vw,56px)] max-w-[52rem] text-center">
             <h2 className="m-0 text-[clamp(28px,4vw,56px)] font-bold leading-[1.15] text-[#1F2432]">
-              Generative AI
+              Agentic AI
               <br />
               Core Offerings
             </h2>
             <p className="mx-auto mt-5 max-w-[48rem] text-[clamp(13px,1.2vw,16px)] leading-7 text-[#9CA3AF] sm:mt-6 2xl:text-[18px] 2xl:leading-8">
-              Purpose-built agents and copilots that turn Gen AI into measurable
-              business outcomes, across analytics, engineering, support,
-              healthcare, HR, knowledge, and financial services.
+              Purpose-built agents that plan, use tools, and execute multi-step
+              workflows  delivering measurable outcomes across analytics,
+              engineering, support, healthcare, HR, knowledge, and finance.
             </p>
           </header>
 
@@ -285,12 +281,13 @@ export default function GenerativeAI() {
         <div className="mx-auto grid w-full max-w-[1692px] grid-cols-1 items-center gap-[clamp(28px,4vw,56px)] px-5 py-[clamp(40px,5vw,72px)] sm:px-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:px-10 xl:px-12">
           <div>
             <h2 className="m-0 text-[clamp(26px,3.5vw,48px)] font-bold leading-[1.15] text-[#1F2432]">
-              Gen AI &amp; LLM Consulting and Solution Architectures
+              Agentic AI Strategy &amp; Architecture Consulting
             </h2>
             <p className="mt-5 max-w-[46rem] text-[clamp(13px,1.2vw,16px)] leading-7 text-[#848b9b] sm:mt-6 2xl:text-[18px] 2xl:leading-8">
-              Expertise in Gen AI strategy and consulting, including use case
-              recognition, feasibility evaluation, technology assessment, technical
-              architecting, and AI deployment tailored to your goals and challenges.
+              We help you move from idea to production-ready agentic systems
+              identifying the right use cases, designing agent architectures,
+              selecting orchestration frameworks, and building the governance
+              controls needed to trust autonomous AI in your workflows.
             </p>
             <ul className="mt-6 flex list-none flex-col gap-3.5 p-0 sm:mt-8">
               {consultingPoints.map((point) => (
@@ -313,7 +310,7 @@ export default function GenerativeAI() {
           <div className="overflow-hidden rounded-[20px] border border-[#e2ebf3] bg-white p-4 shadow-[0_18px_50px_-24px_rgba(17,61,119,0.35)] sm:rounded-[24px] sm:p-6 lg:p-7">
             <img
               src={roadmapImage}
-              alt="Generative AI roadmap from classical NLP to agentic systems"
+              alt="Agentic AI roadmap from classical NLP to autonomous multi-agent systems"
               className="mx-auto block h-auto w-full max-w-[520px] object-contain"
             />
           </div>
@@ -329,7 +326,7 @@ export default function GenerativeAI() {
                 Value Added
               </h2>
               <p className="mt-4 max-w-[34rem] text-[clamp(13px,1.2vw,16px)] leading-7 text-[#9CA3AF] 2xl:text-[18px] 2xl:leading-8">
-                Proven Gen AI deliveries across analytics, support, knowledge
+                Proven agentic AI deliveries across analytics, support, knowledge
                 retrieval, and sales enablement.
               </p>
               <div className="mt-8 hidden justify-center lg:mt-12 lg:flex">
@@ -364,24 +361,25 @@ export default function GenerativeAI() {
       {/* Agent Framework + Success Stories */}
       <section
         className="rounded-[20px] bg-[#f4f7f9] py-[clamp(40px,5vw,72px)] max-sm:rounded-none"
-        aria-label="AI Agents success stories"
+        aria-label="Agentic AI success stories"
       >
         <div className="mx-auto w-full max-w-[1692px] px-5 sm:px-8 lg:px-10 xl:px-12">
           <div className="mb-[clamp(28px,3.5vw,48px)] grid grid-cols-1 items-center gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:gap-12">
             <div>
               <h2 className="m-0 text-[clamp(24px,3.2vw,40px)] font-bold leading-[1.15] text-[#1F2432]">
-                AI Agent Generalize Framework to Build &amp; Launch in Minutes
+                A Reusable Agentic Framework to Build &amp; Launch Agents in Days
               </h2>
               <p className="mt-4 max-w-[42rem] text-[clamp(13px,1.2vw,16px)] leading-7 text-[#848b9b] 2xl:text-[18px] 2xl:leading-8">
-                A reusable agentic framework that connects LLMs, tools, knowledge
-                bases, and human-in-the-loop controls, so you can adapt agents to
-                new domains faster without rebuilding from scratch.
+                Our battle-tested agentic framework connects LLMs, tool libraries,
+                memory stores, retrieval layers, and human-in-the-loop controls
+                so you can adapt agents to new domains and tasks without rebuilding
+                from scratch every time.
               </p>
             </div>
             <div className="overflow-hidden rounded-[20px] border border-[#e2ebf3] bg-white p-4 shadow-[0_18px_50px_-24px_rgba(17,61,119,0.35)] sm:p-6">
               <img
                 src={llmAgentsImage}
-                alt="LLM Agents architecture connecting tools, knowledge base, and human in the loop"
+                alt="Agentic AI framework connecting LLMs, tools, knowledge base, memory, and human-in-the-loop"
                 className="mx-auto block h-auto w-full max-w-[720px] object-contain"
               />
             </div>
@@ -392,7 +390,7 @@ export default function GenerativeAI() {
               Success Stories
             </p>
             <h3 className="m-0 text-[clamp(24px,3vw,40px)] font-bold leading-[1.15] text-[#272935]">
-              AI agents delivering measurable business impact
+              Agentic AI delivering measurable business impact
             </h3>
           </div>
 
@@ -489,7 +487,7 @@ export default function GenerativeAI() {
               Case Study
             </p>
             <h2 className="m-0 text-[clamp(26px,3.5vw,48px)] font-bold leading-[1.15] text-[#1F2432]">
-              GenAI-Enabled SDLC Enablement
+              Agentic AI–Enabled SDLC Transformation
             </h2>
           </header>
 
@@ -498,24 +496,25 @@ export default function GenerativeAI() {
               <Link
                 to="/case-studies/genai-enabled-sdlc"
                 className="group relative flex items-center justify-center overflow-hidden bg-[#EFF7FC] p-3 sm:p-4 lg:p-5"
-                aria-label="Read GenAI-Enabled SDLC case study"
+                aria-label="Read Agentic AI–Enabled SDLC case study"
               >
                 <img
                   src={genAiSdlcCaseImage}
-                  alt="Expected effort savings across GenAI-enabled SDLC roles"
+                  alt="Expected effort savings across agentic AI-enabled SDLC roles"
                   className="block h-auto w-full rounded-[12px] object-contain object-center shadow-[0_12px_32px_-16px_rgba(17,61,119,0.4)] transition-transform duration-500 group-hover:scale-[1.02]"
                 />
               </Link>
 
               <div className="flex flex-col justify-center p-6 sm:p-8 lg:p-10 xl:p-12">
                 <h3 className="m-0 text-[clamp(20px,2.2vw,28px)] font-bold leading-tight text-[#1F2432]">
-                  Concise Client Enablement Plan
+                  Agentic AI Adoption Plan Across the SDLC
                 </h3>
                 <p className="mt-4 text-[clamp(13px,1.2vw,16px)] leading-7 text-[#5a5a5a] 2xl:text-[17px]">
-                  A phase-wise GenAI adoption plan across the SDLC with tool guidance,
-                  a 12-week rollout, ROI modelling, governance, and role-based training.
-                  Standardises Cursor and Claude Code by phase to cut repetitive work
-                  while improving delivery speed and engineering quality.
+                  A phase-wise agentic AI adoption roadmap across the full software
+                  delivery lifecycle with tool guidance, a 12-week rollout, ROI
+                  modelling, governance controls, and role-based training. Standardises
+                  autonomous coding agents by phase to cut repetitive work while
+                  improving delivery speed and quality.
                 </p>
                 <Link
                   to="/case-studies/genai-enabled-sdlc"
@@ -537,18 +536,19 @@ export default function GenerativeAI() {
         <div className="mx-auto w-full max-w-[1692px] px-5 py-[clamp(40px,5vw,80px)] sm:px-8 lg:px-10 xl:px-12">
           <header className="mx-auto mb-[clamp(24px,3vw,40px)] max-w-[48rem] text-center">
             <h2 className="m-0 text-[clamp(26px,3.5vw,48px)] font-bold leading-[1.15] text-[#1F2432]">
-              Generative AI Technology Stack
+              Agentic AI Technology Stack
             </h2>
             <p className="mt-4 text-[clamp(13px,1.2vw,16px)] leading-7 text-[#9CA3AF] 2xl:text-[18px] 2xl:leading-8">
-              Cloud platforms, LLM ecosystems, and agent frameworks we use to design,
-              deploy, and scale production-ready Gen AI solutions.
+              LLM orchestration frameworks, tool libraries, memory systems, and
+              cloud platforms we use to design, deploy, and scale production
+              agentic AI solutions.
             </p>
           </header>
 
           <div className="overflow-hidden rounded-[20px] border border-[#e2ebf3] bg-white p-5 shadow-[0_20px_60px_-28px_rgba(17,61,119,0.35)] sm:rounded-[24px] sm:p-8 lg:p-10">
             <img
               src={techStackImage}
-              alt="Generative AI technology stack across cloud providers and agent frameworks"
+              alt="Agentic AI technology stack across orchestration frameworks and cloud providers"
               className="mx-auto block h-auto w-full max-w-[980px] object-contain"
             />
           </div>

@@ -1,15 +1,15 @@
 import DigitalServicePage, {
   digitalServiceImages,
 } from "./DigitalServicePage";
+import productDiscovery from "../assets/OurServices/product-discovery.png";
+import wireframes from "../assets/OurServices/wireframes.png";
+import highFidelity from "../assets/OurServices/high-fidelty.png";
+import interactivePrototypes from "../assets/OurServices/interactive-prototypes.png";
+import responsive from "../assets/OurServices/responsive.png";
+import handoff from "../assets/OurServices/handoff.png";
 
 const {
   uiUx,
-  genData,
-  genSoftware,
-  genOptimize,
-  genCustomer,
-  genKnowledge,
-  genHr,
   processFrame1,
   processFrame2,
   processFrame3,
@@ -33,37 +33,37 @@ export default function UiUxDesign() {
           title: "Product discovery & research",
           description:
             "Map user journeys, pain points, and opportunities so every screen decision is grounded in real behavior.",
-          icon: genData,
+          icon: productDiscovery,
         },
         {
           title: "Wireframes & information architecture",
           description:
             "Structure content and flows early to reduce rework and keep engineering aligned with product intent.",
-          icon: genSoftware,
+          icon: wireframes,
         },
         {
           title: "High-fidelity UI systems",
           description:
             "Polished interfaces with reusable components, brand consistency, and accessibility built in.",
-          icon: genOptimize,
+          icon: highFidelity,
         },
         {
           title: "Interactive prototypes",
           description:
             "Clickable prototypes that validate flows before build, ideal for stakeholder demos and usability tests.",
-          icon: genCustomer,
+          icon: interactivePrototypes,
         },
         {
           title: "Responsive & multi-device design",
           description:
             "Layouts that stay elegant and usable across desktop, tablet, and mobile breakpoints.",
-          icon: genKnowledge,
+          icon: responsive,
         },
         {
           title: "Design handoff for engineering",
           description:
             "Specs, assets, and component guidance that help developers ship pixel-accurate experiences faster.",
-          icon: genHr,
+          icon: handoff,
         },
       ]}
       processTitle="Our Design Process"

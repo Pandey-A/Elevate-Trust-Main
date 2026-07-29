@@ -2,14 +2,15 @@ import DigitalServicePage, {
   digitalServiceImages,
 } from "./DigitalServicePage";
 
+import corporateImg from "../assets/OurServices/corporate.png";
+import responsiveImg from "../assets/OurServices/responsive.png";
+import cmsImg from "../assets/OurServices/cms.png";
+import seoImg from "../assets/OurServices/seo.png";
+import integrationForumsImg from "../assets/OurServices/integration-forums.png";
+import ongoingImg from "../assets/OurServices/ongoing.png";
+
 const {
   website,
-  genSoftware,
-  genData,
-  genOptimize,
-  genKnowledge,
-  audioInsights,
-  audioIntegration,
   processFrame1,
   processFrame3,
   processFrame5,
@@ -34,37 +35,37 @@ export default function WebDesignDevelopment() {
           title: "Corporate & marketing websites",
           description:
             "Brand-forward sites that communicate your value clearly and convert visitors into conversations.",
-          icon: genSoftware,
+          icon: corporateImg,
         },
         {
           title: "Responsive front-end builds",
           description:
             "Modern UI implementation with clean components, accessibility, and cross-browser reliability.",
-          icon: genOptimize,
+          icon: responsiveImg,
         },
         {
           title: "CMS & content platforms",
           description:
             "Editable content structures so marketing teams can publish without engineering bottlenecks.",
-          icon: genKnowledge,
+          icon: cmsImg,
         },
         {
           title: "Performance & SEO foundations",
           description:
             "Fast load times, structured content, and technical SEO basics that support discoverability.",
-          icon: genData,
+          icon: seoImg,
         },
         {
           title: "Integrations & forms",
           description:
             "CRM, analytics, chat, and lead-capture workflows wired into your existing stack.",
-          icon: audioIntegration,
+          icon: integrationForumsImg,
         },
         {
           title: "Ongoing enhancement",
           description:
             "Iterative improvements based on analytics, A/B insights, and evolving business needs.",
-          icon: audioInsights,
+          icon: ongoingImg,
         },
       ]}
       deliveredWork={[

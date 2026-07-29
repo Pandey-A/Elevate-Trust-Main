@@ -64,6 +64,8 @@ export default function AdminDashboard() {
 
   const [tab, setTab] = useState<Tab>("overview");
   const [demoForm, setDemoForm] = useState(emptyDemoForm);
+  const [demoThumbnailFile, setDemoThumbnailFile] = useState<File | null>(null);
+  const [demoThumbnailPreview, setDemoThumbnailPreview] = useState<string | null>(null);
   const [jobForm, setJobForm] = useState(emptyJobForm);
   const [demoError, setDemoError] = useState("");
   const [jobError, setJobError] = useState("");
@@ -152,6 +154,8 @@ export default function AdminDashboard() {
 
   const resetDemoForm = () => {
     setDemoForm(emptyDemoForm);
+    setDemoThumbnailFile(null);
+    setDemoThumbnailPreview(null);
     setDemoError("");
     setDemoSuccess("");
   };
@@ -170,6 +174,8 @@ export default function AdminDashboard() {
       youtubeUrl: demo.youtubeUrl,
       industries: demo.industries,
     });
+    setDemoThumbnailFile(null);
+    setDemoThumbnailPreview(demo.thumbnailUrl ?? null);
     setDemoSuccess("");
     setDemoError("");
   };
@@ -223,6 +229,7 @@ export default function AdminDashboard() {
       title: demoForm.title.trim(),
       youtubeUrl: demoForm.youtubeUrl.trim(),
       industries: demoForm.industries,
+      thumbnailFile: demoThumbnailFile,
     };
 
     try {
@@ -230,10 +237,14 @@ export default function AdminDashboard() {
       if (editingDemo) {
         await updateDemo(demoForm.id, payload);
         setDemoForm(emptyDemoForm);
+        setDemoThumbnailFile(null);
+        setDemoThumbnailPreview(null);
         setDemoSuccess("Demo updated successfully.");
       } else {
         await createDemo({ id: createId("demo"), ...payload });
         setDemoForm(emptyDemoForm);
+        setDemoThumbnailFile(null);
+        setDemoThumbnailPreview(null);
         setDemoSuccess("Demo added successfully.");
       }
       setDemoError("");
@@ -450,6 +461,46 @@ export default function AdminDashboard() {
                   </label>
                 </div>
 
+                {/* Thumbnail image upload */}
+                <div className="mt-4">
+                  <p className="mb-2 text-sm font-medium text-[#5a5a5a]">
+                    Thumbnail image <span className="font-normal text-[#848b9b]">(optional — replaces auto-generated YouTube thumbnail)</span>
+                  </p>
+                  <div className="flex flex-wrap items-start gap-4">
+                    <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-[12px] border-2 border-dashed border-[#d7e6f3] bg-[#f8fbfd] px-5 py-4 text-sm font-medium text-[#2365aa] transition-colors hover:border-[#2365aa] hover:bg-[#EFF7FC]">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                      {demoThumbnailFile ? demoThumbnailFile.name : "Choose image"}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="sr-only"
+                        onChange={(event) => {
+                          const file = event.target.files?.[0] ?? null;
+                          setDemoThumbnailFile(file);
+                          setDemoThumbnailPreview(file ? URL.createObjectURL(file) : null);
+                        }}
+                      />
+                    </label>
+                    {demoThumbnailPreview ? (
+                      <div className="relative">
+                        <img
+                          src={demoThumbnailPreview}
+                          alt="Thumbnail preview"
+                          className="h-20 w-32 rounded-[10px] border border-[#d7e6f3] object-cover"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => { setDemoThumbnailFile(null); setDemoThumbnailPreview(null); }}
+                          className="absolute -right-2 -top-2 flex h-5 w-5 cursor-pointer items-center justify-center rounded-full border-0 bg-[#2365aa] text-[10px] font-bold text-white"
+                          aria-label="Remove thumbnail"
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    ) : null}
+                  </div>
+                </div>
+
                 <div className="mt-4">
                   <p className="mb-2 text-sm font-medium text-[#5a5a5a]">Industry tags</p>
                   <div className="flex flex-wrap gap-2">
@@ -474,7 +525,7 @@ export default function AdminDashboard() {
                 </div>
 
                 {demoError ? (
-                  <p className="mt-4 rounded-[12px] bg-[#fde8e8] px-3 py-2 text-sm text-[#b42318]">
+                  <p className="mt-4 rounded-[12px] bg-[#EEF3FB] px-3 py-2 text-sm text-[#2365aa]">
                     {demoError}
                   </p>
                 ) : null}
@@ -499,7 +550,7 @@ export default function AdminDashboard() {
               </form>
 
               {demosLoadError ? (
-                <p className="rounded-[12px] bg-[#fde8e8] px-3 py-2 text-sm text-[#b42318]">
+                <p className="rounded-[12px] bg-[#EEF3FB] px-3 py-2 text-sm text-[#2365aa]">
                   {demosLoadError}
                 </p>
               ) : null}
@@ -514,7 +565,7 @@ export default function AdminDashboard() {
                     className="flex h-full flex-col overflow-hidden rounded-[18px] border border-[#d7e6f3] bg-white shadow-[0_12px_30px_-22px_rgba(17,61,119,0.35)] xl:rounded-[20px]"
                   >
                     <img
-                      src={youtubeThumb(demo.videoId)}
+                      src={demo.thumbnailUrl || youtubeThumb(demo.videoId)}
                       alt=""
                       className="aspect-video w-full shrink-0 object-cover"
                     />
@@ -553,7 +604,7 @@ export default function AdminDashboard() {
                               );
                             }
                           }}
-                          className="inline-flex flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-full border-0 bg-[#fde8e8] px-3 py-2 text-xs font-semibold text-[#b42318]"
+                          className="inline-flex flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-full border-0 bg-[#EEF3FB] px-3 py-2 text-xs font-semibold text-[#2365aa]"
                         >
                           <Trash2 size={14} />
                           Delete
@@ -672,7 +723,7 @@ export default function AdminDashboard() {
                 </div>
 
                 {jobError ? (
-                  <p className="mt-4 rounded-[12px] bg-[#fde8e8] px-3 py-2 text-sm text-[#b42318]">
+                  <p className="mt-4 rounded-[12px] bg-[#EEF3FB] px-3 py-2 text-sm text-[#2365aa]">
                     {jobError}
                   </p>
                 ) : null}
@@ -724,7 +775,7 @@ export default function AdminDashboard() {
                           onClick={() => {
                             if (window.confirm(`Delete "${job.title}"?`)) deleteJob(job.id);
                           }}
-                          className="inline-flex cursor-pointer items-center gap-1.5 rounded-full border-0 bg-[#fde8e8] px-3 py-2 text-xs font-semibold text-[#b42318]"
+                          className="inline-flex cursor-pointer items-center gap-1.5 rounded-full border-0 bg-[#EEF3FB] px-3 py-2 text-xs font-semibold text-[#2365aa]"
                         >
                           <Trash2 size={14} />
                           Delete
@@ -761,7 +812,7 @@ export default function AdminDashboard() {
               </div>
 
               {applicationsError ? (
-                <p className="rounded-[12px] bg-[#fde8e8] px-3 py-2 text-sm text-[#b42318]">
+                <p className="rounded-[12px] bg-[#EEF3FB] px-3 py-2 text-sm text-[#2365aa]">
                   {applicationsError}
                 </p>
               ) : null}
@@ -856,7 +907,7 @@ export default function AdminDashboard() {
                         type="button"
                         onClick={() => void onDeleteApplication(application)}
                         disabled={deletingApplicationId === application.id}
-                        className="inline-flex cursor-pointer items-center gap-1.5 rounded-full border-0 bg-[#fde8e8] px-3 py-2 text-xs font-semibold text-[#b42318] disabled:cursor-not-allowed disabled:opacity-70"
+                        className="inline-flex cursor-pointer items-center gap-1.5 rounded-full border-0 bg-[#EEF3FB] px-3 py-2 text-xs font-semibold text-[#2365aa] disabled:cursor-not-allowed disabled:opacity-70"
                       >
                         <Trash2 size={14} />
                         {deletingApplicationId === application.id

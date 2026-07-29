@@ -1,15 +1,15 @@
 import DigitalServicePage, {
   digitalServiceImages,
 } from "./DigitalServicePage";
+import iosAndroid from "../assets/OurServices/iosandroid.png";
+import crossPlatform from "../assets/OurServices/cross-platform.png";
+import mvpScale from "../assets/OurServices/mvp-scale.png";
+import apiBackend from "../assets/OurServices/api-backend.png";
+import pushNotification from "../assets/OurServices/push-notification.png";
+import launchSupport from "../assets/OurServices/launch-support.png";
 
 const {
   appDev,
-  genCustomer,
-  genOptimize,
-  genSoftware,
-  genHealthcare,
-  audioCamera,
-  audioSimple,
   processFrame2,
   processFrame3,
   processFrame6,
@@ -33,37 +33,37 @@ export default function MobileAppDevelopment() {
           title: "iOS & Android apps",
           description:
             "Platform-aware experiences that feel native, fast, and aligned with store guidelines.",
-          icon: genCustomer,
+          icon: iosAndroid,
         },
         {
           title: "Cross-platform product apps",
           description:
             "Shared codebases that accelerate delivery while preserving quality UX on both platforms.",
-          icon: genSoftware,
+          icon: crossPlatform,
         },
         {
           title: "MVP to scale roadmap",
           description:
             "Start with a focused MVP, then expand features as adoption and feedback grow.",
-          icon: genOptimize,
+          icon: mvpScale,
         },
         {
           title: "API & backend integration",
           description:
             "Secure connections to your services, auth flows, notifications, and data sync.",
-          icon: audioSimple,
+          icon: apiBackend,
         },
         {
           title: "Push, analytics & retention",
           description:
             "Engagement tooling that helps you understand usage and improve retention loops.",
-          icon: audioCamera,
+          icon: pushNotification,
         },
         {
           title: "Store launch support",
           description:
             "Release readiness, listing assets, and post-launch monitoring for smooth go-lives.",
-          icon: genHealthcare,
+          icon: launchSupport,
         },
       ]}
       processTitle="App Development Journey"

@@ -8,25 +8,27 @@
   .about-hero {
     position: relative;
     width: 100%;
-    padding: clamp(80px, 10vw, 120px) var(--site-padding-x, 20px) clamp(60px, 8vw, 100px);
-    background-color: #0d2f5a;
-    background: radial-gradient(circle at center, #113D77 0%, #0a2548 100%);
+    height: var(--service-hero-height);
+    min-height: var(--service-hero-height);
+    padding: 0 var(--site-padding-x, 20px);
+    background-color: #113d77;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     overflow: hidden;
+    box-sizing: border-box;
   }
   
   .about-hero-bg {
     position: absolute;
-    top: 65%;
+    top: 62%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 120%;
     max-width: 1600px;
     pointer-events: none;
-    opacity: 1;
+    opacity: 0.95;
   }
   
   .about-hero-content {

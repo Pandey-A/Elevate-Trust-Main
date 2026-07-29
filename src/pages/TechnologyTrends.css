@@ -31,11 +31,12 @@
 .tt-hero__map {
   position: absolute;
   left: 50%;
-  top: 58%;
+  top: 62%;
   transform: translate(-50%, -50%);
-  width: min(94%, 1600px);
+  width: 120%;
+  max-width: 1600px;
   pointer-events: none;
-  opacity: 0.55;
+  opacity: 0.95;
 }
 
 .tt-hero__content {
@@ -238,7 +239,7 @@
   justify-content: space-between;
   height: 300px;
   padding: 28px 30px;
-  background: #f07c62;
+  background: #2365aa;
   border-radius: 30px;
   color: #ffffff;
   box-sizing: border-box;
@@ -382,11 +383,11 @@
 }
 
 .tt-trends__tab:hover {
-  background: #ffe8e2;
+  background: #EEF3FB;
 }
 
 .tt-trends__tab.is-active {
-  background: #f07c62;
+  background: #2365aa;
   color: #ffffff;
 }
 
@@ -428,7 +429,7 @@
 
 .tt-trend-card__header {
   padding: 13px 22px;
-  background: #f07c62;
+  background: #2365aa;
   color: #ffffff;
   font-size: clamp(18px, 1.6vw, 24px);
   font-weight: 500;

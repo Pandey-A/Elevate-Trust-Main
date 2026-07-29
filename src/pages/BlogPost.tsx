@@ -30,18 +30,14 @@ export default function BlogPost() {
 
   return (
     <div className="bg-white font-['Lay_Grotesk_Trial',sans-serif] text-[#272935]">
-      <section
-        className="relative flex w-full items-center justify-center overflow-hidden bg-[#113d77]"
-        style={{ minHeight: "clamp(260px, 28vw, 420px)" }}
-        aria-label={post.title}
-      >
+      <section className="service-page-hero" aria-label={post.title}>
         <img
           src={worldMapBackground}
           alt=""
           aria-hidden
-          className="pointer-events-none absolute left-1/2 top-[58%] w-[min(94%,1600px)] -translate-x-1/2 -translate-y-1/2 opacity-55"
+          className="service-page-hero__map"
         />
-        <div className="relative z-10 mx-auto flex w-full max-w-[920px] flex-col items-center px-5 pb-[clamp(40px,5vw,72px)] pt-[clamp(72px,8vw,110px)] text-center">
+        <div className="service-page-hero__content max-w-[920px]">
           <p className="mb-3 text-sm font-semibold uppercase tracking-[0.16em] text-[#8eb4df]">
             {post.category}
           </p>

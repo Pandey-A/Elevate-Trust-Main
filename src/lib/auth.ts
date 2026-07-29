@@ -68,24 +68,6 @@ export function logoutUser() {
   notifyAuthChanged();
 }
 
-export async function registerUser(input: {
-  name: string;
-  email: string;
-  password: string;
-}) {
-  const { data } = await api.post<AuthResponse>("/api/auth/register", {
-    name: input.name,
-    email: input.email,
-    password: input.password,
-  });
-
-  if (!data.success || !data.data?.token) {
-    throw new Error(data.message || "Unable to create account.");
-  }
-
-  return data;
-}
-
 export async function loginUser(email: string, password: string) {
   const { data } = await api.post<AuthResponse>("/api/auth/login", {
     email,

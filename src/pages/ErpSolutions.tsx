@@ -1,14 +1,14 @@
 import DigitalServicePage, {
   digitalServiceImages,
 } from "./DigitalServicePage";
+import genAiData from "../assets/OurServices/GenAI-Data.png";
+import genAiCustomService from "../assets/OurServices/GenAI-customService.png";
+import catalogImg from "../assets/OurServices/catalog.png";
 
 const {
   erp,
   genFinance,
   genHr,
-  genData,
-  genOptimize,
-  audioIntegration,
   processFrame1,
   processFrame4,
   processFrame5,
@@ -45,13 +45,13 @@ export default function ErpSolutions() {
           title: "Inventory & supply chain",
           description:
             "Stock, procurement, and logistics visibility that reduces waste and delays.",
-          icon: genOptimize,
+          icon: catalogImg,
         },
         {
           title: "Sales & customer operations",
           description:
             "Order-to-cash flows that connect sales activity with fulfillment and finance.",
-          icon: genData,
+          icon: genAiCustomService,
         },
         {
           title: "Education & institutional ERP",
@@ -63,7 +63,7 @@ export default function ErpSolutions() {
           title: "Analytics & decision support",
           description:
             "Dashboards and operational KPIs that help leaders act with confidence.",
-          icon: audioIntegration,
+          icon: genAiData,
         },
       ]}
       processTitle="ERP Delivery Approach"

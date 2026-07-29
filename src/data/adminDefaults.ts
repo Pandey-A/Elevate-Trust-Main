@@ -10,6 +10,7 @@ export type AdminDemo = {
   videoId: string;
   youtubeUrl: string;
   industries: IndustryTag[];
+  thumbnailUrl: string | null;
 };
 
 export type AdminJob = {

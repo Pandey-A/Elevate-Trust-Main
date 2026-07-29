@@ -13,3 +13,4 @@ export const activePartners = [
   { name: "Microsoft", logo: partnerMicrosoft },
   { name: "NVIDIA", logo: partnerNvidia, tall: true },
 ] as const;
+

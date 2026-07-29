@@ -234,31 +234,27 @@ export default function Demo() {
 
   return (
     <div className="bg-white font-['Lay_Grotesk_Trial',sans-serif] text-[#272935]">
-      <section
-        className="relative flex w-full items-center justify-center overflow-hidden bg-[#113d77]"
-        style={{ minHeight: "clamp(280px, 32vw, 492px)" }}
-        aria-label="Demo"
-      >
+      <section className="service-page-hero" aria-label="Demo">
         <img
           src={worldMapBackground}
           alt=""
           aria-hidden
-          className="pointer-events-none absolute left-1/2 top-[58%] w-[min(94%,1600px)] -translate-x-1/2 -translate-y-1/2 opacity-55"
+          className="service-page-hero__map"
         />
-        <div className="relative z-10 flex max-w-[min(860px,92%)] flex-col items-center px-5 pb-[clamp(48px,6vw,80px)] pt-[clamp(72px,8vw,120px)] text-center">
+        <div className="service-page-hero__content">
           <p className="mb-3 text-sm font-semibold uppercase tracking-[0.16em] text-[#8eb4df] 2xl:text-base">
             Resources
           </p>
           <h1 className="m-0 text-[clamp(32px,4vw,48px)] font-bold leading-[1.29] tracking-tight text-white lg:text-[clamp(26px,3vw,34px)] 2xl:text-[clamp(32px,4vw,48px)]">
             Demo
           </h1>
-          <p className="mt-[clamp(16px,2vw,24px)] max-w-[783px] font-['Ubuntu',sans-serif] text-[clamp(14px,1.4vw,18px)] font-normal leading-6 text-[#a1b1cb] lg:text-[clamp(13px,1.1vw,15px)] 2xl:text-[clamp(14px,1.4vw,18px)]">
+          <p className="mt-[clamp(12px,1.5vw,20px)] max-w-[783px] font-['Ubuntu',sans-serif] text-[clamp(14px,1.4vw,18px)] font-normal leading-6 text-[#a1b1cb] lg:text-[clamp(13px,1.1vw,15px)] 2xl:text-[clamp(14px,1.4vw,18px)]">
             Advancing Your Business with Smart Tech, explore live walkthroughs
             of our AI agents, video analytics, and responsible AI capabilities.
           </p>
           <Link
             to="/contact"
-            className="mt-[clamp(24px,3vw,40px)] inline-flex items-center gap-1.5 rounded-full bg-[#2365aa] py-3 pl-[26px] pr-3.5 text-base font-normal uppercase leading-[1.2] text-white no-underline transition-colors hover:bg-[#1a5490] lg:py-2.5 lg:pl-[22px] lg:pr-2.5 lg:text-sm 2xl:py-3 2xl:pl-[26px] 2xl:pr-3.5 2xl:text-base"
+            className="mt-[clamp(16px,2vw,28px)] inline-flex items-center gap-1.5 rounded-full bg-[#2365aa] py-3 pl-[26px] pr-3.5 text-base font-normal uppercase leading-[1.2] text-white no-underline transition-colors hover:bg-[#1a5490] lg:py-2.5 lg:pl-[22px] lg:pr-2.5 lg:text-sm 2xl:py-3 2xl:pl-[26px] 2xl:pr-3.5 2xl:text-base"
           >
             Contact Us
             <span className="inline-flex h-[37px] w-[37px] items-center justify-center rounded-full bg-white text-[#2365aa]">
@@ -405,8 +401,8 @@ export default function Demo() {
           </div>
 
           {demosError ? (
-            <div className="rounded-[20px] border border-[#f5c2c2] bg-[#fde8e8] px-6 py-10 text-center">
-              <p className="m-0 text-[clamp(14px,1.2vw,16px)] text-[#b42318]">
+            <div className="rounded-[20px] border border-[#d7e6f3] bg-[#EEF3FB] px-6 py-10 text-center">
+              <p className="m-0 text-[clamp(14px,1.2vw,16px)] text-[#2365aa]">
                 {demosError}
               </p>
             </div>
@@ -427,11 +423,11 @@ export default function Demo() {
                     key={demo.id}
                     className="flex flex-col overflow-hidden rounded-[20px] border border-[#d7e6f3] bg-white shadow-[0_14px_40px_-28px_rgba(17,61,119,0.35)] transition-shadow duration-300 hover:shadow-[0_18px_44px_-24px_rgba(17,61,119,0.5)]"
                   >
-                    <div className="relative overflow-hidden bg-[#e8eef3]">
+                    <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#0d1117]">
                       <img
-                        src={youtubeThumb(demo.videoId)}
+                        src={demo.thumbnailUrl || youtubeThumb(demo.videoId)}
                         alt=""
-                        className="aspect-[16/10] h-auto w-full object-cover"
+                        className="absolute inset-0 h-full w-full object-cover object-top"
                       />
                     </div>
 

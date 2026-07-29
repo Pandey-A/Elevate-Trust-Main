@@ -42,7 +42,7 @@ const CASE_STUDIES_PATH = '/case-studies';
 
 const serviceItemPaths: Record<string, string> = {
   'AI/ML Solution': SERVICE_AI_ML_PATH,
-  'Generative AI': SERVICE_GENERATIVE_AI_PATH,
+  'Agentic AI': SERVICE_GENERATIVE_AI_PATH,
   'Audio/Video Analytics': SERVICE_AUDIO_VIDEO_PATH,
   'Cloud/On-Premise Deployment': SERVICE_CLOUD_ON_PREMISE_PATH,
   ...digitalServicePaths,
@@ -99,7 +99,7 @@ const megaMenus: Record<MegaMenuId, MegaMenuConfig> = {
     itemHref: SERVICES_PATH,
     leftColumn: [
       'AI/ML Solution',
-      'Generative AI',
+      'Agentic AI',
       'Audio/Video Analytics',
       'Cloud/On-Premise Deployment',
       'UI/UX Design Content',
@@ -232,12 +232,12 @@ export default function Navbar() {
     const menu = megaMenus[menuId];
 
     return (
-      <div className="flex h-full flex-col px-1 pt-1 min-[2012px]:px-2 min-[2012px]:pt-2">
-        <p className="mb-4 text-base font-semibold leading-tight text-[#272935] min-[1920px]:mb-6 min-[1920px]:text-[22px] min-[2012px]:mb-7 min-[2012px]:text-2xl min-[2012px]:leading-[1.2]">
+      <div className="flex flex-col px-1 pt-1 min-[2012px]:px-2 min-[2012px]:pt-2">
+        <p className="mb-4 text-base font-semibold leading-tight text-[#272935] min-[1920px]:mb-5 min-[1920px]:text-[22px] min-[2012px]:mb-5 min-[2012px]:text-2xl min-[2012px]:leading-[1.2]">
           {menu.title}
         </p>
-        <div className="grid flex-1 grid-cols-1 content-start gap-x-10 gap-y-1 sm:grid-cols-2 min-[1920px]:gap-x-16 min-[2012px]:gap-x-[72px]">
-          <ul className="m-0 flex list-none flex-col gap-3 p-0 min-[1920px]:gap-4 min-[2012px]:gap-[14px]">
+        <div className="grid grid-cols-1 content-start gap-x-10 gap-y-1 sm:grid-cols-2 min-[1920px]:gap-x-16 min-[2012px]:gap-x-[72px]">
+          <ul className="m-0 flex list-none flex-col gap-3 p-0 min-[1920px]:gap-3.5 min-[2012px]:gap-[14px]">
             {menu.leftColumn.map((item) => (
               <li key={item}>
                 <Link
@@ -250,7 +250,7 @@ export default function Navbar() {
               </li>
             ))}
           </ul>
-          <ul className="m-0 flex list-none flex-col gap-3 p-0 min-[1920px]:gap-4 min-[2012px]:gap-[14px]">
+          <ul className="m-0 flex list-none flex-col gap-3 p-0 min-[1920px]:gap-3.5 min-[2012px]:gap-[14px]">
             {menu.rightColumn.map((item) => (
               <li key={item}>
                 <Link
@@ -311,10 +311,10 @@ export default function Navbar() {
                     {activeDropdown === link.label && (
                       <div className="absolute top-full left-1/2 z-50 pt-2 -translate-x-1/2 min-[1440px]:left-0 min-[1440px]:translate-x-0">
                         <div
-                          className={`rounded-[16px] border border-gray-100 bg-white px-6 py-6 shadow-[0_12px_40px_rgba(0,0,0,0.12)] max-h-[70vh] overflow-auto min-[1920px]:px-8 min-[1920px]:py-7 min-[2012px]:max-h-none min-[2012px]:overflow-visible ${
+                          className={`rounded-[16px] border border-gray-100 bg-white px-6 py-5 shadow-[0_12px_40px_rgba(0,0,0,0.12)] max-h-[70vh] overflow-auto min-[1920px]:px-8 min-[1920px]:py-6 min-[2012px]:max-h-none min-[2012px]:overflow-visible ${
                             link.megaMenu === 'services'
-                              ? 'w-[min(899px,90vw)] min-[2012px]:h-[378px] min-[2012px]:w-[899px]'
-                              : 'w-[min(831px,90vw)] min-[2012px]:h-[395px] min-[2012px]:w-[831px]'
+                              ? 'w-[min(899px,90vw)] min-[2012px]:w-[899px]'
+                              : 'w-[min(831px,90vw)] min-[2012px]:w-[831px]'
                           }`}
                         >
                           {renderMegaMenu(link.megaMenu)}

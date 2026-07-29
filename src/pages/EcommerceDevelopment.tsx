@@ -1,14 +1,14 @@
 import DigitalServicePage, {
   digitalServiceImages,
 } from "./DigitalServicePage";
+import catalogImg from "../assets/OurServices/catalog.png";
+import promotionImg from "../assets/OurServices/promotion.png";
+import orderFulfillmentImg from "../assets/OurServices/order-fullfilment.png";
 
 const {
   ecommerce,
   genFinance,
   genCustomer,
-  genOptimize,
-  genData,
-  audioAccuracy,
   audioInsights,
   processFrame1,
   processFrame2,
@@ -39,7 +39,7 @@ export default function EcommerceDevelopment() {
           title: "Catalog & inventory systems",
           description:
             "Flexible product data models, variants, and inventory sync for growing catalogs.",
-          icon: genData,
+          icon: catalogImg,
         },
         {
           title: "Payments & checkout",
@@ -51,13 +51,13 @@ export default function EcommerceDevelopment() {
           title: "Order & fulfillment workflows",
           description:
             "Order management, notifications, and operational tools for reliable fulfillment.",
-          icon: audioAccuracy,
+          icon: orderFulfillmentImg,
         },
         {
           title: "Promotions & personalization",
           description:
             "Campaigns, coupons, and recommendation patterns that lift average order value.",
-          icon: genOptimize,
+          icon: promotionImg,
         },
         {
           title: "Analytics & growth loops",

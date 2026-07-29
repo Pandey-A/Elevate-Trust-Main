@@ -4,23 +4,14 @@ import { ArrowUpRight, Eye, EyeOff } from "lucide-react";
 import worldMapBackground from "../../assets/homepage-icons/Group(3).png";
 import agileImage from "../../assets/OurServices/agile-light.png";
 import { getErrorMessage } from "../../lib/api";
-import {
-  getAuthSession,
-  loginUser,
-  registerUser,
-} from "../../lib/auth";
-
-type Mode = "login" | "signup";
+import { getAuthSession, loginUser } from "../../lib/auth";
 
 export default function AdminAuth() {
   const navigate = useNavigate();
-  const [mode, setMode] = useState<Mode>("login");
-  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
-  const [message, setMessage] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
@@ -30,7 +21,6 @@ export default function AdminAuth() {
   const onSubmit = async (event: FormEvent) => {
     event.preventDefault();
     setError("");
-    setMessage("");
 
     if (!email.trim() || !password.trim()) {
       setError("Email and password are required.");
@@ -39,26 +29,6 @@ export default function AdminAuth() {
 
     try {
       setSubmitting(true);
-
-      if (mode === "signup") {
-        if (!name.trim()) {
-          setError("Name is required for signup.");
-          return;
-        }
-        const result = await registerUser({
-          name: name.trim(),
-          email: email.trim(),
-          password,
-        });
-        setMessage(
-          result.message ||
-            "Account created. You can sign in now with your admin credentials.",
-        );
-        setMode("login");
-        setPassword("");
-        return;
-      }
-
       await loginUser(email.trim(), password);
       navigate("/admin/dashboard");
     } catch (err) {
@@ -109,49 +79,14 @@ export default function AdminAuth() {
         {/* Auth form panel */}
         <section className="flex items-center justify-center px-5 py-8 sm:px-8 sm:py-12 lg:px-10 lg:py-14 xl:px-14 2xl:px-20">
           <div className="w-full max-w-[440px] rounded-[24px] border border-[#d7e6f3] bg-white p-5 shadow-[0_20px_60px_-34px_rgba(17,61,119,0.4)] sm:max-w-[480px] sm:p-8 xl:max-w-[520px] xl:rounded-[28px] xl:p-10 2xl:max-w-[560px] 2xl:p-12">
-            <div className="mb-5 flex rounded-full bg-[#EFF7FC] p-1 sm:mb-6 2xl:mb-8">
-              {(["login", "signup"] as const).map((item) => (
-                <button
-                  key={item}
-                  type="button"
-                  onClick={() => {
-                    setMode(item);
-                    setError("");
-                    setMessage("");
-                  }}
-                  className={`flex-1 cursor-pointer rounded-full border-0 py-2.5 text-sm font-semibold capitalize transition-colors 2xl:py-3 2xl:text-base ${
-                    mode === item
-                      ? "bg-[#113d77] text-white"
-                      : "bg-transparent text-[#2365aa]"
-                  }`}
-                >
-                  {item === "login" ? "Login" : "Sign up"}
-                </button>
-              ))}
-            </div>
-
             <h2 className="m-0 text-[clamp(24px,2.4vw,36px)] font-bold text-[#1F2432]">
-              {mode === "login" ? "Welcome back" : "Create admin account"}
+              Welcome back
             </h2>
             <p className="mt-2 text-sm leading-6 text-[#848b9b] 2xl:mt-3 2xl:text-base 2xl:leading-7">
-              {mode === "login"
-                ? "Sign in with your admin account to manage the website."
-                : "The first registered account becomes admin. Later signups cannot access the dashboard."}
+              Sign in with your admin account to manage the website.
             </p>
 
             <form className="mt-6 flex flex-col gap-4 2xl:mt-8 2xl:gap-5" onSubmit={onSubmit}>
-              {mode === "signup" ? (
-                <label className="flex flex-col gap-1.5 text-sm font-medium text-[#5a5a5a] 2xl:text-base">
-                  Full name
-                  <input
-                    value={name}
-                    onChange={(event) => setName(event.target.value)}
-                    className="rounded-[12px] border border-[#d7e6f3] bg-[#f8fbfd] px-3.5 py-3 text-[#1F2432] outline-none transition focus:border-[#2365aa] 2xl:rounded-[14px] 2xl:px-4 2xl:py-3.5 2xl:text-base"
-                    placeholder="Admin name"
-                  />
-                </label>
-              ) : null}
-
               <label className="flex flex-col gap-1.5 text-sm font-medium text-[#5a5a5a] 2xl:text-base">
                 Email
                 <input
@@ -159,7 +94,8 @@ export default function AdminAuth() {
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
                   className="rounded-[12px] border border-[#d7e6f3] bg-[#f8fbfd] px-3.5 py-3 text-[#1F2432] outline-none transition focus:border-[#2365aa] 2xl:rounded-[14px] 2xl:px-4 2xl:py-3.5 2xl:text-base"
-                  placeholder="admin@elevatetrust.ai"
+                  placeholder="Enter email"
+                  autoComplete="username"
                 />
               </label>
 
@@ -172,6 +108,7 @@ export default function AdminAuth() {
                     onChange={(event) => setPassword(event.target.value)}
                     className="w-full rounded-[12px] border border-[#d7e6f3] bg-[#f8fbfd] px-3.5 py-3 pr-11 text-[#1F2432] outline-none transition focus:border-[#2365aa] 2xl:rounded-[14px] 2xl:px-4 2xl:py-3.5 2xl:pr-12 2xl:text-base"
                     placeholder="Enter password"
+                    autoComplete="current-password"
                   />
                   <button
                     type="button"
@@ -185,13 +122,8 @@ export default function AdminAuth() {
               </label>
 
               {error ? (
-                <p className="m-0 rounded-[12px] bg-[#fde8e8] px-3 py-2 text-sm text-[#b42318] 2xl:text-base">
+                <p className="m-0 rounded-[12px] bg-[#EEF3FB] px-3 py-2 text-sm text-[#2365aa] 2xl:text-base">
                   {error}
-                </p>
-              ) : null}
-              {message ? (
-                <p className="m-0 rounded-[12px] bg-[#e8f6ee] px-3 py-2 text-sm text-[#1d5c3a] 2xl:text-base">
-                  {message}
                 </p>
               ) : null}
 
@@ -200,11 +132,7 @@ export default function AdminAuth() {
                 disabled={submitting}
                 className="mt-1 inline-flex cursor-pointer items-center justify-center gap-2 rounded-full border-0 bg-[#2365aa] py-3 pl-6 pr-3 text-sm font-semibold uppercase tracking-wide text-white transition hover:bg-[#1a5490] disabled:cursor-not-allowed disabled:opacity-70 2xl:py-3.5 2xl:pl-7 2xl:text-base"
               >
-                {submitting
-                  ? "Please wait..."
-                  : mode === "login"
-                    ? "Enter dashboard"
-                    : "Create account"}
+                {submitting ? "Please wait..." : "Enter dashboard"}
                 <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white text-[#2365aa] 2xl:h-9 2xl:w-9">
                   <ArrowUpRight size={16} strokeWidth={2.5} />
                 </span>

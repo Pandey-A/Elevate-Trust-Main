@@ -8,13 +8,15 @@
 .careers-hero {
   position: relative;
   width: 100%;
-  min-height: clamp(420px, 42vw, 576px);
-  padding: clamp(100px, 11vw, 140px) var(--site-padding-x, 24px) 0;
+  height: var(--service-hero-height);
+  min-height: var(--service-hero-height);
+  padding: 0 var(--site-padding-x, 24px);
   background-color: #113d77;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 .careers-hero__bg {
@@ -66,9 +68,10 @@
 
 .careers-hero__illustration {
   display: block;
-  width: min(318px, 72vw);
+  width: min(280px, 60vw);
   height: auto;
-  margin-top: clamp(28px, 4vw, 48px);
+  max-height: 42%;
+  margin-top: clamp(16px, 2vw, 28px);
   margin-bottom: 0;
   object-fit: contain;
   object-position: center bottom;

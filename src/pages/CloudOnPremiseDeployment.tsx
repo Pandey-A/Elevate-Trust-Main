@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowUpRight, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import FlyCTA from "../components/FlyCTA";
 import worldMapBackground from "../assets/homepage-icons/Group(3).png";
 import machineLearningIcon from "../assets/OurServices/machine-learning.png";
@@ -232,20 +232,38 @@ const stackTabs = [
   },
 ];
 
+const STAGE_AUTO_MS = 5000;
+const TOOL_AUTO_MS = 3500;
+
 export default function CloudOnPremiseDeployment() {
   const [activeStage, setActiveStage] = useState(0);
   const [panelReady, setPanelReady] = useState(true);
+  const [stagePaused, setStagePaused] = useState(false);
+  const [reducedMotion, setReducedMotion] = useState(false);
   const [stackTab, setStackTab] = useState<"cloud" | "aiops">("cloud");
   const [activeTool, setActiveTool] = useState(0);
   const [stackReady, setStackReady] = useState(true);
+  const [toolPaused, setToolPaused] = useState(false);
 
   const stage = pipelineStages[activeStage];
-  const progress = ((activeStage + 1) / pipelineStages.length) * 100;
+  const stageCount = pipelineStages.length;
+  const segmentPercent = 100 / (stageCount - 1);
+  const completedPercent = (activeStage / (stageCount - 1)) * 100;
+  const staticProgress = ((activeStage + 1) / stageCount) * 100;
+  const segmentAnimKey = `${activeStage}-${stagePaused ? "paused" : "running"}`;
   const activeStack = stackTabs.find((tab) => tab.id === stackTab) ?? stackTabs[0];
   const selectedTool = activeStack.items[activeTool] ?? activeStack.items[0];
 
   useEffect(() => {
     window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setReducedMotion(media.matches);
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
   }, []);
 
   const selectStage = (index: number) => {
@@ -257,13 +275,31 @@ export default function CloudOnPremiseDeployment() {
     }, 160);
   };
 
-  const goPrev = () => {
-    selectStage(activeStage === 0 ? pipelineStages.length - 1 : activeStage - 1);
-  };
+  const advanceStage = useCallback(() => {
+    setPanelReady(false);
+    window.setTimeout(() => {
+      setActiveStage((current) =>
+        current >= pipelineStages.length - 1 ? 0 : current + 1,
+      );
+      setPanelReady(true);
+    }, 160);
+  }, []);
 
-  const goNext = () => {
-    selectStage(activeStage === pipelineStages.length - 1 ? 0 : activeStage + 1);
-  };
+  useEffect(() => {
+    if (stagePaused || reducedMotion) return;
+
+    const id = window.setInterval(advanceStage, STAGE_AUTO_MS);
+    return () => window.clearInterval(id);
+  }, [activeStage, stagePaused, reducedMotion, advanceStage]);
+
+  useEffect(() => {
+    if (toolPaused || reducedMotion) return;
+    const items = activeStack.items;
+    const id = window.setInterval(() => {
+      setActiveTool((current) => (current >= items.length - 1 ? 0 : current + 1));
+    }, TOOL_AUTO_MS);
+    return () => window.clearInterval(id);
+  }, [activeTool, stackTab, toolPaused, reducedMotion, activeStack.items]);
 
   const selectStackTab = (id: "cloud" | "aiops") => {
     if (id === stackTab) return;
@@ -278,25 +314,21 @@ export default function CloudOnPremiseDeployment() {
   return (
     <div className="bg-white font-['Lay_Grotesk_Trial',sans-serif] text-[#272935]">
       {/* Hero */}
-      <section
-        className="relative flex w-full items-center justify-center overflow-hidden bg-[#113d77]"
-        style={{ minHeight: "clamp(280px, 32vw, 492px)" }}
-        aria-label="Cloud and On-Premise Deployment"
-      >
+      <section className="service-page-hero" aria-label="Cloud and On-Premise Deployment">
         <img
           src={worldMapBackground}
           alt=""
           aria-hidden
-          className="pointer-events-none absolute left-1/2 top-[58%] w-[min(94%,1600px)] -translate-x-1/2 -translate-y-1/2 opacity-55"
+          className="service-page-hero__map"
         />
-        <div className="relative z-10 flex max-w-[min(900px,92%)] flex-col items-center px-5 pb-[clamp(48px,6vw,80px)] pt-[clamp(72px,8vw,120px)] text-center">
+        <div className="service-page-hero__content max-w-[min(900px,92%)]">
           <p className="mb-3 text-sm font-semibold uppercase tracking-[0.16em] text-[#8eb4df] 2xl:text-base">
             Cloud / On-Premise
           </p>
           <h1 className="m-0 text-[clamp(26px,3.6vw,46px)] font-bold leading-[1.29] tracking-tight text-white lg:text-[clamp(24px,2.8vw,34px)] 2xl:text-[clamp(30px,3.8vw,46px)]">
             Comprehensive AI/ML Deployment Solutions for Cloud and On-Premise
           </h1>
-          <p className="mt-[clamp(16px,2vw,24px)] max-w-[783px] font-['Ubuntu',sans-serif] text-[clamp(14px,1.4vw,18px)] font-normal leading-6 text-[#a1b1cb] lg:text-[clamp(13px,1.1vw,15px)] 2xl:text-[clamp(14px,1.4vw,18px)]">
+          <p className="mt-[clamp(12px,1.5vw,20px)] max-w-[783px] font-['Ubuntu',sans-serif] text-[clamp(14px,1.4vw,18px)] font-normal leading-6 text-[#a1b1cb] lg:text-[clamp(13px,1.1vw,15px)] 2xl:text-[clamp(14px,1.4vw,18px)]">
             We offer a wide range of solutions for scaling and deploying AI/ML
             technologies in both cloud and on-premise settings, customized to fit
             diverse business needs. Our deployment services ensure optimization,
@@ -304,7 +336,7 @@ export default function CloudOnPremiseDeployment() {
           </p>
           <Link
             to="/contact"
-            className="mt-[clamp(24px,3vw,40px)] inline-flex items-center gap-1.5 rounded-full bg-[#2365aa] py-3 pl-[26px] pr-3.5 text-base font-normal uppercase leading-[1.2] text-white no-underline transition-colors hover:bg-[#1a5490] lg:py-2.5 lg:pl-[22px] lg:pr-2.5 lg:text-sm 2xl:py-3 2xl:pl-[26px] 2xl:pr-3.5 2xl:text-base"
+            className="mt-[clamp(16px,2vw,28px)] inline-flex items-center gap-1.5 rounded-full bg-[#2365aa] py-3 pl-[26px] pr-3.5 text-base font-normal uppercase leading-[1.2] text-white no-underline transition-colors hover:bg-[#1a5490] lg:py-2.5 lg:pl-[22px] lg:pr-2.5 lg:text-sm 2xl:py-3 2xl:pl-[26px] 2xl:pr-3.5 2xl:text-base"
           >
             Contact Us
             <span className="inline-flex h-[37px] w-[37px] items-center justify-center rounded-full bg-white text-[#2365aa]">
@@ -384,7 +416,10 @@ export default function CloudOnPremiseDeployment() {
       </section>
 
       {/* Interactive blue pipeline stepper */}
-      <section className="w-full bg-[#EFF7FC]" aria-label="AI/ML deployment pipeline">
+      <section
+        className="w-full bg-[#EFF7FC]"
+        aria-label="AI/ML deployment pipeline"
+      >
         <div className="mx-auto w-full max-w-[1692px] px-5 py-[clamp(40px,5vw,80px)] sm:px-8 lg:px-10 xl:px-12">
           <header className="mx-auto mb-[clamp(28px,3.5vw,48px)] max-w-[52rem] text-center">
             <p className="mb-2 text-sm font-semibold uppercase tracking-[0.16em] text-[#2365aa] 2xl:text-base">
@@ -403,15 +438,37 @@ export default function CloudOnPremiseDeployment() {
           {/* Clickable stage rail */}
           <div className="mx-auto mb-8 max-w-[1100px] sm:mb-10">
             <div className="relative px-1 pt-2">
-              <div className="absolute left-[6%] right-[6%] top-[22px] h-[3px] rounded-full bg-[#d7e6f3] sm:top-[26px]">
-                <div
-                  className="h-full rounded-full bg-[#2365aa] transition-all duration-500 ease-out"
-                  style={{ width: `${progress}%` }}
-                />
+              <div className="absolute z-0 left-[6%] right-[6%] top-[22px] h-[3px] overflow-hidden rounded-full bg-[#d7e6f3] sm:top-[26px]">
+                {reducedMotion ? (
+                  <div
+                    className="h-full rounded-full bg-[#2365aa] transition-all duration-500 ease-out"
+                    style={{ width: `${staticProgress}%` }}
+                  />
+                ) : (
+                  <>
+                    <div
+                      className="absolute inset-y-0 left-0 rounded-full bg-[#2365aa]"
+                      style={{ width: `${completedPercent}%` }}
+                    />
+                    {activeStage < stageCount - 1 && (
+                      <div
+                        key={segmentAnimKey}
+                        className={`pipeline-stage-advance absolute inset-y-0 origin-left rounded-full bg-[#2365aa] ${
+                          stagePaused ? "pipeline-stage-advance--paused" : ""
+                        }`}
+                        style={{
+                          left: `${completedPercent}%`,
+                          width: `${segmentPercent}%`,
+                          ["--stage-duration" as string]: `${STAGE_AUTO_MS}ms`,
+                        }}
+                      />
+                    )}
+                  </>
+                )}
               </div>
 
               <div
-                className="relative z-10 flex justify-between gap-1 overflow-x-auto pb-1"
+                className="relative z-20 flex justify-between gap-1 overflow-x-auto pb-1"
                 role="tablist"
                 aria-label="Pipeline stages"
               >
@@ -431,14 +488,20 @@ export default function CloudOnPremiseDeployment() {
                       className="group flex min-w-[64px] flex-1 cursor-pointer flex-col items-center border-0 bg-transparent p-0 outline-none"
                     >
                       <span
-                        className={`flex h-10 w-10 items-center justify-center rounded-full text-xs font-bold transition-all duration-300 sm:h-12 sm:w-12 sm:text-sm ${
+                        className={`relative flex h-10 w-10 items-center justify-center rounded-full text-xs font-bold transition-all duration-300 sm:h-12 sm:w-12 sm:text-sm ${
                           isActive
-                            ? "scale-110 bg-[#113d77] text-white shadow-[0_10px_24px_-10px_rgba(17,61,119,0.7)]"
+                            ? "scale-[1.05] bg-[#113d77] text-white shadow-[0_8px_18px_-12px_rgba(17,61,119,0.7)]"
                             : isDone
                               ? "bg-[#2365aa] text-white"
                               : "bg-white text-[#2365aa] ring-2 ring-[#c5d8eb] group-hover:ring-[#2365aa]"
                         }`}
                       >
+                        {isActive && !reducedMotion && (
+                          <span
+                            className="pipeline-step-pulse pointer-events-none absolute inset-0 rounded-full"
+                            aria-hidden
+                          />
+                        )}
                         {step}
                       </span>
                       <span
@@ -455,18 +518,17 @@ export default function CloudOnPremiseDeployment() {
             </div>
           </div>
 
-          {/* Active stage panel */}
+          {/* Active stage panel — fixed height so switching never shifts layout */}
           <div
             id="pipeline-stage-panel"
             role="tabpanel"
-            className={`mx-auto max-w-[1100px] overflow-hidden rounded-[24px] border border-[#d7e6f3] bg-white shadow-[0_20px_60px_-34px_rgba(17,61,119,0.45)] transition-all duration-300 ease-out ${
-              panelReady
-                ? "translate-y-0 opacity-100"
-                : "translate-y-3 opacity-0"
-            }`}
+            onMouseEnter={() => setStagePaused(true)}
+            onMouseLeave={() => setStagePaused(false)}
+            className="mx-auto max-w-[1100px] overflow-hidden rounded-[24px] border border-[#d7e6f3] bg-white shadow-[0_20px_60px_-34px_rgba(17,61,119,0.45)]"
           >
-            <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
-              <div className="flex items-center justify-center p-4 sm:p-6 lg:p-8">
+            <div className="grid grid-cols-1 items-stretch lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:grid-rows-[1fr]">
+              {/* Illustration — fixed height so it never shrinks */}
+              <div className="flex min-h-[260px] items-center justify-center p-4 sm:p-6 lg:min-h-[420px] lg:p-8">
                 <img
                   key={stage.title}
                   src={stage.illustration}
@@ -476,45 +538,34 @@ export default function CloudOnPremiseDeployment() {
                 />
               </div>
 
-              <div className="flex flex-col justify-center border-t border-[#e8eef3] p-5 sm:p-7 lg:border-l lg:border-t-0 lg:p-9">
-                <p className="mb-2 text-sm font-semibold uppercase tracking-[0.14em] text-[#2365aa]">
-                  Stage {String(activeStage + 1).padStart(2, "0")} of{" "}
-                  {String(pipelineStages.length).padStart(2, "0")}
-                </p>
-                <h3 className="m-0 text-[clamp(22px,2.4vw,34px)] font-bold leading-snug text-[#1F2432]">
-                  {stage.title}
-                </h3>
-                <p className="mt-4 text-[clamp(13px,1.2vw,16px)] leading-7 text-[#687181] 2xl:text-[18px] 2xl:leading-8">
-                  {stage.description}
-                </p>
-                <div className="mt-6 flex flex-wrap gap-2">
-                  {stage.tools.map((tool) => (
-                    <span
-                      key={tool}
-                      className="rounded-full bg-[#EFF7FC] px-3.5 py-1.5 text-xs font-semibold text-[#2365aa] sm:text-sm"
-                    >
-                      {tool}
-                    </span>
-                  ))}
-                </div>
-
-                <div className="mt-8 flex items-center gap-3">
-                  <button
-                    type="button"
-                    onClick={goPrev}
-                    className="inline-flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-[#d7e6f3] bg-white text-[#2365aa] transition-colors hover:border-[#2365aa] hover:bg-[#EFF7FC]"
-                    aria-label="Previous stage"
-                  >
-                    <ChevronLeft size={20} />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={goNext}
-                    className="inline-flex h-11 flex-1 cursor-pointer items-center justify-center gap-2 rounded-full bg-[#2365aa] px-5 text-sm font-semibold uppercase tracking-wide text-white transition-colors hover:bg-[#1a5490] sm:flex-none sm:px-7"
-                  >
-                    Next stage
-                    <ChevronRight size={18} />
-                  </button>
+              {/* Text content — fades on switch, never resizes the card */}
+              <div className="relative border-t border-[#e8eef3] lg:border-l lg:border-t-0">
+                <div
+                  key={`stage-detail-${activeStage}`}
+                  className={`flex h-full flex-col justify-center p-5 sm:p-7 lg:p-9 transition-opacity duration-300 ${
+                    panelReady ? "opacity-100" : "opacity-0"
+                  }`}
+                >
+                  <p className="mb-2 text-sm font-semibold uppercase tracking-[0.14em] text-[#2365aa]">
+                    Stage {String(activeStage + 1).padStart(2, "0")} of{" "}
+                    {String(pipelineStages.length).padStart(2, "0")}
+                  </p>
+                  <h3 className="m-0 text-[clamp(22px,2.4vw,34px)] font-bold leading-snug text-[#1F2432]">
+                    {stage.title}
+                  </h3>
+                  <p className="mt-4 text-[clamp(13px,1.2vw,16px)] leading-7 text-[#687181] 2xl:text-[18px] 2xl:leading-8">
+                    {stage.description}
+                  </p>
+                  <div className="mt-6 flex flex-wrap gap-2">
+                    {stage.tools.map((tool) => (
+                      <span
+                        key={tool}
+                        className="rounded-full bg-[#EFF7FC] px-3.5 py-1.5 text-xs font-semibold text-[#2365aa] sm:text-sm"
+                      >
+                        {tool}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
@@ -562,66 +613,90 @@ export default function CloudOnPremiseDeployment() {
             })}
           </div>
 
+          {/* Outer wrapper: fixed height so nothing ever shifts */}
           <div
-            className={`mx-auto grid max-w-[1100px] grid-cols-1 overflow-hidden rounded-[24px] border border-[#d7e6f3] bg-[#EFF7FC] shadow-[0_20px_60px_-34px_rgba(17,61,119,0.4)] transition-all duration-300 ease-out lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] ${
-              stackReady ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"
+            onMouseEnter={() => setToolPaused(true)}
+            onMouseLeave={() => setToolPaused(false)}
+            className={`mx-auto max-w-[1100px] overflow-hidden rounded-[24px] border border-[#d7e6f3] bg-[#EFF7FC] shadow-[0_20px_60px_-34px_rgba(17,61,119,0.4)] transition-opacity duration-300 ease-out ${
+              stackReady ? "opacity-100" : "opacity-0"
             }`}
           >
-            {/* Tool grid */}
-            <div className="border-b border-[#d7e6f3] p-5 sm:p-6 lg:border-b-0 lg:border-r lg:p-7">
-              <p className="mb-4 text-sm leading-6 text-[#687181]">{activeStack.summary}</p>
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
-                {activeStack.items.map((item, index) => {
-                  const isActive = index === activeTool;
-                  return (
-                    <button
-                      key={item.name}
-                      type="button"
-                      onClick={() => setActiveTool(index)}
-                      className={`flex min-h-[96px] cursor-pointer flex-col items-center justify-center gap-2 rounded-[18px] border px-3 py-4 transition-all duration-300 ${
-                        isActive
-                          ? "border-[#2365aa] bg-white shadow-[0_14px_30px_-18px_rgba(17,61,119,0.55)] scale-[1.03]"
-                          : "border-transparent bg-white/80 hover:border-[#c5d8eb] hover:bg-white hover:shadow-[0_10px_24px_-18px_rgba(17,61,119,0.35)]"
-                      }`}
-                    >
-                      <img
-                        src={item.logo}
-                        alt={item.name}
-                        className="h-9 w-auto max-w-full object-contain sm:h-10"
-                      />
-                    </button>
-                  );
-                })}
+            {/* Fixed-height inner grid — tall enough for 2 rows of tool cards + detail */}
+            <div className="grid min-h-[480px] grid-cols-1 lg:min-h-[360px] lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
+              {/* Tool grid — fixed height, never shrinks */}
+              <div className="border-b border-[#d7e6f3] p-5 sm:p-6 lg:border-b-0 lg:border-r lg:p-7">
+                <p className="mb-4 text-sm leading-6 text-[#687181]">{activeStack.summary}</p>
+                {/* Always reserve space for 2 rows of 3 cards */}
+                <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
+                  {/* Render all 6 slots; hide extras so height stays constant */}
+                  {Array.from({ length: 6 }).map((_, index) => {
+                    const item = activeStack.items[index];
+                    const isActive = index === activeTool;
+                    if (!item) {
+                      return (
+                        <div
+                          key={`empty-${index}`}
+                          className="min-h-[96px] rounded-[18px] bg-transparent"
+                          aria-hidden
+                        />
+                      );
+                    }
+                    return (
+                      <button
+                        key={item.name}
+                        type="button"
+                        onClick={() => { setActiveTool(index); setToolPaused(false); }}
+                        className={`flex min-h-[96px] cursor-pointer flex-col items-center justify-center gap-2 rounded-[18px] border px-3 py-4 transition-all duration-300 ${
+                          isActive
+                            ? "border-[#2365aa] bg-white shadow-[0_14px_30px_-18px_rgba(17,61,119,0.55)] scale-[1.03]"
+                            : "border-transparent bg-white/80 hover:border-[#c5d8eb] hover:bg-white hover:shadow-[0_10px_24px_-18px_rgba(17,61,119,0.35)]"
+                        }`}
+                      >
+                        <img
+                          src={item.logo}
+                          alt={item.name}
+                          className="h-9 w-auto max-w-full object-contain sm:h-10"
+                        />
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
 
-            {/* Active tool detail */}
-            <div className="flex flex-col justify-center bg-white p-6 sm:p-8 lg:p-10">
-              <p className="mb-2 text-sm font-semibold uppercase tracking-[0.14em] text-[#2365aa]">
-                {activeStack.label} toolkit
-              </p>
-              <h3 className="m-0 text-[clamp(22px,2.2vw,32px)] font-bold leading-snug text-[#1F2432]">
-                {selectedTool.name}
-              </h3>
-              <p className="mt-3 max-w-[32rem] text-[clamp(13px,1.2vw,16px)] leading-7 text-[#687181] 2xl:text-[18px] 2xl:leading-8">
-                {selectedTool.blurb}
-              </p>
-              <ul className="mt-5 flex list-none flex-col gap-3 p-0">
-                {selectedTool.points.map((point) => (
-                  <li
-                    key={point}
-                    className="flex items-start gap-3 text-[clamp(13px,1.15vw,15px)] leading-6 text-[#5a5a5a] 2xl:text-[17px] 2xl:leading-7"
-                  >
-                    <img
-                      src={checkIcon}
-                      alt=""
-                      aria-hidden
-                      className="mt-[0.4em] h-3 w-3 shrink-0"
-                    />
-                    <span>{point}</span>
-                  </li>
-                ))}
-              </ul>
+              {/* Detail panel — fills remaining height, content fades on switch */}
+              <div className="relative bg-white">
+                <div
+                  key={`${stackTab}-${activeTool}`}
+                  className="absolute inset-0 flex flex-col justify-center overflow-y-auto p-6 transition-opacity duration-300 sm:p-8 lg:p-10"
+                  style={{ opacity: stackReady ? 1 : 0 }}
+                >
+                  <p className="mb-2 text-sm font-semibold uppercase tracking-[0.14em] text-[#2365aa]">
+                    {activeStack.label} toolkit
+                  </p>
+                  <h3 className="m-0 text-[clamp(22px,2.2vw,32px)] font-bold leading-snug text-[#1F2432]">
+                    {selectedTool.name}
+                  </h3>
+                  <p className="mt-3 max-w-[32rem] text-[clamp(13px,1.2vw,16px)] leading-7 text-[#687181] 2xl:text-[18px] 2xl:leading-8">
+                    {selectedTool.blurb}
+                  </p>
+                  <ul className="mt-5 flex list-none flex-col gap-3 p-0">
+                    {selectedTool.points.map((point) => (
+                      <li
+                        key={point}
+                        className="flex items-start gap-3 text-[clamp(13px,1.15vw,15px)] leading-6 text-[#5a5a5a] 2xl:text-[17px] 2xl:leading-7"
+                      >
+                        <img
+                          src={checkIcon}
+                          alt=""
+                          aria-hidden
+                          className="mt-[0.4em] h-3 w-3 shrink-0"
+                        />
+                        <span>{point}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
             </div>
           </div>
         </div>

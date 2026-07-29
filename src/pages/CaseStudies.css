@@ -8,15 +8,16 @@
 .cs-hero {
   position: relative;
   width: 100%;
-  min-height: clamp(320px, 36vw, 576px);
-  padding: clamp(88px, 10vw, 140px) var(--site-padding-x, 24px)
-    clamp(56px, 7vw, 88px);
+  height: var(--service-hero-height);
+  min-height: var(--service-hero-height);
+  padding: 0 var(--site-padding-x, 24px);
   background-color: #113d77;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 .cs-hero__bg {
@@ -356,12 +357,6 @@
 
 /* ── Laptop scaling (1024–2011px) ─────────────── */
 @media (min-width: 1024px) and (max-width: 2011px) {
-  .cs-hero {
-    min-height: clamp(260px, 28vw, 400px);
-    padding: clamp(64px, 7vw, 100px) var(--site-padding-x, 24px)
-      clamp(40px, 5vw, 64px);
-  }
-
   .cs-hero__title {
     font-size: clamp(24px, 2.8vw, 34px);
     margin-bottom: 14px;

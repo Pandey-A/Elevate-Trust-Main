@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Mail, MapPin, Phone } from "lucide-react";
 import letsConnectIcon from "../../assets/nav/lets-connect.svg";
-import worldMapBackground from "../../assets/homepage-icons/wordmap.svg";
+import worldMapBackground from "../../assets/homepage-icons/Group(3).png";
 
 const contactItems = [
   { icon: Mail, label: "info@elevatetrust.ai", href: "mailto:info@elevatetrust.ai" },
@@ -15,59 +15,52 @@ const contactItems = [
 
 export default function ContactHero() {
   return (
-    <section className="relative h-[20rem] w-full overflow-hidden bg-[#113D77] sm:h-[22rem] md:h-[23rem] lg:h-[25rem]">
-      {/* Map, same layer as ServiceHero */}
-      <div
+    <section className="service-page-hero" aria-label="Contact ElevateTrust.Ai">
+      <img
+        src={worldMapBackground}
+        alt=""
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 z-[1] flex items-end justify-center overflow-hidden"
-      >
-        <img
-          src={worldMapBackground}
-          alt=""
-          className="mt-12 block w-[94%] max-w-none sm:mt-16 sm:w-[88%] md:mt-20 md:w-[80%] lg:mt-18 lg:w-[70%]"
-        />
-      </div>
+        className="service-page-hero__map"
+      />
 
-      <div className="relative z-[2] mx-auto flex h-full w-full max-w-[1440px] items-center justify-center p-4 lg:p-8">
-        <div className="flex w-full max-w-[20rem] flex-col items-center gap-12 text-center sm:max-w-[34rem] sm:gap-14 md:max-w-[40rem] lg:max-w-[44rem] lg:gap-16">
-          <h1 className="text-[1.25rem] font-bold leading-[1.35] text-white sm:text-[1.5rem] md:text-[1.75rem] lg:text-[2rem] lg:leading-[1.45]">
-            Contact ElevateTrust.Ai
-          </h1>
+      <div className="service-page-hero__content max-w-[min(880px,92%)]">
+        <h1 className="m-0 text-[clamp(28px,3.8vw,48px)] font-bold leading-[1.29] tracking-tight text-white lg:text-[clamp(26px,3vw,34px)] 2xl:text-[clamp(32px,4vw,48px)]">
+          Contact ElevateTrust.Ai
+        </h1>
 
-          <ul className="flex w-full flex-col items-center gap-3 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-x-8 sm:gap-y-3 lg:gap-x-12">
-            {contactItems.map(({ icon: Icon, label, href }) => (
-              <li key={label}>
-                {href.startsWith("/") ? (
-                  <Link
-                    to={href}
-                    className="inline-flex items-center gap-1.5 font-ubuntu text-[12px] font-normal leading-relaxed text-white/50 transition hover:text-white/70 sm:text-[13px] md:text-[14px] lg:text-[13px]"
-                  >
-                    <Icon className="h-3.5 w-3.5 shrink-0 stroke-[1.75] sm:h-4 sm:w-4" aria-hidden />
-                    <span>{label}</span>
-                  </Link>
-                ) : (
-                  <a
-                    href={href}
-                    className="inline-flex items-center gap-1.5 font-ubuntu text-[12px] font-normal leading-relaxed text-white/50 transition hover:text-white/70 sm:text-[13px] md:text-[14px] lg:text-[13px]"
-                  >
-                    <Icon className="h-3.5 w-3.5 shrink-0 stroke-[1.75] sm:h-4 sm:w-4" aria-hidden />
-                    <span>{label}</span>
-                  </a>
-                )}
-              </li>
-            ))}
-          </ul>
+        <ul className="mt-[clamp(16px,2vw,28px)] flex w-full list-none flex-col items-center gap-3 p-0 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-x-8 sm:gap-y-3 lg:gap-x-12">
+          {contactItems.map(({ icon: Icon, label, href }) => (
+            <li key={label}>
+              {href.startsWith("/") ? (
+                <Link
+                  to={href}
+                  className="inline-flex items-center gap-1.5 font-['Ubuntu',sans-serif] text-[clamp(13px,1.2vw,15px)] font-normal leading-relaxed text-[#a1b1cb] transition hover:text-white"
+                >
+                  <Icon className="h-4 w-4 shrink-0 stroke-[1.75]" aria-hidden />
+                  <span>{label}</span>
+                </Link>
+              ) : (
+                <a
+                  href={href}
+                  className="inline-flex items-center gap-1.5 font-['Ubuntu',sans-serif] text-[clamp(13px,1.2vw,15px)] font-normal leading-relaxed text-[#a1b1cb] transition hover:text-white"
+                >
+                  <Icon className="h-4 w-4 shrink-0 stroke-[1.75]" aria-hidden />
+                  <span>{label}</span>
+                </a>
+              )}
+            </li>
+          ))}
+        </ul>
 
-          <Link
-            to="/about"
-            className="inline-flex shrink-0 items-center gap-2 rounded-full bg-[#2365AA] px-3 py-1.5 pl-4 pr-2 text-[10px] font-semibold uppercase tracking-wide text-white transition hover:bg-[#1d5694] sm:py-2 sm:text-xs"
-          >
-            Company Profile
-            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white sm:h-7 sm:w-7">
-              <img src={letsConnectIcon} alt="" aria-hidden className="h-4 w-4 sm:h-auto sm:w-auto" />
-            </span>
-          </Link>
-        </div>
+        <Link
+          to="/about"
+          className="mt-[clamp(16px,2vw,28px)] inline-flex shrink-0 items-center gap-2 rounded-full bg-[#2365aa] py-3 pl-[26px] pr-3.5 text-base font-normal uppercase leading-[1.2] text-white no-underline transition-colors hover:bg-[#1a5490] lg:py-2.5 lg:pl-[22px] lg:pr-2.5 lg:text-sm 2xl:py-3 2xl:pl-[26px] 2xl:pr-3.5 2xl:text-base"
+        >
+          Company Profile
+          <span className="inline-flex h-[37px] w-[37px] items-center justify-center rounded-full bg-white">
+            <img src={letsConnectIcon} alt="" aria-hidden className="h-4 w-4 sm:h-auto sm:w-auto" />
+          </span>
+        </Link>
       </div>
     </section>
   );
