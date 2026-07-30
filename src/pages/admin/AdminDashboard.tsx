@@ -2,18 +2,24 @@ import { useCallback, useEffect, useMemo, useState, type FormEvent } from "react
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import {
   ArrowUpRight,
+  BookOpen,
   Briefcase,
   ExternalLink,
+  Eye,
+  EyeOff,
   FileText,
   LayoutDashboard,
   LogOut,
   Pencil,
+  Play,
   Plus,
+  Tags,
   Trash2,
   Video,
+  X,
 } from "lucide-react";
-import { INDUSTRY_TAGS, type AdminDemo, type AdminJob, type IndustryTag } from "../../data/adminDefaults";
-import { useAdminAuth, useAdminDemos, useAdminJobs } from "../../hooks/useAdminData";
+import { type AdminDemo, type AdminJob, type IndustryTag } from "../../data/adminDefaults";
+import { useAdminAuth, useAdminBlogs, useAdminDemos, useAdminJobs, useDemoTags } from "../../hooks/useAdminData";
 import {
   createId,
   deleteJob,
@@ -26,24 +32,45 @@ import { logoutUser } from "../../lib/auth";
 import {
   createDemo,
   deleteDemo,
+  toggleDemoVisibility,
   updateDemo,
 } from "../../lib/demosApi";
+import {
+  createBlog,
+  deleteBlog,
+  updateBlog,
+  type BlogPost,
+} from "../../lib/blogsApi";
 import {
   deleteCareerApplication,
   fetchCareerApplications,
   type CareerApplication,
 } from "../../lib/careersApi";
+import { createDemoTag } from "../../lib/tagsApi";
+import BlogRichTextEditor from "../../components/blog/BlogRichTextEditor";
+import { excerptFromContent, isRichTextEmpty } from "../../lib/blogContent";
 import brainstormingIcon from "../../assets/OurServices/brainstorming.png";
 import analysisIcon from "../../assets/OurServices/analysis.png";
 
-type Tab = "overview" | "demos" | "jobs" | "applications";
+type Tab = "overview" | "demos" | "blogs" | "tags" | "jobs" | "applications";
 
 const emptyDemoForm = {
   id: "",
   title: "",
   youtubeUrl: "",
   industries: ["Healthcare and Life Sciences"] as IndustryTag[],
+  isPublic: true,
 };
+
+const emptyBlogForm = {
+  id: "",
+  title: "",
+  description: "",
+};
+
+function youtubeEmbed(videoId: string) {
+  return `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+}
 
 const emptyJobForm = {
   id: "",
@@ -59,19 +86,32 @@ const emptyJobForm = {
 export default function AdminDashboard() {
   const navigate = useNavigate();
   const session = useAdminAuth();
-  const { demos, loading: demosLoading, error: demosLoadError } = useAdminDemos();
+  const { demos, loading: demosLoading, error: demosLoadError, refresh: refreshDemos } = useAdminDemos();
+  const { blogs, loading: blogsLoading, error: blogsLoadError, refresh: refreshBlogs } = useAdminBlogs();
+  const { tags: demoTags, loading: tagsLoading, error: tagsLoadError, refresh: refreshTags } = useDemoTags();
   const jobs = useAdminJobs();
 
   const [tab, setTab] = useState<Tab>("overview");
   const [demoForm, setDemoForm] = useState(emptyDemoForm);
   const [demoThumbnailFile, setDemoThumbnailFile] = useState<File | null>(null);
   const [demoThumbnailPreview, setDemoThumbnailPreview] = useState<string | null>(null);
+  const [blogForm, setBlogForm] = useState(emptyBlogForm);
+  const [blogImageFile, setBlogImageFile] = useState<File | null>(null);
+  const [blogImagePreview, setBlogImagePreview] = useState<string | null>(null);
   const [jobForm, setJobForm] = useState(emptyJobForm);
   const [demoError, setDemoError] = useState("");
+  const [blogError, setBlogError] = useState("");
   const [jobError, setJobError] = useState("");
   const [demoSuccess, setDemoSuccess] = useState("");
+  const [blogSuccess, setBlogSuccess] = useState("");
   const [jobSuccess, setJobSuccess] = useState("");
   const [demoSaving, setDemoSaving] = useState(false);
+  const [blogSaving, setBlogSaving] = useState(false);
+  const [tagName, setTagName] = useState("");
+  const [tagError, setTagError] = useState("");
+  const [tagSuccess, setTagSuccess] = useState("");
+  const [tagSaving, setTagSaving] = useState(false);
+  const [playingDemo, setPlayingDemo] = useState<AdminDemo | null>(null);
   const [applications, setApplications] = useState<CareerApplication[]>([]);
   const [applicationsLoading, setApplicationsLoading] = useState(false);
   const [applicationsError, setApplicationsError] = useState("");
@@ -103,7 +143,42 @@ export default function AdminDashboard() {
     void loadApplications();
   }, [session, loadApplications]);
 
+  useEffect(() => {
+    if (!playingDemo) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setPlayingDemo(null);
+    };
+    document.addEventListener("keydown", onKeyDown);
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = "";
+    };
+  }, [playingDemo]);
+
+  const resetBlogForm = () => {
+    setBlogForm(emptyBlogForm);
+    setBlogImageFile(null);
+    setBlogImagePreview(null);
+    setBlogError("");
+    setBlogSuccess("");
+  };
+
+  const onEditBlog = (blog: BlogPost) => {
+    setTab("blogs");
+    setBlogForm({
+      id: blog.id,
+      title: blog.title,
+      description: blog.description,
+    });
+    setBlogImageFile(null);
+    setBlogImagePreview(blog.imageUrl || null);
+    setBlogSuccess("");
+    setBlogError("");
+  };
+
   const editingDemo = Boolean(demoForm.id);
+  const editingBlog = Boolean(blogForm.id);
   const editingJob = Boolean(jobForm.id);
 
   const industryCounts = useMemo(() => {
@@ -173,6 +248,7 @@ export default function AdminDashboard() {
       title: demo.title,
       youtubeUrl: demo.youtubeUrl,
       industries: demo.industries,
+      isPublic: demo.isPublic,
     });
     setDemoThumbnailFile(null);
     setDemoThumbnailPreview(demo.thumbnailUrl ?? null);
@@ -229,6 +305,7 @@ export default function AdminDashboard() {
       title: demoForm.title.trim(),
       youtubeUrl: demoForm.youtubeUrl.trim(),
       industries: demoForm.industries,
+      isPublic: demoForm.isPublic,
       thumbnailFile: demoThumbnailFile,
     };
 
@@ -252,6 +329,82 @@ export default function AdminDashboard() {
       setDemoError(getErrorMessage(err, "Unable to save demo."));
     } finally {
       setDemoSaving(false);
+    }
+  };
+
+  const submitBlog = async (event: FormEvent) => {
+    event.preventDefault();
+    setBlogError("");
+    setBlogSuccess("");
+
+    if (!blogForm.title.trim()) {
+      setBlogError("Blog title is required.");
+      return;
+    }
+    if (isRichTextEmpty(blogForm.description)) {
+      setBlogError("Blog content is required.");
+      return;
+    }
+    if (!editingBlog && !blogImageFile) {
+      setBlogError("Blog cover image is required.");
+      return;
+    }
+
+    const payload = {
+      title: blogForm.title.trim(),
+      description: blogForm.description.trim(),
+      imageFile: blogImageFile,
+    };
+
+    try {
+      setBlogSaving(true);
+      if (editingBlog) {
+        await updateBlog(blogForm.id, payload);
+        resetBlogForm();
+        setBlogSuccess("Blog updated successfully.");
+      } else {
+        await createBlog({
+          id: createId("blog"),
+          ...payload,
+          imageFile: blogImageFile!,
+        });
+        resetBlogForm();
+        setBlogSuccess("Blog published successfully.");
+      }
+      setBlogError("");
+      void refreshBlogs();
+    } catch (err) {
+      setBlogError(getErrorMessage(err, "Unable to save blog."));
+    } finally {
+      setBlogSaving(false);
+    }
+  };
+
+  const submitTag = async (event: FormEvent) => {
+    event.preventDefault();
+    setTagError("");
+    setTagSuccess("");
+
+    const name = tagName.trim();
+    if (!name) {
+      setTagError("Tag name is required.");
+      return;
+    }
+    if (name.length < 2) {
+      setTagError("Tag name must be at least 2 characters.");
+      return;
+    }
+
+    try {
+      setTagSaving(true);
+      await createDemoTag(name);
+      setTagName("");
+      setTagSuccess(`Tag "${name}" added successfully.`);
+      void refreshTags();
+    } catch (err) {
+      setTagError(getErrorMessage(err, "Unable to add tag."));
+    } finally {
+      setTagSaving(false);
     }
   };
 
@@ -331,6 +484,8 @@ export default function AdminDashboard() {
               [
                 ["overview", "Overview", LayoutDashboard],
                 ["demos", "Manage Demos", Video],
+                ["blogs", "Manage Blogs", BookOpen],
+                ["tags", "Manage Tags", Tags],
                 ["jobs", "Manage Jobs", Briefcase],
                 ["applications", "Manage Applications", FileText],
               ] as const
@@ -358,6 +513,8 @@ export default function AdminDashboard() {
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 sm:gap-5 2xl:gap-6">
                 {[
                   { label: "Total demos", value: demos.length, icon: brainstormingIcon },
+                  { label: "Total blogs", value: blogs.length, icon: analysisIcon },
+                  { label: "Demo tags", value: demoTags.length, icon: brainstormingIcon },
                   { label: "Open jobs", value: jobs.length, icon: analysisIcon },
                   {
                     label: "Applications",
@@ -393,6 +550,14 @@ export default function AdminDashboard() {
                   >
                     <Plus size={16} />
                     Add demo
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setTab("blogs")}
+                    className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-[#d7e6f3] bg-[#EFF7FC] px-4 py-2.5 text-sm font-semibold text-[#2365aa] 2xl:px-5 2xl:py-3 2xl:text-base"
+                  >
+                    <Plus size={16} />
+                    Add blog
                   </button>
                   <button
                     type="button"
@@ -502,9 +667,24 @@ export default function AdminDashboard() {
                 </div>
 
                 <div className="mt-4">
-                  <p className="mb-2 text-sm font-medium text-[#5a5a5a]">Industry tags</p>
+                  <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+                    <p className="m-0 text-sm font-medium text-[#5a5a5a]">Industry tags</p>
+                    <button
+                      type="button"
+                      onClick={() => setTab("tags")}
+                      className="cursor-pointer border-0 bg-transparent p-0 text-xs font-semibold text-[#2365aa] hover:underline"
+                    >
+                      Manage tags
+                    </button>
+                  </div>
+                  {tagsLoading ? (
+                    <p className="mb-2 text-xs text-[#848b9b]">Loading tags...</p>
+                  ) : null}
+                  {tagsLoadError ? (
+                    <p className="mb-2 text-xs text-[#2365aa]">{tagsLoadError}</p>
+                  ) : null}
                   <div className="flex flex-wrap gap-2">
-                    {INDUSTRY_TAGS.map((industry) => {
+                    {demoTags.map((industry) => {
                       const active = demoForm.industries.includes(industry);
                       return (
                         <button
@@ -522,6 +702,37 @@ export default function AdminDashboard() {
                       );
                     })}
                   </div>
+                </div>
+
+                <div className="mt-4">
+                  <p className="mb-2 text-sm font-medium text-[#5a5a5a]">Visibility</p>
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setDemoForm((prev) => ({ ...prev, isPublic: true }))}
+                      className={`cursor-pointer rounded-full border px-3 py-1.5 text-xs font-semibold ${
+                        demoForm.isPublic
+                          ? "border-[#113d77] bg-[#113d77] text-white"
+                          : "border-[#d7e6f3] bg-[#EFF7FC] text-[#2365aa]"
+                      }`}
+                    >
+                      Public
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setDemoForm((prev) => ({ ...prev, isPublic: false }))}
+                      className={`cursor-pointer rounded-full border px-3 py-1.5 text-xs font-semibold ${
+                        !demoForm.isPublic
+                          ? "border-[#113d77] bg-[#113d77] text-white"
+                          : "border-[#d7e6f3] bg-[#EFF7FC] text-[#2365aa]"
+                      }`}
+                    >
+                      Private
+                    </button>
+                  </div>
+                  <p className="mt-2 text-xs text-[#848b9b]">
+                    Public demos appear on the website. Private demos are only visible in this admin panel.
+                  </p>
                 </div>
 
                 {demoError ? (
@@ -564,11 +775,32 @@ export default function AdminDashboard() {
                     key={demo.id}
                     className="flex h-full flex-col overflow-hidden rounded-[18px] border border-[#d7e6f3] bg-white shadow-[0_12px_30px_-22px_rgba(17,61,119,0.35)] xl:rounded-[20px]"
                   >
-                    <img
-                      src={demo.thumbnailUrl || youtubeThumb(demo.videoId)}
-                      alt=""
-                      className="aspect-video w-full shrink-0 object-cover"
-                    />
+                    <div className="relative">
+                      <img
+                        src={demo.thumbnailUrl || youtubeThumb(demo.videoId)}
+                        alt=""
+                        className="aspect-video w-full shrink-0 object-cover"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setPlayingDemo(demo)}
+                        className="absolute inset-0 flex cursor-pointer items-center justify-center bg-[#0b1220]/25 transition hover:bg-[#0b1220]/40"
+                        aria-label={`Play ${demo.title}`}
+                      >
+                        <span className="flex size-12 items-center justify-center rounded-full bg-white/95 text-[#2365aa]">
+                          <Play size={22} className="ml-0.5" />
+                        </span>
+                      </button>
+                      <span
+                        className={`absolute left-3 top-3 rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide ${
+                          demo.isPublic
+                            ? "bg-[#e8f6ee] text-[#1d5c3a]"
+                            : "bg-[#fff4e5] text-[#9a6700]"
+                        }`}
+                      >
+                        {demo.isPublic ? "Public" : "Private"}
+                      </span>
+                    </div>
                     <div className="flex flex-1 flex-col p-4">
                       <h3 className="m-0 min-h-[3rem] text-base font-bold leading-snug text-[#1F2432]">
                         {demo.title}
@@ -583,7 +815,32 @@ export default function AdminDashboard() {
                           </span>
                         ))}
                       </div>
-                      <div className="mt-auto flex gap-2 pt-4">
+                      <div className="mt-auto flex flex-wrap gap-2 pt-4">
+                        <button
+                          type="button"
+                          onClick={() => setPlayingDemo(demo)}
+                          className="inline-flex flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-full border border-[#d7e6f3] bg-white px-3 py-2 text-xs font-semibold text-[#2365aa]"
+                        >
+                          <Play size={14} />
+                          Play
+                        </button>
+                        <button
+                          type="button"
+                          onClick={async () => {
+                            try {
+                              await toggleDemoVisibility(demo.id, !demo.isPublic);
+                              void refreshDemos();
+                            } catch (err) {
+                              setDemoError(
+                                getErrorMessage(err, "Unable to update visibility."),
+                              );
+                            }
+                          }}
+                          className="inline-flex flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-full border border-[#d7e6f3] bg-[#EFF7FC] px-3 py-2 text-xs font-semibold text-[#2365aa]"
+                        >
+                          {demo.isPublic ? <EyeOff size={14} /> : <Eye size={14} />}
+                          {demo.isPublic ? "Make private" : "Make public"}
+                        </button>
                         <button
                           type="button"
                           onClick={() => onEditDemo(demo)}
@@ -598,6 +855,7 @@ export default function AdminDashboard() {
                             if (!window.confirm(`Delete "${demo.title}"?`)) return;
                             try {
                               await deleteDemo(demo.id);
+                              void refreshDemos();
                             } catch (err) {
                               setDemoError(
                                 getErrorMessage(err, "Unable to delete demo."),
@@ -613,6 +871,236 @@ export default function AdminDashboard() {
                     </div>
                   </article>
                 ))}
+              </div>
+            </section>
+          ) : null}
+
+          {tab === "blogs" ? (
+            <section className="space-y-5 sm:space-y-6 2xl:space-y-8">
+              <form
+                onSubmit={submitBlog}
+                className="rounded-[20px] border border-[#d7e6f3] bg-white p-5 shadow-[0_14px_40px_-28px_rgba(17,61,119,0.3)] sm:p-6 xl:rounded-[24px] xl:p-7 2xl:p-8"
+              >
+                <div className="mb-4 flex flex-wrap items-center justify-between gap-3 2xl:mb-5">
+                  <h2 className="m-0 text-xl font-bold text-[#1F2432] 2xl:text-2xl">
+                    {editingBlog ? "Update blog" : "Add blog post"}
+                  </h2>
+                  {editingBlog ? (
+                    <button
+                      type="button"
+                      onClick={resetBlogForm}
+                      className="cursor-pointer rounded-full border border-[#d7e6f3] bg-[#EFF7FC] px-3 py-1.5 text-xs font-semibold text-[#2365aa]"
+                    >
+                      Cancel edit
+                    </button>
+                  ) : null}
+                </div>
+
+                <div className="grid grid-cols-1 gap-4">
+                  <label className="flex flex-col gap-1.5 text-sm font-medium text-[#5a5a5a]">
+                    Title
+                    <input
+                      value={blogForm.title}
+                      onChange={(event) =>
+                        setBlogForm((prev) => ({ ...prev, title: event.target.value }))
+                      }
+                      className="rounded-[12px] border border-[#d7e6f3] bg-[#f8fbfd] px-3.5 py-3 outline-none focus:border-[#2365aa]"
+                      placeholder="Blog title"
+                    />
+                  </label>
+                  <div className="flex flex-col gap-1.5 text-sm font-medium text-[#5a5a5a]">
+                    Content
+                    <BlogRichTextEditor
+                      value={blogForm.description}
+                      onChange={(html) =>
+                        setBlogForm((prev) => ({ ...prev, description: html }))
+                      }
+                      placeholder="Write the blog content here..."
+                    />
+                  </div>
+                </div>
+
+                <div className="mt-4">
+                  <p className="mb-2 text-sm font-medium text-[#5a5a5a]">
+                    Cover image {editingBlog ? "(optional — leave unchanged to keep current)" : "(required)"}
+                  </p>
+                  <div className="flex flex-wrap items-start gap-4">
+                    <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-[12px] border-2 border-dashed border-[#d7e6f3] bg-[#f8fbfd] px-5 py-4 text-sm font-medium text-[#2365aa] transition-colors hover:border-[#2365aa] hover:bg-[#EFF7FC]">
+                      Choose image
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="sr-only"
+                        onChange={(event) => {
+                          const file = event.target.files?.[0] ?? null;
+                          setBlogImageFile(file);
+                          setBlogImagePreview(file ? URL.createObjectURL(file) : blogImagePreview);
+                        }}
+                      />
+                    </label>
+                    {blogImagePreview ? (
+                      <img
+                        src={blogImagePreview}
+                        alt="Blog cover preview"
+                        className="h-24 w-40 rounded-[10px] border border-[#d7e6f3] object-cover"
+                      />
+                    ) : null}
+                  </div>
+                </div>
+
+                {blogError ? (
+                  <p className="mt-4 rounded-[12px] bg-[#EEF3FB] px-3 py-2 text-sm text-[#2365aa]">
+                    {blogError}
+                  </p>
+                ) : null}
+                {blogSuccess ? (
+                  <p className="mt-4 rounded-[12px] bg-[#e8f6ee] px-3 py-2 text-sm text-[#1d5c3a]">
+                    {blogSuccess}
+                  </p>
+                ) : null}
+
+                <button
+                  type="submit"
+                  disabled={blogSaving}
+                  className="mt-5 inline-flex cursor-pointer items-center gap-2 rounded-full border-0 bg-[#2365aa] px-5 py-3 text-sm font-semibold uppercase text-white hover:bg-[#1a5490] disabled:cursor-not-allowed disabled:opacity-70"
+                >
+                  {blogSaving ? "Saving..." : editingBlog ? "Update blog" : "Publish blog"}
+                  <ArrowUpRight size={16} />
+                </button>
+              </form>
+
+              {blogsLoadError ? (
+                <p className="rounded-[12px] bg-[#EEF3FB] px-3 py-2 text-sm text-[#2365aa]">
+                  {blogsLoadError}
+                </p>
+              ) : null}
+              {blogsLoading ? (
+                <p className="text-sm text-[#848b9b]">Loading blogs...</p>
+              ) : null}
+
+              <div className="space-y-3">
+                {blogs.map((blog) => (
+                  <article
+                    key={blog.id}
+                    className="rounded-[18px] border border-[#d7e6f3] bg-white p-4 shadow-[0_12px_30px_-22px_rgba(17,61,119,0.35)] sm:p-5"
+                  >
+                    <div className="flex flex-wrap items-start justify-between gap-4">
+                      <div className="flex min-w-0 flex-1 gap-4">
+                        {blog.imageUrl ? (
+                          <img
+                            src={blog.imageUrl}
+                            alt=""
+                            className="size-20 shrink-0 rounded-[12px] object-cover"
+                          />
+                        ) : null}
+                        <div className="min-w-0">
+                          <h3 className="m-0 text-lg font-bold text-[#1F2432]">{blog.title}</h3>
+                          <p className="mt-1 text-xs text-[#848b9b]">
+                            {formatDate(blog.createdAt)}
+                          </p>
+                          <p className="mt-2 line-clamp-3 text-sm leading-6 text-[#687181]">
+                            {excerptFromContent(blog.description)}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        <button
+                          type="button"
+                          onClick={() => onEditBlog(blog)}
+                          className="inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-[#d7e6f3] bg-[#EFF7FC] px-3 py-2 text-xs font-semibold text-[#2365aa]"
+                        >
+                          <Pencil size={14} />
+                          Edit
+                        </button>
+                        <button
+                          type="button"
+                          onClick={async () => {
+                            if (!window.confirm(`Delete "${blog.title}"?`)) return;
+                            try {
+                              await deleteBlog(blog.id);
+                              void refreshBlogs();
+                            } catch (err) {
+                              setBlogError(
+                                getErrorMessage(err, "Unable to delete blog."),
+                              );
+                            }
+                          }}
+                          className="inline-flex cursor-pointer items-center gap-1.5 rounded-full border-0 bg-[#EEF3FB] px-3 py-2 text-xs font-semibold text-[#2365aa]"
+                        >
+                          <Trash2 size={14} />
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </section>
+          ) : null}
+
+          {tab === "tags" ? (
+            <section className="space-y-5 sm:space-y-6 2xl:space-y-8">
+              <form
+                onSubmit={submitTag}
+                className="rounded-[20px] border border-[#d7e6f3] bg-white p-5 shadow-[0_14px_40px_-28px_rgba(17,61,119,0.3)] sm:p-6 xl:rounded-[24px] xl:p-7 2xl:p-8"
+              >
+                <h2 className="m-0 text-xl font-bold text-[#1F2432] 2xl:text-2xl">Add demo tag</h2>
+                <p className="mt-2 text-sm text-[#848b9b]">
+                  Tags are used to categorize demo videos on the website and in the admin panel.
+                </p>
+
+                <label className="mt-5 flex flex-col gap-1.5 text-sm font-medium text-[#5a5a5a]">
+                  Tag name
+                  <input
+                    value={tagName}
+                    onChange={(event) => setTagName(event.target.value)}
+                    className="rounded-[12px] border border-[#d7e6f3] bg-[#f8fbfd] px-3.5 py-3 outline-none focus:border-[#2365aa]"
+                    placeholder="e.g. Healthcare and Life Sciences"
+                  />
+                </label>
+
+                {tagError ? (
+                  <p className="mt-4 rounded-[12px] bg-[#EEF3FB] px-3 py-2 text-sm text-[#2365aa]">
+                    {tagError}
+                  </p>
+                ) : null}
+                {tagSuccess ? (
+                  <p className="mt-4 rounded-[12px] bg-[#e8f6ee] px-3 py-2 text-sm text-[#1d5c3a]">
+                    {tagSuccess}
+                  </p>
+                ) : null}
+
+                <button
+                  type="submit"
+                  disabled={tagSaving}
+                  className="mt-5 inline-flex cursor-pointer items-center gap-2 rounded-full border-0 bg-[#2365aa] px-5 py-3 text-sm font-semibold uppercase text-white hover:bg-[#1a5490] disabled:cursor-not-allowed disabled:opacity-70"
+                >
+                  {tagSaving ? "Adding..." : "Add tag"}
+                  <ArrowUpRight size={16} />
+                </button>
+              </form>
+
+              {tagsLoadError ? (
+                <p className="rounded-[12px] bg-[#EEF3FB] px-3 py-2 text-sm text-[#2365aa]">
+                  {tagsLoadError}
+                </p>
+              ) : null}
+              {tagsLoading ? (
+                <p className="text-sm text-[#848b9b]">Loading tags...</p>
+              ) : null}
+
+              <div className="rounded-[20px] border border-[#d7e6f3] bg-white p-5 shadow-[0_14px_40px_-28px_rgba(17,61,119,0.3)] sm:p-6 xl:rounded-[24px] xl:p-7 2xl:p-8">
+                <h3 className="m-0 text-lg font-bold text-[#1F2432]">All tags ({demoTags.length})</h3>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {demoTags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="rounded-full bg-[#EFF7FC] px-3 py-1.5 text-xs font-semibold text-[#2365aa]"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
               </div>
             </section>
           ) : null}
@@ -922,6 +1410,45 @@ export default function AdminDashboard() {
           ) : null}
         </main>
       </div>
+
+      {playingDemo ? (
+        <div
+          className="fixed inset-0 z-[200] flex items-center justify-center bg-[#0b1220]/72 p-4 backdrop-blur-[2px] sm:p-6"
+          role="dialog"
+          aria-modal="true"
+          aria-label={playingDemo.title}
+          onClick={() => setPlayingDemo(null)}
+        >
+          <div
+            className="relative w-full max-w-[960px] overflow-hidden rounded-[20px] bg-[#0b1220] shadow-[0_30px_80px_-20px_rgba(0,0,0,0.65)]"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="flex items-center justify-between gap-4 border-b border-white/10 px-4 py-3 sm:px-5">
+              <h3 className="m-0 truncate text-sm font-semibold text-white sm:text-base">
+                {playingDemo.title}
+              </h3>
+              <button
+                type="button"
+                onClick={() => setPlayingDemo(null)}
+                className="inline-flex size-9 cursor-pointer items-center justify-center rounded-full border-0 bg-white/10 text-white transition-colors hover:bg-white/20"
+                aria-label="Close video"
+              >
+                <X size={18} />
+              </button>
+            </div>
+            <div className="relative aspect-video w-full bg-black">
+              <iframe
+                key={playingDemo.videoId}
+                src={youtubeEmbed(playingDemo.videoId)}
+                title={playingDemo.title}
+                className="absolute inset-0 h-full w-full border-0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+              />
+            </div>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

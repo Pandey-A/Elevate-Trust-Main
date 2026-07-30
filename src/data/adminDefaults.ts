@@ -1,6 +1,6 @@
-import { SITE_INDUSTRIES, type SiteIndustry } from "./industries";
+import { SITE_INDUSTRIES } from "./industries";
 
-export type IndustryTag = SiteIndustry;
+export type IndustryTag = string;
 
 export const INDUSTRY_TAGS: IndustryTag[] = [...SITE_INDUSTRIES];
 
@@ -11,6 +11,7 @@ export type AdminDemo = {
   youtubeUrl: string;
   industries: IndustryTag[];
   thumbnailUrl: string | null;
+  isPublic: boolean;
 };
 
 export type AdminJob = {
@@ -191,7 +192,7 @@ export const DEFAULT_DEMOS: AdminDemo[] = (
     industries: ["Healthcare and Life Sciences"],
   },
 ] as Omit<AdminDemo, "thumbnailUrl">[]
-).map((demo) => ({ ...demo, thumbnailUrl: null }));
+).map((demo) => ({ ...demo, thumbnailUrl: null, isPublic: true }));
 
 export const DEFAULT_JOBS: AdminJob[] = [
   {

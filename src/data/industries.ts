@@ -32,18 +32,25 @@ export const LEGACY_INDUSTRY_MAP: Record<string, SiteIndustry[]> = {
   General: ["E-commerce & Retail"],
 };
 
-export function normalizeIndustryTags(tags: string[]): SiteIndustry[] {
-  const next = new Set<SiteIndustry>();
+export function normalizeIndustryTags(tags: string[]): string[] {
+  const next = new Set<string>();
 
   tags.forEach((tag) => {
-    const mapped = LEGACY_INDUSTRY_MAP[tag];
+    const trimmed = String(tag || "").trim();
+    if (!trimmed) return;
+
+    const mapped = LEGACY_INDUSTRY_MAP[trimmed];
     if (mapped) {
       mapped.forEach((industry) => next.add(industry));
       return;
     }
-    if ((SITE_INDUSTRIES as readonly string[]).includes(tag)) {
-      next.add(tag as SiteIndustry);
+
+    if ((SITE_INDUSTRIES as readonly string[]).includes(trimmed)) {
+      next.add(trimmed);
+      return;
     }
+
+    next.add(trimmed);
   });
 
   return Array.from(next);

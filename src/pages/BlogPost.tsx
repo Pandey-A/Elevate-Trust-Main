@@ -1,12 +1,20 @@
-import { useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import FlyCTA from "../components/FlyCTA";
+import BlogArticleBody from "../components/blog/BlogArticleBody";
+import BlogHtmlContent from "../components/blog/BlogHtmlContent";
+import { parseBlogDescription } from "../components/blog/parseBlogDescription";
 import worldMapBackground from "../assets/homepage-icons/Group(3).png";
-import { BLOG_POSTS, getBlogPost } from "../data/blogs";
+import { getBlogSections } from "../data/blogSections";
+import { looksLikeHtml } from "../lib/blogContent";
+import { usePublicBlogs } from "../hooks/useAdminData";
+import { fetchPublicBlogById, type BlogPost as ApiBlogPost } from "../lib/blogsApi";
+import { getErrorMessage } from "../lib/api";
 
 function formatDate(iso: string) {
-  const date = new Date(`${iso}T00:00:00`);
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return iso;
   return date.toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
@@ -14,19 +22,72 @@ function formatDate(iso: string) {
   });
 }
 
-export default function BlogPost() {
+export default function BlogPostPage() {
   const { slug = "" } = useParams();
-  const post = getBlogPost(slug);
+  const { blogs } = usePublicBlogs();
+  const [post, setPost] = useState<ApiBlogPost | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadPost() {
+      if (!slug) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        setLoading(true);
+        const data = await fetchPublicBlogById(slug);
+        if (!cancelled) {
+          setPost(data);
+          setError("");
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setPost(null);
+          setError(getErrorMessage(err, "Blog not found."));
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+
+    void loadPost();
+    return () => {
+      cancelled = true;
+    };
+  }, [slug]);
 
   useEffect(() => {
     if (post) document.title = `${post.title} | ElevateTrust.AI`;
   }, [post]);
 
+  const sections = useMemo(() => {
+    if (!post) return [];
+    if (looksLikeHtml(post.description)) return [];
+    const staticSections = getBlogSections(slug);
+    if (staticSections?.length) return staticSections;
+    return parseBlogDescription(post.description);
+  }, [slug, post]);
+
+  const htmlContent = post && looksLikeHtml(post.description) ? post.description : "";
+
+  if (loading) {
+    return (
+      <div className="flex min-h-[50vh] items-center justify-center bg-white text-sm text-[#848b9b]">
+        Loading blog...
+      </div>
+    );
+  }
+
   if (!post) {
     return <Navigate to="/resources/blogs" replace />;
   }
 
-  const related = BLOG_POSTS.filter((item) => item.slug !== post.slug).slice(0, 3);
+  const related = blogs.filter((item) => item.id !== post.id).slice(0, 3);
 
   return (
     <div className="bg-white font-['Lay_Grotesk_Trial',sans-serif] text-[#272935]">
@@ -39,13 +100,13 @@ export default function BlogPost() {
         />
         <div className="service-page-hero__content max-w-[920px]">
           <p className="mb-3 text-sm font-semibold uppercase tracking-[0.16em] text-[#8eb4df]">
-            {post.category}
+            Blog
           </p>
           <h1 className="m-0 text-[clamp(26px,3.4vw,42px)] font-bold leading-[1.25] tracking-tight text-white">
             {post.title}
           </h1>
           <p className="mt-4 text-sm text-[#a1b1cb] sm:text-base">
-            {post.author} · <time dateTime={post.date}>{formatDate(post.date)}</time>
+            ElevateTrust.AI · <time dateTime={post.createdAt}>{formatDate(post.createdAt)}</time>
           </p>
         </div>
       </section>
@@ -70,46 +131,29 @@ export default function BlogPost() {
             <span className="line-clamp-1 text-[#848b9b]">{post.title}</span>
           </nav>
 
-          <div className="overflow-hidden rounded-[20px] border border-[#e2ebf3] bg-[#e8eef3] shadow-[0_18px_50px_-32px_rgba(17,61,119,0.45)]">
-            <img
-              src={post.cover}
-              alt=""
-              className="aspect-[16/9] h-auto w-full object-cover"
-            />
+          {post.imageUrl ? (
+            <div className="overflow-hidden rounded-[20px] border border-[#e2ebf3] bg-[#e8eef3] shadow-[0_18px_50px_-32px_rgba(17,61,119,0.45)]">
+              <img
+                src={post.imageUrl}
+                alt=""
+                className="aspect-[16/9] h-auto w-full object-cover"
+              />
+            </div>
+          ) : null}
+
+          {error ? (
+            <p className="mt-6 text-sm text-[#2365aa]">{error}</p>
+          ) : null}
+
+          <div className="mt-10 sm:mt-12">
+            {htmlContent ? (
+              <BlogHtmlContent html={htmlContent} />
+            ) : (
+              <BlogArticleBody sections={sections} />
+            )}
           </div>
 
-          <div className="mt-10 space-y-8 sm:mt-12">
-            {post.sections.map((section, index) => (
-              <section key={`${section.heading ?? "intro"}-${index}`}>
-                {section.heading ? (
-                  <h2 className="m-0 text-[clamp(20px,2.2vw,28px)] font-bold leading-snug text-[#1F2432]">
-                    {section.heading}
-                  </h2>
-                ) : null}
-
-                {section.paragraphs.map((paragraph, pIndex) => (
-                  <p
-                    key={`${index}-p-${pIndex}`}
-                    className={`text-[clamp(14px,1.15vw,17px)] leading-7 text-[#4b5568] sm:leading-8 ${
-                      section.heading || pIndex > 0 ? "mt-4" : "mt-0"
-                    }`}
-                  >
-                    {paragraph}
-                  </p>
-                ))}
-
-                {section.bullets && section.bullets.length > 0 ? (
-                  <ul className="mt-4 list-disc space-y-2 pl-5 text-[clamp(14px,1.15vw,17px)] leading-7 text-[#4b5568]">
-                    {section.bullets.map((bullet, bIndex) => (
-                      <li key={`${index}-b-${bIndex}`}>{bullet}</li>
-                    ))}
-                  </ul>
-                ) : null}
-              </section>
-            ))}
-          </div>
-
-          <div className="mt-12 flex flex-col gap-3 border-t border-[#e2ebf3] pt-8 sm:flex-row sm:items-center sm:justify-between">
+          <div className="mx-auto mt-14 flex max-w-[42rem] flex-col gap-3 border-t border-[#e2ebf3] pt-8 sm:flex-row sm:items-center sm:justify-between">
             <Link
               to="/resources/blogs"
               className="inline-flex items-center gap-2 text-sm font-semibold text-[#2365aa] no-underline hover:text-[#1a5490]"
@@ -137,23 +181,27 @@ export default function BlogPost() {
             <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-7">
               {related.map((item) => (
                 <article
-                  key={item.slug}
+                  key={item.id}
                   className="overflow-hidden rounded-[18px] border border-[#d7e6f3] bg-white shadow-[0_12px_36px_-28px_rgba(17,61,119,0.4)]"
                 >
-                  <Link to={`/resources/blogs/${item.slug}`} className="block bg-[#e8eef3]">
-                    <img
-                      src={item.cover}
-                      alt=""
-                      className="aspect-[16/10] w-full object-cover"
-                    />
+                  <Link to={`/resources/blogs/${item.id}`} className="block bg-[#e8eef3]">
+                    {item.imageUrl ? (
+                      <img
+                        src={item.imageUrl}
+                        alt=""
+                        className="aspect-[16/10] w-full object-cover"
+                      />
+                    ) : (
+                      <div className="aspect-[16/10] w-full bg-[#e8eef3]" />
+                    )}
                   </Link>
                   <div className="px-5 py-5">
                     <p className="m-0 text-xs font-semibold uppercase tracking-wide text-[#2365aa]">
-                      {item.category}
+                      Blog
                     </p>
                     <h3 className="mt-2 text-[clamp(15px,1.2vw,18px)] font-bold leading-snug text-[#1F2432]">
                       <Link
-                        to={`/resources/blogs/${item.slug}`}
+                        to={`/resources/blogs/${item.id}`}
                         className="text-inherit no-underline hover:text-[#2365aa]"
                       >
                         {item.title}

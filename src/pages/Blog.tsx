@@ -1,14 +1,14 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
 import FlyCTA from "../components/FlyCTA";
 import worldMapBackground from "../assets/homepage-icons/Group(3).png";
-import { BLOG_POSTS } from "../data/blogs";
-
-const CATEGORIES = ["All", ...Array.from(new Set(BLOG_POSTS.map((p) => p.category)))];
+import { usePublicBlogs } from "../hooks/useAdminData";
+import { excerptFromContent } from "../lib/blogContent";
 
 function formatDate(iso: string) {
-  const date = new Date(`${iso}T00:00:00`);
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return iso;
   return date.toLocaleDateString("en-US", {
     year: "numeric",
     month: "short",
@@ -16,17 +16,16 @@ function formatDate(iso: string) {
   });
 }
 
+function excerpt(text: string, maxLength = 180) {
+  return excerptFromContent(text, maxLength);
+}
+
 export default function Blog() {
-  const [activeCategory, setActiveCategory] = useState("All");
+  const { blogs, loading, error } = usePublicBlogs();
 
   useEffect(() => {
     document.title = "Blog | ElevateTrust.AI";
   }, []);
-
-  const filtered = useMemo(() => {
-    if (activeCategory === "All") return BLOG_POSTS;
-    return BLOG_POSTS.filter((post) => post.category === activeCategory);
-  }, [activeCategory]);
 
   return (
     <div className="bg-white font-['Lay_Grotesk_Trial',sans-serif] text-[#272935]">
@@ -97,60 +96,59 @@ export default function Blog() {
             </p>
           </header>
 
-          <div className="mx-auto mb-[clamp(28px,3.5vw,40px)] flex max-w-[900px] flex-wrap items-center justify-center gap-2 sm:gap-3">
-            {CATEGORIES.map((category) => {
-              const isActive = activeCategory === category;
-              return (
-                <button
-                  key={category}
-                  type="button"
-                  onClick={() => setActiveCategory(category)}
-                  className={`cursor-pointer rounded-full border px-4 py-2 text-sm font-semibold transition-colors ${
-                    isActive
-                      ? "border-[#2365aa] bg-[#2365aa] text-white"
-                      : "border-[#d7e6f3] bg-white text-[#687181] hover:border-[#2365aa] hover:text-[#2365aa]"
-                  }`}
-                >
-                  {category}
-                </button>
-              );
-            })}
-          </div>
+          {error ? (
+            <p className="mb-6 text-center text-sm text-[#2365aa]">{error}</p>
+          ) : null}
+          {loading ? (
+            <p className="mb-6 text-center text-sm text-[#848b9b]">Loading blogs...</p>
+          ) : null}
 
           <p className="mb-6 text-center text-sm text-[#848b9b]">
             Showing{" "}
-            <span className="font-semibold text-[#2365aa]">{filtered.length}</span>{" "}
-            {filtered.length === 1 ? "article" : "articles"}
+            <span className="font-semibold text-[#2365aa]">{blogs.length}</span>{" "}
+            {blogs.length === 1 ? "article" : "articles"}
           </p>
 
+          {!loading && blogs.length === 0 ? (
+            <div className="rounded-[20px] border border-[#d7e6f3] bg-[#EFF7FC] px-6 py-14 text-center">
+              <p className="m-0 text-sm text-[#687181]">
+                No blog posts published yet. Check back soon.
+              </p>
+            </div>
+          ) : null}
+
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 lg:gap-7 xl:gap-8">
-            {filtered.map((post) => (
+            {blogs.map((post) => (
               <article
-                key={post.slug}
+                key={post.id}
                 className="flex flex-col overflow-hidden rounded-[20px] border border-[#d7e6f3] bg-white shadow-[0_14px_40px_-28px_rgba(17,61,119,0.35)] transition-shadow duration-300 hover:shadow-[0_18px_44px_-24px_rgba(17,61,119,0.5)]"
               >
                 <Link
-                  to={`/resources/blogs/${post.slug}`}
+                  to={`/resources/blogs/${post.id}`}
                   className="relative block overflow-hidden bg-[#e8eef3]"
                 >
-                  <img
-                    src={post.cover}
-                    alt=""
-                    className="aspect-[16/10] h-auto w-full object-cover transition-transform duration-500 hover:scale-[1.03]"
-                  />
+                  {post.imageUrl ? (
+                    <img
+                      src={post.imageUrl}
+                      alt=""
+                      className="aspect-[16/10] h-auto w-full object-cover transition-transform duration-500 hover:scale-[1.03]"
+                    />
+                  ) : (
+                    <div className="aspect-[16/10] w-full bg-[#e8eef3]" />
+                  )}
                 </Link>
 
                 <div className="flex flex-1 flex-col px-5 py-5 sm:px-6 sm:py-6">
                   <div className="mb-3 flex flex-wrap items-center gap-2 text-[12px] text-[#848b9b]">
                     <span className="rounded-full bg-[#EFF7FC] px-2.5 py-1 font-semibold text-[#2365aa]">
-                      {post.category}
+                      Blog
                     </span>
-                    <time dateTime={post.date}>{formatDate(post.date)}</time>
+                    <time dateTime={post.createdAt}>{formatDate(post.createdAt)}</time>
                   </div>
 
                   <h3 className="m-0 text-[clamp(16px,1.3vw,20px)] font-bold leading-snug text-[#1F2432] 2xl:text-[22px]">
                     <Link
-                      to={`/resources/blogs/${post.slug}`}
+                      to={`/resources/blogs/${post.id}`}
                       className="text-inherit no-underline transition-colors hover:text-[#2365aa]"
                     >
                       {post.title}
@@ -158,12 +156,12 @@ export default function Blog() {
                   </h3>
 
                   <p className="mt-3 line-clamp-3 text-[clamp(13px,1.1vw,15px)] leading-6 text-[#687181]">
-                    {post.excerpt}
+                    {excerpt(post.description)}
                   </p>
 
                   <div className="mt-auto pt-5">
                     <Link
-                      to={`/resources/blogs/${post.slug}`}
+                      to={`/resources/blogs/${post.id}`}
                       className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#2365aa] no-underline transition-colors hover:text-[#1a5490]"
                     >
                       Read article

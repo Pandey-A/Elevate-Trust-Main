@@ -3,17 +3,24 @@ import { Link, useSearchParams } from "react-router-dom";
 import { ArrowUpRight, ChevronLeft, ChevronRight, Play, X } from "lucide-react";
 import FlyCTA from "../components/FlyCTA";
 import worldMapBackground from "../assets/homepage-icons/Group(3).png";
-import { INDUSTRY_TAGS, type IndustryTag } from "../data/adminDefaults";
+import { type IndustryTag } from "../data/adminDefaults";
 import { normalizeIndustryTags } from "../data/industries";
-import { useAdminDemos } from "../hooks/useAdminData";
+import { useDemoTags, usePublicDemos } from "../hooks/useAdminData";
 import { youtubeThumb } from "../lib/adminStorage";
 import type { AdminDemo } from "../data/adminDefaults";
 
 type IndustryFilter = "All" | IndustryTag;
 
-const industryFilters: IndustryFilter[] = ["All", ...INDUSTRY_TAGS];
-
-/** Only map demos that clearly match an existing case study page. */
+function resolveIndustryFromQuery(
+  value: string | null,
+  tags: string[],
+): IndustryFilter {
+  if (!value) return "All";
+  const decoded = decodeURIComponent(value).trim();
+  if (decoded.toLowerCase() === "all") return "All";
+  const match = tags.find((tag) => tag.toLowerCase() === decoded.toLowerCase());
+  return match ?? "All";
+}
 const DEMO_CASE_STUDY_HREF: Record<string, string> = {
   "demo-sdlc": "/case-studies/genai-enabled-sdlc",
 };
@@ -72,16 +79,6 @@ function getCaseStudyHref(demo: AdminDemo) {
   return DEMO_CASE_STUDY_HREF[demo.id] ?? null;
 }
 
-function resolveIndustryFromQuery(value: string | null): IndustryFilter {
-  if (!value) return "All";
-  const decoded = decodeURIComponent(value).trim();
-  if (decoded.toLowerCase() === "all") return "All";
-  const match = INDUSTRY_TAGS.find(
-    (tag) => tag.toLowerCase() === decoded.toLowerCase(),
-  );
-  return match ?? "All";
-}
-
 const industryCopy: Record<
   IndustryFilter,
   { title: string; description: string }
@@ -138,12 +135,15 @@ function youtubeEmbed(videoId: string) {
 }
 
 export default function Demo() {
-  const { demos, loading: demosLoading, error: demosError } = useAdminDemos();
+  const { demos, loading: demosLoading, error: demosError } = usePublicDemos();
+  const { tags: demoTags } = useDemoTags();
+  const industryFilters = useMemo<IndustryFilter[]>(
+    () => ["All", ...demoTags],
+    [demoTags],
+  );
   const [searchParams, setSearchParams] = useSearchParams();
   const [activeDemo, setActiveDemo] = useState<AdminDemo | null>(null);
-  const [activeIndustry, setActiveIndustry] = useState<IndustryFilter>(() =>
-    resolveIndustryFromQuery(searchParams.get("industry")),
-  );
+  const [activeIndustry, setActiveIndustry] = useState<IndustryFilter>("All");
   const filterRailRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
@@ -156,8 +156,17 @@ export default function Demo() {
   }, [activeIndustry, demos]);
 
   useEffect(() => {
-    setActiveIndustry(resolveIndustryFromQuery(searchParams.get("industry")));
-  }, [searchParams]);
+    setActiveIndustry(resolveIndustryFromQuery(searchParams.get("industry"), demoTags));
+  }, [searchParams, demoTags]);
+
+  const activeIndustryCopy =
+    industryCopy[activeIndustry] ??
+    (activeIndustry === "All"
+      ? industryCopy.All
+      : {
+          title: `AI demos for ${activeIndustry}`,
+          description: `Browse ElevateTrust.AI walkthroughs tagged with ${activeIndustry}.`,
+        });
 
   const selectIndustry = (industry: IndustryFilter) => {
     setActiveIndustry(industry);
@@ -385,10 +394,10 @@ export default function Demo() {
               role="tabpanel"
             >
               <h3 className="m-0 text-[clamp(20px,2.4vw,32px)] font-bold leading-snug text-[#1F2432]">
-                {industryCopy[activeIndustry].title}
+                {activeIndustryCopy.title}
               </h3>
               <p className="mx-auto mt-3 max-w-[40rem] text-[clamp(13px,1.15vw,16px)] leading-7 text-[#687181]">
-                {industryCopy[activeIndustry].description}
+                {activeIndustryCopy.description}
               </p>
               <p className="mt-4 text-sm text-[#848b9b]">
                 Showing{" "}
