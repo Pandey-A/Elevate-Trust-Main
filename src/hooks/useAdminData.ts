@@ -13,6 +13,8 @@ import {
 import { fetchAdminDemos, fetchPublicDemos } from "../lib/demosApi";
 import type { BlogPost } from "../lib/blogsApi";
 import { fetchAdminBlogs, fetchPublicBlogs } from "../lib/blogsApi";
+import type { Testimonial } from "../lib/testimonialsApi";
+import { fetchAdminTestimonials, fetchPublicTestimonials } from "../lib/testimonialsApi";
 import { fetchDemoTags, type DemoTag } from "../lib/tagsApi";
 import { INDUSTRY_TAGS } from "../data/adminDefaults";
 
@@ -151,6 +153,66 @@ export function useAdminBlogs() {
   }, [refresh]);
 
   return { blogs, loading, error, refresh };
+}
+
+export function usePublicTestimonials() {
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  const refresh = useCallback(async () => {
+    try {
+      setLoading(true);
+      const data = await fetchPublicTestimonials();
+      setTestimonials(data);
+      setError("");
+    } catch (err) {
+      setError(getErrorMessage(err, "Unable to load testimonials."));
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    void refresh();
+    const onChange = () => {
+      void refresh();
+    };
+    window.addEventListener(ADMIN_DATA_EVENT, onChange);
+    return () => window.removeEventListener(ADMIN_DATA_EVENT, onChange);
+  }, [refresh]);
+
+  return { testimonials, loading, error, refresh };
+}
+
+export function useAdminTestimonials() {
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  const refresh = useCallback(async () => {
+    try {
+      setLoading(true);
+      const data = await fetchAdminTestimonials();
+      setTestimonials(data);
+      setError("");
+    } catch (err) {
+      setError(getErrorMessage(err, "Unable to load testimonials."));
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    void refresh();
+    const onChange = () => {
+      void refresh();
+    };
+    window.addEventListener(ADMIN_DATA_EVENT, onChange);
+    return () => window.removeEventListener(ADMIN_DATA_EVENT, onChange);
+  }, [refresh]);
+
+  return { testimonials, loading, error, refresh };
 }
 
 export function useDemoTags() {

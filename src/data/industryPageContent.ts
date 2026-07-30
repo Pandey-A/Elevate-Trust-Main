@@ -37,32 +37,39 @@ import {
   Workflow,
 } from "lucide-react";
 import type { IndustryPageContent } from "../components/industry/IndustryPageTemplate";
-import dataIcon from "../assets/OurServices/GenAI-Data.png";
-import softwareIcon from "../assets/OurServices/GenAI-Software.png";
-import optimizeIcon from "../assets/OurServices/GenAI-Optimize.png";
-import customerIcon from "../assets/OurServices/GenAI-customService.png";
-import knowledgeIcon from "../assets/OurServices/GenAI-knowledge.png";
-import financeIcon from "../assets/OurServices/GenAI-Finance.png";
-import healthcareIcon from "../assets/OurServices/GenAI-healthcare.png";
-import hrIcon from "../assets/OurServices/GenAI-HR.png";
 import fintechChallengesImage from "../assets/OurServices/fintech-2.jpg";
-import ecommerceChallengesImage from "../assets/OurServices/ecommerce.jpeg";
+import ecommerceChallengesImage from "../assets/industries/ecommerce.jpeg";
 import educationChallengesImage from "../assets/OurServices/education.jpg";
 import logisticsChallengesImage from "../assets/OurServices/logistics.jpeg";
 import manufacturingChallengesImage from "../assets/OurServices/Future-of-Manufacturing-with-Industry-4.0.jpg";
 import socialMediaChallengesImage from "../assets/OurServices/socialmedia.jpg";
 import publicSectorChallengesImage from "../assets/OurServices/publicsector.jpeg";
 
-const solutionIcons = [
-  dataIcon,
-  softwareIcon,
-  optimizeIcon,
-  customerIcon,
-  knowledgeIcon,
-  financeIcon,
-  healthcareIcon,
-  hrIcon,
-];
+import imgAiKyc from "../assets/industries/ai-kyc.jpeg";
+import imgAiTutor from "../assets/industries/ai-tutor.jpeg";
+import imgAml from "../assets/industries/aml.jpeg";
+import imgComputerVision from "../assets/industries/computer-vision.jpeg";
+import imgCustomerSupport from "../assets/industries/customer-support.jpeg";
+import imgDeepfake from "../assets/industries/deepfake.jpeg";
+import imgDeliveryTracking from "../assets/industries/delivery-tracking.jpeg";
+import imgFleetIntelligence from "../assets/industries/fleet-intelligence.jpeg";
+import imgFraudRisk from "../assets/industries/fraud-risk.jpeg";
+import imgInventory from "../assets/industries/inventory.jpeg";
+import imgInventoryIntelligence from "../assets/industries/inventory-intelligence.jpeg";
+import imgIotAnalytics from "../assets/industries/iot-analytics.jpeg";
+import imgLearningAnalytics from "../assets/industries/learning-analytics.jpeg";
+import imgOcrAutomation from "../assets/industries/ocr-automation.jpeg";
+import imgOcrDoc from "../assets/industries/ocr-doc.jpeg";
+import imgOcrInvoice from "../assets/industries/ocr-invoice.jpeg";
+import imgPredictiveMaintenance from "../assets/industries/predictive-maintenance.jpeg";
+import imgQuiz from "../assets/industries/quiz.jpeg";
+import imgRecommendation from "../assets/industries/recommendation.jpeg";
+import imgRoutePlanning from "../assets/industries/route-planning.jpeg";
+import imgSentiment from "../assets/industries/sentiment.jpeg";
+import imgShopping from "../assets/industries/shopping.jpeg";
+import imgTranscript from "../assets/industries/transcript.jpeg";
+import imgVoiceAuth from "../assets/industries/voice-auth.jpeg";
+import imgWarehouse from "../assets/industries/warehouse.jpeg";
 
 const whyDefault = [
   {
@@ -131,12 +138,12 @@ export const industryPagesBySlug: Record<string, IndustryPageContent> = {
     solutionsSubtitle:
       "Purpose-built AI capabilities that strengthen trust, reduce fraud losses, and accelerate digital financial operations.",
     solutions: [
-      { title: "AI KYC Verification", text: "Automate identity and document checks with accurate extraction and validation.", icon: solutionIcons[5] },
-      { title: "Deepfake Detection", text: "Detect manipulated faces, videos, and synthetic media used in fraud attempts.", icon: solutionIcons[2] },
-      { title: "Voice Authentication", text: "Verify callers and reduce voice-based social engineering risks.", icon: solutionIcons[3] },
-      { title: "OCR Document Processing", text: "Digitize KYC packs, applications, and claims into structured records.", icon: solutionIcons[4] },
-      { title: "AML Intelligence", text: "Support monitoring teams with AI-assisted pattern detection and case prioritization.", icon: solutionIcons[0] },
-      { title: "Fraud Risk Scoring", text: "Score risk across onboarding, payments, and account activity with actionable alerts.", icon: solutionIcons[1] },
+      { title: "AI KYC Verification", text: "Automate identity and document checks with accurate extraction and validation.", icon: imgAiKyc },
+      { title: "Deepfake Detection", text: "Detect manipulated faces, videos, and synthetic media used in fraud attempts.", icon: imgDeepfake },
+      { title: "Voice Authentication", text: "Verify callers and reduce voice-based social engineering risks.", icon: imgVoiceAuth },
+      { title: "OCR Document Processing", text: "Digitize KYC packs, applications, and claims into structured records.", icon: imgOcrDoc },
+      { title: "AML Intelligence", text: "Support monitoring teams with AI-assisted pattern detection and case prioritization.", icon: imgAml },
+      { title: "Fraud Risk Scoring", text: "Score risk across onboarding, payments, and account activity with actionable alerts.", icon: imgFraudRisk },
     ],
     useCasesIntro:
       "Practical financial scenarios where AI reduces risk, shortens cycle times, and improves customer confidence.",
@@ -210,12 +217,12 @@ export const industryPagesBySlug: Record<string, IndustryPageContent> = {
     solutionsSubtitle:
       "Retail-ready AI modules that improve conversion, support efficiency, and operational decision-making.",
     solutions: [
-      { title: "AI Shopping Assistant", text: "Guide shoppers with conversational product discovery and purchase support.", icon: solutionIcons[3] },
-      { title: "Recommendation Engine", text: "Personalize product suggestions across browse, cart, and post-purchase journeys.", icon: solutionIcons[1] },
-      { title: "Sentiment Analysis", text: "Understand customer feedback from reviews, chats, and support conversations.", icon: solutionIcons[0] },
-      { title: "Inventory Intelligence", text: "Improve stock planning with AI-assisted demand and inventory insights.", icon: solutionIcons[2] },
-      { title: "OCR Invoice Processing", text: "Automate extraction from invoices, packing slips, and returns documents.", icon: solutionIcons[4] },
-      { title: "Customer Support Automation", text: "Reduce ticket volume with agents grounded in your catalog and policies.", icon: solutionIcons[7] },
+      { title: "AI Shopping Assistant", text: "Guide shoppers with conversational product discovery and purchase support.", icon: imgShopping },
+      { title: "Recommendation Engine", text: "Personalize product suggestions across browse, cart, and post-purchase journeys.", icon: imgRecommendation },
+      { title: "Sentiment Analysis", text: "Understand customer feedback from reviews, chats, and support conversations.", icon: imgSentiment },
+      { title: "Inventory Intelligence", text: "Improve stock planning with AI-assisted demand and inventory insights.", icon: imgInventoryIntelligence },
+      { title: "OCR Invoice Processing", text: "Automate extraction from invoices, packing slips, and returns documents.", icon: imgOcrInvoice },
+      { title: "Customer Support Automation", text: "Reduce ticket volume with agents grounded in your catalog and policies.", icon: imgCustomerSupport },
     ],
     useCasesIntro:
       "Retail use cases that connect personalization, support automation, and smarter inventory decisions.",
@@ -289,12 +296,12 @@ export const industryPagesBySlug: Record<string, IndustryPageContent> = {
     solutionsSubtitle:
       "Learning-focused AI capabilities that improve personalization, assessment, accessibility, and teaching productivity.",
     solutions: [
-      { title: "AI Tutor", text: "Offer guided learning support with human oversight and curriculum-grounded answers.", icon: solutionIcons[7] },
-      { title: "Quiz Generator", text: "Generate practice questions and assessments from approved learning content.", icon: solutionIcons[1] },
-      { title: "Learning Analytics", text: "Track engagement and progress to help educators intervene earlier.", icon: solutionIcons[0] },
-      { title: "OCR Notes", text: "Digitize handwritten or scanned notes into searchable learning assets.", icon: solutionIcons[4] },
-      { title: "Speech-to-Text", text: "Capture lectures and discussions for accessible transcripts and study aids.", icon: solutionIcons[2] },
-      { title: "Translation AI", text: "Support multilingual learners with faster content localization.", icon: solutionIcons[3] },
+      { title: "AI Tutor", text: "Offer guided learning support with human oversight and curriculum-grounded answers.", icon: imgAiTutor },
+      { title: "Quiz Generator", text: "Generate practice questions and assessments from approved learning content.", icon: imgQuiz },
+      { title: "Learning Analytics", text: "Track engagement and progress to help educators intervene earlier.", icon: imgLearningAnalytics },
+      { title: "OCR Notes", text: "Digitize handwritten or scanned notes into searchable learning assets.", icon: imgOcrDoc },
+      { title: "Speech-to-Text", text: "Capture lectures and discussions for accessible transcripts and study aids.", icon: imgTranscript },
+      { title: "Translation AI", text: "Support multilingual learners with faster content localization.", icon: imgSentiment },
     ],
     useCasesIntro:
       "Education scenarios where AI improves teaching support, learner experience, and institutional efficiency.",
@@ -368,12 +375,12 @@ export const industryPagesBySlug: Record<string, IndustryPageContent> = {
     solutionsSubtitle:
       "Operational AI modules designed for fleet, warehouse, inventory, and document-intensive logistics workflows.",
     solutions: [
-      { title: "Fleet Intelligence", text: "Gain actionable insights across vehicles, trips, and utilization patterns.", icon: solutionIcons[0] },
-      { title: "Route Planning", text: "Support smarter dispatch and delivery planning decisions.", icon: solutionIcons[1] },
-      { title: "Warehouse Vision", text: "Apply computer vision to improve monitoring and operational awareness.", icon: solutionIcons[2] },
-      { title: "Inventory Analytics", text: "Improve stock visibility and planning with AI-assisted analytics.", icon: solutionIcons[4] },
-      { title: "Delivery Tracking", text: "Strengthen delivery status visibility and exception handling.", icon: solutionIcons[3] },
-      { title: "OCR Automation", text: "Extract structured data from logistics documents at scale.", icon: solutionIcons[5] },
+      { title: "Fleet Intelligence", text: "Gain actionable insights across vehicles, trips, and utilization patterns.", icon: imgFleetIntelligence },
+      { title: "Route Planning", text: "Support smarter dispatch and delivery planning decisions.", icon: imgRoutePlanning },
+      { title: "Warehouse Vision", text: "Apply computer vision to improve monitoring and operational awareness.", icon: imgWarehouse },
+      { title: "Inventory Analytics", text: "Improve stock visibility and planning with AI-assisted analytics.", icon: imgInventory },
+      { title: "Delivery Tracking", text: "Strengthen delivery status visibility and exception handling.", icon: imgDeliveryTracking },
+      { title: "OCR Automation", text: "Extract structured data from logistics documents at scale.", icon: imgOcrAutomation },
     ],
     useCasesIntro:
       "Logistics scenarios where AI improves movement, visibility, safety, and warehouse performance.",
@@ -447,12 +454,12 @@ export const industryPagesBySlug: Record<string, IndustryPageContent> = {
     solutionsSubtitle:
       "Industrial AI capabilities that strengthen quality, safety, maintenance, and production intelligence.",
     solutions: [
-      { title: "Computer Vision", text: "Automate visual inspection and monitoring across manufacturing environments.", icon: solutionIcons[2] },
-      { title: "Predictive Maintenance", text: "Reduce downtime with early signals from equipment and process data.", icon: solutionIcons[0] },
-      { title: "IoT Analytics", text: "Analyze machine telemetry for performance and reliability insights.", icon: solutionIcons[1] },
-      { title: "Video Analytics", text: "Monitor safety, movement, and operational events on the factory floor.", icon: solutionIcons[3] },
-      { title: "Quality Inspection", text: "Improve consistency and reduce escapes with AI-assisted inspection.", icon: solutionIcons[4] },
-      { title: "Digital Twin Support", text: "Support smarter planning with digital representations of industrial processes.", icon: solutionIcons[6] },
+      { title: "Computer Vision", text: "Automate visual inspection and monitoring across manufacturing environments.", icon: imgComputerVision },
+      { title: "Predictive Maintenance", text: "Reduce downtime with early signals from equipment and process data.", icon: imgPredictiveMaintenance },
+      { title: "IoT Analytics", text: "Analyze machine telemetry for performance and reliability insights.", icon: imgIotAnalytics },
+      { title: "Video Analytics", text: "Monitor safety, movement, and operational events on the factory floor.", icon: imgWarehouse },
+      { title: "Quality Inspection", text: "Improve consistency and reduce escapes with AI-assisted inspection.", icon: imgComputerVision },
+      { title: "Digital Twin Support", text: "Support smarter planning with digital representations of industrial processes.", icon: imgIotAnalytics },
     ],
     useCasesIntro:
       "Manufacturing scenarios where AI improves inspection, safety, production insight, and material integrity.",
@@ -526,12 +533,12 @@ export const industryPagesBySlug: Record<string, IndustryPageContent> = {
     solutionsSubtitle:
       "Trust and safety AI capabilities designed for platforms, studios, and digital content ecosystems.",
     solutions: [
-      { title: "Deepfake Detection", text: "Identify manipulated faces and synthetic media before they cause harm.", icon: solutionIcons[2] },
-      { title: "Video Intelligence", text: "Analyze video content for moderation, verification, and brand safety.", icon: solutionIcons[3] },
-      { title: "Image Forensics", text: "Inspect images for manipulation, misuse, and policy risk signals.", icon: solutionIcons[0] },
-      { title: "Audio Verification", text: "Validate audio authenticity and support anti-spoofing workflows.", icon: solutionIcons[7] },
-      { title: "Text Analysis", text: "Detect harmful language, misinformation patterns, and policy violations.", icon: solutionIcons[4] },
-      { title: "Brand Protection", text: "Monitor content risk that can damage creators, platforms, and advertisers.", icon: solutionIcons[5] },
+      { title: "Deepfake Detection", text: "Identify manipulated faces and synthetic media before they cause harm.", icon: imgDeepfake },
+      { title: "Video Intelligence", text: "Analyze video content for moderation, verification, and brand safety.", icon: imgComputerVision },
+      { title: "Image Forensics", text: "Inspect images for manipulation, misuse, and policy risk signals.", icon: imgDeepfake },
+      { title: "Audio Verification", text: "Validate audio authenticity and support anti-spoofing workflows.", icon: imgVoiceAuth },
+      { title: "Text Analysis", text: "Detect harmful language, misinformation patterns, and policy violations.", icon: imgSentiment },
+      { title: "Brand Protection", text: "Monitor content risk that can damage creators, platforms, and advertisers.", icon: imgFraudRisk },
     ],
     useCasesIntro:
       "Media and platform scenarios where AI strengthens trust, safety, and content integrity.",
@@ -605,12 +612,12 @@ export const industryPagesBySlug: Record<string, IndustryPageContent> = {
     solutionsSubtitle:
       "Public-sector AI capabilities for safer cities, smarter surveillance, and more efficient citizen services.",
     solutions: [
-      { title: "Smart Surveillance", text: "Monitor public spaces with intelligent video analytics and alerting.", icon: solutionIcons[2] },
-      { title: "Face Recognition Support", text: "Assist investigations and search workflows with responsible AI tooling.", icon: solutionIcons[6] },
-      { title: "Virtual Fencing", text: "Detect perimeter breaches and restricted-zone activity more reliably.", icon: solutionIcons[1] },
-      { title: "Vehicle Tracking", text: "Support traffic and security teams with vehicle-oriented analytics.", icon: solutionIcons[0] },
-      { title: "Document Intelligence", text: "Extract and organize information from government forms and records.", icon: solutionIcons[4] },
-      { title: "Citizen AI Assistant", text: "Help citizens get answers and complete service journeys more easily.", icon: solutionIcons[3] },
+      { title: "Smart Surveillance", text: "Monitor public spaces with intelligent video analytics and alerting.", icon: imgWarehouse },
+      { title: "Face Recognition Support", text: "Assist investigations and search workflows with responsible AI tooling.", icon: imgDeepfake },
+      { title: "Virtual Fencing", text: "Detect perimeter breaches and restricted-zone activity more reliably.", icon: imgComputerVision },
+      { title: "Vehicle Tracking", text: "Support traffic and security teams with vehicle-oriented analytics.", icon: imgFleetIntelligence },
+      { title: "Document Intelligence", text: "Extract and organize information from government forms and records.", icon: imgOcrDoc },
+      { title: "Citizen AI Assistant", text: "Help citizens get answers and complete service journeys more easily.", icon: imgCustomerSupport },
     ],
     useCasesIntro:
       "Government scenarios where AI improves safety, response speed, and citizen experience.",
