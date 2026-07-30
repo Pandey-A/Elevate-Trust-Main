@@ -185,6 +185,37 @@ export function useDemoTags() {
   return { tags, loading, error, refresh };
 }
 
+export function useAdminDemoTags() {
+  const [tags, setTags] = useState<DemoTag[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  const refresh = useCallback(async () => {
+    try {
+      setLoading(true);
+      const data = await fetchDemoTags();
+      setTags(data);
+      setError("");
+    } catch (err) {
+      setTags([]);
+      setError(getErrorMessage(err, "Unable to load tags."));
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    void refresh();
+    const onChange = () => {
+      void refresh();
+    };
+    window.addEventListener(ADMIN_DATA_EVENT, onChange);
+    return () => window.removeEventListener(ADMIN_DATA_EVENT, onChange);
+  }, [refresh]);
+
+  return { tags, loading, error, refresh };
+}
+
 export function useAdminJobs(): AdminJob[] {
   return useJobsSnapshot();
 }

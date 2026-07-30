@@ -35,3 +35,30 @@ export async function createDemoTag(name: string): Promise<DemoTag> {
   notifyTagsChanged();
   return data.data;
 }
+
+export async function updateDemoTag(id: string, name: string): Promise<DemoTag> {
+  const { data } = await api.put<{
+    success: boolean;
+    message?: string;
+    data: DemoTag;
+  }>(`/api/demo-tags/${encodeURIComponent(id)}`, { name });
+
+  if (!data.success || !data.data) {
+    throw new Error(data.message || "Unable to update tag.");
+  }
+
+  notifyTagsChanged();
+  return data.data;
+}
+
+export async function deleteDemoTag(id: string): Promise<void> {
+  const { data } = await api.delete<{ success: boolean; message?: string }>(
+    `/api/demo-tags/${encodeURIComponent(id)}`,
+  );
+
+  if (!data.success) {
+    throw new Error(data.message || "Unable to delete tag.");
+  }
+
+  notifyTagsChanged();
+}

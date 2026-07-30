@@ -19,7 +19,7 @@ import {
   X,
 } from "lucide-react";
 import { type AdminDemo, type AdminJob, type IndustryTag } from "../../data/adminDefaults";
-import { useAdminAuth, useAdminBlogs, useAdminDemos, useAdminJobs, useDemoTags } from "../../hooks/useAdminData";
+import { useAdminAuth, useAdminBlogs, useAdminDemos, useAdminJobs, useAdminDemoTags, useDemoTags } from "../../hooks/useAdminData";
 import {
   createId,
   deleteJob,
@@ -46,7 +46,7 @@ import {
   fetchCareerApplications,
   type CareerApplication,
 } from "../../lib/careersApi";
-import { createDemoTag } from "../../lib/tagsApi";
+import { createDemoTag, deleteDemoTag, updateDemoTag, type DemoTag } from "../../lib/tagsApi";
 import BlogRichTextEditor from "../../components/blog/BlogRichTextEditor";
 import { excerptFromContent, isRichTextEmpty } from "../../lib/blogContent";
 import brainstormingIcon from "../../assets/OurServices/brainstorming.png";
@@ -89,6 +89,7 @@ export default function AdminDashboard() {
   const { demos, loading: demosLoading, error: demosLoadError, refresh: refreshDemos } = useAdminDemos();
   const { blogs, loading: blogsLoading, error: blogsLoadError, refresh: refreshBlogs } = useAdminBlogs();
   const { tags: demoTags, loading: tagsLoading, error: tagsLoadError, refresh: refreshTags } = useDemoTags();
+  const { tags: adminDemoTags, loading: adminTagsLoading, error: adminTagsLoadError, refresh: refreshAdminTags } = useAdminDemoTags();
   const jobs = useAdminJobs();
 
   const [tab, setTab] = useState<Tab>("overview");
@@ -108,6 +109,7 @@ export default function AdminDashboard() {
   const [demoSaving, setDemoSaving] = useState(false);
   const [blogSaving, setBlogSaving] = useState(false);
   const [tagName, setTagName] = useState("");
+  const [editingTagId, setEditingTagId] = useState("");
   const [tagError, setTagError] = useState("");
   const [tagSuccess, setTagSuccess] = useState("");
   const [tagSaving, setTagSaving] = useState(false);
@@ -380,6 +382,23 @@ export default function AdminDashboard() {
     }
   };
 
+  const editingTag = Boolean(editingTagId);
+
+  const resetTagForm = () => {
+    setTagName("");
+    setEditingTagId("");
+    setTagError("");
+    setTagSuccess("");
+  };
+
+  const onEditTag = (tag: DemoTag) => {
+    setTab("tags");
+    setEditingTagId(tag.id);
+    setTagName(tag.name);
+    setTagError("");
+    setTagSuccess("");
+  };
+
   const submitTag = async (event: FormEvent) => {
     event.preventDefault();
     setTagError("");
@@ -397,12 +416,19 @@ export default function AdminDashboard() {
 
     try {
       setTagSaving(true);
-      await createDemoTag(name);
-      setTagName("");
-      setTagSuccess(`Tag "${name}" added successfully.`);
+      if (editingTag) {
+        await updateDemoTag(editingTagId, name);
+        resetTagForm();
+        setTagSuccess(`Tag "${name}" updated successfully.`);
+      } else {
+        await createDemoTag(name);
+        resetTagForm();
+        setTagSuccess(`Tag "${name}" added successfully.`);
+      }
       void refreshTags();
+      void refreshAdminTags();
     } catch (err) {
-      setTagError(getErrorMessage(err, "Unable to add tag."));
+      setTagError(getErrorMessage(err, editingTag ? "Unable to update tag." : "Unable to add tag."));
     } finally {
       setTagSaving(false);
     }
@@ -1044,7 +1070,20 @@ export default function AdminDashboard() {
                 onSubmit={submitTag}
                 className="rounded-[20px] border border-[#d7e6f3] bg-white p-5 shadow-[0_14px_40px_-28px_rgba(17,61,119,0.3)] sm:p-6 xl:rounded-[24px] xl:p-7 2xl:p-8"
               >
-                <h2 className="m-0 text-xl font-bold text-[#1F2432] 2xl:text-2xl">Add demo tag</h2>
+                <div className="mb-4 flex flex-wrap items-center justify-between gap-3 2xl:mb-5">
+                  <h2 className="m-0 text-xl font-bold text-[#1F2432] 2xl:text-2xl">
+                    {editingTag ? "Update demo tag" : "Add demo tag"}
+                  </h2>
+                  {editingTag ? (
+                    <button
+                      type="button"
+                      onClick={resetTagForm}
+                      className="cursor-pointer rounded-full border border-[#d7e6f3] bg-[#EFF7FC] px-3 py-1.5 text-xs font-semibold text-[#2365aa]"
+                    >
+                      Cancel edit
+                    </button>
+                  ) : null}
+                </div>
                 <p className="mt-2 text-sm text-[#848b9b]">
                   Tags are used to categorize demo videos on the website and in the admin panel.
                 </p>
@@ -1075,30 +1114,64 @@ export default function AdminDashboard() {
                   disabled={tagSaving}
                   className="mt-5 inline-flex cursor-pointer items-center gap-2 rounded-full border-0 bg-[#2365aa] px-5 py-3 text-sm font-semibold uppercase text-white hover:bg-[#1a5490] disabled:cursor-not-allowed disabled:opacity-70"
                 >
-                  {tagSaving ? "Adding..." : "Add tag"}
+                  {tagSaving ? "Saving..." : editingTag ? "Update tag" : "Add tag"}
                   <ArrowUpRight size={16} />
                 </button>
               </form>
 
-              {tagsLoadError ? (
+              {tagsLoadError || adminTagsLoadError ? (
                 <p className="rounded-[12px] bg-[#EEF3FB] px-3 py-2 text-sm text-[#2365aa]">
-                  {tagsLoadError}
+                  {tagsLoadError || adminTagsLoadError}
                 </p>
               ) : null}
-              {tagsLoading ? (
+              {tagsLoading || adminTagsLoading ? (
                 <p className="text-sm text-[#848b9b]">Loading tags...</p>
               ) : null}
 
               <div className="rounded-[20px] border border-[#d7e6f3] bg-white p-5 shadow-[0_14px_40px_-28px_rgba(17,61,119,0.3)] sm:p-6 xl:rounded-[24px] xl:p-7 2xl:p-8">
-                <h3 className="m-0 text-lg font-bold text-[#1F2432]">All tags ({demoTags.length})</h3>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {demoTags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="rounded-full bg-[#EFF7FC] px-3 py-1.5 text-xs font-semibold text-[#2365aa]"
+                <h3 className="m-0 text-lg font-bold text-[#1F2432]">All tags ({adminDemoTags.length})</h3>
+                <div className="mt-4 space-y-3">
+                  {adminDemoTags.map((tag) => (
+                    <article
+                      key={tag.id}
+                      className="flex flex-wrap items-center justify-between gap-3 rounded-[14px] border border-[#d7e6f3] bg-[#f8fbfd] px-4 py-3"
                     >
-                      {tag}
-                    </span>
+                      <div className="min-w-0">
+                        <p className="m-0 text-sm font-semibold text-[#1F2432]">{tag.name}</p>
+                        <p className="mt-1 text-xs text-[#848b9b]">
+                          Added {formatDate(tag.createdAt)}
+                        </p>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        <button
+                          type="button"
+                          onClick={() => onEditTag(tag)}
+                          className="inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-[#d7e6f3] bg-[#EFF7FC] px-3 py-2 text-xs font-semibold text-[#2365aa]"
+                        >
+                          <Pencil size={14} />
+                          Edit
+                        </button>
+                        <button
+                          type="button"
+                          onClick={async () => {
+                            if (!window.confirm(`Delete tag "${tag.name}"?`)) return;
+                            try {
+                              await deleteDemoTag(tag.id);
+                              if (editingTagId === tag.id) resetTagForm();
+                              setTagSuccess(`Tag "${tag.name}" deleted successfully.`);
+                              void refreshTags();
+                              void refreshAdminTags();
+                            } catch (err) {
+                              setTagError(getErrorMessage(err, "Unable to delete tag."));
+                            }
+                          }}
+                          className="inline-flex cursor-pointer items-center gap-1.5 rounded-full border-0 bg-[#EEF3FB] px-3 py-2 text-xs font-semibold text-[#2365aa]"
+                        >
+                          <Trash2 size={14} />
+                          Delete
+                        </button>
+                      </div>
+                    </article>
                   ))}
                 </div>
               </div>
