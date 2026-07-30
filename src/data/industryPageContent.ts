@@ -48,12 +48,18 @@ import publicSectorChallengesImage from "../assets/OurServices/publicsector.jpeg
 import imgAiKyc from "../assets/industries/ai-kyc.jpeg";
 import imgAiTutor from "../assets/industries/ai-tutor.jpeg";
 import imgAml from "../assets/industries/aml.jpeg";
+import imgAudioVerification from "../assets/industries/audio-verification.jpeg";
+import imgBrandProtection from "../assets/industries/brand-protection.jpeg";
 import imgComputerVision from "../assets/industries/computer-vision.jpeg";
 import imgCustomerSupport from "../assets/industries/customer-support.jpeg";
 import imgDeepfake from "../assets/industries/deepfake.jpeg";
 import imgDeliveryTracking from "../assets/industries/delivery-tracking.jpeg";
+import imgDigitalTwin from "../assets/industries/digital-twin.jpeg";
+import imgDocumentIntelligence from "../assets/industries/document-intelligence.jpeg";
+import imgFaceRecognition from "../assets/industries/face-recogintion.jpeg";
 import imgFleetIntelligence from "../assets/industries/fleet-intelligence.jpeg";
 import imgFraudRisk from "../assets/industries/fraud-risk.jpeg";
+import imgImageForensics from "../assets/industries/image-forensic.jpeg";
 import imgInventory from "../assets/industries/inventory.jpeg";
 import imgInventoryIntelligence from "../assets/industries/inventory-intelligence.jpeg";
 import imgIotAnalytics from "../assets/industries/iot-analytics.jpeg";
@@ -62,12 +68,19 @@ import imgOcrAutomation from "../assets/industries/ocr-automation.jpeg";
 import imgOcrDoc from "../assets/industries/ocr-doc.jpeg";
 import imgOcrInvoice from "../assets/industries/ocr-invoice.jpeg";
 import imgPredictiveMaintenance from "../assets/industries/predictive-maintenance.jpeg";
+import imgQualityInspection from "../assets/industries/quality-inspection.jpeg";
 import imgQuiz from "../assets/industries/quiz.jpeg";
 import imgRecommendation from "../assets/industries/recommendation.jpeg";
 import imgRoutePlanning from "../assets/industries/route-planning.jpeg";
 import imgSentiment from "../assets/industries/sentiment.jpeg";
 import imgShopping from "../assets/industries/shopping.jpeg";
+import imgSmartSurveillance from "../assets/industries/smart-surveliance.jpeg";
+import imgTextAnalysis from "../assets/industries/text-analysis.jpeg";
 import imgTranscript from "../assets/industries/transcript.jpeg";
+import imgVehicleTracking from "../assets/industries/vehicle-tracking.jpeg";
+import imgVideoAnalytics from "../assets/industries/video-analytics.jpeg";
+import imgVideoIntelligence from "../assets/industries/video-intelligence.jpeg";
+import imgVirtualFencing from "../assets/industries/virtual-fencing.jpeg";
 import imgVoiceAuth from "../assets/industries/voice-auth.jpeg";
 import imgWarehouse from "../assets/industries/warehouse.jpeg";
 
@@ -457,9 +470,9 @@ export const industryPagesBySlug: Record<string, IndustryPageContent> = {
       { title: "Computer Vision", text: "Automate visual inspection and monitoring across manufacturing environments.", icon: imgComputerVision },
       { title: "Predictive Maintenance", text: "Reduce downtime with early signals from equipment and process data.", icon: imgPredictiveMaintenance },
       { title: "IoT Analytics", text: "Analyze machine telemetry for performance and reliability insights.", icon: imgIotAnalytics },
-      { title: "Video Analytics", text: "Monitor safety, movement, and operational events on the factory floor.", icon: imgWarehouse },
-      { title: "Quality Inspection", text: "Improve consistency and reduce escapes with AI-assisted inspection.", icon: imgComputerVision },
-      { title: "Digital Twin Support", text: "Support smarter planning with digital representations of industrial processes.", icon: imgIotAnalytics },
+      { title: "Video Analytics", text: "Monitor safety, movement, and operational events on the factory floor.", icon: imgVideoAnalytics },
+      { title: "Quality Inspection", text: "Improve consistency and reduce escapes with AI-assisted inspection.", icon: imgQualityInspection },
+      { title: "Digital Twin Support", text: "Support smarter planning with digital representations of industrial processes.", icon: imgDigitalTwin },
     ],
     useCasesIntro:
       "Manufacturing scenarios where AI improves inspection, safety, production insight, and material integrity.",
@@ -534,11 +547,11 @@ export const industryPagesBySlug: Record<string, IndustryPageContent> = {
       "Trust and safety AI capabilities designed for platforms, studios, and digital content ecosystems.",
     solutions: [
       { title: "Deepfake Detection", text: "Identify manipulated faces and synthetic media before they cause harm.", icon: imgDeepfake },
-      { title: "Video Intelligence", text: "Analyze video content for moderation, verification, and brand safety.", icon: imgComputerVision },
-      { title: "Image Forensics", text: "Inspect images for manipulation, misuse, and policy risk signals.", icon: imgDeepfake },
-      { title: "Audio Verification", text: "Validate audio authenticity and support anti-spoofing workflows.", icon: imgVoiceAuth },
-      { title: "Text Analysis", text: "Detect harmful language, misinformation patterns, and policy violations.", icon: imgSentiment },
-      { title: "Brand Protection", text: "Monitor content risk that can damage creators, platforms, and advertisers.", icon: imgFraudRisk },
+      { title: "Video Intelligence", text: "Analyze video content for moderation, verification, and brand safety.", icon: imgVideoIntelligence },
+      { title: "Image Forensics", text: "Inspect images for manipulation, misuse, and policy risk signals.", icon: imgImageForensics },
+      { title: "Audio Verification", text: "Validate audio authenticity and support anti-spoofing workflows.", icon: imgAudioVerification },
+      { title: "Text Analysis", text: "Detect harmful language, misinformation patterns, and policy violations.", icon: imgTextAnalysis },
+      { title: "Brand Protection", text: "Monitor content risk that can damage creators, platforms, and advertisers.", icon: imgBrandProtection },
     ],
     useCasesIntro:
       "Media and platform scenarios where AI strengthens trust, safety, and content integrity.",
@@ -612,11 +625,11 @@ export const industryPagesBySlug: Record<string, IndustryPageContent> = {
     solutionsSubtitle:
       "Public-sector AI capabilities for safer cities, smarter surveillance, and more efficient citizen services.",
     solutions: [
-      { title: "Smart Surveillance", text: "Monitor public spaces with intelligent video analytics and alerting.", icon: imgWarehouse },
-      { title: "Face Recognition Support", text: "Assist investigations and search workflows with responsible AI tooling.", icon: imgDeepfake },
-      { title: "Virtual Fencing", text: "Detect perimeter breaches and restricted-zone activity more reliably.", icon: imgComputerVision },
-      { title: "Vehicle Tracking", text: "Support traffic and security teams with vehicle-oriented analytics.", icon: imgFleetIntelligence },
-      { title: "Document Intelligence", text: "Extract and organize information from government forms and records.", icon: imgOcrDoc },
+      { title: "Smart Surveillance", text: "Monitor public spaces with intelligent video analytics and alerting.", icon: imgSmartSurveillance },
+      { title: "Face Recognition Support", text: "Assist investigations and search workflows with responsible AI tooling.", icon: imgFaceRecognition },
+      { title: "Virtual Fencing", text: "Detect perimeter breaches and restricted-zone activity more reliably.", icon: imgVirtualFencing },
+      { title: "Vehicle Tracking", text: "Support traffic and security teams with vehicle-oriented analytics.", icon: imgVehicleTracking },
+      { title: "Document Intelligence", text: "Extract and organize information from government forms and records.", icon: imgDocumentIntelligence },
       { title: "Citizen AI Assistant", text: "Help citizens get answers and complete service journeys more easily.", icon: imgCustomerSupport },
     ],
     useCasesIntro:
