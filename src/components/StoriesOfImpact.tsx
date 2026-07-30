@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { Link } from "react-router-dom";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, X } from "lucide-react";
 import blueArrow from "../assets/homepage-icons/blue-arrow.png";
 import arupaLogo from "../assets/client-strip/Arupa.svg";
 import complyCoreLogo from "../assets/client-strip/ComplyCore.svg";
@@ -8,12 +9,31 @@ import qjumpersLogo from "../assets/client-strip/Qjumpers.svg";
 import happyFeetLogo from "../assets/client-strip/travellers.svg";
 import roshanHirePhoto from "../assets/testimonial/RoshanHireHappyFeet.png";
 import naritaMahajanPhoto from "../assets/testimonial/happyFeetCEO.png";
+import reshuChoudharyPhoto from "../assets/testimonial/reshu-complyCore.jpeg";
+import simonQjumpersPhoto from "../assets/testimonial/simon-qjumper.png";
 import storiesVector from "../assets/homepage-icons/stories-vector.png";
 import storyProfile1 from "../assets/homepage-icons/stories-1.svg";
 import storyProfile2 from "../assets/homepage-icons/stories-2.svg";
 import "./StoriesOfImpact.css";
 
-const stories = [
+type Story = {
+  logo: string;
+  profile: string;
+  quote: string;
+  fullQuote?: string;
+  name: string;
+  title: string;
+};
+
+const stories: Story[] = [
+  {
+    logo: complyCoreLogo,
+    profile: reshuChoudharyPhoto,
+    quote:
+      "Working with Elevate trust to develop our marketing compliance platform was an excellent experience. The team quickly understood our product vision and translated complex requirements into a strong, practical technical solution. We appreciated their expertise, thoughtful approach, and commitment throughout the development process.",
+    name: "Reshu Choudhary",
+    title: "Co-Founder, ComplyCore",
+  },
   {
     logo: happyFeetLogo,
     profile: roshanHirePhoto,
@@ -39,14 +59,6 @@ const stories = [
     title: "CEO at ESI ecom",
   },
   {
-    logo: complyCoreLogo,
-    profile: storyProfile2,
-    quote:
-      "Working with Elevate trust to develop our marketing compliance platform was an excellent experience. The team quickly understood our product vision and translated complex requirements into a strong, practical technical solution. We appreciated their expertise, thoughtful approach, and commitment throughout the development process.",
-    name: "Reshu Choudhary",
-    title: "Co-Founder, ComplyCore",
-  },
-  {
     logo: arupaLogo,
     profile: storyProfile2,
     quote:
@@ -55,30 +67,45 @@ const stories = [
     title: "CEO at ESI ecom",
   },
   {
-    logo: complyCoreLogo,
-    profile: storyProfile1,
-    quote:
-      "Working with Elevate trust to develop our marketing compliance platform was an excellent experience. The team quickly understood our product vision and translated complex requirements into a strong, practical technical solution.",
-    name: "Reshu Choudhary",
-    title: "Co-Founder, ComplyCore",
-  },
-  {
     logo: qjumpersLogo,
-    profile: storyProfile2,
+    profile: simonQjumpersPhoto,
     quote:
-      "Their agentic AI framework accelerated our product development cycle. We now ship intelligent features faster while maintaining the security standards our enterprise clients require.",
-    name: "Amet Consec",
-    title: "CEO at Qjumpers",
+      "Elevate Trust has become a trusted extension of our team. Whenever we need additional expertise, capability, or development capacity, they are quick to step in and deliver. What sets them apart is their commitment to understanding the business outcome before discussing the technology.",
+    fullQuote:
+      "Elevate Trust has become a trusted extension of our team. Whenever we need additional expertise, capability, or development capacity, they are quick to step in and deliver.\n\nWhat sets them apart is their commitment to understanding the business outcome before discussing the technology. From day one, they have focused on our goals, challenging assumptions, contributing ideas, and ensuring that every technical decision supports a real business objective.\n\nWe've worked with many technology providers over the years, and the difference with Elevate Trust is clear. They don't view projects as transactions. They take ownership of the outcome, remain engaged throughout the journey, and work alongside us until we are genuinely satisfied with the result. Their flexibility, responsiveness, and customer-first mindset make them a pleasure to work with.\n\nOne of the most significant projects Elevate Trust has delivered for us is the AI matching engine within our recruitment platform. The solution automatically scores applicants, explains its recommendations, and identifies high-quality candidates from our talent pool. Today, it is a cornerstone of our platform and a key competitive differentiator.\n\nTo achieve this, the Elevate Trust team invested considerable time evaluating alternative approaches, researching the latest advancements in AI, and designing a solution tailored to our needs. The result is the most accurate candidate matching system I have seen, and they continue to innovate and refine it as technology evolves.\n\nI would highly recommend Elevate Trust to any organisation looking for a technology partner that combines technical excellence with a genuine commitment to achieving business results.",
+    name: "Simon Oldham",
+    title: "CEO & Co-Founder, QJumpers",
   },
 ];
 
 const AUTO_ADVANCE_MS = 4500;
+
+function StoryQuote({ text, className }: { text: string; className: string }) {
+  const paragraphs = text.split(/\n\n+/).filter(Boolean);
+
+  if (paragraphs.length <= 1) {
+    return <p className={className}>“{text.replace(/^["“]|["”]$/g, "")}”</p>;
+  }
+
+  return (
+    <div className={className}>
+      {paragraphs.map((paragraph, index) => (
+        <p key={index} className={index > 0 ? "mt-4" : ""}>
+          {index === 0 ? "“" : ""}
+          {paragraph}
+          {index === paragraphs.length - 1 ? "”" : ""}
+        </p>
+      ))}
+    </div>
+  );
+}
 
 export default function StoriesOfImpact() {
   const trackRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef({ active: false, startX: 0 });
 
   const [activeIndex, setActiveIndex] = useState(0);
+  const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
   const [offset, setOffset] = useState(0);
   const [dragX, setDragX] = useState(0);
   const [dragging, setDragging] = useState(false);
@@ -125,7 +152,7 @@ export default function StoriesOfImpact() {
   }, [activeIndex, measureOffset]);
 
   useEffect(() => {
-    if (dragging || cardHovered || maxIndex <= 0) return;
+    if (dragging || cardHovered || maxIndex <= 0 || expandedIndex !== null) return;
 
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (prefersReducedMotion) return;
@@ -135,12 +162,32 @@ export default function StoriesOfImpact() {
     }, AUTO_ADVANCE_MS);
 
     return () => window.clearInterval(id);
-  }, [activeIndex, dragging, cardHovered, maxIndex]);
+  }, [activeIndex, dragging, cardHovered, maxIndex, expandedIndex]);
+
+  useEffect(() => {
+    if (expandedIndex === null) return;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setExpandedIndex(null);
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = "";
+    };
+  }, [expandedIndex]);
+
+  const expandedStory = expandedIndex !== null ? stories[expandedIndex] : null;
 
   const goPrev = () => setActiveIndex((i) => Math.max(0, i - 1));
   const goNext = () => setActiveIndex((i) => Math.min(maxIndex, i + 1));
 
   const onPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (event.target instanceof Element && event.target.closest("button, a")) return;
+
     dragRef.current = { active: true, startX: event.clientX };
     setDragging(true);
     event.currentTarget.setPointerCapture(event.pointerId);
@@ -291,8 +338,23 @@ export default function StoriesOfImpact() {
                                 : "text-[11px] leading-4 sm:text-xs sm:leading-4 md:text-sm md:leading-5 lg:text-base lg:leading-6 xl:text-lg xl:leading-7 2xl:text-xl 2xl:leading-8",
                             ].join(" ")}
                           >
-                            “{story.quote.replace(/^["“]|["”]$/g, "")}”
+                            “{story.quote.replace(/^["“]|["”]$/g, "")}
+                            {story.fullQuote ? "..." : ""}”
                           </p>
+
+                          {story.fullQuote && focused ? (
+                            <button
+                              type="button"
+                              onPointerDown={(event) => event.stopPropagation()}
+                              onClick={(event) => {
+                                event.stopPropagation();
+                                setExpandedIndex(index);
+                              }}
+                              className="relative z-10 mt-2 w-fit text-left text-sm font-semibold text-[#2365AA] transition hover:text-[#113D77] hover:underline sm:text-[15px] lg:text-base"
+                            >
+                              More
+                            </button>
+                          ) : null}
 
                           <div className="relative mt-3 flex items-end justify-between gap-2 pt-2 sm:mt-4 lg:mt-auto lg:gap-3 lg:pt-4">
                             <div className="min-w-0">
@@ -340,6 +402,64 @@ export default function StoriesOfImpact() {
           </div>
         </div>
       </div>
+
+      {expandedStory
+        ? createPortal(
+            <div
+              className="fixed inset-0 z-[200] flex items-center justify-center bg-[#0b1220]/72 p-4 backdrop-blur-[2px] sm:p-6"
+              role="dialog"
+              aria-modal="true"
+              aria-label={`${expandedStory.name} testimonial`}
+              onClick={() => setExpandedIndex(null)}
+            >
+              <article
+                className="story-modal relative max-h-[90vh] w-full max-w-[860px] overflow-y-auto rounded-[24px] bg-white p-6 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.45)] sm:rounded-[30px] sm:p-8 lg:p-10"
+                onClick={(event) => event.stopPropagation()}
+              >
+                <button
+                  type="button"
+                  onClick={() => setExpandedIndex(null)}
+                  className="absolute right-4 top-4 inline-flex size-9 items-center justify-center rounded-full border border-[#272935]/10 bg-[#F4F7F9] text-[#272935] transition hover:bg-[#E8EEF3] sm:right-6 sm:top-6"
+                  aria-label="Close testimonial"
+                >
+                  <X className="size-5" />
+                </button>
+
+                <div className="flex items-start justify-between gap-4 pr-10 sm:gap-6 sm:pr-12">
+                  <img
+                    src={expandedStory.logo}
+                    alt=""
+                    className="h-8 w-auto max-w-[140px] object-contain sm:h-10 sm:max-w-[180px] lg:h-12 lg:max-w-[220px]"
+                  />
+                  <img
+                    src={expandedStory.profile}
+                    alt={expandedStory.name}
+                    className="size-20 shrink-0 rounded-[16px] object-cover object-top sm:size-24 lg:size-32 lg:rounded-[24px]"
+                  />
+                </div>
+
+                <StoryQuote
+                  text={expandedStory.fullQuote ?? expandedStory.quote}
+                  className="mt-6 text-[15px] leading-7 text-[#5A5A5A] sm:mt-8 sm:text-base sm:leading-7 lg:text-lg lg:leading-8"
+                />
+
+                <div className="relative mt-8 flex items-end justify-between gap-4 border-t border-[#272935]/10 pt-6">
+                  <div>
+                    <p className="text-base font-bold text-[#272935] sm:text-lg">{expandedStory.name}</p>
+                    <p className="mt-1 text-sm text-[#272935]/60 sm:text-base">{expandedStory.title}</p>
+                  </div>
+                  <span
+                    className="pointer-events-none select-none font-[Georgia,'Times_New_Roman',serif] text-5xl leading-none text-[#272935]/10 sm:text-6xl"
+                    aria-hidden
+                  >
+                    ”
+                  </span>
+                </div>
+              </article>
+            </div>,
+            document.body,
+          )
+        : null}
     </section>
   );
 }

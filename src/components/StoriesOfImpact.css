@@ -21,3 +21,17 @@
     transition: none;
   }
 }
+
+.story-modal {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(39, 41, 53, 0.25) transparent;
+}
+
+.story-modal::-webkit-scrollbar {
+  width: 8px;
+}
+
+.story-modal::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(39, 41, 53, 0.25);
+}
