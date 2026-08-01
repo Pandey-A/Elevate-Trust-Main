@@ -1,0 +1,175 @@
+/* E-commerce & Retail industry page — mobile only (≤767px)
+   Readable type + tighter section/card spacing without redesign */
+@media (max-width: 767px) {
+  .industry-page--ecommerce .service-page-hero {
+    height: auto;
+    min-height: 0;
+  }
+
+  .industry-page--ecommerce .service-page-hero__content {
+    padding-block: 1.5rem 1.75rem;
+  }
+
+  .industry-page--ecommerce .service-page-hero__content > p:first-of-type {
+    margin-bottom: 0.65rem !important;
+    font-size: 12px !important;
+    letter-spacing: 0.12em !important;
+  }
+
+  .industry-page--ecommerce .service-page-hero__content > h1 {
+    font-size: 26px !important;
+    line-height: 1.25 !important;
+  }
+
+  .industry-page--ecommerce .service-page-hero__content > p:nth-of-type(2) {
+    margin-top: 0.75rem !important;
+    font-size: 14px !important;
+    line-height: 1.55 !important;
+    color: #c5d2e4 !important;
+  }
+
+  .industry-page--ecommerce .page-breadcrumb-wrap {
+    padding-block: 1rem 0.35rem;
+  }
+
+  /* Section containers */
+  .industry-page--ecommerce > section > .mx-auto {
+    padding-left: 1.1rem !important;
+    padding-right: 1.1rem !important;
+    padding-top: 1.75rem !important;
+    padding-bottom: 1.75rem !important;
+  }
+
+  .industry-page--ecommerce > section[aria-label="Industry Challenges"] > .mx-auto {
+    padding-top: 0.35rem !important;
+  }
+
+  .industry-page--ecommerce h2 {
+    font-size: 24px !important;
+    line-height: 1.25 !important;
+  }
+
+  .industry-page--ecommerce h3 {
+    font-size: 16px !important;
+    line-height: 1.35 !important;
+  }
+
+  /* Body copy outside hero */
+  .industry-page--ecommerce > section:not(.service-page-hero) p {
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+    color: #5f6775 !important;
+  }
+
+  .industry-page--ecommerce > section:not(.service-page-hero) article h3,
+  .industry-page--ecommerce > section:not(.service-page-hero) header h2,
+  .industry-page--ecommerce > section:not(.service-page-hero) h2 {
+    color: #1f2432 !important;
+  }
+
+  /* Intro stacks */
+  .industry-page--ecommerce section[aria-label="Industry Challenges"] > .mx-auto > div:first-child {
+    gap: 1.2rem !important;
+  }
+
+  .industry-page--ecommerce section[aria-label="Industry Challenges"] h2 + p,
+  .industry-page--ecommerce section[aria-label="How ElevateTrust Helps"] h2 + p,
+  .industry-page--ecommerce section[aria-label="Industry Use Cases"] h2 + p,
+  .industry-page--ecommerce header h2 + p {
+    margin-top: 0.7rem !important;
+  }
+
+  /* Card / tile grids */
+  .industry-page--ecommerce section[aria-label="Industry Challenges"] > .mx-auto > div:last-child,
+  .industry-page--ecommerce section[aria-label="How ElevateTrust Helps"] > .mx-auto > div:last-child,
+  .industry-page--ecommerce section[aria-label="Industry Use Cases"] > .mx-auto > div:last-child,
+  .industry-page--ecommerce section[aria-label="Business Outcomes"] > .mx-auto > div:last-child,
+  .industry-page--ecommerce section[aria-label="Why ElevateTrust"] > .mx-auto > div.grid {
+    margin-top: 0 !important;
+    gap: 0.85rem !important;
+  }
+
+  .industry-page--ecommerce section[aria-label="Industry Challenges"] > .mx-auto > div:last-child {
+    margin-top: 1.25rem !important;
+  }
+
+  .industry-page--ecommerce section[aria-label="How ElevateTrust Helps"] > .mx-auto > div:first-child,
+  .industry-page--ecommerce section[aria-label="Industry Use Cases"] > .mx-auto > div:first-child {
+    margin-bottom: 1.2rem !important;
+    gap: 1.1rem !important;
+  }
+
+  .industry-page--ecommerce header {
+    margin-bottom: 1.2rem !important;
+  }
+
+  /* Cards: roomy enough, not sparse */
+  .industry-page--ecommerce article {
+    padding: 1rem 1.05rem !important;
+  }
+
+  .industry-page--ecommerce article .mb-4 {
+    margin-bottom: 0.7rem !important;
+  }
+
+  .industry-page--ecommerce article .mt-3 {
+    margin-top: 0.5rem !important;
+  }
+
+  /* Solutions section (title comes from content) */
+  .industry-page--ecommerce section[aria-label="AI Solutions for E-commerce & Retail"] > .mx-auto > div.grid {
+    gap: 0.95rem !important;
+  }
+
+  .industry-page--ecommerce section[aria-label="AI Solutions for E-commerce & Retail"] article .mb-5 {
+    margin-bottom: 0.85rem !important;
+  }
+
+  /* Technologies */
+  .industry-page--ecommerce section[aria-label="Technologies"] > .mx-auto > div.grid {
+    gap: 0.75rem !important;
+  }
+
+  .industry-page--ecommerce section[aria-label="Technologies"] > .mx-auto > div.grid > div {
+    min-height: 104px !important;
+    gap: 0.65rem !important;
+    padding: 1rem 0.75rem !important;
+  }
+
+  .industry-page--ecommerce section[aria-label="Technologies"] > .mx-auto > div.grid > div p {
+    color: #1f2432 !important;
+    font-size: 13px !important;
+    line-height: 1.35 !important;
+  }
+
+  .industry-page--ecommerce section[aria-label="Business Outcomes"] article {
+    min-height: 0 !important;
+  }
+
+  /* Why ElevateTrust checklist */
+  .industry-page--ecommerce section[aria-label="Why ElevateTrust"] ul {
+    margin-top: 1.25rem !important;
+    gap: 0.75rem !important;
+  }
+
+  .industry-page--ecommerce section[aria-label="Why ElevateTrust"] li {
+    font-size: 14px !important;
+    line-height: 1.55 !important;
+    gap: 0.65rem !important;
+    color: #5f6775 !important;
+  }
+
+  /* Demos CTA band */
+  .industry-page--ecommerce section[aria-label="Check our demos"] > .mx-auto > div {
+    gap: 1rem !important;
+    padding: 1.15rem 1.1rem !important;
+  }
+
+  .industry-page--ecommerce section[aria-label="Check our demos"] h2 {
+    font-size: 22px !important;
+  }
+
+  .industry-page--ecommerce section[aria-label="Check our demos"] h2 + p {
+    margin-top: 0.65rem !important;
+  }
+}
