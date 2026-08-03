@@ -258,11 +258,12 @@ body {
 
 @keyframes client-strip-scroll {
   from {
-    transform: translateX(0);
+    transform: translate3d(0, 0, 0);
   }
 
   to {
-    transform: translateX(-50%);
+    /* Exactly one LogoGroup width — seamless handoff to the duplicate group */
+    transform: translate3d(-50%, 0, 0);
   }
 }
 
@@ -273,12 +274,22 @@ body {
 .client-strip__track {
   display: flex;
   width: max-content;
-  animation: client-strip-scroll 25s linear infinite;
+  animation: client-strip-scroll 40s linear infinite;
   will-change: transform;
 }
 
-.client-strip:hover .client-strip__track {
-  animation-play-state: paused;
+.client-strip__group {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+}
+
+.client-strip__sep {
+  display: block;
+  width: 1px;
+  height: 56px;
+  flex-shrink: 0;
+  background-color: #d0d5dd;
 }
 
 @media (prefers-reduced-motion: reduce) {

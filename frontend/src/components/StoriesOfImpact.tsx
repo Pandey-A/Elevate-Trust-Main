@@ -20,19 +20,18 @@ type Story = {
 const AUTO_ADVANCE_MS = 4500;
 
 function StoryQuote({ text, className }: { text: string; className: string }) {
-  const paragraphs = text.split(/\n\n+/).filter(Boolean);
+  const clean = text.replace(/^["“]|["”]$/g, "");
+  const paragraphs = clean.split(/\n\n+/).filter(Boolean);
 
   if (paragraphs.length <= 1) {
-    return <p className={className}>“{text.replace(/^["“]|["”]$/g, "")}”</p>;
+    return <p className={className}>{clean}</p>;
   }
 
   return (
     <div className={className}>
       {paragraphs.map((paragraph, index) => (
         <p key={index} className={index > 0 ? "mt-4" : ""}>
-          {index === 0 ? "“" : ""}
           {paragraph}
-          {index === paragraphs.length - 1 ? "”" : ""}
         </p>
       ))}
     </div>
@@ -287,29 +286,18 @@ export default function StoriesOfImpact() {
                                 ) : (
                                   <span />
                                 )}
-
-                                <img
-                                  src={story.profile}
-                                  alt={story.name}
-                                  className={[
-                                    "shrink-0 rounded-[12px] object-cover object-top sm:rounded-[14px] lg:rounded-[24px] 2xl:rounded-[30px]",
-                                    focused
-                                      ? "size-14 sm:size-16 md:size-20 lg:size-[140px] xl:size-[160px] 2xl:size-[206px]"
-                                      : "size-11 sm:size-12 md:size-14 lg:size-[110px] xl:size-[130px] 2xl:size-[170px] min-[1920px]:size-[206px]",
-                                  ].join(" ")}
-                                />
                               </div>
 
                               <p
                                 className={[
-                                  "mt-3 flex-1 text-[#5A5A5A] sm:mt-4 md:mt-5 lg:mt-6 2xl:mt-10",
+                                  "mt-2 flex-1 text-[#5A5A5A] sm:mt-2.5 lg:mt-3",
                                   focused
-                                    ? "text-[13px] leading-5 sm:text-sm sm:leading-5 md:text-[15px] md:leading-6 lg:max-w-[420px] lg:text-lg lg:leading-7 xl:max-w-[460px] xl:text-xl xl:leading-8 2xl:max-w-[520px] 2xl:text-2xl 2xl:leading-[35px]"
-                                    : "text-[11px] leading-4 sm:text-xs sm:leading-4 md:text-sm md:leading-5 lg:text-base lg:leading-6 xl:text-lg xl:leading-7 2xl:text-xl 2xl:leading-8",
+                                    ? "w-full text-[13px] leading-5 sm:text-sm sm:leading-5 md:text-[15px] md:leading-6 lg:text-lg lg:leading-7 xl:text-xl xl:leading-8 2xl:text-2xl 2xl:leading-[35px]"
+                                    : "w-full text-[11px] leading-4 sm:text-xs sm:leading-4 md:text-sm md:leading-5 lg:text-base lg:leading-6 xl:text-lg xl:leading-7 2xl:text-xl 2xl:leading-8",
                                 ].join(" ")}
                               >
-                                “{story.quote.replace(/^["“]|["”]$/g, "")}
-                                {story.fullQuote ? "..." : ""}”
+                                {story.quote.replace(/^["“]|["”]$/g, "")}
+                                {story.fullQuote ? "..." : ""}
                               </p>
 
                               {story.fullQuote && focused ? (
@@ -326,7 +314,17 @@ export default function StoriesOfImpact() {
                                 </button>
                               ) : null}
 
-                              <div className="relative mt-3 flex items-end justify-between gap-2 pt-2 sm:mt-4 lg:mt-auto lg:gap-3 lg:pt-4">
+                              <div className="relative mt-3 flex items-center gap-2.5 pt-2 sm:mt-4 sm:gap-3 lg:mt-auto lg:gap-4 lg:pt-4">
+                                <img
+                                  src={story.profile}
+                                  alt={story.name}
+                                  className={[
+                                    "shrink-0 rounded-full object-cover object-top",
+                                    focused
+                                      ? "size-16 sm:size-[72px] md:size-20 lg:size-24 xl:size-[104px] 2xl:size-[120px]"
+                                      : "size-12 sm:size-14 md:size-16 lg:size-[72px] xl:size-20 2xl:size-24",
+                                  ].join(" ")}
+                                />
                                 <div className="min-w-0">
                                   <p
                                     className={[
@@ -349,18 +347,6 @@ export default function StoriesOfImpact() {
                                     {story.title}
                                   </p>
                                 </div>
-
-                                <span
-                                  className={[
-                                    "pointer-events-none select-none font-[Georgia,'Times_New_Roman',serif] leading-none text-[#272935]/10",
-                                    focused
-                                      ? "text-4xl sm:text-5xl lg:text-6xl xl:text-7xl 2xl:text-[104px]"
-                                      : "text-3xl sm:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl",
-                                  ].join(" ")}
-                                  aria-hidden
-                                >
-                                  ”
-                                </span>
                               </div>
                             </div>
                           </article>
@@ -397,21 +383,14 @@ export default function StoriesOfImpact() {
                   <X className="size-5" />
                 </button>
 
-                <div className="flex items-start justify-between gap-4 pr-10 sm:gap-6 sm:pr-12">
+                <div className="pr-10 sm:pr-12">
                   {expandedStory.logo ? (
                     <img
                       src={expandedStory.logo}
                       alt=""
                       className="h-8 w-auto max-w-[140px] object-contain sm:h-10 sm:max-w-[180px] lg:h-12 lg:max-w-[220px]"
                     />
-                  ) : (
-                    <span />
-                  )}
-                  <img
-                    src={expandedStory.profile}
-                    alt={expandedStory.name}
-                    className="size-20 shrink-0 rounded-[16px] object-cover object-top sm:size-24 lg:size-32 lg:rounded-[24px]"
-                  />
+                  ) : null}
                 </div>
 
                 <StoryQuote
@@ -419,17 +398,16 @@ export default function StoriesOfImpact() {
                   className="mt-6 text-[15px] leading-7 text-[#5A5A5A] sm:mt-8 sm:text-base sm:leading-7 lg:text-lg lg:leading-8"
                 />
 
-                <div className="relative mt-8 flex items-end justify-between gap-4 border-t border-[#272935]/10 pt-6">
+                <div className="relative mt-8 flex items-center gap-3 border-t border-[#272935]/10 pt-6 sm:gap-4">
+                  <img
+                    src={expandedStory.profile}
+                    alt={expandedStory.name}
+                    className="size-14 shrink-0 rounded-full object-cover object-top sm:size-16 lg:size-[72px]"
+                  />
                   <div>
                     <p className="text-base font-bold text-[#272935] sm:text-lg">{expandedStory.name}</p>
                     <p className="mt-1 text-sm text-[#272935]/60 sm:text-base">{expandedStory.title}</p>
                   </div>
-                  <span
-                    className="pointer-events-none select-none font-[Georgia,'Times_New_Roman',serif] text-5xl leading-none text-[#272935]/10 sm:text-6xl"
-                    aria-hidden
-                  >
-                    ”
-                  </span>
                 </div>
               </article>
             </div>,

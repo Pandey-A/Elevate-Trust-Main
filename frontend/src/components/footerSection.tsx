@@ -247,22 +247,36 @@ export default function FooterSection() {
 
           <FooterColumn title="Partners">
             <div className="footer__partners">
-              {activePartners.map((partner) => (
-                <div
-                  key={partner.name}
-                  className={
-                    "tall" in partner && partner.tall
-                      ? "footer__partner-slot footer__partner-slot--tall"
-                      : "footer__partner-slot"
-                  }
-                >
+              {activePartners.map((partner) => {
+                const slotClass =
+                  "tall" in partner && partner.tall
+                    ? "footer__partner-slot footer__partner-slot--tall"
+                    : "footer__partner-slot";
+                const logo = (
                   <img
                     src={partner.logo}
                     alt={partner.name}
                     className="footer__partner-logo"
                   />
-                </div>
-              ))}
+                );
+
+                return "href" in partner && partner.href ? (
+                  <a
+                    key={partner.name}
+                    href={partner.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={slotClass}
+                    aria-label={`${partner.name} (opens in a new tab)`}
+                  >
+                    {logo}
+                  </a>
+                ) : (
+                  <div key={partner.name} className={slotClass}>
+                    {logo}
+                  </div>
+                );
+              })}
             </div>
           </FooterColumn>
         </div>

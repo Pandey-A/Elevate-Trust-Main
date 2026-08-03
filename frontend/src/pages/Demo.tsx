@@ -398,13 +398,6 @@ export default function Demo() {
               <p className="mx-auto mt-3 max-w-[40rem] text-[clamp(13px,1.15vw,16px)] leading-7 text-[#687181]">
                 {activeIndustryCopy.description}
               </p>
-              <p className="mt-4 text-sm text-[#848b9b]">
-                Showing{" "}
-                <span className="font-semibold text-[#2365aa]">
-                  {filteredDemos.length}
-                </span>{" "}
-                {filteredDemos.length === 1 ? "demo" : "demos"}
-              </p>
             </div>
           </div>
 

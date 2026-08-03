@@ -227,7 +227,7 @@ export default function IndustryPageTemplate({ content }: Props) {
                 key={item.title}
                 className="group flex h-full min-w-0 flex-col rounded-[20px] border border-[#e8eef3] bg-[#f8fbfd] p-4 transition-all hover:-translate-y-1 hover:border-[#2365aa]/30 hover:shadow-[0_18px_40px_-24px_rgba(17,61,119,0.4)] sm:p-5"
               >
-                <div className="mb-5 aspect-[4/3] w-full overflow-hidden rounded-[16px] bg-white">
+                <div className="mb-5 aspect-[4/3] w-full overflow-hidden rounded-[16px] bg-[#f8fbfd]">
                   <img
                     src={item.icon}
                     alt=""

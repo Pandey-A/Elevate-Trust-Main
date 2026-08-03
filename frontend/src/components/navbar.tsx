@@ -9,6 +9,7 @@ import instagramIcon from '../assets/nav/instagram.png';
 import smartArrow from '../assets/homepage-icons/smart-arrow.png';
 import { SITE_INDUSTRIES } from '../data/industries';
 import { digitalServicePaths } from '../data/digitalServices';
+import { prefetchDemoPage, prefetchPublicBlogs } from '../hooks/useAdminData';
 import './navbar.css';
 
 const SOCIAL_LINKS = [
@@ -163,6 +164,11 @@ function getResourceItemPath(item: string) {
   return resourceItemPaths[item] ?? `${RESOURCES_PATH}/${toSlug(item)}`;
 }
 
+function prefetchResourceItem(item: string) {
+  if (item === 'Demo') void prefetchDemoPage();
+  if (item === 'Blogs') void prefetchPublicBlogs();
+}
+
 function isResourcesPathActive(pathname: string) {
   return (
     pathname === RESOURCES_PATH ||
@@ -197,7 +203,14 @@ export default function Navbar() {
   };
 
   const toggleMobileDropdown = (label: string) => {
-    setMobileExpanded((current) => (current === label ? null : label));
+    setMobileExpanded((current) => {
+      const next = current === label ? null : label;
+      if (next === 'Resources') {
+        void prefetchDemoPage();
+        void prefetchPublicBlogs();
+      }
+      return next;
+    });
   };
 
   const isMegaMenuActive = (menuId: MegaMenuId) => {
@@ -328,7 +341,13 @@ export default function Navbar() {
                           : 'text-gray-600 hover:text-gray-900'
                         }`}
                       aria-expanded={activeDropdown === link.label}
-                      onMouseEnter={() => setActiveDropdown(link.label)}
+                      onMouseEnter={() => {
+                        setActiveDropdown(link.label);
+                        if (link.label === 'Resources') {
+                          void prefetchDemoPage();
+                          void prefetchPublicBlogs();
+                        }
+                      }}
                       onClick={() =>
                         setActiveDropdown((current) =>
                           current === link.label ? null : link.label
@@ -425,6 +444,16 @@ export default function Navbar() {
                           : `${activeDropdownLink.href}/${toSlug(item)}`
                       }
                       className="block rounded-md px-2 py-2 text-sm font-medium leading-snug text-[#4B5563] transition-all duration-200 hover:scale-[1.04] hover:bg-[#EFF7FC] hover:text-[#111827] min-[1920px]:text-[15px] min-[1920px]:leading-[1.5] origin-left"
+                      onMouseEnter={() => {
+                        if (activeDropdownLink.label === 'Resources') {
+                          prefetchResourceItem(item);
+                        }
+                      }}
+                      onFocus={() => {
+                        if (activeDropdownLink.label === 'Resources') {
+                          prefetchResourceItem(item);
+                        }
+                      }}
                       onClick={() => setActiveDropdown(null)}
                     >
                       {item}
@@ -503,6 +532,11 @@ export default function Navbar() {
                                   : `${link.href}/${toSlug(item)}`
                               }
                               className="block py-2 text-sm text-gray-600 hover:text-gray-900"
+                              onMouseEnter={() => {
+                                if (link.label === 'Resources') {
+                                  prefetchResourceItem(item);
+                                }
+                              }}
                               onClick={closeMobileMenu}
                             >
                               {item}

@@ -336,11 +336,11 @@ export default function DigitalServicePage({
                 ))}
               </ul>
             </div>
-            <div>
+            <div className="flex w-full items-center justify-center self-center lg:self-stretch">
               <img
                 src={heroImage}
                 alt=""
-                className="mx-auto block h-auto w-full max-w-[520px] object-contain"
+                className="mx-auto block h-auto w-full max-w-full object-contain object-center"
               />
             </div>
           </div>
@@ -513,7 +513,7 @@ export default function DigitalServicePage({
               <img
                 src={capabilitiesImage}
                 alt=""
-                className="mx-auto block h-auto w-full max-w-[480px] object-contain"
+                className="mx-auto block h-auto w-full max-w-[min(100%,560px)] rounded-[24px] object-contain sm:rounded-[28px] lg:max-w-[620px] lg:rounded-[32px] xl:max-w-[680px]"
               />
             </div>
             <div>

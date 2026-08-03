@@ -13,43 +13,45 @@ const clientLogos = [
   { name: "Qjumpers", src: qjumpersLogo },
 ];
 
+/** Repeat once so each track half stays wider than the viewport — no empty gaps in the loop. */
+const logoSequence = [...clientLogos, ...clientLogos];
 
-
-
-function LogoRow({ duplicate = false }: { duplicate?: boolean }) {
+function LogoGroup({ duplicate = false }: { duplicate?: boolean }) {
   return (
-    <div className="flex shrink-0 items-center" aria-hidden={duplicate || undefined}>
-      {clientLogos.map((client) => (
+    <div
+      className="client-strip__group flex shrink-0 items-center"
+      aria-hidden={duplicate || undefined}
+    >
+      {logoSequence.map((client, index) => (
         <div
-          key={`${duplicate ? "dup-" : ""}${client.name}`}
-          className="flex h-12 shrink-0 items-center justify-center px-8 sm:px-12 lg:px-14"
+          key={`${duplicate ? "dup" : "main"}-${client.name}-${index}`}
+          className="flex shrink-0 items-center"
         >
-          <img
-            src={client.src}
-            alt={duplicate ? "" : client.name}
-            className="max-h-10 w-auto object-contain"
-            draggable={false}
-          />
+          <div className="flex h-12 items-center justify-center px-8 sm:px-12 lg:px-14">
+            <img
+              src={client.src}
+              alt={duplicate ? "" : client.name}
+              className="max-h-10 w-auto object-contain"
+              draggable={false}
+            />
+          </div>
+          <span className="client-strip__sep" aria-hidden="true" />
         </div>
       ))}
     </div>
   );
 }
 
-
-
-
 export default function ClientStrip() {
   return (
-    <>
-      <section className="client-strip relative overflow-hidden bg-white py-6" aria-label="Our customers">
-        <div className="client-strip__track flex w-max items-center">
-          <LogoRow />
-          <LogoRow duplicate />
-        </div>
-      </section>
-
-
-    </>
+    <section
+      className="client-strip relative overflow-hidden bg-white py-6"
+      aria-label="Our customers"
+    >
+      <div className="client-strip__track flex w-max items-center">
+        <LogoGroup />
+        <LogoGroup duplicate />
+      </div>
+    </section>
   );
 }

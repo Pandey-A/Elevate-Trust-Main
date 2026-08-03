@@ -102,12 +102,6 @@ export default function Blog() {
             <p className="mb-6 text-center text-sm text-[#848b9b]">Loading blogs...</p>
           ) : null}
 
-          <p className="mb-6 text-center text-sm text-[#848b9b]">
-            Showing{" "}
-            <span className="font-semibold text-[#2365aa]">{blogs.length}</span>{" "}
-            {blogs.length === 1 ? "article" : "articles"}
-          </p>
-
           {!loading && blogs.length === 0 ? (
             <div className="rounded-[20px] border border-[#d7e6f3] bg-[#EFF7FC] px-6 py-14 text-center">
               <p className="m-0 text-sm text-[#687181]">

@@ -18,6 +18,73 @@ import { fetchAdminTestimonials, fetchPublicTestimonials } from "../lib/testimon
 import { fetchDemoTags, type DemoTag } from "../lib/tagsApi";
 import { INDUSTRY_TAGS } from "../data/adminDefaults";
 
+/** Keep list pages snappy when navigating away and back. */
+const PUBLIC_CACHE_TTL_MS = 60_000;
+
+type ResourceCache<T> = {
+  peek: () => T | null;
+  isFresh: () => boolean;
+  invalidate: () => void;
+  get: (force?: boolean) => Promise<T>;
+};
+
+function createResourceCache<T>(fetcher: () => Promise<T>): ResourceCache<T> {
+  let data: T | null = null;
+  let fetchedAt = 0;
+  let inflight: Promise<T> | null = null;
+
+  return {
+    peek: () => data,
+    isFresh: () => data !== null && Date.now() - fetchedAt < PUBLIC_CACHE_TTL_MS,
+    invalidate: () => {
+      fetchedAt = 0;
+    },
+    get: (force = false) => {
+      if (!force && data !== null && Date.now() - fetchedAt < PUBLIC_CACHE_TTL_MS) {
+        return Promise.resolve(data);
+      }
+      if (inflight) return inflight;
+
+      inflight = fetcher()
+        .then((result) => {
+          data = result;
+          fetchedAt = Date.now();
+          return result;
+        })
+        .finally(() => {
+          inflight = null;
+        });
+
+      return inflight;
+    },
+  };
+}
+
+const publicDemosCache = createResourceCache(fetchPublicDemos);
+const publicBlogsCache = createResourceCache(fetchPublicBlogs);
+const publicDemoTagsCache = createResourceCache(async () => {
+  const data = await fetchDemoTags();
+  const names = data.map((tag: DemoTag) => tag.name).filter(Boolean);
+  return names.length > 0 ? names : [...INDUSTRY_TAGS];
+});
+
+/** Warm cache before the user lands on Demo/Blog (e.g. nav hover). */
+export function prefetchPublicDemos() {
+  return publicDemosCache.get(false);
+}
+
+export function prefetchPublicBlogs() {
+  return publicBlogsCache.get(false);
+}
+
+export function prefetchDemoTags() {
+  return publicDemoTagsCache.get(false);
+}
+
+export function prefetchDemoPage() {
+  return Promise.all([prefetchPublicDemos(), prefetchDemoTags()]);
+}
+
 function useJobsSnapshot() {
   const [value, setValue] = useState<AdminJob[]>(() => getJobs());
 
@@ -36,33 +103,38 @@ function useJobsSnapshot() {
 }
 
 export function usePublicDemos() {
-  const [demos, setDemos] = useState<AdminDemo[]>([]);
-  const [loading, setLoading] = useState(true);
+  const initial = publicDemosCache.peek();
+  const [demos, setDemos] = useState<AdminDemo[]>(() => initial ?? []);
+  const [loading, setLoading] = useState(() => initial === null);
   const [error, setError] = useState("");
 
-  const refresh = useCallback(async () => {
+  const refresh = useCallback(async (force = false) => {
+    const hadCache = publicDemosCache.peek() !== null;
     try {
-      setLoading(true);
-      const data = await fetchPublicDemos();
+      if (!hadCache) setLoading(true);
+      const data = await publicDemosCache.get(force);
       setDemos(data);
       setError("");
     } catch (err) {
-      setError(getErrorMessage(err, "Unable to load demos."));
+      if (publicDemosCache.peek() === null) {
+        setError(getErrorMessage(err, "Unable to load demos."));
+      }
     } finally {
       setLoading(false);
     }
   }, []);
 
   useEffect(() => {
-    void refresh();
+    void refresh(false);
     const onChange = () => {
-      void refresh();
+      publicDemosCache.invalidate();
+      void refresh(true);
     };
     window.addEventListener(ADMIN_DATA_EVENT, onChange);
     return () => window.removeEventListener(ADMIN_DATA_EVENT, onChange);
   }, [refresh]);
 
-  return { demos, loading, error, refresh };
+  return { demos, loading, error, refresh: () => refresh(true) };
 }
 
 export function useAdminDemos() {
@@ -96,33 +168,38 @@ export function useAdminDemos() {
 }
 
 export function usePublicBlogs() {
-  const [blogs, setBlogs] = useState<BlogPost[]>([]);
-  const [loading, setLoading] = useState(true);
+  const initial = publicBlogsCache.peek();
+  const [blogs, setBlogs] = useState<BlogPost[]>(() => initial ?? []);
+  const [loading, setLoading] = useState(() => initial === null);
   const [error, setError] = useState("");
 
-  const refresh = useCallback(async () => {
+  const refresh = useCallback(async (force = false) => {
+    const hadCache = publicBlogsCache.peek() !== null;
     try {
-      setLoading(true);
-      const data = await fetchPublicBlogs();
+      if (!hadCache) setLoading(true);
+      const data = await publicBlogsCache.get(force);
       setBlogs(data);
       setError("");
     } catch (err) {
-      setError(getErrorMessage(err, "Unable to load blogs."));
+      if (publicBlogsCache.peek() === null) {
+        setError(getErrorMessage(err, "Unable to load blogs."));
+      }
     } finally {
       setLoading(false);
     }
   }, []);
 
   useEffect(() => {
-    void refresh();
+    void refresh(false);
     const onChange = () => {
-      void refresh();
+      publicBlogsCache.invalidate();
+      void refresh(true);
     };
     window.addEventListener(ADMIN_DATA_EVENT, onChange);
     return () => window.removeEventListener(ADMIN_DATA_EVENT, onChange);
   }, [refresh]);
 
-  return { blogs, loading, error, refresh };
+  return { blogs, loading, error, refresh: () => refresh(true) };
 }
 
 export function useAdminBlogs() {
@@ -216,35 +293,39 @@ export function useAdminTestimonials() {
 }
 
 export function useDemoTags() {
-  const [tags, setTags] = useState<string[]>([...INDUSTRY_TAGS]);
-  const [loading, setLoading] = useState(true);
+  const initial = publicDemoTagsCache.peek();
+  const [tags, setTags] = useState<string[]>(() => initial ?? [...INDUSTRY_TAGS]);
+  const [loading, setLoading] = useState(() => initial === null);
   const [error, setError] = useState("");
 
-  const refresh = useCallback(async () => {
+  const refresh = useCallback(async (force = false) => {
+    const hadCache = publicDemoTagsCache.peek() !== null;
     try {
-      setLoading(true);
-      const data = await fetchDemoTags();
-      const names = data.map((tag: DemoTag) => tag.name).filter(Boolean);
-      setTags(names.length > 0 ? names : [...INDUSTRY_TAGS]);
+      if (!hadCache) setLoading(true);
+      const data = await publicDemoTagsCache.get(force);
+      setTags(data);
       setError("");
     } catch (err) {
-      setTags([...INDUSTRY_TAGS]);
-      setError(getErrorMessage(err, "Unable to load tags."));
+      if (publicDemoTagsCache.peek() === null) {
+        setTags([...INDUSTRY_TAGS]);
+        setError(getErrorMessage(err, "Unable to load tags."));
+      }
     } finally {
       setLoading(false);
     }
   }, []);
 
   useEffect(() => {
-    void refresh();
+    void refresh(false);
     const onChange = () => {
-      void refresh();
+      publicDemoTagsCache.invalidate();
+      void refresh(true);
     };
     window.addEventListener(ADMIN_DATA_EVENT, onChange);
     return () => window.removeEventListener(ADMIN_DATA_EVENT, onChange);
   }, [refresh]);
 
-  return { tags, loading, error, refresh };
+  return { tags, loading, error, refresh: () => refresh(true) };
 }
 
 export function useAdminDemoTags() {
