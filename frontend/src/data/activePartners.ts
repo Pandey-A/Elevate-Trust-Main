@@ -5,7 +5,14 @@ import partnerMeta from "../assets/homepage-icons/partners/meta.png";
 import partnerMicrosoft from "../assets/homepage-icons/partners/microsoft.png";
 import partnerNvidia from "../assets/homepage-icons/partners/nvidia.png";
 
-export const activePartners = [
+export type ActivePartner = {
+  name: string;
+  logo: string;
+  href?: string;
+  tall?: boolean;
+};
+
+export const activePartners: ActivePartner[] = [
   {
     name: "AWS",
     logo: partnerAws,
@@ -38,5 +45,4 @@ export const activePartners = [
     tall: true,
     href: "https://www.nvidia.com/en-in/",
   },
-] as const;
-
+];

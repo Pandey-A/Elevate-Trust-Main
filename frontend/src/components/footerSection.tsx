@@ -248,10 +248,9 @@ export default function FooterSection() {
           <FooterColumn title="Partners">
             <div className="footer__partners">
               {activePartners.map((partner) => {
-                const slotClass =
-                  "tall" in partner && partner.tall
-                    ? "footer__partner-slot footer__partner-slot--tall"
-                    : "footer__partner-slot";
+                const slotClass = partner.tall
+                  ? "footer__partner-slot footer__partner-slot--tall"
+                  : "footer__partner-slot";
                 const logo = (
                   <img
                     src={partner.logo}
@@ -260,7 +259,7 @@ export default function FooterSection() {
                   />
                 );
 
-                return "href" in partner && partner.href ? (
+                return partner.href ? (
                   <a
                     key={partner.name}
                     href={partner.href}

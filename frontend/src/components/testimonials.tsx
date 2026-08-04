@@ -93,7 +93,7 @@ export default function Testimonials() {
                   src={partner.logo}
                   alt={partner.name}
                   className={
-                    "tall" in partner && partner.tall
+                    partner.tall
                       ? "h-12 w-auto max-w-[72px] min-w-0 shrink object-contain sm:h-14 sm:max-w-[88px] md:h-16 md:max-w-[100px] lg:h-[60px] lg:max-w-[96px] xl:h-16 xl:max-w-[110px] 2xl:h-20 2xl:max-w-[130px]"
                       : "h-10 w-auto max-w-[88px] min-w-0 shrink object-contain sm:h-12 sm:max-w-[110px] md:h-14 md:max-w-[130px] lg:h-12 lg:max-w-[120px] xl:h-14 xl:max-w-[140px] 2xl:h-16 2xl:max-w-[170px]"
                   }
