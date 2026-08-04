@@ -20,16 +20,28 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PREFERRED_PORT = Number(process.env.PORT || 5000);
 const MAX_PORT_TRIES = Number(process.env.PORT_TRIES || 20);
-const CORS_ORIGIN = process.env.CORS_ORIGIN || "http://localhost:5173";
+const allowedOrigins = (
+  process.env.CORS_ORIGIN ||
+  "http://localhost:5173,https://et-revamp-2-1.vercel.app"
+)
+  .split(",")
+  .map((origin) => origin.trim());
 
 app.use(
-  helmet({
-    crossOriginResourcePolicy: { policy: "cross-origin" },
+  cors({
+    origin(origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error("Not allowed by CORS"));
+    },
+    credentials: true,
   }),
 );
 app.use(
-  cors({
-    origin: CORS_ORIGIN,
+  helmet({
+    crossOriginResourcePolicy: { policy: "cross-origin" },
   }),
 );
 app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev"));
