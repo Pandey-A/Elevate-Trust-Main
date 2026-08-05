@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
 import FlyCTA from "../components/FlyCTA";
@@ -232,18 +232,18 @@ const stackTabs = [
   },
 ];
 
-const STAGE_AUTO_MS = 5000;
-const TOOL_AUTO_MS = 3500;
+const STAGE_AUTO_MS = 3000;
+const TOOL_AUTO_MS = 2500;
 
 export default function CloudOnPremiseDeployment() {
   const [activeStage, setActiveStage] = useState(0);
   const [panelReady, setPanelReady] = useState(true);
   const [stagePaused, setStagePaused] = useState(false);
-  const [reducedMotion, setReducedMotion] = useState(false);
   const [stackTab, setStackTab] = useState<"cloud" | "aiops">("cloud");
   const [activeTool, setActiveTool] = useState(0);
   const [stackReady, setStackReady] = useState(true);
   const [toolPaused, setToolPaused] = useState(false);
+  const tablistRef = useRef<HTMLDivElement>(null);
 
   const stage = pipelineStages[activeStage];
   const stageCount = pipelineStages.length;
@@ -259,12 +259,15 @@ export default function CloudOnPremiseDeployment() {
   }, []);
 
   useEffect(() => {
-    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const update = () => setReducedMotion(media.matches);
-    update();
-    media.addEventListener("change", update);
-    return () => media.removeEventListener("change", update);
-  }, []);
+    if (tablistRef.current) {
+      const activeBtn = tablistRef.current.querySelector('[aria-selected="true"]') as HTMLElement;
+      if (activeBtn) {
+        const container = tablistRef.current;
+        const scrollLeft = activeBtn.offsetLeft - (container.offsetWidth / 2) + (activeBtn.offsetWidth / 2);
+        container.scrollTo({ left: scrollLeft, behavior: "smooth" });
+      }
+    }
+  }, [activeStage]);
 
   const selectStage = (index: number) => {
     if (index === activeStage) return;
@@ -286,20 +289,20 @@ export default function CloudOnPremiseDeployment() {
   }, []);
 
   useEffect(() => {
-    if (stagePaused || reducedMotion) return;
+    if (stagePaused) return;
 
     const id = window.setInterval(advanceStage, STAGE_AUTO_MS);
     return () => window.clearInterval(id);
-  }, [activeStage, stagePaused, reducedMotion, advanceStage]);
+  }, [activeStage, stagePaused, advanceStage]);
 
   useEffect(() => {
-    if (toolPaused || reducedMotion) return;
+    if (toolPaused) return;
     const items = activeStack.items;
     const id = window.setInterval(() => {
       setActiveTool((current) => (current >= items.length - 1 ? 0 : current + 1));
     }, TOOL_AUTO_MS);
     return () => window.clearInterval(id);
-  }, [activeTool, stackTab, toolPaused, reducedMotion, activeStack.items]);
+  }, [activeTool, stackTab, toolPaused, activeStack.items]);
 
   const selectStackTab = (id: "cloud" | "aiops") => {
     if (id === stackTab) return;
@@ -437,37 +440,29 @@ export default function CloudOnPremiseDeployment() {
           {/* Clickable stage rail */}
           <div className="mx-auto mb-8 max-w-[1100px] sm:mb-10">
             <div className="relative px-1 pt-2">
-              <div className="absolute z-0 left-[6%] right-[6%] top-[22px] h-[3px] overflow-hidden rounded-full bg-[#d7e6f3] sm:top-[26px]">
-                {reducedMotion ? (
+              <div className="absolute z-0 left-[6%] right-[6%] top-[30px] h-[3px] overflow-hidden rounded-full bg-[#d7e6f3] sm:top-[34px]">
+                <div
+                  className="absolute inset-y-0 left-0 rounded-full bg-[#2365aa]"
+                  style={{ width: `${completedPercent}%` }}
+                />
+                {activeStage < stageCount - 1 && (
                   <div
-                    className="h-full rounded-full bg-[#2365aa] transition-all duration-500 ease-out"
-                    style={{ width: `${staticProgress}%` }}
+                    key={segmentAnimKey}
+                    className={`pipeline-stage-advance-forced absolute inset-y-0 origin-left rounded-full bg-[#2365aa] ${
+                      stagePaused ? "pipeline-stage-advance--paused" : ""
+                    }`}
+                    style={{
+                      left: `${completedPercent}%`,
+                      width: `${segmentPercent}%`,
+                      ["--stage-duration" as string]: `${STAGE_AUTO_MS}ms`,
+                    }}
                   />
-                ) : (
-                  <>
-                    <div
-                      className="absolute inset-y-0 left-0 rounded-full bg-[#2365aa]"
-                      style={{ width: `${completedPercent}%` }}
-                    />
-                    {activeStage < stageCount - 1 && (
-                      <div
-                        key={segmentAnimKey}
-                        className={`pipeline-stage-advance absolute inset-y-0 origin-left rounded-full bg-[#2365aa] ${
-                          stagePaused ? "pipeline-stage-advance--paused" : ""
-                        }`}
-                        style={{
-                          left: `${completedPercent}%`,
-                          width: `${segmentPercent}%`,
-                          ["--stage-duration" as string]: `${STAGE_AUTO_MS}ms`,
-                        }}
-                      />
-                    )}
-                  </>
                 )}
               </div>
 
               <div
-                className="relative z-20 flex justify-between gap-1 overflow-x-auto pb-1"
+                ref={tablistRef}
+                className="relative z-20 flex justify-between gap-1 overflow-x-auto pb-4 pt-2 px-2 scroll-smooth scrollbar-none"
                 role="tablist"
                 aria-label="Pipeline stages"
               >
@@ -495,9 +490,9 @@ export default function CloudOnPremiseDeployment() {
                               : "bg-white text-[#2365aa] ring-2 ring-[#c5d8eb] group-hover:ring-[#2365aa]"
                         }`}
                       >
-                        {isActive && !reducedMotion && (
+                        {isActive && (
                           <span
-                            className="pipeline-step-pulse pointer-events-none absolute inset-0 rounded-full"
+                            className="pipeline-step-pulse-forced pointer-events-none absolute inset-0 rounded-full"
                             aria-hidden
                           />
                         )}
@@ -662,11 +657,11 @@ export default function CloudOnPremiseDeployment() {
                 </div>
               </div>
 
-              {/* Detail panel — fills remaining height, content fades on switch */}
-              <div className="relative bg-white">
+              {/* Detail panel — expands to fit content, content fades on switch */}
+              <div className="flex flex-col justify-center bg-white">
                 <div
                   key={`${stackTab}-${activeTool}`}
-                  className="absolute inset-0 flex flex-col justify-center overflow-y-auto p-6 transition-opacity duration-300 sm:p-8 lg:p-10"
+                  className="flex flex-col justify-center p-6 transition-opacity duration-300 sm:p-8 lg:p-10"
                   style={{ opacity: stackReady ? 1 : 0 }}
                 >
                   <p className="mb-2 text-sm font-semibold uppercase tracking-[0.14em] text-[#2365aa]">

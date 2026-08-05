@@ -32,7 +32,7 @@ const SOCIAL_LINKS = [
 
 const SERVICES_PATH = '/Services';
 const SERVICE_AI_ML_PATH = '/Services/ai-ml';
-const SERVICE_GENERATIVE_AI_PATH = '/Services/generative-ai';
+const SERVICE_AGENTIC_AI_PATH = '/Services/agentic-ai';
 const SERVICE_AUDIO_VIDEO_PATH = '/Services/audio-video-analytics';
 const SERVICE_CLOUD_ON_PREMISE_PATH = '/Services/cloud-on-premise-deployment';
 const TECHNOLOGIES_PATH = '/technologies';
@@ -43,7 +43,7 @@ const CASE_STUDIES_PATH = '/case-studies';
 
 const serviceItemPaths: Record<string, string> = {
   'AI/ML Solution': SERVICE_AI_ML_PATH,
-  'Agentic AI': SERVICE_GENERATIVE_AI_PATH,
+  'Agentic AI': SERVICE_AGENTIC_AI_PATH,
   'Audio/Video Analytics': SERVICE_AUDIO_VIDEO_PATH,
   'Cloud/On-Premise Deployment': SERVICE_CLOUD_ON_PREMISE_PATH,
   ...digitalServicePaths,

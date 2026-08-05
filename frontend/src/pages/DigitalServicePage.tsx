@@ -347,32 +347,32 @@ export default function DigitalServicePage({
         </div>
       </section>
 
-      <section className="w-full bg-[#EFF7FC]">
-        <div className="mx-auto w-full max-w-[1692px] px-5 py-[clamp(40px,5vw,72px)] sm:px-8 lg:px-10 xl:px-12">
-          <header className="mx-auto mb-[clamp(28px,3.5vw,48px)] max-w-[52rem] text-center">
-            <h2 className="m-0 text-[clamp(26px,3.5vw,48px)] font-bold leading-[1.15] text-[#1F2432]">
+      <section className="w-full bg-white">
+        <div className="mx-auto w-full max-w-[1692px] px-5 pb-[clamp(48px,6vw,80px)] pt-0 sm:px-8 lg:px-10 xl:px-12">
+          <header className="mx-auto mb-[clamp(32px,4vw,56px)] max-w-[52rem] text-center">
+            <h2 className="m-0 text-[clamp(28px,4vw,56px)] font-bold leading-[1.15] text-[#1F2432]">
               {sectionTitle}
             </h2>
-            <p className="mx-auto mt-4 max-w-[42rem] text-[clamp(13px,1.2vw,16px)] leading-7 text-[#687181] 2xl:text-[18px] 2xl:leading-8">
+            <p className="mx-auto mt-5 max-w-[48rem] text-[clamp(13px,1.2vw,16px)] leading-7 text-[#9CA3AF] sm:mt-6 2xl:text-[18px] 2xl:leading-8">
               {sectionSubtitle}
             </p>
           </header>
 
-          <div className="grid grid-cols-1 items-stretch gap-8 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-3 lg:gap-8">
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-10 xl:gap-x-10">
             {offerings.map((item) => (
-              <article key={item.title} className="flex h-full min-w-0 flex-col">
-                <div className="mb-5 flex aspect-[5/4] w-full items-center justify-center overflow-hidden bg-[#EFF7FC] sm:mb-6">
+              <article key={item.title} className="flex min-w-0 flex-col">
+                <div className="mb-5 flex aspect-[1.1] w-full items-center justify-center rounded-[24px] bg-[#e5ecf3] p-8 sm:mb-6">
                   <img
                     src={item.icon}
                     alt=""
+                    className="h-full w-full object-contain drop-shadow-sm"
                     aria-hidden
-                    className="h-full w-full object-contain"
                   />
                 </div>
                 <h3 className="m-0 text-[clamp(16px,1.3vw,20px)] font-bold leading-snug text-[#1F2432] 2xl:text-[22px]">
                   {item.title}
                 </h3>
-                <p className="mt-3 flex-1 text-[clamp(12px,1.1vw,14px)] leading-6 text-[#9CA3AF] sm:mt-4 2xl:text-[18px] 2xl:leading-8">
+                <p className="mt-3 text-[clamp(12px,1.1vw,14px)] leading-6 text-[#9CA3AF] sm:mt-4 2xl:text-[18px] 2xl:leading-8">
                   {item.description}
                 </p>
               </article>

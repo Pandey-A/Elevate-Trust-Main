@@ -201,7 +201,10 @@ export default function DigitalWorkspace() {
 
   return (
     <div className="font-['Lay_Grotesk_Trial',sans-serif] bg-white text-[#272935]">
-      <section className="service-page-hero" aria-label="Digital Workspace">
+      <section 
+        className="service-page-hero !h-[clamp(320px,35vw,400px)] 2xl:!h-[500px]" 
+        aria-label="Digital Workspace hero"
+      >
         <img
           src={worldMapBackground}
           alt=""

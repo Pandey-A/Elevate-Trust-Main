@@ -21,8 +21,8 @@ type FooterLinkItem = {
 const services: FooterLinkItem[] = [
   { label: "Overview", href: "/Services/ai-ml" },
   { label: "AI/ML Solution", href: "/Services/ai-ml" },
-  { label: "Agentic AI", href: "/Services/generative-ai" },
-  { label: "Video Analytics", href: "/Services/audio-video-analytics" },
+  { label: "Agentic AI", href: "/Services/agentic-ai" },
+  { label: "Audio/Video Analytics", href: "/Services/audio-video-analytics" },
   { label: "Cloud Deployment", href: "/Services/cloud-on-premise-deployment" },
 ];
 

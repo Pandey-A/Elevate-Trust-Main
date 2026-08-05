@@ -284,6 +284,13 @@ body {
   align-items: center;
 }
 
+.industry-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: client-strip-scroll 40s linear infinite;
+  will-change: transform;
+}
+
 .client-strip__sep {
   display: block;
   width: 1px;
@@ -446,6 +453,16 @@ body {
 }
 
 .pipeline-step-pulse {
+  animation: pipeline-step-pulse 2.2s ease-out infinite;
+  background: transparent;
+}
+
+.pipeline-stage-advance-forced {
+  transform: scaleX(0);
+  animation: pipeline-segment-fill var(--stage-duration, 5000ms) linear forwards;
+}
+
+.pipeline-step-pulse-forced {
   animation: pipeline-step-pulse 2.2s ease-out infinite;
   background: transparent;
 }
