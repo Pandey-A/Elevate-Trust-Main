@@ -3,7 +3,7 @@ import Navbar from './components/navbar';
 import ScrollToTop from './components/ScrollToTop';
 import Home from './pages/home';
 import ServiceDetails from './pages/ServiceDetails';
-import GenerativeAI from './pages/GenerativeAI';
+import AgenticAI from './pages/AgenticAI';
 import AudioVideoAnalytics from './pages/AudioVideoAnalytics';
 import CloudOnPremiseDeployment from './pages/CloudOnPremiseDeployment';
 import AboutUs from './pages/AboutUs';
@@ -58,7 +58,7 @@ function AppShell() {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/Services/ai-ml" element={<ServiceDetails />} />
-        <Route path="/Services/generative-ai" element={<GenerativeAI />} />
+        <Route path="/Services/agentic-ai" element={<AgenticAI />} />
         <Route path="/Services/audio-video-analytics" element={<AudioVideoAnalytics />} />
         <Route path="/Services/cloud-on-premise-deployment" element={<CloudOnPremiseDeployment />} />
         <Route path="/Services/ui-ux-design" element={<UiUxDesign />} />

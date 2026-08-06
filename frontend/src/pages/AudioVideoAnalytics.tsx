@@ -215,7 +215,7 @@ export default function AudioVideoAnalytics() {
                 <img
                   src={item.icon}
                   alt=""
-                  className="mb-5 h-auto w-full max-h-[210px] rounded-[20px] object-cover object-center sm:mb-6 sm:max-h-[220px] lg:max-h-[230px]"
+                  className="mb-5 h-auto w-full max-h-[260px] rounded-[20px] object-cover object-center sm:mb-6 sm:max-h-[280px] lg:max-h-[300px]"
                   aria-hidden
                 />
                 <h3 className="text-[clamp(16px,1.3vw,20px)] font-bold leading-snug text-[#1F2432] 2xl:text-[22px]">
@@ -255,42 +255,44 @@ export default function AudioVideoAnalytics() {
             </div>
           </div>
 
-          <div className="grid auto-rows-fr grid-cols-1 items-stretch gap-5 sm:grid-cols-2 sm:gap-6 xl:grid-cols-3">
-            {industrySolutions.map((solution, index) => (
-              <article
-                key={solution.title}
-                className="flex h-full min-h-0 flex-col overflow-hidden rounded-[20px] border border-[#e0e9f1] bg-white shadow-[0_14px_40px_-28px_rgba(17,61,119,0.4)]"
-              >
-                <header className="relative flex min-h-[168px] shrink-0 flex-col overflow-hidden bg-[#113d77] px-5 py-5 text-white sm:min-h-[180px] sm:px-6 sm:py-6">
-                  <span className="absolute -bottom-10 -right-8 h-28 w-28 rounded-full border-[20px] border-white/[0.06]" />
-                  <span className="relative mb-4 inline-flex h-9 w-9 items-center justify-center rounded-full bg-white text-xs font-bold text-[#113d77]">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
-                  <h3 className="relative m-0 min-h-[2.6em] text-[clamp(16px,1.3vw,20px)] font-bold leading-snug 2xl:text-[22px]">
-                    {solution.title}
-                  </h3>
-                  <p className="relative mt-auto pt-2 text-xs font-medium uppercase tracking-[0.08em] text-white/60 2xl:text-sm">
-                    Applications
-                  </p>
-                </header>
-                <ul className="m-0 flex flex-1 list-none flex-col gap-3 p-5 sm:p-6">
-                  {solution.applications.map((app) => (
-                    <li
-                      key={app}
-                      className="flex items-start gap-2.5 text-[clamp(12px,1.05vw,14px)] leading-[1.5] text-[#687181] 2xl:text-[17px] 2xl:leading-7"
-                    >
-                      <img
-                        src={elevateIcon}
-                        alt=""
-                        aria-hidden
-                        className="mt-[6px] h-2 w-2 shrink-0 object-contain"
-                      />
-                      <span>{app}</span>
-                    </li>
-                  ))}
-                </ul>
-              </article>
-            ))}
+          <div className="relative w-full overflow-hidden py-4">
+            <div className="industry-marquee-track gap-5 hover:[animation-play-state:paused] sm:gap-6">
+              {[...industrySolutions, ...industrySolutions].map((solution, index) => (
+                <article
+                  key={`${solution.title}-${index}`}
+                  className="flex h-full w-[320px] shrink-0 flex-col overflow-hidden rounded-[20px] border border-[#e0e9f1] bg-white shadow-[0_14px_40px_-28px_rgba(17,61,119,0.4)] sm:w-[380px] xl:w-[420px]"
+                >
+                  <header className="relative flex min-h-[168px] shrink-0 flex-col overflow-hidden bg-[#113d77] px-5 py-5 text-white sm:min-h-[180px] sm:px-6 sm:py-6">
+                    <span className="absolute -bottom-10 -right-8 h-28 w-28 rounded-full border-[20px] border-white/[0.06]" />
+                    <span className="relative mb-4 inline-flex h-9 w-9 items-center justify-center rounded-full bg-white text-xs font-bold text-[#113d77]">
+                      {String((index % industrySolutions.length) + 1).padStart(2, "0")}
+                    </span>
+                    <h3 className="relative m-0 min-h-[2.6em] text-[clamp(16px,1.3vw,20px)] font-bold leading-snug 2xl:text-[22px]">
+                      {solution.title}
+                    </h3>
+                    <p className="relative mt-auto pt-2 text-xs font-medium uppercase tracking-[0.08em] text-white/60 2xl:text-sm">
+                      Applications
+                    </p>
+                  </header>
+                  <ul className="m-0 flex flex-1 list-none flex-col gap-3 p-5 sm:p-6">
+                    {solution.applications.map((app) => (
+                      <li
+                        key={app}
+                        className="flex items-start gap-2.5 text-[clamp(12px,1.05vw,14px)] leading-[1.5] text-[#687181] 2xl:text-[17px] 2xl:leading-7"
+                      >
+                        <img
+                          src={elevateIcon}
+                          alt=""
+                          aria-hidden
+                          className="mt-[6px] h-2 w-2 shrink-0 object-contain"
+                        />
+                        <span>{app}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </article>
+              ))}
+            </div>
           </div>
         </div>
       </section>
