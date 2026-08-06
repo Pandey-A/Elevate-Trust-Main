@@ -249,7 +249,7 @@ export default function CloudOnPremiseDeployment() {
   const stageCount = pipelineStages.length;
   const segmentPercent = 100 / (stageCount - 1);
   const completedPercent = (activeStage / (stageCount - 1)) * 100;
-  const staticProgress = ((activeStage + 1) / stageCount) * 100;
+  // const staticProgress = ((activeStage + 1) / stageCount) * 100;
   const segmentAnimKey = `${activeStage}-${stagePaused ? "paused" : "running"}`;
   const activeStack = stackTabs.find((tab) => tab.id === stackTab) ?? stackTabs[0];
   const selectedTool = activeStack.items[activeTool] ?? activeStack.items[0];
