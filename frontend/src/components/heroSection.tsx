@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import "./heroSection.css";
-import elevateMainLogo from "../assets/homepage-icons/elevatestarting-logo.svg";
 import heroBg from "../assets/homepage-icons/Hero-bg.png";
 import futureIcon from "../assets/homepage-icons/future.png";
 import editModeIcon from "../assets/homepage-icons/editmode.png";
@@ -35,10 +34,6 @@ export default function HeroSection() {
           <span className="hero-globe__pin hero-globe__pin--2" />
           <span className="hero-globe__pin hero-globe__pin--3" />
         </div>
-      </div>
-
-      <div className="hero-top-logo">
-        <img src={elevateMainLogo} alt="Elevate Trust" />
       </div>
 
       <div className="hero-inner">

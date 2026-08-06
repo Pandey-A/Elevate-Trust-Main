@@ -20,6 +20,31 @@ export default function Testimonials() {
   const blogPosts = blogs.slice(0, 3);
   return (
     <>
+      <WhoWeAre />
+
+      <section className="bg-white px-4 py-14 sm:px-6 sm:py-16 lg:px-10 lg:py-20 xl:px-12 2xl:px-16">
+        <div className="mx-auto max-w-site w-full">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold text-[#272935] sm:text-4xl lg:text-[52px] xl:text-[58px] 2xl:text-[64px] min-[1920px]:text-[68px]">Our Active Partners</h2>
+
+            <div className="mt-10 flex w-full items-center justify-center gap-3 overflow-hidden sm:gap-4 md:gap-5 lg:mt-12 lg:gap-5 xl:gap-6 2xl:gap-8">
+              {activePartners.map((partner) => (
+                <img
+                  key={partner.name}
+                  src={partner.logo}
+                  alt={partner.name}
+                  className={
+                    partner.tall
+                      ? "h-12 w-auto max-w-[72px] min-w-0 shrink object-contain sm:h-14 sm:max-w-[88px] md:h-16 md:max-w-[100px] lg:h-[60px] lg:max-w-[96px] xl:h-16 xl:max-w-[110px] 2xl:h-20 2xl:max-w-[130px]"
+                      : "h-10 w-auto max-w-[88px] min-w-0 shrink object-contain sm:h-12 sm:max-w-[110px] md:h-14 md:max-w-[130px] lg:h-12 lg:max-w-[120px] xl:h-14 xl:max-w-[140px] 2xl:h-16 2xl:max-w-[170px]"
+                  }
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="bg-white px-4 py-14 sm:px-6 sm:py-16 lg:px-10 lg:py-20 xl:px-12 2xl:px-16">
         <div className="mx-auto max-w-site w-full">
           <div className="text-center">
@@ -75,31 +100,6 @@ export default function Testimonials() {
                 </h3>
               </article>
             ))}
-          </div>
-        </div>
-      </section>
-
-      <WhoWeAre />
-
-      <section className="bg-white px-4 py-14 sm:px-6 sm:py-16 lg:px-10 lg:py-20 xl:px-12 2xl:px-16">
-        <div className="mx-auto max-w-site w-full">
-          <div className="text-center">
-            <h2 className="text-3xl font-bold text-[#272935] sm:text-4xl lg:text-[52px] xl:text-[58px] 2xl:text-[64px] min-[1920px]:text-[68px]">Our Active Partners</h2>
-
-            <div className="mt-10 flex w-full items-center justify-center gap-3 overflow-hidden sm:gap-4 md:gap-5 lg:mt-12 lg:gap-5 xl:gap-6 2xl:gap-8">
-              {activePartners.map((partner) => (
-                <img
-                  key={partner.name}
-                  src={partner.logo}
-                  alt={partner.name}
-                  className={
-                    partner.tall
-                      ? "h-12 w-auto max-w-[72px] min-w-0 shrink object-contain sm:h-14 sm:max-w-[88px] md:h-16 md:max-w-[100px] lg:h-[60px] lg:max-w-[96px] xl:h-16 xl:max-w-[110px] 2xl:h-20 2xl:max-w-[130px]"
-                      : "h-10 w-auto max-w-[88px] min-w-0 shrink object-contain sm:h-12 sm:max-w-[110px] md:h-14 md:max-w-[130px] lg:h-12 lg:max-w-[120px] xl:h-14 xl:max-w-[140px] 2xl:h-16 2xl:max-w-[170px]"
-                  }
-                />
-              ))}
-            </div>
           </div>
         </div>
       </section>

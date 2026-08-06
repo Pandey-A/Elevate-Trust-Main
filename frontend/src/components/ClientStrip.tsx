@@ -27,11 +27,11 @@ function LogoGroup({ duplicate = false }: { duplicate?: boolean }) {
           key={`${duplicate ? "dup" : "main"}-${client.name}-${index}`}
           className="flex shrink-0 items-center"
         >
-          <div className="flex h-12 items-center justify-center px-8 sm:px-12 lg:px-14">
+          <div className="flex h-7 items-center justify-center px-5 sm:h-8 sm:px-8 md:h-9 md:px-10 lg:h-10 lg:px-12">
             <img
               src={client.src}
               alt={duplicate ? "" : client.name}
-              className="max-h-10 w-auto object-contain"
+              className="max-h-5 w-auto object-contain sm:max-h-6 md:max-h-7 lg:max-h-8"
               draggable={false}
             />
           </div>
@@ -45,7 +45,7 @@ function LogoGroup({ duplicate = false }: { duplicate?: boolean }) {
 export default function ClientStrip() {
   return (
     <section
-      className="client-strip relative overflow-hidden bg-white py-6"
+      className="client-strip relative overflow-hidden bg-white py-2.5 sm:py-3.5 md:py-4 lg:py-5"
       aria-label="Our customers"
     >
       <div className="client-strip__track flex w-max items-center">
