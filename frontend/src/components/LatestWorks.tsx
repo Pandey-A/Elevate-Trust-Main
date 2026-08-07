@@ -205,7 +205,7 @@ export default function LatestWorks() {
                 <div className="latest-works__body-wrapper">
                   <div className="latest-works__body">
                     <div className="latest-works__grid">
-                      <div className="latest-works__col-left-top">
+                      <div className="latest-works__col-left">
                         <div className="latest-works__card latest-works__card--white">
                           <h4 className="latest-works__card-label">
                             Business Challenge
@@ -214,9 +214,33 @@ export default function LatestWorks() {
                             {work.businessChallenge}
                           </p>
                         </div>
+
+                        <div className="latest-works__card latest-works__card--blue-glass">
+                          <h4 className="latest-works__card-label">
+                            Solution Overview
+                          </h4>
+                          {work.solutionBullets ? (
+                            <>
+                              <p className="latest-works__card-desc">
+                                {work.solutionOverview}
+                              </p>
+                              <ul className="latest-works__solution-list">
+                                {work.solutionBullets.map((bullet) => (
+                                  <li key={bullet} className="latest-works__card-desc">
+                                    {bullet}
+                                  </li>
+                                ))}
+                              </ul>
+                            </>
+                          ) : (
+                            <p className="latest-works__card-desc">
+                              {work.solutionOverview}
+                            </p>
+                          )}
+                        </div>
                       </div>
 
-                      <div className="latest-works__col-right-top">
+                      <div className="latest-works__col-right">
                         <div className="latest-works__tech-section">
                           <h4 className="latest-works__tech-heading">
                             Technology/Tools Used
@@ -244,9 +268,7 @@ export default function LatestWorks() {
                             </ul>
                           </div>
                         )}
-                      </div>
 
-                      <div className="latest-works__col-left-bottom">
                         <div className="latest-works__illustration-container">
                           <img
                             src={work.image}
@@ -256,35 +278,7 @@ export default function LatestWorks() {
                             draggable={false}
                           />
                         </div>
-                      </div>
 
-                      <div className="latest-works__col-solution">
-                        <div className="latest-works__card latest-works__card--blue-glass">
-                          <h4 className="latest-works__card-label">
-                            Solution Overview
-                          </h4>
-                          {work.solutionBullets ? (
-                            <>
-                              <p className="latest-works__card-desc">
-                                {work.solutionOverview}
-                              </p>
-                              <ul className="latest-works__solution-list">
-                                {work.solutionBullets.map((bullet) => (
-                                  <li key={bullet} className="latest-works__card-desc">
-                                    {bullet}
-                                  </li>
-                                ))}
-                              </ul>
-                            </>
-                          ) : (
-                            <p className="latest-works__card-desc">
-                              {work.solutionOverview}
-                            </p>
-                          )}
-                        </div>
-                      </div>
-
-                      <div className="latest-works__col-results">
                         <div className="latest-works__card latest-works__card--blue-glass">
                           <h4 className="latest-works__card-label">
                             Business Outcome

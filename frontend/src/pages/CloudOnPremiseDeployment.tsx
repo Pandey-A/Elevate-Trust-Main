@@ -382,21 +382,21 @@ export default function CloudOnPremiseDeployment() {
             </div>
 
             <div>
-              <p className="mb-2 text-sm font-semibold uppercase tracking-[0.16em] text-[#2365aa] 2xl:text-base">
-                Core Offerings
-              </p>
-              <h2 className="m-0 text-[clamp(26px,3.5vw,48px)] font-bold leading-[1.15] text-[#1F2432]">
-                AI/ML Ops
-              </h2>
-              <p className="mt-5 max-w-[46rem] text-[clamp(13px,1.2vw,16px)] leading-7 text-[#848b9b] sm:mt-6 2xl:text-[18px] 2xl:leading-8">
-                We specialize in implementing AI/ML operations practices that
-                deliver scalable and automated solutions, emphasizing efficient
-                model development, continuous integration, and seamless deployment
-                pipelines. Our use of Docker for containerization and Kubernetes
-                for orchestration ensures that machine learning models are easily
-                deployable and can scale effectively across different environments.
-              </p>
-              <ul className="mt-6 flex list-none flex-col gap-3.5 p-0 sm:mt-8">
+                <p className="mb-2 text-sm font-semibold uppercase tracking-[0.16em] text-[#2365aa] 2xl:text-base">
+                  Core Offerings
+                </p>
+                <h2 className="m-0 text-[clamp(26px,3.5vw,48px)] font-bold leading-[1.15] text-[#1F2432]">
+                  AI/ML Ops
+                </h2>
+                <p className="mt-5 max-w-[46rem] text-[clamp(13px,1.2vw,16px)] leading-7 text-[#848b9b] sm:mt-6 2xl:text-[18px] 2xl:leading-8">
+                  We specialize in implementing AI/ML operations practices that
+                  deliver scalable and automated solutions, emphasizing efficient
+                  model development, continuous integration, and seamless deployment
+                  pipelines. Our use of Docker for containerization and Kubernetes
+                  for orchestration ensures that machine learning models are easily
+                  deployable and can scale effectively across different environments.
+                </p>
+                <ul className="mt-6 flex list-none flex-col gap-3.5 p-0 sm:mt-8">
                 {mlOpsPoints.map((point) => (
                   <li
                     key={point}

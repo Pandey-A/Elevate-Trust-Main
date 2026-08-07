@@ -127,27 +127,29 @@ export default function CaseStudies() {
 
   return (
     <div className="cs-page">
-      <section className="cs-hero">
+      <section className="service-page-hero" aria-label="Case Studies">
         <img
           src={worldMapBackground}
           alt=""
-          className="cs-hero__bg"
+          className="service-page-hero__map"
           aria-hidden="true"
         />
-        <div className="cs-hero__content">
-          <p className="cs-hero__eyebrow">Resources</p>
-          <h1 className="cs-hero__title">
+        <div className="service-page-hero__content">
+          <span className="mb-3 text-sm font-semibold uppercase tracking-[0.16em] text-[#8eb4df]">
+            Resources
+          </span>
+          <h1 className="m-0 font-bold leading-[1.29] tracking-tight text-white">
             Case Studies That Show Real AI Impact
           </h1>
-          <p className="cs-hero__subtitle">
+          <p className="m-0 mt-4 max-w-[783px] font-['Ubuntu',sans-serif] font-normal leading-6 text-[#a1b1cb]">
             Explore how ElevateTrust.AI partners with enterprises to solve complex
             problems, from agentic automation and predictive maintenance to video
             analytics and document intelligence, with measurable business outcomes.
           </p>
-          <Link to="/contact" className="cs-hero__btn">
-            <span>Contact Us</span>
-            <span className="cs-hero__btn-circle">
-              <ArrowUpRight size={16} strokeWidth={2.5} />
+          <Link to="/contact">
+            Contact Us
+            <span>
+              <ArrowUpRight size={18} strokeWidth={2.5} />
             </span>
           </Link>
         </div>

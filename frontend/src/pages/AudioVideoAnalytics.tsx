@@ -198,9 +198,9 @@ export default function AudioVideoAnalytics() {
         <div className="mx-auto w-full max-w-[1692px] px-5 pb-[clamp(48px,6vw,80px)] pt-0 sm:px-8 lg:px-10 xl:px-12">
           <header className="mx-auto mb-[clamp(32px,4vw,56px)] max-w-[52rem] text-center">
             <h2 className="m-0 text-[clamp(28px,4vw,56px)] font-bold leading-[1.15] text-[#1F2432]">
-              Video &amp; Audio Analytics
+              Core Offerings
               <br />
-              Core Offering
+              Video &amp; Audio Analytics
             </h2>
             <p className="mx-auto mt-5 max-w-[48rem] text-[clamp(13px,1.2vw,16px)] leading-7 text-[#9CA3AF] sm:mt-6 2xl:text-[18px] 2xl:leading-8">
               Production-ready capabilities that turn existing cameras into
@@ -256,11 +256,11 @@ export default function AudioVideoAnalytics() {
           </div>
 
           <div className="relative w-full overflow-hidden py-4">
-            <div className="industry-marquee-track gap-5 hover:[animation-play-state:paused] sm:gap-6">
+            <div className="industry-marquee-track items-stretch gap-5 hover:[animation-play-state:paused] sm:gap-6">
               {[...industrySolutions, ...industrySolutions].map((solution, index) => (
                 <article
                   key={`${solution.title}-${index}`}
-                  className="flex h-full w-[320px] shrink-0 flex-col overflow-hidden rounded-[20px] border border-[#e0e9f1] bg-white shadow-[0_14px_40px_-28px_rgba(17,61,119,0.4)] sm:w-[380px] xl:w-[420px]"
+                  className="flex w-[320px] shrink-0 flex-col overflow-hidden rounded-[20px] border border-[#e0e9f1] bg-white shadow-[0_14px_40px_-28px_rgba(17,61,119,0.4)] sm:w-[380px] xl:w-[420px]"
                 >
                   <header className="relative flex min-h-[168px] shrink-0 flex-col overflow-hidden bg-[#113d77] px-5 py-5 text-white sm:min-h-[180px] sm:px-6 sm:py-6">
                     <span className="absolute -bottom-10 -right-8 h-28 w-28 rounded-full border-[20px] border-white/[0.06]" />

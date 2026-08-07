@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, ChevronLeft, ChevronRight } from "lucide-react";
 import FlyCTA from "../components/FlyCTA";
 import worldMapBackground from "../assets/homepage-icons/Group(3).png";
 import dataAgentIcon from "../assets/OurServices/GenAI-Data.png";
@@ -197,6 +197,14 @@ export default function AgenticAI() {
     return () => window.clearInterval(id);
   }, [isPaused]);
 
+  const handlePrev = () => {
+    setActiveStory((prev) => (prev === 0 ? successStories.length - 1 : prev - 1));
+  };
+
+  const handleNext = () => {
+    setActiveStory((prev) => (prev + 1) % successStories.length);
+  };
+
   return (
     <div className="bg-white font-['Lay_Grotesk_Trial',sans-serif] text-[#272935]">
       {/* Hero */}
@@ -254,9 +262,9 @@ export default function AgenticAI() {
         <div className="mx-auto w-full max-w-[1692px] px-5 pb-[clamp(48px,6vw,80px)] pt-0 sm:px-8 lg:px-10 xl:px-12">
           <header className="mx-auto mb-[clamp(32px,4vw,56px)] max-w-[52rem] text-center">
             <h2 className="m-0 text-[clamp(28px,4vw,56px)] font-bold leading-[1.15] text-[#1F2432]">
-              Agentic AI
-              <br />
               Core Offerings
+              <br />
+              Agentic AI
             </h2>
             <p className="mx-auto mt-5 max-w-[48rem] text-[clamp(13px,1.2vw,16px)] leading-7 text-[#9CA3AF] sm:mt-6 2xl:text-[18px] 2xl:leading-8">
               Purpose-built agents that plan, use tools, and execute multi-step
@@ -495,70 +503,120 @@ export default function AgenticAI() {
               ))}
             </div>
 
-            {/* Slider Dots */}
-            <div className="mt-8 flex justify-center gap-2">
-              {successStories.map((_, idx) => (
-                <button
-                  key={idx}
-                  type="button"
-                  aria-label={`Go to slide ${idx + 1}`}
-                  onClick={() => setActiveStory(idx)}
-                  className={`h-2.5 rounded-full transition-all duration-300 ${
-                    activeStory === idx ? "w-8 bg-[#2365aa]" : "w-2.5 bg-[#c5d8eb] hover:bg-[#a1b1cb]"
-                  }`}
-                />
-              ))}
+            {/* Slider Controls */}
+            <div className="mt-8 flex items-center justify-center gap-6">
+              <button
+                type="button"
+                onClick={handlePrev}
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-[#c5d8eb] bg-white text-[#2365aa] transition-colors hover:bg-[#2365aa] hover:text-white"
+                aria-label="Previous story"
+              >
+                <ChevronLeft size={20} />
+              </button>
+
+              <div className="flex justify-center gap-2">
+                {successStories.map((_, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    aria-label={`Go to slide ${idx + 1}`}
+                    onClick={() => setActiveStory(idx)}
+                    className={`h-2.5 rounded-full transition-all duration-300 ${
+                      activeStory === idx ? "w-8 bg-[#2365aa]" : "w-2.5 bg-[#c5d8eb] hover:bg-[#a1b1cb]"
+                    }`}
+                  />
+                ))}
+              </div>
+
+              <button
+                type="button"
+                onClick={handleNext}
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-[#c5d8eb] bg-white text-[#2365aa] transition-colors hover:bg-[#2365aa] hover:text-white"
+                aria-label="Next story"
+              >
+                <ChevronRight size={20} />
+              </button>
             </div>
           </div>
         </div>
       </section>
 
       {/* Featured Case Study */}
-      <section className="w-full bg-[#f8fbfd]" aria-label="Featured case study">
-        <div className="mx-auto w-full max-w-[1692px] px-5 py-[clamp(40px,5vw,72px)] sm:px-8 lg:px-10 xl:px-12">
-          <header className="mb-[clamp(24px,3vw,40px)] max-w-[48rem]">
-            <p className="mb-2 text-sm font-semibold uppercase tracking-[0.16em] text-[#2365aa] 2xl:text-base">
-              Case Study
-            </p>
-            <h2 className="m-0 text-[clamp(26px,3.5vw,48px)] font-bold leading-[1.15] text-[#1F2432]">
+      <section className="relative w-full overflow-hidden bg-gradient-to-b from-[#f4f7f9] to-white" aria-label="Featured case study">
+        {/* Background decorative elements */}
+        <div className="absolute top-0 right-0 -mr-[10%] -mt-[5%] h-[600px] w-[600px] rounded-full bg-[#e3eff8] blur-[100px] opacity-60 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 -ml-[10%] -mb-[5%] h-[500px] w-[500px] rounded-full bg-[#f0f5fc] blur-[80px] opacity-60 pointer-events-none" />
+
+        <div className="relative mx-auto w-full max-w-[1692px] px-5 py-[clamp(60px,8vw,100px)] sm:px-8 lg:px-10 xl:px-12">
+          <header className="mb-[clamp(32px,4vw,56px)] flex flex-col items-center text-center">
+            <div className="inline-flex items-center gap-2 rounded-full bg-[#eaf3fa] px-4 py-1.5 mb-4">
+              <span className="h-2 w-2 rounded-full bg-[#2365aa] animate-pulse" />
+              <span className="text-sm font-bold uppercase tracking-[0.12em] text-[#2365aa] 2xl:text-base">
+                Featured Case Study
+              </span>
+            </div>
+            <h2 className="m-0 max-w-[700px] text-[clamp(28px,4vw,52px)] font-bold leading-[1.15] text-[#1F2432]">
               Agentic AI–Enabled SDLC Transformation
             </h2>
           </header>
 
-          <article className="overflow-hidden rounded-[24px] border border-[#e8eef3] bg-white shadow-[0_20px_50px_-28px_rgba(17,61,119,0.35)] lg:rounded-[28px]">
-            <div className="grid grid-cols-1 items-center lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
+          <article className="group relative mx-auto max-w-[1200px] overflow-hidden rounded-[28px] border border-[#e8eef3]/80 bg-white shadow-[0_24px_60px_-24px_rgba(17,61,119,0.15)] transition-all duration-500 hover:shadow-[0_32px_70px_-20px_rgba(17,61,119,0.2)] hover:border-[#d0e1f9] lg:rounded-[32px]">
+            <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr]">
+              {/* Image Section */}
               <Link
                 to="/case-studies/genai-enabled-sdlc"
-                className="group relative flex items-center justify-center overflow-hidden bg-[#EFF7FC] p-3 sm:p-4 lg:p-5"
+                className="relative flex items-center justify-center overflow-hidden bg-gradient-to-br from-[#f0f6fb] to-[#e4eef6] p-6 sm:p-8 lg:p-12"
                 aria-label="Read Agentic AI–Enabled SDLC case study"
               >
+                {/* Decorative dots in background */}
+                <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(#113d77 2px, transparent 2px)', backgroundSize: '24px 24px' }} />
+                
                 <img
                   src={genAiSdlcCaseImage}
                   alt="Expected effort savings across agentic AI-enabled SDLC roles"
-                  className="block h-auto w-full rounded-[12px] object-contain object-center shadow-[0_12px_32px_-16px_rgba(17,61,119,0.4)] transition-transform duration-500 group-hover:scale-[1.02]"
+                  className="relative z-10 block h-auto w-full max-w-[540px] rounded-[16px] object-contain shadow-[0_16px_40px_-12px_rgba(17,61,119,0.25)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
                 />
+                
+                {/* Overlay gradient on hover */}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#113d77]/10 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
               </Link>
 
-              <div className="flex flex-col justify-center p-6 sm:p-8 lg:p-10 xl:p-12">
-                <h3 className="m-0 text-[clamp(20px,2.2vw,28px)] font-bold leading-tight text-[#1F2432]">
+              {/* Content Section */}
+              <div className="flex flex-col justify-center bg-white p-8 sm:p-10 lg:p-12 xl:p-16 relative">
+                {/* Accent line */}
+                <div className="absolute left-0 top-1/2 h-[60%] w-1 -translate-y-1/2 rounded-r-full bg-gradient-to-b from-[#2365aa] to-[#518bcf] opacity-0 transition-opacity duration-500 group-hover:opacity-100 hidden lg:block" />
+                
+                <div className="flex flex-wrap gap-2 mb-6">
+                  {['12-Week Rollout', 'ROI Modeling', 'Governance'].map(tag => (
+                    <span key={tag} className="inline-block rounded bg-[#f4f7f9] px-3 py-1 text-xs font-semibold text-[#5a5a5a] transition-colors group-hover:bg-[#eaf3fa] group-hover:text-[#2365aa]">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+
+                <h3 className="m-0 text-[clamp(22px,2.5vw,32px)] font-bold leading-[1.2] text-[#1F2432] group-hover:text-[#2365aa] transition-colors duration-300">
                   Agentic AI Adoption Plan Across the SDLC
                 </h3>
-                <p className="mt-4 text-[clamp(13px,1.2vw,16px)] leading-7 text-[#5a5a5a] 2xl:text-[17px]">
+                
+                <p className="mt-5 text-[clamp(14px,1.1vw,16px)] leading-[1.8] text-[#5a5a5a] 2xl:text-[18px]">
                   A phase-wise agentic AI adoption roadmap across the full software
                   delivery lifecycle with tool guidance, a 12-week rollout, ROI
                   modelling, governance controls, and role-based training. Standardises
                   autonomous coding agents by phase to cut repetitive work while
                   improving delivery speed and quality.
                 </p>
-                <Link
-                  to="/case-studies/genai-enabled-sdlc"
-                  className="mt-6 inline-flex w-fit items-center gap-1.5 rounded-full bg-[#2365aa] py-2.5 pl-[22px] pr-2.5 text-sm font-normal uppercase tracking-[0.02em] text-white no-underline transition-colors hover:bg-[#1a5490] sm:text-base"
-                >
-                  Read the case study
-                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white text-[#2365aa]">
-                    <ArrowUpRight size={16} strokeWidth={2.5} />
-                  </span>
-                </Link>
+
+                <div className="mt-10 flex items-center">
+                  <Link
+                    to="/case-studies/genai-enabled-sdlc"
+                    className="group/btn relative inline-flex items-center gap-3 overflow-hidden rounded-full bg-[#2365aa] px-6 py-3.5 text-sm font-semibold uppercase tracking-[0.04em] text-white transition-all duration-300 hover:bg-[#1a5490] hover:pr-4 hover:pl-7 sm:text-base"
+                  >
+                    <span className="relative z-10">Read the case study</span>
+                    <span className="relative z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white text-[#2365aa] transition-transform duration-300 group-hover/btn:translate-x-1">
+                      <ArrowUpRight size={18} strokeWidth={2.5} />
+                    </span>
+                  </Link>
+                </div>
               </div>
             </div>
           </article>

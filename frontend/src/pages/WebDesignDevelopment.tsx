@@ -85,6 +85,7 @@ export default function WebDesignDevelopment() {
           image: happyFeet,
           href: "https://www.happyfeettravellers.com/",
           linkLabel: "Visit Happy Feet Travellers",
+          hideRightButton: true,
         },
       ]}
       processTitle="How We Build Web Experiences"

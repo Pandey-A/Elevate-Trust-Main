@@ -76,6 +76,7 @@ export type DeliveredWorkProject = {
   image: string;
   href: string;
   linkLabel?: string;
+  hideRightButton?: boolean;
 };
 
 export type DigitalServicePageProps = {
@@ -449,17 +450,19 @@ export default function DigitalServicePage({
                         ))}
                       </ul>
 
-                      <a
-                        href={project.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="mt-8 inline-flex w-fit items-center gap-1.5 rounded-full bg-[#2365aa] py-3 pl-[22px] pr-2.5 text-sm font-normal uppercase leading-[1.2] text-white no-underline transition-colors hover:bg-[#1a5490] sm:text-base sm:pl-[26px] sm:pr-3.5"
-                      >
-                        {project.linkLabel || "Visit Website"}
-                        <span className="inline-flex h-[34px] w-[34px] items-center justify-center rounded-full bg-white text-[#2365aa] sm:h-[37px] sm:w-[37px]">
-                          <ArrowUpRight size={16} strokeWidth={2.5} />
-                        </span>
-                      </a>
+                      {!project.hideRightButton && (
+                        <a
+                          href={project.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="mt-8 inline-flex w-fit items-center gap-1.5 rounded-full bg-[#2365aa] py-3 pl-[22px] pr-2.5 text-sm font-normal uppercase leading-[1.2] text-white no-underline transition-colors hover:bg-[#1a5490] sm:text-base sm:pl-[26px] sm:pr-3.5"
+                        >
+                          {project.linkLabel || "Visit Website"}
+                          <span className="inline-flex h-[34px] w-[34px] items-center justify-center rounded-full bg-white text-[#2365aa] sm:h-[37px] sm:w-[37px]">
+                            <ArrowUpRight size={16} strokeWidth={2.5} />
+                          </span>
+                        </a>
+                      )}
                     </div>
                   </div>
                 </article>

@@ -364,16 +364,6 @@ export default function DigitalWorkspace() {
               </div>
             </div>
           </div>
-
-          <a
-            href="#"
-            className="mt-[clamp(28px,3.5vw,48px)] inline-flex items-center gap-4 rounded-[36px] bg-[#2365aa] py-2 pl-7 pr-3 text-[clamp(15px,1.1vw,18px)] font-normal leading-[1.2] text-white no-underline transition-colors hover:bg-[#1a5490]"
-          >
-            Download Insights
-            <span className="inline-flex h-[37px] w-[37px] items-center justify-center rounded-full bg-white">
-              <img src={downloadIcon} alt="" className="h-[22px] w-[22px]" />
-            </span>
-          </a>
         </div>
       </section>
 

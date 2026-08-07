@@ -380,6 +380,40 @@ body {
   text-align: center;
 }
 
+/* Shared hero h1 font size — same on every page using this blue hero */
+.service-page-hero__content h1 {
+  font-size: clamp(32px, 4vw, 48px) !important;
+}
+
+@media (min-width: 1024px) {
+  .service-page-hero__content h1 {
+    font-size: clamp(28px, 3vw, 36px) !important;
+  }
+}
+
+@media (min-width: 1536px) {
+  .service-page-hero__content h1 {
+    font-size: clamp(32px, 4vw, 48px) !important;
+  }
+}
+
+/* Shared hero paragraph font size */
+.service-page-hero__content p {
+  font-size: clamp(14px, 1.4vw, 18px) !important;
+}
+
+@media (min-width: 1024px) {
+  .service-page-hero__content p {
+    font-size: clamp(13px, 1.1vw, 15px) !important;
+  }
+}
+
+@media (min-width: 1536px) {
+  .service-page-hero__content p {
+    font-size: clamp(14px, 1.4vw, 18px) !important;
+  }
+}
+
 /* Shared hero CTA button size — same on every page using this blue hero */
 .service-page-hero__content > a {
   box-sizing: border-box;

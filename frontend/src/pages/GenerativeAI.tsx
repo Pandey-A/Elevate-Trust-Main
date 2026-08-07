@@ -243,9 +243,9 @@ export default function GenerativeAI() {
         <div className="mx-auto w-full max-w-[1692px] px-5 pb-[clamp(48px,6vw,80px)] pt-0 sm:px-8 lg:px-10 xl:px-12">
           <header className="mx-auto mb-[clamp(32px,4vw,56px)] max-w-[52rem] text-center">
             <h2 className="m-0 text-[clamp(28px,4vw,56px)] font-bold leading-[1.15] text-[#1F2432]">
-              Agentic AI
-              <br />
               Core Offerings
+              <br />
+              Generative AI
             </h2>
             <p className="mx-auto mt-5 max-w-[48rem] text-[clamp(13px,1.2vw,16px)] leading-7 text-[#9CA3AF] sm:mt-6 2xl:text-[18px] 2xl:leading-8">
               Purpose-built agents that plan, use tools, and execute multi-step
