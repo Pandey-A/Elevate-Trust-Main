@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useMemo, useState, type FormEvent } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent } from "react";
+import { createPortal } from "react-dom";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import {
   ArrowUpRight,
@@ -11,9 +12,11 @@ import {
   EyeOff,
   FileText,
   LayoutDashboard,
+  ListFilter,
   LogOut,
+  PanelLeftClose,
+  PanelLeftOpen,
   Pencil,
-  Play,
   Plus,
   Search,
   Tags,
@@ -29,7 +32,6 @@ import {
   deleteJob,
   extractYoutubeId,
   upsertJob,
-  youtubeThumb,
 } from "../../lib/adminStorage";
 import { getErrorMessage } from "../../lib/api";
 import { logoutUser } from "../../lib/auth";
@@ -58,6 +60,7 @@ import {
 } from "../../lib/careersApi";
 import { createDemoTag, deleteDemoTag, updateDemoTag, type DemoTag } from "../../lib/tagsApi";
 import BlogRichTextEditor from "../../components/blog/BlogRichTextEditor";
+import DemoPlayCover from "../../components/DemoPlayCover";
 import { excerptFromContent, isRichTextEmpty } from "../../lib/blogContent";
 import brainstormingIcon from "../../assets/OurServices/brainstorming.png";
 import analysisIcon from "../../assets/OurServices/analysis.png";
@@ -89,7 +92,17 @@ const emptyTestimonialForm = {
 };
 
 function youtubeEmbed(videoId: string) {
-  return `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+  const params = new URLSearchParams({
+    autoplay: "1",
+    rel: "0",
+    modestbranding: "1",
+    iv_load_policy: "3",
+    playsinline: "1",
+    fs: "1",
+    disablekb: "0",
+    cc_load_policy: "0",
+  });
+  return `https://www.youtube.com/embed/${videoId}?${params.toString()}`;
 }
 
 const emptyJobForm = {
@@ -119,6 +132,14 @@ export default function AdminDashboard() {
   const jobs = useAdminJobs();
 
   const [tab, setTab] = useState<Tab>("overview");
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
+  const [showHomeStats, setShowHomeStats] = useState(false);
+  const [homeDemoSearch, setHomeDemoSearch] = useState("");
+  const [homeTitleFilter, setHomeTitleFilter] = useState("All");
+  const [homeTitleMenuOpen, setHomeTitleMenuOpen] = useState(false);
+  const [homeTitleMenuPos, setHomeTitleMenuPos] = useState({ top: 0, right: 0 });
+  const homeTitleMenuRef = useRef<HTMLDivElement>(null);
+  const homeTitleButtonRef = useRef<HTMLButtonElement>(null);
   const [demoForm, setDemoForm] = useState(emptyDemoForm);
   const [demoThumbnailFile, setDemoThumbnailFile] = useState<File | null>(null);
   const [demoThumbnailPreview, setDemoThumbnailPreview] = useState<string | null>(null);
@@ -173,6 +194,38 @@ export default function AdminDashboard() {
       setApplicationsLoading(false);
     }
   }, []);
+
+  useEffect(() => {
+    if (!homeTitleMenuOpen) return;
+
+    const closeMenu = () => setHomeTitleMenuOpen(false);
+
+    const onPointerDown = (event: MouseEvent) => {
+      const target = event.target as Node;
+      if (
+        homeTitleMenuRef.current?.contains(target) ||
+        homeTitleButtonRef.current?.contains(target)
+      ) {
+        return;
+      }
+      closeMenu();
+    };
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") closeMenu();
+    };
+
+    // Close on any scroll so the card never gets stuck/cut at the top
+    window.addEventListener("scroll", closeMenu, true);
+    window.addEventListener("resize", closeMenu);
+    document.addEventListener("mousedown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      window.removeEventListener("scroll", closeMenu, true);
+      window.removeEventListener("resize", closeMenu);
+      document.removeEventListener("mousedown", onPointerDown);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [homeTitleMenuOpen]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -272,6 +325,25 @@ export default function AdminDashboard() {
       return matchesTitle && matchesCategory;
     });
   }, [demos, demoSearch, demoCategoryFilter]);
+
+  const homeDemoTitles = useMemo(() => {
+    const titles = Array.from(new Set(demos.map((demo) => demo.title.trim()).filter(Boolean)));
+    return titles.sort((a, b) => a.localeCompare(b));
+  }, [demos]);
+
+  const homeFilteredDemos = useMemo(() => {
+    const query = homeDemoSearch.trim().toLowerCase();
+    return demos.filter((demo) => {
+      const matchesSearch = !query || demo.title.toLowerCase().includes(query);
+      const matchesTitle =
+        homeTitleFilter === "All" ||
+        demo.title.trim().toLowerCase() === homeTitleFilter.trim().toLowerCase();
+      return matchesSearch && matchesTitle;
+    });
+  }, [demos, homeDemoSearch, homeTitleFilter]);
+
+  const homeFilterActive =
+    homeDemoSearch.trim().length > 0 || homeTitleFilter !== "All";
 
   const formatDate = (value: string) => {
     const date = new Date(value);
@@ -614,10 +686,19 @@ export default function AdminDashboard() {
     navigate("/admin");
   };
 
+  const selectTab = (next: Tab) => {
+    setTab(next);
+    setHomeTitleMenuOpen(false);
+    // Collapse drawer on small screens so content stays usable
+    if (typeof window !== "undefined" && window.matchMedia("(max-width: 1023px)").matches) {
+      setSidebarCollapsed(true);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#f4f7f9] font-['Lay_Grotesk_Trial',sans-serif] text-[#272935]">
-      <header className="sticky top-0 z-30 border-b border-[#d7e6f3] bg-white/95 backdrop-blur">
-        <div className="mx-auto flex w-full max-w-[1692px] flex-wrap items-center justify-between gap-4 px-5 py-4 sm:px-8 lg:px-10 xl:px-12 2xl:py-5">
+      <header className="sticky top-0 z-40 border-b border-[#d7e6f3] bg-white/95 backdrop-blur">
+        <div className="mx-auto flex w-full max-w-[1692px] flex-wrap items-center justify-between gap-3 px-4 py-3.5 sm:gap-4 sm:px-8 sm:py-4 lg:px-10 xl:px-12 2xl:py-5">
           <div className="min-w-0">
             <Link to="/" className="inline-flex items-center no-underline">
               <img
@@ -640,12 +721,60 @@ export default function AdminDashboard() {
         </div>
       </header>
 
-      <div className="mx-auto grid w-full max-w-[1692px] gap-5 px-5 py-5 sm:gap-6 sm:px-8 sm:py-6 lg:grid-cols-[220px_minmax(0,1fr)] lg:px-10 xl:grid-cols-[260px_minmax(0,1fr)] xl:gap-8 xl:px-12 2xl:grid-cols-[280px_minmax(0,1fr)] 2xl:gap-10 2xl:py-8">
-        <aside className="h-fit rounded-[20px] border border-[#d7e6f3] bg-white p-2 shadow-[0_14px_40px_-28px_rgba(17,61,119,0.35)] sm:p-3 lg:sticky lg:top-20 lg:self-start xl:rounded-[24px] xl:top-24 2xl:p-4">
-          <div className="flex gap-2 overflow-x-auto lg:block lg:overflow-visible">
+      {!sidebarCollapsed ? (
+        <button
+          type="button"
+          aria-label="Close sidebar"
+          className="fixed inset-0 z-[45] border-0 bg-[#0b1220]/45 lg:hidden"
+          onClick={() => setSidebarCollapsed(true)}
+        />
+      ) : null}
+
+      <div
+        className={`mx-auto grid w-full max-w-[1692px] grid-cols-1 gap-4 py-4 transition-all duration-300 ease-out sm:gap-6 sm:py-6 xl:gap-8 2xl:gap-10 2xl:py-8 ${
+          sidebarCollapsed
+            ? "pl-[72px] pr-4 sm:pl-[76px] sm:pr-6 lg:px-8 lg:pl-[88px] xl:px-10 xl:pl-[92px] 2xl:pl-[96px]"
+            : "pl-[72px] pr-4 sm:pl-[76px] sm:pr-6 lg:px-8 lg:pl-[240px] xl:px-10 xl:pl-[280px] 2xl:pl-[300px]"
+        }`}
+      >
+        <aside
+          className={`fixed left-2 top-20 z-50 max-h-[calc(100dvh-6rem)] overflow-y-auto border border-[#d7e6f3] bg-white shadow-[0_14px_40px_-28px_rgba(17,61,119,0.35)] transition-all duration-300 ease-out [scrollbar-width:thin] sm:left-3 lg:top-1/2 lg:max-h-[min(90dvh,calc(100dvh-2rem))] lg:-translate-y-1/2 ${
+            sidebarCollapsed
+              ? "w-[56px] rounded-[16px] p-1.5 sm:w-[60px] xl:rounded-[18px]"
+              : "w-[min(210px,calc(100vw-1.5rem))] rounded-[20px] p-2 sm:p-3 xl:w-[248px] xl:rounded-[24px] 2xl:w-[268px] 2xl:p-4"
+          }`}
+        >
+          <div
+            className={`mb-2.5 flex border-b border-[#e8eef3] pb-2.5 ${
+              sidebarCollapsed ? "justify-center" : "justify-end"
+            }`}
+          >
+            <button
+              type="button"
+              onClick={() => setSidebarCollapsed((open) => !open)}
+              aria-label={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+              aria-expanded={!sidebarCollapsed}
+              title={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+              className={`inline-flex cursor-pointer items-center justify-center gap-1.5 border-0 font-semibold transition ${
+                sidebarCollapsed
+                  ? "size-10 rounded-full bg-[#113d77] text-white shadow-[0_8px_18px_-10px_rgba(17,61,119,0.9)] hover:bg-[#0e3262]"
+                  : "h-9 rounded-full bg-[#EFF7FC] px-3 text-[#113d77] hover:bg-[#e5eef7]"
+              }`}
+            >
+              {sidebarCollapsed ? (
+                <PanelLeftOpen size={18} strokeWidth={2.25} />
+              ) : (
+                <>
+                  <PanelLeftClose size={16} strokeWidth={2.25} />
+                  <span className="text-xs">Collapse</span>
+                </>
+              )}
+            </button>
+          </div>
+          <div className="flex flex-col gap-1">
             {(
               [
-                ["overview", "Overview", LayoutDashboard],
+                ["overview", "Home", LayoutDashboard],
                 ["demos", "Manage Demos", Video],
                 ["blogs", "Manage Blogs", BookOpen],
                 ["testimonials", "Manage Testimonials", Quote],
@@ -657,92 +786,313 @@ export default function AdminDashboard() {
               <button
                 key={id}
                 type="button"
-                onClick={() => setTab(id)}
-                className={`mb-0 flex shrink-0 cursor-pointer items-center gap-2.5 rounded-[14px] border-0 px-3.5 py-2.5 text-left text-sm font-semibold transition lg:mb-1.5 lg:w-full lg:gap-3 lg:px-3.5 lg:py-3 2xl:rounded-[16px] 2xl:px-4 2xl:py-3.5 2xl:text-base ${
+                onClick={() => selectTab(id)}
+                title={label}
+                aria-label={label}
+                className={`mb-0 flex w-full shrink-0 cursor-pointer items-center justify-start rounded-[12px] border-0 text-left text-sm font-semibold transition-all duration-300 ease-out 2xl:rounded-[14px] 2xl:text-base ${
+                  sidebarCollapsed
+                    ? "gap-0 px-2.5 py-2.5"
+                    : "gap-2.5 px-3.5 py-2.5 lg:gap-3 lg:px-3.5 lg:py-3 2xl:px-4 2xl:py-3.5"
+                } ${
                   tab === id
                     ? "bg-[#113d77] text-white"
-                    : "bg-[#EFF7FC] text-[#5a5a5a] hover:bg-[#e5eef7] lg:bg-transparent lg:hover:bg-[#EFF7FC]"
+                    : "bg-transparent text-[#5a5a5a] hover:bg-[#EFF7FC]"
                 }`}
               >
-                <Icon size={18} />
-                {label}
+                <Icon size={18} className="shrink-0" />
+                <span
+                  className={`overflow-hidden whitespace-nowrap transition-all duration-300 ease-out ${
+                    sidebarCollapsed
+                      ? "max-w-0 opacity-0 pointer-events-none"
+                      : "max-w-[12rem] opacity-100"
+                  }`}
+                >
+                  {label}
+                </span>
               </button>
             ))}
           </div>
         </aside>
 
-        <main className="min-w-0">
+        <main className="min-w-0 overflow-x-hidden">
           {tab === "overview" ? (
             <section className="space-y-5 sm:space-y-6 2xl:space-y-8">
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 sm:gap-5 2xl:gap-6">
-                {[
-                  { label: "Total demos", value: demos.length, icon: brainstormingIcon },
-                  { label: "Total blogs", value: blogs.length, icon: analysisIcon },
-                  { label: "Testimonials", value: testimonials.length, icon: brainstormingIcon },
-                  { label: "Demo tags", value: demoTags.length, icon: analysisIcon },
-                  { label: "Open jobs", value: jobs.length, icon: brainstormingIcon },
-                  {
-                    label: "Applications",
-                    value: applications.length,
-                    icon: analysisIcon,
-                  },
-                ].map((card) => (
-                  <article
-                    key={card.label}
-                    className="rounded-[20px] border border-[#d7e6f3] bg-white p-5 shadow-[0_14px_40px_-28px_rgba(17,61,119,0.3)] xl:rounded-[24px] xl:p-6 2xl:p-7"
-                  >
-                    <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#EFF7FC] p-2 2xl:h-14 2xl:w-14">
-                      <img src={card.icon} alt="" aria-hidden className="h-7 w-7 object-contain 2xl:h-8 2xl:w-8" />
-                    </div>
-                    <p className="m-0 text-sm text-[#848b9b] 2xl:text-base">{card.label}</p>
-                    <p className="mt-1 text-3xl font-bold text-[#113d77] 2xl:text-4xl">{card.value}</p>
-                  </article>
-                ))}
-              </div>
-
               <div className="rounded-[20px] border border-[#d7e6f3] bg-white p-5 sm:p-6 xl:rounded-[24px] 2xl:p-8">
-                <h2 className="m-0 text-xl font-bold text-[#1F2432] 2xl:text-2xl">Quick actions</h2>
-                <div className="mt-4 flex flex-wrap gap-3 2xl:mt-5">
+                <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
+                  <h2 className="m-0 shrink-0 text-xl font-bold text-[#1F2432] 2xl:text-2xl">
+                    Quick actions
+                  </h2>
+
+                  <div className="flex w-full min-w-0 flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center xl:w-auto xl:flex-1 xl:justify-end">
+                    <label className="relative w-full min-w-0 sm:min-w-[180px] sm:max-w-[260px] sm:flex-1 xl:max-w-[240px]">
+                      <Search
+                        size={15}
+                        className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#8a94a6]"
+                      />
+                      <input
+                        value={homeDemoSearch}
+                        onChange={(event) => setHomeDemoSearch(event.target.value)}
+                        className="h-10 w-full rounded-full border border-[#d7e6f3] bg-[#f7fafc] pl-9 pr-3 text-sm text-[#1F2432] outline-none transition placeholder:text-[#9aa3b2] focus:border-[#2365aa] focus:bg-white focus:ring-2 focus:ring-[#2365aa]/10 sm:h-9"
+                        placeholder="Search demos…"
+                        aria-label="Search demos by title"
+                      />
+                    </label>
+
+                    <div className="flex w-full items-center gap-2 sm:w-auto">
+                      <div className="relative min-w-0 flex-1 sm:flex-none">
+                        <button
+                          ref={homeTitleButtonRef}
+                          type="button"
+                          onClick={() => {
+                            const button = homeTitleButtonRef.current;
+                            if (button) {
+                              const rect = button.getBoundingClientRect();
+                              setHomeTitleMenuPos({
+                                top: rect.bottom + 6,
+                                right: Math.max(12, window.innerWidth - rect.right),
+                              });
+                            }
+                            setHomeTitleMenuOpen((open) => !open);
+                          }}
+                          className={`inline-flex h-10 w-full max-w-none cursor-pointer items-center justify-center gap-1.5 rounded-full border px-3 text-sm font-semibold transition sm:h-9 sm:w-auto sm:max-w-[210px] sm:justify-start ${
+                            homeTitleFilter === "All"
+                              ? "border-[#d7e6f3] bg-[#EFF7FC] text-[#2365aa] hover:bg-[#e7f2fb]"
+                              : "border-[#2365aa] bg-[#2365aa] text-white hover:bg-[#1a5490]"
+                          }`}
+                          aria-haspopup="listbox"
+                          aria-expanded={homeTitleMenuOpen}
+                        >
+                          <ListFilter size={14} className="shrink-0" />
+                          <span className="truncate">
+                            {homeTitleFilter === "All" ? "All titles" : homeTitleFilter}
+                          </span>
+                          <ChevronDown
+                            size={14}
+                            className={`shrink-0 transition-transform ${
+                              homeTitleMenuOpen ? "rotate-180" : ""
+                            }`}
+                          />
+                        </button>
+
+                        {homeTitleMenuOpen
+                          ? createPortal(
+                              <div
+                                ref={homeTitleMenuRef}
+                                role="listbox"
+                                style={{
+                                  top: homeTitleMenuPos.top,
+                                  right: homeTitleMenuPos.right,
+                                }}
+                                className="fixed z-[250] max-h-[min(60vh,420px)] w-[min(480px,calc(100vw-24px))] overflow-y-auto rounded-xl border border-[#d7e6f3] bg-white p-2.5 shadow-[0_22px_50px_-18px_rgba(17,61,119,0.55)] [scrollbar-width:thin]"
+                              >
+                                <button
+                                  type="button"
+                                  role="option"
+                                  aria-selected={homeTitleFilter === "All"}
+                                  onClick={() => {
+                                    setHomeTitleFilter("All");
+                                    setHomeTitleMenuOpen(false);
+                                  }}
+                                  className={`mb-1.5 flex w-full cursor-pointer items-center justify-between rounded-lg border-0 px-3 py-2 text-left text-sm transition ${
+                                    homeTitleFilter === "All"
+                                      ? "bg-[#EFF7FC] font-semibold text-[#113d77]"
+                                      : "bg-transparent font-medium text-[#1F2432] hover:bg-[#f5f9fd]"
+                                  }`}
+                                >
+                                  All titles
+                                  {homeTitleFilter === "All" ? (
+                                    <Check size={15} className="shrink-0 text-[#2365aa]" />
+                                  ) : null}
+                                </button>
+                                <div className="grid grid-cols-1 gap-1 sm:grid-cols-2">
+                                  {homeDemoTitles.map((title) => {
+                                    const active =
+                                      homeTitleFilter.trim().toLowerCase() ===
+                                      title.toLowerCase();
+                                    return (
+                                      <button
+                                        key={title}
+                                        type="button"
+                                        role="option"
+                                        aria-selected={active}
+                                        onClick={() => {
+                                          setHomeTitleFilter(title);
+                                          setHomeTitleMenuOpen(false);
+                                        }}
+                                        className={`flex w-full cursor-pointer items-start justify-between gap-2 rounded-lg border-0 px-3 py-2 text-left text-sm leading-snug transition ${
+                                          active
+                                            ? "bg-[#EFF7FC] font-semibold text-[#113d77]"
+                                            : "bg-transparent font-medium text-[#1F2432] hover:bg-[#f5f9fd]"
+                                        }`}
+                                      >
+                                        <span className="whitespace-normal break-words">
+                                          {title}
+                                        </span>
+                                        {active ? (
+                                          <Check
+                                            size={15}
+                                            className="mt-0.5 shrink-0 text-[#2365aa]"
+                                          />
+                                        ) : null}
+                                      </button>
+                                    );
+                                  })}
+                                </div>
+                              </div>,
+                              document.body,
+                            )
+                          : null}
+                      </div>
+
+                      {homeFilterActive ? (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setHomeDemoSearch("");
+                            setHomeTitleFilter("All");
+                            setHomeTitleMenuOpen(false);
+                          }}
+                          className="inline-flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full border border-[#d7e6f3] bg-white text-[#5b6b82] transition hover:border-[#2365aa]/35 hover:text-[#2365aa] sm:h-9 sm:w-9"
+                          aria-label="Clear filters"
+                          title="Clear"
+                        >
+                          <X size={15} />
+                        </button>
+                      ) : null}
+
+                      <button
+                        type="button"
+                        onClick={() => setShowHomeStats((open) => !open)}
+                        className="inline-flex h-10 shrink-0 cursor-pointer items-center gap-1.5 rounded-full border border-[#d7e6f3] bg-[#EFF7FC] px-3.5 text-xs font-semibold text-[#2365aa] sm:h-9 sm:text-sm"
+                      >
+                        {showHomeStats ? "Hide stats" : "Show stats"}
+                        <ChevronDown
+                          size={16}
+                          className={`transition-transform ${showHomeStats ? "rotate-180" : ""}`}
+                        />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-4 flex flex-wrap gap-2 sm:gap-3 2xl:mt-5">
                   <button
                     type="button"
-                    onClick={() => setTab("demos")}
-                    className="inline-flex cursor-pointer items-center gap-2 rounded-full border-0 bg-[#2365aa] px-4 py-2.5 text-sm font-semibold text-white 2xl:px-5 2xl:py-3 2xl:text-base"
+                    onClick={() => selectTab("demos")}
+                    className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-full border-0 bg-[#2365aa] px-4 py-2.5 text-sm font-semibold text-white sm:w-auto 2xl:px-5 2xl:py-3 2xl:text-base"
                   >
                     <Plus size={16} />
                     Add demo
                   </button>
                   <button
                     type="button"
-                    onClick={() => setTab("blogs")}
-                    className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-[#d7e6f3] bg-[#EFF7FC] px-4 py-2.5 text-sm font-semibold text-[#2365aa] 2xl:px-5 2xl:py-3 2xl:text-base"
+                    onClick={() => selectTab("blogs")}
+                    className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-full border border-[#d7e6f3] bg-[#EFF7FC] px-4 py-2.5 text-sm font-semibold text-[#2365aa] sm:w-auto 2xl:px-5 2xl:py-3 2xl:text-base"
                   >
                     <Plus size={16} />
                     Add blog
                   </button>
                   <button
                     type="button"
-                    onClick={() => setTab("testimonials")}
-                    className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-[#d7e6f3] bg-[#EFF7FC] px-4 py-2.5 text-sm font-semibold text-[#2365aa] 2xl:px-5 2xl:py-3 2xl:text-base"
+                    onClick={() => selectTab("testimonials")}
+                    className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-full border border-[#d7e6f3] bg-[#EFF7FC] px-4 py-2.5 text-sm font-semibold text-[#2365aa] sm:w-auto 2xl:px-5 2xl:py-3 2xl:text-base"
                   >
                     <Plus size={16} />
                     Add testimonial
                   </button>
                   <button
                     type="button"
-                    onClick={() => setTab("jobs")}
-                    className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-[#d7e6f3] bg-[#EFF7FC] px-4 py-2.5 text-sm font-semibold text-[#2365aa] 2xl:px-5 2xl:py-3 2xl:text-base"
+                    onClick={() => selectTab("jobs")}
+                    className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-full border border-[#d7e6f3] bg-[#EFF7FC] px-4 py-2.5 text-sm font-semibold text-[#2365aa] sm:w-auto 2xl:px-5 2xl:py-3 2xl:text-base"
                   >
                     <Plus size={16} />
                     Add job posting
                   </button>
                   <button
                     type="button"
-                    onClick={() => setTab("applications")}
-                    className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-[#d7e6f3] bg-[#EFF7FC] px-4 py-2.5 text-sm font-semibold text-[#2365aa] 2xl:px-5 2xl:py-3 2xl:text-base"
+                    onClick={() => selectTab("applications")}
+                    className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-full border border-[#d7e6f3] bg-[#EFF7FC] px-4 py-2.5 text-sm font-semibold text-[#2365aa] sm:w-auto 2xl:px-5 2xl:py-3 2xl:text-base"
                   >
                     <FileText size={16} />
                     View applications
                   </button>
+                </div>
+
+                {showHomeStats ? (
+                  <div className="mt-5 grid grid-cols-1 gap-3 border-t border-[#e8eef3] pt-5 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3 xl:grid-cols-6">
+                    {[
+                      { label: "Total demos", value: demos.length, icon: brainstormingIcon },
+                      { label: "Total blogs", value: blogs.length, icon: analysisIcon },
+                      { label: "Testimonials", value: testimonials.length, icon: brainstormingIcon },
+                      { label: "Demo tags", value: demoTags.length, icon: analysisIcon },
+                      { label: "Open jobs", value: jobs.length, icon: brainstormingIcon },
+                      {
+                        label: "Applications",
+                        value: applications.length,
+                        icon: analysisIcon,
+                      },
+                    ].map((card) => (
+                      <article
+                        key={card.label}
+                        className="rounded-[16px] border border-[#d7e6f3] bg-[#EFF7FC] p-4"
+                      >
+                        <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-white p-1.5">
+                          <img src={card.icon} alt="" aria-hidden className="h-6 w-6 object-contain" />
+                        </div>
+                        <p className="m-0 text-xs text-[#848b9b] sm:text-sm">{card.label}</p>
+                        <p className="mt-1 text-2xl font-bold text-[#113d77]">{card.value}</p>
+                      </article>
+                    ))}
+                  </div>
+                ) : null}
+              </div>
+
+              <div>
+                {demosLoading ? (
+                  <p className="text-sm text-[#848b9b]">Loading demos...</p>
+                ) : null}
+                {demosLoadError ? (
+                  <p className="rounded-[12px] bg-[#EEF3FB] px-3 py-2 text-sm text-[#2365aa]">
+                    {demosLoadError}
+                  </p>
+                ) : null}
+                {!demosLoading && demos.length === 0 ? (
+                  <div className="rounded-[20px] border border-[#d7e6f3] bg-white px-6 py-14 text-center">
+                    <p className="m-0 text-sm text-[#687181]">No demos yet.</p>
+                  </div>
+                ) : null}
+                {!demosLoading && demos.length > 0 && homeFilteredDemos.length === 0 ? (
+                  <div className="rounded-[20px] border border-[#d7e6f3] bg-white px-6 py-14 text-center">
+                    <p className="m-0 text-sm text-[#687181]">
+                      No demos match your search or title filter.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setHomeDemoSearch("");
+                        setHomeTitleFilter("All");
+                      }}
+                      className="mt-3 inline-flex cursor-pointer items-center gap-1.5 rounded-full border-0 bg-[#EFF7FC] px-4 py-2 text-sm font-semibold text-[#2365aa]"
+                    >
+                      Reset filters
+                    </button>
+                  </div>
+                ) : null}
+
+                <div className="grid auto-rows-fr grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 xl:grid-cols-3 2xl:grid-cols-4 2xl:gap-6">
+                  {homeFilteredDemos.map((demo) => (
+                    <article
+                      key={demo.id}
+                      className="overflow-hidden rounded-[18px] border border-[#d7e6f3] bg-white shadow-[0_12px_30px_-22px_rgba(17,61,119,0.35)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_-22px_rgba(17,61,119,0.45)] xl:rounded-[20px]"
+                    >
+                      <DemoPlayCover
+                        demo={demo}
+                        compact
+                        showTitle
+                        onPlay={() => setPlayingDemo(demo)}
+                      />
+                    </article>
+                  ))}
                 </div>
               </div>
             </section>
@@ -750,7 +1100,7 @@ export default function AdminDashboard() {
 
           {tab === "demos" ? (
             <section className="space-y-5 sm:space-y-6 2xl:space-y-8">
-              <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
+              <div className="flex flex-col gap-3 md:flex-row md:flex-wrap md:items-center md:justify-between">
                 <div>
                   <h2 className="m-0 text-xl font-bold text-[#1F2432] 2xl:text-2xl">Manage Demos</h2>
                   <p className="mt-1 text-sm text-[#848b9b]">
@@ -758,8 +1108,8 @@ export default function AdminDashboard() {
                   </p>
                 </div>
 
-                <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center">
-                  <label className="relative min-w-0 flex-1 sm:min-w-[220px] sm:max-w-[280px]">
+                <div className="flex w-full flex-col gap-2 md:w-auto md:flex-row md:flex-wrap md:items-center">
+                  <label className="relative min-w-0 w-full md:min-w-[220px] md:max-w-[280px] md:flex-1">
                     <Search
                       size={16}
                       className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-[#848b9b]"
@@ -772,7 +1122,7 @@ export default function AdminDashboard() {
                     />
                   </label>
 
-                  <label className="relative min-w-0 sm:min-w-[200px]">
+                  <label className="relative min-w-0 w-full md:min-w-[200px]">
                     <span className="sr-only">Filter by category</span>
                     <select
                       value={demoCategoryFilter}
@@ -795,7 +1145,7 @@ export default function AdminDashboard() {
                   <button
                     type="button"
                     onClick={openAddDemoModal}
-                    className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-full border-0 bg-[#2365aa] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#1a5490]"
+                    className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-full border-0 bg-[#2365aa] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#1a5490] md:w-auto"
                   >
                     <Plus size={16} />
                     Add Demo
@@ -836,26 +1186,16 @@ export default function AdminDashboard() {
                 {filteredDemos.map((demo) => (
                   <article
                     key={demo.id}
-                    className="flex h-full flex-col overflow-hidden rounded-[18px] border border-[#d7e6f3] bg-white shadow-[0_12px_30px_-22px_rgba(17,61,119,0.35)] xl:rounded-[20px]"
+                    className="flex h-full flex-col overflow-hidden rounded-[18px] border border-[#d7e6f3] bg-white shadow-[0_12px_30px_-22px_rgba(17,61,119,0.35)] transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_-22px_rgba(17,61,119,0.45)] xl:rounded-[20px]"
                   >
                     <div className="relative">
-                      <img
-                        src={demo.thumbnailUrl || youtubeThumb(demo.videoId)}
-                        alt=""
-                        className="aspect-video w-full shrink-0 object-cover"
+                      <DemoPlayCover
+                        demo={demo}
+                        showTitle
+                        onPlay={() => setPlayingDemo(demo)}
                       />
-                      <button
-                        type="button"
-                        onClick={() => setPlayingDemo(demo)}
-                        className="absolute inset-0 flex cursor-pointer items-center justify-center bg-[#0b1220]/25 transition hover:bg-[#0b1220]/40"
-                        aria-label={`Play ${demo.title}`}
-                      >
-                        <span className="flex size-12 items-center justify-center rounded-full bg-white/95 text-[#2365aa]">
-                          <Play size={22} className="ml-0.5" />
-                        </span>
-                      </button>
                       <span
-                        className={`absolute left-3 top-3 rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide ${
+                        className={`pointer-events-none absolute left-3 top-3 z-10 rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide ${
                           demo.isPublic
                             ? "bg-[#e8f6ee] text-[#1d5c3a]"
                             : "bg-[#fff4e5] text-[#9a6700]"
@@ -878,15 +1218,7 @@ export default function AdminDashboard() {
                           </span>
                         ))}
                       </div>
-                      <div className="mt-auto flex flex-wrap gap-2 pt-4">
-                        <button
-                          type="button"
-                          onClick={() => setPlayingDemo(demo)}
-                          className="inline-flex flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-full border border-[#d7e6f3] bg-white px-3 py-2 text-xs font-semibold text-[#2365aa]"
-                        >
-                          <Play size={14} />
-                          Play
-                        </button>
+                      <div className="mt-auto flex flex-col gap-2 pt-4 md:flex-row md:flex-wrap">
                         <button
                           type="button"
                           onClick={async () => {
@@ -899,7 +1231,7 @@ export default function AdminDashboard() {
                               );
                             }
                           }}
-                          className="inline-flex flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-full border border-[#d7e6f3] bg-[#EFF7FC] px-3 py-2 text-xs font-semibold text-[#2365aa]"
+                          className="inline-flex w-full cursor-pointer items-center justify-center gap-1.5 rounded-full border border-[#d7e6f3] bg-[#EFF7FC] px-3 py-2 text-xs font-semibold text-[#2365aa] md:flex-1"
                         >
                           {demo.isPublic ? <EyeOff size={14} /> : <Eye size={14} />}
                           {demo.isPublic ? "Make private" : "Make public"}
@@ -907,7 +1239,7 @@ export default function AdminDashboard() {
                         <button
                           type="button"
                           onClick={() => onEditDemo(demo)}
-                          className="inline-flex flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-full border border-[#d7e6f3] bg-[#EFF7FC] px-3 py-2 text-xs font-semibold text-[#2365aa]"
+                          className="inline-flex w-full cursor-pointer items-center justify-center gap-1.5 rounded-full border border-[#d7e6f3] bg-[#EFF7FC] px-3 py-2 text-xs font-semibold text-[#2365aa] md:flex-1"
                         >
                           <Pencil size={14} />
                           Edit
@@ -925,7 +1257,7 @@ export default function AdminDashboard() {
                               );
                             }
                           }}
-                          className="inline-flex flex-1 cursor-pointer items-center justify-center gap-1.5 rounded-full border-0 bg-[#EEF3FB] px-3 py-2 text-xs font-semibold text-[#2365aa]"
+                          className="inline-flex w-full cursor-pointer items-center justify-center gap-1.5 rounded-full border-0 bg-[#EEF3FB] px-3 py-2 text-xs font-semibold text-[#2365aa] md:flex-1"
                         >
                           <Trash2 size={14} />
                           Delete
@@ -1707,7 +2039,7 @@ export default function AdminDashboard() {
                             <span className="font-semibold text-[#1F2432]">Email:</span>{" "}
                             <a
                               href={`mailto:${application.email}`}
-                              className="text-[#2365aa] no-underline hover:underline"
+                              className="break-all text-[#2365aa] no-underline hover:underline"
                             >
                               {application.email}
                             </a>
@@ -1783,7 +2115,7 @@ export default function AdminDashboard() {
           onClick={closeDemoModal}
         >
           <div
-            className="relative max-h-[90vh] w-full max-w-[720px] overflow-y-auto rounded-[20px] border border-[#d7e6f3] bg-white p-5 shadow-[0_30px_80px_-28px_rgba(17,61,119,0.45)] sm:p-6 xl:p-7"
+            className="relative max-h-[min(90vh,calc(100dvh-2rem))] w-full max-w-[720px] overflow-y-auto rounded-[20px] border border-[#d7e6f3] bg-white p-4 shadow-[0_30px_80px_-28px_rgba(17,61,119,0.45)] sm:p-6 xl:p-7"
             onClick={(event) => event.stopPropagation()}
           >
             <div className="mb-5 flex items-start justify-between gap-3">
@@ -1855,7 +2187,9 @@ export default function AdminDashboard() {
                       <polyline points="17 8 12 3 7 8" />
                       <line x1="12" y1="3" x2="12" y2="15" />
                     </svg>
-                    {demoThumbnailFile ? demoThumbnailFile.name : "Choose image"}
+                    <span className="max-w-full truncate">
+                      {demoThumbnailFile ? demoThumbnailFile.name : "Choose image"}
+                    </span>
                     <input
                       type="file"
                       accept="image/*"

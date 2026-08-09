@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { ArrowUpRight, ChevronLeft, ChevronRight, Play, X } from "lucide-react";
+import DemoPlayCover from "../components/DemoPlayCover";
 import FlyCTA from "../components/FlyCTA";
 import worldMapBackground from "../assets/homepage-icons/Group(3).png";
 import { type IndustryTag } from "../data/adminDefaults";
 import { normalizeIndustryTags } from "../data/industries";
 import { useDemoTags, usePublicDemos } from "../hooks/useAdminData";
-import { youtubeThumb } from "../lib/adminStorage";
 import type { AdminDemo } from "../data/adminDefaults";
 
 type IndustryFilter = "All" | IndustryTag;
@@ -131,7 +131,17 @@ const industryCopy: Record<
 };
 
 function youtubeEmbed(videoId: string) {
-  return `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+  const params = new URLSearchParams({
+    autoplay: "1",
+    rel: "0",
+    modestbranding: "1",
+    iv_load_policy: "3",
+    playsinline: "1",
+    fs: "1",
+    disablekb: "0",
+    cc_load_policy: "0",
+  });
+  return `https://www.youtube.com/embed/${videoId}?${params.toString()}`;
 }
 
 export default function Demo() {
@@ -424,22 +434,12 @@ export default function Demo() {
                     key={demo.id}
                     className="flex flex-col overflow-hidden rounded-[20px] border border-[#d7e6f3] bg-white shadow-[0_14px_40px_-28px_rgba(17,61,119,0.35)] transition-shadow duration-300 hover:shadow-[0_18px_44px_-24px_rgba(17,61,119,0.5)]"
                   >
-                    <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#0d1117]">
-                      <img
-                        src={demo.thumbnailUrl || youtubeThumb(demo.videoId)}
-                        alt=""
-                        className="absolute inset-0 h-full w-full object-cover object-top"
-                        onError={(event) => {
-                          const img = event.currentTarget;
-                          if (img.dataset.fallback === "1") return;
-                          img.dataset.fallback = "1";
-                          img.src = youtubeThumb(demo.videoId).replace(
-                            "/hqdefault.jpg",
-                            "/mqdefault.jpg"
-                          );
-                        }}
-                      />
-                    </div>
+                    <DemoPlayCover
+                      demo={demo}
+                      aspectClassName="aspect-[16/10]"
+                      showTitle
+                      onPlay={() => setActiveDemo(demo)}
+                    />
 
                     <div className="flex flex-1 flex-col px-5 py-5 sm:px-6 sm:py-6">
                       <h3 className="m-0 text-[clamp(16px,1.3vw,20px)] font-bold leading-snug text-[#1F2432] 2xl:text-[22px]">
