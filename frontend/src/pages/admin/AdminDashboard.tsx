@@ -696,7 +696,7 @@ export default function AdminDashboard() {
 
   const selectTab = (next: Tab) => {
     setTab(next);
-    setHomeTitleMenuOpen(false);
+    setHomeTagMenuOpen(false);
     // Collapse drawer on small screens so content stays usable
     if (typeof window !== "undefined" && window.matchMedia("(max-width: 1023px)").matches) {
       setSidebarCollapsed(true);
@@ -1078,7 +1078,7 @@ export default function AdminDashboard() {
                       type="button"
                       onClick={() => {
                         setHomeDemoSearch("");
-                        setHomeTitleFilter("All");
+                        setHomeTagFilter("All");
                       }}
                       className="mt-3 inline-flex cursor-pointer items-center gap-1.5 rounded-full border-0 bg-[#EFF7FC] px-4 py-2 text-sm font-semibold text-[#2365aa]"
                     >
