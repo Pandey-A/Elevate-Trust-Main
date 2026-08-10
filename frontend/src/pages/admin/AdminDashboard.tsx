@@ -8,8 +8,6 @@ import {
   Check,
   ChevronDown,
   ExternalLink,
-  Eye,
-  EyeOff,
   FileText,
   LayoutDashboard,
   ListFilter,
@@ -38,7 +36,6 @@ import { logoutUser } from "../../lib/auth";
 import {
   createDemo,
   deleteDemo,
-  toggleDemoVisibility,
   updateDemo,
 } from "../../lib/demosApi";
 import {
@@ -135,11 +132,11 @@ export default function AdminDashboard() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
   const [showHomeStats, setShowHomeStats] = useState(false);
   const [homeDemoSearch, setHomeDemoSearch] = useState("");
-  const [homeTitleFilter, setHomeTitleFilter] = useState("All");
-  const [homeTitleMenuOpen, setHomeTitleMenuOpen] = useState(false);
-  const [homeTitleMenuPos, setHomeTitleMenuPos] = useState({ top: 0, right: 0 });
-  const homeTitleMenuRef = useRef<HTMLDivElement>(null);
-  const homeTitleButtonRef = useRef<HTMLButtonElement>(null);
+  const [homeTagFilter, setHomeTagFilter] = useState("All");
+  const [homeTagMenuOpen, setHomeTagMenuOpen] = useState(false);
+  const [homeTagMenuPos, setHomeTagMenuPos] = useState({ top: 0, right: 0 });
+  const homeTagMenuRef = useRef<HTMLDivElement>(null);
+  const homeTagButtonRef = useRef<HTMLButtonElement>(null);
   const [demoForm, setDemoForm] = useState(emptyDemoForm);
   const [demoThumbnailFile, setDemoThumbnailFile] = useState<File | null>(null);
   const [demoThumbnailPreview, setDemoThumbnailPreview] = useState<string | null>(null);
@@ -196,15 +193,15 @@ export default function AdminDashboard() {
   }, []);
 
   useEffect(() => {
-    if (!homeTitleMenuOpen) return;
+    if (!homeTagMenuOpen) return;
 
-    const closeMenu = () => setHomeTitleMenuOpen(false);
+    const closeMenu = () => setHomeTagMenuOpen(false);
 
     const onPointerDown = (event: MouseEvent) => {
       const target = event.target as Node;
       if (
-        homeTitleMenuRef.current?.contains(target) ||
-        homeTitleButtonRef.current?.contains(target)
+        homeTagMenuRef.current?.contains(target) ||
+        homeTagButtonRef.current?.contains(target)
       ) {
         return;
       }
@@ -213,19 +210,29 @@ export default function AdminDashboard() {
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") closeMenu();
     };
+    // Close only when page scrolls — not when interacting with the dropdown itself
+    const onScroll = (event: Event) => {
+      const target = event.target;
+      if (
+        target instanceof Node &&
+        homeTagMenuRef.current?.contains(target)
+      ) {
+        return;
+      }
+      closeMenu();
+    };
 
-    // Close on any scroll so the card never gets stuck/cut at the top
-    window.addEventListener("scroll", closeMenu, true);
+    window.addEventListener("scroll", onScroll, true);
     window.addEventListener("resize", closeMenu);
     document.addEventListener("mousedown", onPointerDown);
     document.addEventListener("keydown", onKeyDown);
     return () => {
-      window.removeEventListener("scroll", closeMenu, true);
+      window.removeEventListener("scroll", onScroll, true);
       window.removeEventListener("resize", closeMenu);
       document.removeEventListener("mousedown", onPointerDown);
       document.removeEventListener("keydown", onKeyDown);
     };
-  }, [homeTitleMenuOpen]);
+  }, [homeTagMenuOpen]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -326,24 +333,25 @@ export default function AdminDashboard() {
     });
   }, [demos, demoSearch, demoCategoryFilter]);
 
-  const homeDemoTitles = useMemo(() => {
-    const titles = Array.from(new Set(demos.map((demo) => demo.title.trim()).filter(Boolean)));
-    return titles.sort((a, b) => a.localeCompare(b));
-  }, [demos]);
+  const homeFilterTags = useMemo(() => {
+    return [...demoTags].sort((a, b) => a.localeCompare(b));
+  }, [demoTags]);
 
   const homeFilteredDemos = useMemo(() => {
     const query = homeDemoSearch.trim().toLowerCase();
     return demos.filter((demo) => {
       const matchesSearch = !query || demo.title.toLowerCase().includes(query);
-      const matchesTitle =
-        homeTitleFilter === "All" ||
-        demo.title.trim().toLowerCase() === homeTitleFilter.trim().toLowerCase();
-      return matchesSearch && matchesTitle;
+      const matchesTag =
+        homeTagFilter === "All" ||
+        demo.industries.some(
+          (industry) => industry.toLowerCase() === homeTagFilter.trim().toLowerCase(),
+        );
+      return matchesSearch && matchesTag;
     });
-  }, [demos, homeDemoSearch, homeTitleFilter]);
+  }, [demos, homeDemoSearch, homeTagFilter]);
 
   const homeFilterActive =
-    homeDemoSearch.trim().length > 0 || homeTitleFilter !== "All";
+    homeDemoSearch.trim().length > 0 || homeTagFilter !== "All";
 
   const formatDate = (value: string) => {
     const date = new Date(value);
@@ -841,83 +849,83 @@ export default function AdminDashboard() {
                     <div className="flex w-full items-center gap-2 sm:w-auto">
                       <div className="relative min-w-0 flex-1 sm:flex-none">
                         <button
-                          ref={homeTitleButtonRef}
+                          ref={homeTagButtonRef}
                           type="button"
                           onClick={() => {
-                            const button = homeTitleButtonRef.current;
+                            const button = homeTagButtonRef.current;
                             if (button) {
                               const rect = button.getBoundingClientRect();
-                              setHomeTitleMenuPos({
+                              setHomeTagMenuPos({
                                 top: rect.bottom + 6,
                                 right: Math.max(12, window.innerWidth - rect.right),
                               });
                             }
-                            setHomeTitleMenuOpen((open) => !open);
+                            setHomeTagMenuOpen((open) => !open);
                           }}
                           className={`inline-flex h-10 w-full max-w-none cursor-pointer items-center justify-center gap-1.5 rounded-full border px-3 text-sm font-semibold transition sm:h-9 sm:w-auto sm:max-w-[210px] sm:justify-start ${
-                            homeTitleFilter === "All"
+                            homeTagFilter === "All"
                               ? "border-[#d7e6f3] bg-[#EFF7FC] text-[#2365aa] hover:bg-[#e7f2fb]"
                               : "border-[#2365aa] bg-[#2365aa] text-white hover:bg-[#1a5490]"
                           }`}
                           aria-haspopup="listbox"
-                          aria-expanded={homeTitleMenuOpen}
+                          aria-expanded={homeTagMenuOpen}
                         >
                           <ListFilter size={14} className="shrink-0" />
                           <span className="truncate">
-                            {homeTitleFilter === "All" ? "All titles" : homeTitleFilter}
+                            {homeTagFilter === "All" ? "All tags" : homeTagFilter}
                           </span>
                           <ChevronDown
                             size={14}
                             className={`shrink-0 transition-transform ${
-                              homeTitleMenuOpen ? "rotate-180" : ""
+                              homeTagMenuOpen ? "rotate-180" : ""
                             }`}
                           />
                         </button>
 
-                        {homeTitleMenuOpen
+                        {homeTagMenuOpen
                           ? createPortal(
                               <div
-                                ref={homeTitleMenuRef}
+                                ref={homeTagMenuRef}
                                 role="listbox"
                                 style={{
-                                  top: homeTitleMenuPos.top,
-                                  right: homeTitleMenuPos.right,
+                                  top: homeTagMenuPos.top,
+                                  right: homeTagMenuPos.right,
                                 }}
-                                className="fixed z-[250] max-h-[min(60vh,420px)] w-[min(480px,calc(100vw-24px))] overflow-y-auto rounded-xl border border-[#d7e6f3] bg-white p-2.5 shadow-[0_22px_50px_-18px_rgba(17,61,119,0.55)] [scrollbar-width:thin]"
+                                className="fixed z-[250] w-[min(420px,calc(100vw-24px))] rounded-xl border border-[#d7e6f3] bg-white p-3 shadow-[0_22px_50px_-18px_rgba(17,61,119,0.55)]"
                               >
                                 <button
                                   type="button"
                                   role="option"
-                                  aria-selected={homeTitleFilter === "All"}
+                                  aria-selected={homeTagFilter === "All"}
                                   onClick={() => {
-                                    setHomeTitleFilter("All");
-                                    setHomeTitleMenuOpen(false);
+                                    setHomeTagFilter("All");
+                                    setHomeTagMenuOpen(false);
                                   }}
                                   className={`mb-1.5 flex w-full cursor-pointer items-center justify-between rounded-lg border-0 px-3 py-2 text-left text-sm transition ${
-                                    homeTitleFilter === "All"
+                                    homeTagFilter === "All"
                                       ? "bg-[#EFF7FC] font-semibold text-[#113d77]"
                                       : "bg-transparent font-medium text-[#1F2432] hover:bg-[#f5f9fd]"
                                   }`}
                                 >
-                                  All titles
-                                  {homeTitleFilter === "All" ? (
+                                  All tags
+                                  {homeTagFilter === "All" ? (
                                     <Check size={15} className="shrink-0 text-[#2365aa]" />
                                   ) : null}
                                 </button>
-                                <div className="grid grid-cols-1 gap-1 sm:grid-cols-2">
-                                  {homeDemoTitles.map((title) => {
+                                <div className="grid grid-cols-2 gap-1">
+                                  {homeFilterTags.map((tag) => {
                                     const active =
-                                      homeTitleFilter.trim().toLowerCase() ===
-                                      title.toLowerCase();
+                                      homeTagFilter.trim().toLowerCase() ===
+                                      tag.toLowerCase();
                                     return (
                                       <button
-                                        key={title}
+                                        key={tag}
                                         type="button"
                                         role="option"
                                         aria-selected={active}
                                         onClick={() => {
-                                          setHomeTitleFilter(title);
-                                          setHomeTitleMenuOpen(false);
+                                          setHomeTagFilter(tag);
+                                          setHomeTagMenuOpen(false);
                                         }}
                                         className={`flex w-full cursor-pointer items-start justify-between gap-2 rounded-lg border-0 px-3 py-2 text-left text-sm leading-snug transition ${
                                           active
@@ -926,7 +934,7 @@ export default function AdminDashboard() {
                                         }`}
                                       >
                                         <span className="whitespace-normal break-words">
-                                          {title}
+                                          {tag}
                                         </span>
                                         {active ? (
                                           <Check
@@ -949,8 +957,8 @@ export default function AdminDashboard() {
                           type="button"
                           onClick={() => {
                             setHomeDemoSearch("");
-                            setHomeTitleFilter("All");
-                            setHomeTitleMenuOpen(false);
+                            setHomeTagFilter("All");
+                            setHomeTagMenuOpen(false);
                           }}
                           className="inline-flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full border border-[#d7e6f3] bg-white text-[#5b6b82] transition hover:border-[#2365aa]/35 hover:text-[#2365aa] sm:h-9 sm:w-9"
                           aria-label="Clear filters"
@@ -1064,7 +1072,7 @@ export default function AdminDashboard() {
                 {!demosLoading && demos.length > 0 && homeFilteredDemos.length === 0 ? (
                   <div className="rounded-[20px] border border-[#d7e6f3] bg-white px-6 py-14 text-center">
                     <p className="m-0 text-sm text-[#687181]">
-                      No demos match your search or title filter.
+                      No demos match your search or tag filter.
                     </p>
                     <button
                       type="button"
@@ -1100,34 +1108,31 @@ export default function AdminDashboard() {
 
           {tab === "demos" ? (
             <section className="space-y-5 sm:space-y-6 2xl:space-y-8">
-              <div className="flex flex-col gap-3 md:flex-row md:flex-wrap md:items-center md:justify-between">
-                <div>
-                  <h2 className="m-0 text-xl font-bold text-[#1F2432] 2xl:text-2xl">Manage Demos</h2>
-                  <p className="mt-1 text-sm text-[#848b9b]">
-                    Showing {filteredDemos.length} of {demos.length} demos
-                  </p>
-                </div>
+              <div className="flex flex-col gap-3 rounded-[18px] border border-[#d7e6f3] bg-white p-3 sm:p-3.5 xl:flex-row xl:items-center xl:gap-4">
+                <h2 className="m-0 shrink-0 px-1 text-xl font-bold text-[#1F2432] 2xl:text-2xl">
+                  Manage Demos
+                </h2>
 
-                <div className="flex w-full flex-col gap-2 md:w-auto md:flex-row md:flex-wrap md:items-center">
-                  <label className="relative min-w-0 w-full md:min-w-[220px] md:max-w-[280px] md:flex-1">
+                <div className="flex min-w-0 flex-1 flex-col gap-2 sm:flex-row sm:items-center">
+                  <label className="relative min-w-0 flex-1">
                     <Search
-                      size={16}
-                      className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-[#848b9b]"
+                      size={15}
+                      className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#8a94a6]"
                     />
                     <input
                       value={demoSearch}
                       onChange={(event) => setDemoSearch(event.target.value)}
-                      className="w-full rounded-full border border-[#d7e6f3] bg-white py-2.5 pl-10 pr-3.5 text-sm outline-none focus:border-[#2365aa]"
+                      className="h-10 w-full rounded-full border border-[#e2e8f0] bg-[#f7fafc] pl-9 pr-3 text-sm text-[#1F2432] outline-none transition placeholder:text-[#9aa3b2] focus:border-[#2365aa] focus:bg-white focus:ring-2 focus:ring-[#2365aa]/10"
                       placeholder="Search by title..."
                     />
                   </label>
 
-                  <label className="relative min-w-0 w-full md:min-w-[200px]">
+                  <label className="relative w-full shrink-0 sm:w-[200px]">
                     <span className="sr-only">Filter by category</span>
                     <select
                       value={demoCategoryFilter}
                       onChange={(event) => setDemoCategoryFilter(event.target.value)}
-                      className="w-full appearance-none rounded-full border border-[#d7e6f3] bg-white py-2.5 pl-4 pr-10 text-sm font-medium text-[#1F2432] outline-none focus:border-[#2365aa]"
+                      className="h-10 w-full appearance-none rounded-full border border-[#e2e8f0] bg-[#f7fafc] py-0 pl-4 pr-9 text-sm font-medium text-[#1F2432] outline-none transition focus:border-[#2365aa] focus:bg-white focus:ring-2 focus:ring-[#2365aa]/10"
                     >
                       <option value="All">All categories</option>
                       {demoTags.map((tag) => (
@@ -1137,15 +1142,15 @@ export default function AdminDashboard() {
                       ))}
                     </select>
                     <ChevronDown
-                      size={16}
-                      className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-[#848b9b]"
+                      size={15}
+                      className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[#8a94a6]"
                     />
                   </label>
 
                   <button
                     type="button"
                     onClick={openAddDemoModal}
-                    className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-full border-0 bg-[#2365aa] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#1a5490] md:w-auto"
+                    className="inline-flex h-10 w-full shrink-0 cursor-pointer items-center justify-center gap-2 rounded-full border-0 bg-[#2365aa] px-4 text-sm font-semibold text-white transition hover:bg-[#1a5490] sm:w-auto"
                   >
                     <Plus size={16} />
                     Add Demo
@@ -1194,15 +1199,6 @@ export default function AdminDashboard() {
                         showTitle
                         onPlay={() => setPlayingDemo(demo)}
                       />
-                      <span
-                        className={`pointer-events-none absolute left-3 top-3 z-10 rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide ${
-                          demo.isPublic
-                            ? "bg-[#e8f6ee] text-[#1d5c3a]"
-                            : "bg-[#fff4e5] text-[#9a6700]"
-                        }`}
-                      >
-                        {demo.isPublic ? "Public" : "Private"}
-                      </span>
                     </div>
                     <div className="flex flex-1 flex-col p-4">
                       <h3 className="m-0 min-h-[3rem] text-base font-bold leading-snug text-[#1F2432]">
@@ -1219,23 +1215,6 @@ export default function AdminDashboard() {
                         ))}
                       </div>
                       <div className="mt-auto flex flex-col gap-2 pt-4 md:flex-row md:flex-wrap">
-                        <button
-                          type="button"
-                          onClick={async () => {
-                            try {
-                              await toggleDemoVisibility(demo.id, !demo.isPublic);
-                              void refreshDemos();
-                            } catch (err) {
-                              setDemoError(
-                                getErrorMessage(err, "Unable to update visibility."),
-                              );
-                            }
-                          }}
-                          className="inline-flex w-full cursor-pointer items-center justify-center gap-1.5 rounded-full border border-[#d7e6f3] bg-[#EFF7FC] px-3 py-2 text-xs font-semibold text-[#2365aa] md:flex-1"
-                        >
-                          {demo.isPublic ? <EyeOff size={14} /> : <Eye size={14} />}
-                          {demo.isPublic ? "Make private" : "Make public"}
-                        </button>
                         <button
                           type="button"
                           onClick={() => onEditDemo(demo)}

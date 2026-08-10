@@ -828,147 +828,333 @@
     }
   }
   
-  /* ── Tablet (keeps original Hero-bg + centered card grid) ───────────────── */
+  /* ── Mid tablets (769–1100): same world-map layout as 1101+, scaled down ─ */
   @media (max-width: 1100px) and (min-width: 769px) {
     .hero-section {
-      height: auto;
-      min-height: 0;
-      overflow-x: clip;
-      padding-bottom: 88px;
+      height: 100vh;
+      min-height: 560px;
+      max-height: 760px;
+      overflow: hidden;
+      padding-bottom: 0;
       background-image: var(--hero-bg-image);
       background-size: cover;
-      background-position: center center;
+      background-position: 58% center;
     }
-  
+
     .hero-map-bg {
       display: none !important;
     }
-  
-    .hero-empower {
-      position: relative;
-      bottom: auto;
-      right: auto;
-      max-width: 100%;
-      margin: -12px auto 0;
-      padding: 0 24px;
-      text-align: center;
-    }
-  
-    .hero-empower h2 {
-      font-size: clamp(17px, 4vw, 22px);
-    }
-  
+
     .hero-inner {
-      flex-direction: column;
+      flex-direction: row;
+      align-items: flex-end;
       width: 100%;
-      max-width: 100%;
+      max-width: min(1760px, 100%);
       box-sizing: border-box;
-      padding: 48px 24px 100px;
-      gap: 36px;
-    }
-  
-    .hero-left {
-      flex: none;
-      width: 100%;
-      max-width: 100%;
-      padding-top: 0;
-    }
-  
-    .hero-h1 {
-      font-size: clamp(34px, 7vw, 52px);
-      letter-spacing: -1px;
-      word-break: break-word;
-    }
-  
-    .hero-right {
-      min-height: 0;
-      width: 100%;
-    }
-  
-    .hero-cards-container {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
-      position: relative;
-      width: 100%;
-      max-width: 420px;
-      height: auto;
-      min-height: unset;
+      min-height: calc(100% - 32px);
+      /* Shared vertical band so left + right sit at equal height */
+      padding-top: clamp(88px, 14vh, 128px);
+      padding-bottom: clamp(56px, 8vh, 80px);
+      padding-left: clamp(16px, 2.2vw, 28px);
+      padding-right: clamp(16px, 2.2vw, 28px);
+      gap: clamp(16px, 2.5vw, 28px);
       margin: 0 auto;
     }
-  
-    .hero-card {
-      position: relative !important;
-      top: auto !important;
-      left: auto !important;
-      right: auto !important;
-      bottom: auto !important;
-      transform: none !important;
-      width: 100% !important;
-      height: auto !important;
-      min-height: 100px;
-      padding: 14px 12px;
+
+    .hero-left {
+      flex: 0 1 auto;
+      width: auto;
+      min-width: 0;
+      max-width: clamp(220px, 34vw, 300px);
+      padding-top: 0;
+      margin-bottom: 0;
+      align-self: flex-end;
     }
-  
-    .hero-card--we:hover,
-    .hero-card--create:hover,
-    .hero-card.hero-card--arrow:hover,
-    .hero-card.hero-card--future:hover {
-      transform: none !important;
+
+    .hero-badge {
+      font-size: 11px;
+      padding: 5px 10px;
     }
-  
-    .hero-card--we {
-      grid-column: 1;
-      grid-row: 1;
-      font-size: 26px;
-      border-radius: 20px;
-      min-height: 108px;
+
+    .hero-h1 {
+      max-width: 100%;
+      font-size: clamp(28px, 4.2vw, 40px);
+      letter-spacing: -0.5px;
+      word-break: normal;
     }
-  
-    .hero-card--future {
-      grid-column: 2;
-      grid-row: 1;
-      font-size: 16px;
-      border-radius: 22px;
-      min-height: 108px;
+
+    .hero-sub {
+      min-width: 0;
+      max-width: min(280px, 32vw);
+      font-size: clamp(13px, 1.5vw, 15px);
     }
-  
-    .hero-card__future-icon {
-      width: 56px;
-      height: 40px;
+
+    .hero-cta-btn {
+      max-width: min(280px, 32vw);
+      font-size: 14px;
+      padding: 10px 14px;
     }
-  
-    .hero-card--arrow {
-      grid-column: 1 / -1;
-      grid-row: 2;
-      width: 72px !important;
-      min-height: 64px;
-      justify-self: center;
-      border-radius: 18px;
-      padding: 10px;
-    }
-  
-    .hero-card--arrow .hero-card__arrow-img {
+
+    .hero-cta-btn__circle {
       width: 34px;
       height: 34px;
     }
-  
-    .hero-card--create {
-      grid-column: 1 / -1;
-      grid-row: 3;
-      flex-direction: row;
-      justify-content: center;
-      gap: 14px;
-      font-size: 18px;
-      border-radius: 22px;
-      min-height: 112px;
-      padding: 16px 20px;
+
+    .hero-right {
+      position: relative;
+      flex: 1 1 auto;
+      width: auto;
+      min-width: 0;
+      min-height: 0;
+      overflow: visible;
+      /* Cards + empower as one group, slightly lower than before */
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: flex-end;
+      align-self: flex-end;
+      padding-bottom: clamp(4px, 1vh, 12px);
+      margin-bottom: 0;
     }
-  
-    .hero-card__create-illust {
-      width: 64px;
-      height: 50px;
+
+    /* Cards sit above empower, both flush right */
+    .hero-cards-container {
+      position: relative;
+      display: block;
+      grid-template-columns: none;
+      gap: 0;
+      top: auto;
+      right: auto;
+      bottom: auto;
+      left: auto;
+      width: 268px;
+      height: 340px;
+      max-width: none;
+      min-height: unset;
+      margin: 0 0 12px 0;
+      transform: none;
       flex-shrink: 0;
+    }
+
+    .hero-card {
+      position: absolute !important;
+      top: auto;
+      left: auto;
+      right: auto;
+      bottom: auto;
+      width: auto !important;
+      height: auto !important;
+      min-height: 0;
+      padding: 0;
+    }
+
+    .hero-card--we:hover,
+    .hero-card--create:hover {
+      transform: translateY(-3px) !important;
+    }
+
+    .hero-card.hero-card--arrow:hover,
+    .hero-card.hero-card--future:hover {
+      transform: translateY(-3px) !important;
+    }
+
+    .hero-card--we {
+      top: 34px !important;
+      left: 0 !important;
+      right: auto !important;
+      grid-column: auto;
+      grid-row: auto;
+      width: 86px !important;
+      height: 80px !important;
+      border-radius: 20px;
+      font-size: 20px;
+      min-height: 0;
+      z-index: 3;
+    }
+
+    .hero-card--future {
+      top: 0 !important;
+      left: 132px !important;
+      right: auto !important;
+      grid-column: auto;
+      grid-row: auto;
+      width: 128px !important;
+      height: 122px !important;
+      border-radius: 26px;
+      font-size: 14px;
+      gap: 4px;
+      min-height: 0;
+      z-index: 4;
+    }
+
+    .hero-card__future-icon {
+      width: 52px;
+      height: 40px;
+      object-fit: contain;
+    }
+
+    .hero-card--arrow {
+      top: 126px !important;
+      left: 74px !important;
+      right: auto !important;
+      grid-column: auto;
+      grid-row: auto;
+      width: 84px !important;
+      height: 80px !important;
+      min-height: 0;
+      border-radius: 22px;
+      justify-self: auto;
+      padding: 0;
+      z-index: 5;
+    }
+
+    .hero-card--arrow .hero-card__arrow-img {
+      width: 28px;
+      height: 28px;
+    }
+
+    .hero-card--create {
+      top: 220px !important;
+      left: 14px !important;
+      right: auto !important;
+      grid-column: auto;
+      grid-row: auto;
+      width: 120px !important;
+      height: 108px !important;
+      min-height: 0;
+      border-radius: 22px;
+      font-size: 14px;
+      gap: 3px;
+      padding: 10px 8px !important;
+      flex-direction: column !important;
+      justify-content: center !important;
+      z-index: 3;
+    }
+
+    .hero-card__create-illust {
+      width: 54px;
+      height: 40px;
+      flex-shrink: 0;
+    }
+
+    .hero-card--create > span {
+      width: auto;
+      height: auto;
+      font-size: inherit;
+      line-height: 1;
+    }
+
+    .hero-empower {
+      position: relative;
+      right: auto;
+      bottom: auto;
+      left: auto;
+      text-align: right;
+      max-width: 220px;
+      width: 268px;
+      margin: 0;
+      padding: 0;
+      z-index: 10;
+      flex-shrink: 0;
+    }
+
+    .hero-empower h2 {
+      font-size: clamp(15px, 2vw, 18px);
+      line-height: 1.25;
+      margin: 0 0 8px;
+    }
+
+    .hero-empower p {
+      font-size: clamp(11px, 1.3vw, 13px);
+      font-weight: 500;
+      font-style: normal;
+      line-height: 1.3;
+    }
+
+    /* Tighter mid-band (iPad portrait / small laptop) */
+    @media (max-width: 900px) {
+      .hero-inner {
+        padding-top: clamp(80px, 13vh, 112px);
+        padding-bottom: clamp(48px, 7vh, 68px);
+      }
+
+      .hero-left {
+        max-width: clamp(200px, 32vw, 260px);
+        margin-bottom: 0;
+      }
+
+      .hero-h1 {
+        font-size: clamp(26px, 4vw, 34px);
+      }
+
+      .hero-sub,
+      .hero-cta-btn {
+        max-width: min(240px, 30vw);
+      }
+
+      .hero-cards-container {
+        width: 240px;
+        height: 300px;
+        margin-bottom: 10px;
+      }
+
+      .hero-card--we {
+        top: 28px !important;
+        width: 76px !important;
+        height: 70px !important;
+        font-size: 18px;
+        border-radius: 18px;
+      }
+
+      .hero-card--future {
+        left: 118px !important;
+        width: 114px !important;
+        height: 108px !important;
+        font-size: 13px;
+        border-radius: 22px;
+      }
+
+      .hero-card__future-icon {
+        width: 46px;
+        height: 34px;
+      }
+
+      .hero-card--arrow {
+        top: 112px !important;
+        left: 66px !important;
+        width: 74px !important;
+        height: 70px !important;
+        border-radius: 18px;
+      }
+
+      .hero-card--arrow .hero-card__arrow-img {
+        width: 24px;
+        height: 24px;
+      }
+
+      .hero-card--create {
+        top: 196px !important;
+        left: 10px !important;
+        width: 108px !important;
+        height: 96px !important;
+        font-size: 13px;
+        border-radius: 18px;
+        padding: 8px 6px !important;
+      }
+
+      .hero-card__create-illust {
+        width: 48px;
+        height: 34px;
+      }
+
+      .hero-empower {
+        max-width: 200px;
+        width: 240px;
+      }
+
+      .hero-empower h2 {
+        font-size: 15px;
+      }
     }
   }
   
