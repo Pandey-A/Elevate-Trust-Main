@@ -5,8 +5,6 @@ import FlyCTA from "../components/FlyCTA";
 import worldMapBackground from "../assets/homepage-icons/Group(3).png";
 import architectureDiagram from "../assets/technology-trends/Trends-cloud.png";
 import checkIcon from "../assets/technology-trends/check-icon.svg";
-import downloadIcon from "../assets/technology-trends/download-device-icon.svg";
-
 type Horizon = {
   tag: string;
   titleLines: [string, string];
