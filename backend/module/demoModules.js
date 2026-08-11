@@ -4,8 +4,10 @@ function mapDemo(row) {
   return {
     id: row.id,
     title: row.title,
-    videoId: row.video_id,
-    youtubeUrl: row.youtube_url,
+    videoId: row.video_id || "",
+    youtubeUrl: row.youtube_url || "",
+    videoUrl: row.video_url || null,
+    thumbnailUrl: row.thumbnail_url || null,
     industries: Array.isArray(row.industries) ? row.industries : [],
     isPublic: row.is_public !== false,
     createdAt: row.created_at,
@@ -14,7 +16,7 @@ function mapDemo(row) {
 }
 
 const DEMO_COLUMNS = `
-  id, title, video_id, youtube_url, industries, is_public, created_at, updated_at
+  id, title, video_id, youtube_url, video_url, thumbnail_url, industries, is_public, created_at, updated_at
 `;
 
 export async function listPublicDemos() {
@@ -52,15 +54,19 @@ export async function getDemoById(id) {
 export async function createDemo(data) {
   const result = await pool.query(
     `
-      INSERT INTO demos (id, title, video_id, youtube_url, industries, is_public)
-      VALUES ($1, $2, $3, $4, $5::jsonb, $6)
+      INSERT INTO demos (
+        id, title, video_id, youtube_url, video_url, thumbnail_url, industries, is_public
+      )
+      VALUES ($1, $2, $3, $4, $5, $6, $7::jsonb, $8)
       RETURNING ${DEMO_COLUMNS}
     `,
     [
       data.id,
       data.title,
-      data.videoId,
-      data.youtubeUrl,
+      data.videoId || "",
+      data.youtubeUrl || "",
+      data.videoUrl || null,
+      data.thumbnailUrl || null,
       JSON.stringify(data.industries || []),
       data.isPublic !== false,
     ],
@@ -76,8 +82,10 @@ export async function updateDemo(id, data) {
         title = $2,
         video_id = $3,
         youtube_url = $4,
-        industries = $5::jsonb,
-        is_public = $6,
+        video_url = $5,
+        thumbnail_url = $6,
+        industries = $7::jsonb,
+        is_public = $8,
         updated_at = NOW()
       WHERE id = $1
       RETURNING ${DEMO_COLUMNS}
@@ -85,8 +93,10 @@ export async function updateDemo(id, data) {
     [
       id,
       data.title,
-      data.videoId,
-      data.youtubeUrl,
+      data.videoId || "",
+      data.youtubeUrl || "",
+      data.videoUrl || null,
+      data.thumbnailUrl || null,
       JSON.stringify(data.industries || []),
       data.isPublic !== false,
     ],

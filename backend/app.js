@@ -5,6 +5,7 @@ import helmet from "helmet";
 import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";
+import pool from "./config/db.js";
 import careerRouter from "./route/career.js";
 import authRouter from "./route/auth.js";
 import demoRouter from "./route/demo.js";
@@ -78,7 +79,8 @@ app.use((error, _req, res, _next) => {
     error instanceof Error &&
     (error.message.includes("Only PDF") ||
       error.message.includes("Only JPG") ||
-      error.message.includes("images are allowed"))
+      error.message.includes("images are allowed") ||
+      error.message.includes("Only video files"))
   ) {
     return res.status(400).json({
       success: false,
@@ -89,7 +91,7 @@ app.use((error, _req, res, _next) => {
   if (error?.code === "LIMIT_FILE_SIZE") {
     return res.status(400).json({
       success: false,
-      message: "File is too large. Max size is 5MB.",
+      message: "File is too large. Max demo video size is 500MB.",
     });
   }
 
@@ -119,6 +121,15 @@ function listenOnPort(port) {
 }
 
 async function startServer() {
+  try {
+    await pool.query(`
+      ALTER TABLE demos ADD COLUMN IF NOT EXISTS video_url TEXT;
+      ALTER TABLE demos ADD COLUMN IF NOT EXISTS thumbnail_url TEXT;
+    `);
+  } catch (error) {
+    console.warn("Demo schema ensure skipped:", error?.message || error);
+  }
+
   let lastError = null;
 
   for (let offset = 0; offset < MAX_PORT_TRIES; offset += 1) {

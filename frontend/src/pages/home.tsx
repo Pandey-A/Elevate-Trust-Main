@@ -1,4 +1,5 @@
 // pages/home.tsx
+import { useEffect } from "react";
 import HeroSection from "../components/heroSection";
 import ClientStrip from "../components/ClientStrip";
 import StoriesOfImpact from "../components/StoriesOfImpact";
@@ -9,8 +10,13 @@ import LatestWorks from "../components/LatestWorks";
 import Testimonials from "../components/testimonials";
 import FlyCTA from "../components/FlyCTA";
 import Service from "../components/Service";
+import { prefetchPublicTestimonials } from "../hooks/useAdminData";
 
 export default function Home() {
+  useEffect(() => {
+    void prefetchPublicTestimonials();
+  }, []);
+
   return (
     <main className="min-h-[calc(200vh-4rem)] bg-[#113D77]">
       <HeroSection />

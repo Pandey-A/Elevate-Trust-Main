@@ -13,6 +13,9 @@ const pool = process.env.DATABASE_URL
   ? new Pool({
       connectionString: process.env.DATABASE_URL,
       ssl: isSupabase ? { rejectUnauthorized: false } : undefined,
+      max: 10,
+      connectionTimeoutMillis: 10_000,
+      idleTimeoutMillis: 30_000,
     })
   : new Pool({
       host: process.env.DB_HOST || "localhost",
@@ -21,6 +24,9 @@ const pool = process.env.DATABASE_URL
       user: process.env.DB_USER || "postgres",
       password: process.env.DB_PASSWORD || "",
       ssl: isSupabase ? { rejectUnauthorized: false } : undefined,
+      max: 10,
+      connectionTimeoutMillis: 10_000,
+      idleTimeoutMillis: 30_000,
     });
 
 pool.on("error", (error) => {

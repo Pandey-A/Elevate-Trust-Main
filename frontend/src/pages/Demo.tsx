@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { ArrowUpRight, ChevronLeft, ChevronRight, Play, X } from "lucide-react";
 import DemoPlayCover from "../components/DemoPlayCover";
+import DemoVideoPlayer from "../components/DemoVideoPlayer";
 import FlyCTA from "../components/FlyCTA";
 import worldMapBackground from "../assets/homepage-icons/Group(3).png";
 import { type IndustryTag } from "../data/adminDefaults";
@@ -129,20 +130,6 @@ const industryCopy: Record<
       "See how computer vision and responsible AI support public safety, access control, crowd monitoring, and secure operations.",
   },
 };
-
-function youtubeEmbed(videoId: string) {
-  const params = new URLSearchParams({
-    autoplay: "1",
-    rel: "0",
-    modestbranding: "1",
-    iv_load_policy: "3",
-    playsinline: "1",
-    fs: "1",
-    disablekb: "0",
-    cc_load_policy: "0",
-  });
-  return `https://www.youtube.com/embed/${videoId}?${params.toString()}`;
-}
 
 export default function Demo() {
   const { demos, loading: demosLoading, error: demosError } = usePublicDemos();
@@ -525,13 +512,11 @@ export default function Demo() {
               </button>
             </div>
             <div className="relative aspect-video w-full bg-black">
-              <iframe
-                key={activeDemo.videoId}
-                src={youtubeEmbed(activeDemo.videoId)}
+              <DemoVideoPlayer
                 title={activeDemo.title}
-                className="absolute inset-0 h-full w-full border-0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowFullScreen
+                videoUrl={activeDemo.videoUrl}
+                videoId={activeDemo.videoId}
+                poster={activeDemo.thumbnailUrl}
               />
             </div>
           </div>

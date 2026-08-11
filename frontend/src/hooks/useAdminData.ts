@@ -62,6 +62,7 @@ function createResourceCache<T>(fetcher: () => Promise<T>): ResourceCache<T> {
 
 const publicDemosCache = createResourceCache(fetchPublicDemos);
 const publicBlogsCache = createResourceCache(fetchPublicBlogs);
+const publicTestimonialsCache = createResourceCache(fetchPublicTestimonials);
 const publicDemoTagsCache = createResourceCache(async () => {
   const data = await fetchDemoTags();
   const names = data.map((tag: DemoTag) => tag.name).filter(Boolean);
@@ -75,6 +76,10 @@ export function prefetchPublicDemos() {
 
 export function prefetchPublicBlogs() {
   return publicBlogsCache.get(false);
+}
+
+export function prefetchPublicTestimonials() {
+  return publicTestimonialsCache.get(false);
 }
 
 export function prefetchDemoTags() {
@@ -233,33 +238,38 @@ export function useAdminBlogs() {
 }
 
 export function usePublicTestimonials() {
-  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
-  const [loading, setLoading] = useState(true);
+  const initial = publicTestimonialsCache.peek();
+  const [testimonials, setTestimonials] = useState<Testimonial[]>(() => initial ?? []);
+  const [loading, setLoading] = useState(() => initial === null);
   const [error, setError] = useState("");
 
-  const refresh = useCallback(async () => {
+  const refresh = useCallback(async (force = false) => {
+    const cached = publicTestimonialsCache.peek();
     try {
-      setLoading(true);
-      const data = await fetchPublicTestimonials();
+      if (cached === null) setLoading(true);
+      const data = await publicTestimonialsCache.get(force);
       setTestimonials(data);
       setError("");
     } catch (err) {
-      setError(getErrorMessage(err, "Unable to load testimonials."));
+      if (publicTestimonialsCache.peek() === null) {
+        setError(getErrorMessage(err, "Unable to load testimonials."));
+      }
     } finally {
       setLoading(false);
     }
   }, []);
 
   useEffect(() => {
-    void refresh();
+    void refresh(false);
     const onChange = () => {
-      void refresh();
+      publicTestimonialsCache.invalidate();
+      void refresh(true);
     };
     window.addEventListener(ADMIN_DATA_EVENT, onChange);
     return () => window.removeEventListener(ADMIN_DATA_EVENT, onChange);
   }, [refresh]);
 
-  return { testimonials, loading, error, refresh };
+  return { testimonials, loading, error, refresh: () => refresh(true) };
 }
 
 export function useAdminTestimonials() {

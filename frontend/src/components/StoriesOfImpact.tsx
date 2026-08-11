@@ -39,9 +39,10 @@ function StoryQuote({ text, className }: { text: string; className: string }) {
 }
 
 export default function StoriesOfImpact() {
-  const { testimonials, loading, error } = usePublicTestimonials();
+  const { testimonials, loading, error, refresh } = usePublicTestimonials();
   const trackRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef({ active: false, startX: 0 });
+  const sectionRef = useRef<HTMLElement>(null);
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
@@ -49,6 +50,8 @@ export default function StoriesOfImpact() {
   const [dragX, setDragX] = useState(0);
   const [dragging, setDragging] = useState(false);
   const [cardHovered, setCardHovered] = useState(false);
+  const [inView, setInView] = useState(false);
+  const wasInViewRef = useRef(false);
 
   const stories: Story[] = testimonials.map((item) => ({
     id: item.id,
@@ -68,6 +71,38 @@ export default function StoriesOfImpact() {
       return Math.min(prev, stories.length - 1);
     });
   }, [stories.length]);
+
+  // Start carousel only while visible; reset to first card when leaving / re-entering
+  useEffect(() => {
+    const node = sectionRef.current;
+    if (!node) return;
+
+    let retried = false;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const visible = Boolean(entry?.isIntersecting && entry.intersectionRatio >= 0.2);
+
+        if (visible && !wasInViewRef.current) {
+          setActiveIndex(0);
+          if (!retried && (loading || error)) {
+            retried = true;
+            void refresh();
+          }
+        }
+        if (!visible && wasInViewRef.current) {
+          setActiveIndex(0);
+          setExpandedIndex(null);
+        }
+
+        wasInViewRef.current = visible;
+        setInView(visible);
+      },
+      { threshold: [0, 0.2, 0.35], rootMargin: "80px 0px" },
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [error, loading, refresh]);
 
   const measureOffset = useCallback((index: number) => {
     const track = trackRef.current;
@@ -107,7 +142,14 @@ export default function StoriesOfImpact() {
   }, [activeIndex, measureOffset, stories.length]);
 
   useEffect(() => {
-    if (dragging || cardHovered || maxIndex <= 0 || expandedIndex !== null || stories.length === 0) {
+    if (
+      !inView ||
+      dragging ||
+      cardHovered ||
+      maxIndex <= 0 ||
+      expandedIndex !== null ||
+      stories.length === 0
+    ) {
       return;
     }
 
@@ -119,7 +161,7 @@ export default function StoriesOfImpact() {
     }, AUTO_ADVANCE_MS);
 
     return () => window.clearInterval(id);
-  }, [activeIndex, dragging, cardHovered, maxIndex, expandedIndex, stories.length]);
+  }, [activeIndex, cardHovered, dragging, expandedIndex, inView, maxIndex, stories.length]);
 
   useEffect(() => {
     if (expandedIndex === null) return;
@@ -170,6 +212,7 @@ export default function StoriesOfImpact() {
 
   return (
     <section
+      ref={sectionRef}
       className="relative overflow-hidden bg-[#113D77] px-4 py-14 sm:px-6 sm:py-16 lg:px-10 lg:py-20 xl:px-12 xl:py-24"
       aria-label="Client testimonials"
     >
@@ -204,9 +247,27 @@ export default function StoriesOfImpact() {
           <div className="overflow-hidden rounded-[28px] border border-white/10 bg-[#1a4d8c]/40 sm:rounded-[40px] lg:rounded-[48px] xl:rounded-[56px]">
             <div className="px-4 pb-7 pt-5 sm:px-6 sm:pb-9 sm:pt-6 lg:px-8 lg:pb-10 lg:pt-7 xl:px-10">
               {loading ? (
-                <p className="py-16 text-center text-sm text-white/80">Loading testimonials...</p>
+                <div className="flex flex-col items-center gap-3 py-16 text-center">
+                  <p className="m-0 text-sm text-white/80">Loading testimonials...</p>
+                  <button
+                    type="button"
+                    onClick={() => void refresh()}
+                    className="rounded-full border border-white/30 bg-white/10 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/20"
+                  >
+                    Retry
+                  </button>
+                </div>
               ) : error ? (
-                <p className="py-16 text-center text-sm text-white/80">{error}</p>
+                <div className="flex flex-col items-center gap-3 py-16 text-center">
+                  <p className="m-0 text-sm text-white/80">{error}</p>
+                  <button
+                    type="button"
+                    onClick={() => void refresh()}
+                    className="rounded-full border border-white/30 bg-white/10 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/20"
+                  >
+                    Retry
+                  </button>
+                </div>
               ) : stories.length === 0 ? (
                 <p className="py-16 text-center text-sm text-white/80">
                   Testimonials will appear here once published.

@@ -7,6 +7,11 @@ import {
   updateDemo,
   updateDemoVisibility,
 } from "../module/demoModules.js";
+import {
+  cleanupDemoTempFiles,
+  storeDemoThumbnail,
+  storeDemoVideo,
+} from "../middleware/upload.js";
 
 function extractYoutubeId(input) {
   const value = String(input || "").trim();
@@ -73,21 +78,41 @@ function parseIndustries(body) {
   return [];
 }
 
-function validateDemoPayload(body) {
+function getUploadedFile(req, field) {
+  if (req.files && typeof req.files === "object" && !Array.isArray(req.files)) {
+    const list = req.files[field];
+    return Array.isArray(list) ? list[0] : undefined;
+  }
+  return undefined;
+}
+
+function validateDemoPayload(body, { hasVideoFile = false, existingVideoUrl = "" } = {}) {
   const title = String(body.title || "").trim();
   const youtubeUrl = String(body.youtubeUrl || body.youtube_url || "").trim();
   const industries = parseIndustries(body);
   const videoId =
     extractYoutubeId(youtubeUrl) ||
-    extractYoutubeId(body.videoId || body.video_id || "");
+    extractYoutubeId(body.videoId || body.video_id || "") ||
+    "";
   const isPublic = parseVisibility(body);
+  const hasYoutube = Boolean(videoId);
+  const hasCloudVideo = hasVideoFile || Boolean(existingVideoUrl);
 
   const errors = [];
   if (!title) errors.push("title");
-  if (!videoId) errors.push("youtubeUrl");
+  if (!hasYoutube && !hasCloudVideo) errors.push("video");
   if (industries.length === 0) errors.push("industries");
 
-  return { title, youtubeUrl, industries, videoId, isPublic, errors };
+  return {
+    title,
+    youtubeUrl: hasYoutube
+      ? youtubeUrl || `https://www.youtube.com/watch?v=${videoId}`
+      : "",
+    industries,
+    videoId,
+    isPublic,
+    errors,
+  };
 }
 
 /** Public website: only public demos */
@@ -126,8 +151,13 @@ export async function getAdminDemos(_req, res) {
 
 export async function createDemoHandler(req, res) {
   try {
-    const payload = validateDemoPayload(req.body);
+    const videoFile = getUploadedFile(req, "video");
+    const thumbnailFile = getUploadedFile(req, "thumbnail");
+    const payload = validateDemoPayload(req.body, {
+      hasVideoFile: Boolean(videoFile),
+    });
     if (payload.errors.length > 0) {
+      await cleanupDemoTempFiles(req);
       return res.status(400).json({
         success: false,
         message: `Missing or invalid fields: ${payload.errors.join(", ")}`,
@@ -137,18 +167,33 @@ export async function createDemoHandler(req, res) {
     const id = String(req.body.id || "").trim() || createId();
     const existing = await getDemoById(id);
     if (existing) {
+      await cleanupDemoTempFiles(req);
       return res.status(409).json({
         success: false,
         message: "A demo with this id already exists.",
       });
     }
 
+    let videoUrl = null;
+    let thumbnailUrl = null;
+
+    if (videoFile) {
+      const stored = await storeDemoVideo(videoFile, req);
+      videoUrl = stored.videoUrl;
+    }
+
+    if (thumbnailFile) {
+      const storedThumb = await storeDemoThumbnail(thumbnailFile, req);
+      thumbnailUrl = storedThumb.imageUrl;
+    }
+
     const demo = await createDemo({
       id,
       title: payload.title,
       videoId: payload.videoId,
-      youtubeUrl:
-        payload.youtubeUrl || `https://www.youtube.com/watch?v=${payload.videoId}`,
+      youtubeUrl: payload.youtubeUrl,
+      videoUrl,
+      thumbnailUrl,
       industries: payload.industries,
       isPublic: payload.isPublic,
     });
@@ -161,10 +206,11 @@ export async function createDemoHandler(req, res) {
       data: demo,
     });
   } catch (error) {
+    await cleanupDemoTempFiles(req);
     console.error("Create demo error:", error);
     return res.status(500).json({
       success: false,
-      message: "Unable to create demo right now.",
+      message: error?.message || "Unable to create demo right now.",
     });
   }
 }
@@ -179,29 +225,51 @@ export async function updateDemoHandler(req, res) {
       });
     }
 
-    const payload = validateDemoPayload(req.body);
+    const existing = await getDemoById(id);
+    if (!existing) {
+      await cleanupDemoTempFiles(req);
+      return res.status(404).json({
+        success: false,
+        message: "Demo not found.",
+      });
+    }
+
+    const videoFile = getUploadedFile(req, "video");
+    const thumbnailFile = getUploadedFile(req, "thumbnail");
+    const payload = validateDemoPayload(req.body, {
+      hasVideoFile: Boolean(videoFile),
+      existingVideoUrl: existing.videoUrl || "",
+    });
     if (payload.errors.length > 0) {
+      await cleanupDemoTempFiles(req);
       return res.status(400).json({
         success: false,
         message: `Missing or invalid fields: ${payload.errors.join(", ")}`,
       });
     }
 
+    let videoUrl = existing.videoUrl || null;
+    let thumbnailUrl = existing.thumbnailUrl || null;
+
+    if (videoFile) {
+      const stored = await storeDemoVideo(videoFile, req);
+      videoUrl = stored.videoUrl;
+    }
+
+    if (thumbnailFile) {
+      const storedThumb = await storeDemoThumbnail(thumbnailFile, req);
+      thumbnailUrl = storedThumb.imageUrl;
+    }
+
     const demo = await updateDemo(id, {
       title: payload.title,
       videoId: payload.videoId,
-      youtubeUrl:
-        payload.youtubeUrl || `https://www.youtube.com/watch?v=${payload.videoId}`,
+      youtubeUrl: payload.youtubeUrl,
+      videoUrl,
+      thumbnailUrl,
       industries: payload.industries,
       isPublic: payload.isPublic,
     });
-
-    if (!demo) {
-      return res.status(404).json({
-        success: false,
-        message: "Demo not found.",
-      });
-    }
 
     return res.status(200).json({
       success: true,
@@ -211,10 +279,11 @@ export async function updateDemoHandler(req, res) {
       data: demo,
     });
   } catch (error) {
+    await cleanupDemoTempFiles(req);
     console.error("Update demo error:", error);
     return res.status(500).json({
       success: false,
-      message: "Unable to update demo right now.",
+      message: error?.message || "Unable to update demo right now.",
     });
   }
 }

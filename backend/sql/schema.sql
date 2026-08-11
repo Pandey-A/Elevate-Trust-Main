@@ -30,8 +30,10 @@ CREATE INDEX IF NOT EXISTS idx_admin_users_email ON admin_users (email);
 CREATE TABLE IF NOT EXISTS demos (
   id VARCHAR(120) PRIMARY KEY,
   title VARCHAR(255) NOT NULL,
-  video_id VARCHAR(32) NOT NULL,
-  youtube_url TEXT NOT NULL,
+  video_id VARCHAR(64) NOT NULL DEFAULT '',
+  youtube_url TEXT NOT NULL DEFAULT '',
+  video_url TEXT,
+  thumbnail_url TEXT,
   industries JSONB NOT NULL DEFAULT '[]'::jsonb,
   is_public BOOLEAN NOT NULL DEFAULT TRUE,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -40,6 +42,18 @@ CREATE TABLE IF NOT EXISTS demos (
 
 ALTER TABLE demos
   ADD COLUMN IF NOT EXISTS is_public BOOLEAN NOT NULL DEFAULT TRUE;
+
+ALTER TABLE demos
+  ADD COLUMN IF NOT EXISTS video_url TEXT;
+
+ALTER TABLE demos
+  ADD COLUMN IF NOT EXISTS thumbnail_url TEXT;
+
+ALTER TABLE demos
+  ALTER COLUMN video_id SET DEFAULT '';
+
+ALTER TABLE demos
+  ALTER COLUMN youtube_url SET DEFAULT '';
 
 CREATE INDEX IF NOT EXISTS idx_demos_created_at ON demos (created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_demos_is_public ON demos (is_public);

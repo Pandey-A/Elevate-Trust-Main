@@ -54,6 +54,22 @@ async function initDb() {
   const schema = fs.readFileSync(schemaPath, "utf8");
 
   await pool.query(schema);
+
+  // Existing DBs may still have NOT NULL on YouTube columns — relax for Cloudinary-only demos.
+  await pool.query(`
+    DO $$
+    BEGIN
+      BEGIN
+        ALTER TABLE demos ALTER COLUMN video_id DROP NOT NULL;
+      EXCEPTION WHEN others THEN NULL;
+      END;
+      BEGIN
+        ALTER TABLE demos ALTER COLUMN youtube_url DROP NOT NULL;
+      EXCEPTION WHEN others THEN NULL;
+      END;
+    END $$;
+  `);
+
   console.log("Database schema is ready");
   await seedDemoTags(DEFAULT_TAGS);
   console.log("demo_tags are ready");

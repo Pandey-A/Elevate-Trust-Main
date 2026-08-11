@@ -73,7 +73,9 @@ const AUTO_ADVANCE_MS = 4500;
 export default function AILandscape() {
   const trackRef = useRef<HTMLDivElement>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
   const dragRef = useRef({ active: false, startX: 0, startOffset: 0 });
+  const wasInViewRef = useRef(false);
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [slideOffset, setSlideOffset] = useState(0);
@@ -81,6 +83,7 @@ export default function AILandscape() {
   const [isDragging, setIsDragging] = useState(false);
   const [visibleCards, setVisibleCards] = useState(1);
   const [cardHovered, setCardHovered] = useState(false);
+  const [inView, setInView] = useState(false);
 
   const maxIndex = Math.max(0, cards.length - visibleCards);
 
@@ -93,7 +96,30 @@ export default function AILandscape() {
   }, [maxIndex]);
 
   useEffect(() => {
-    if (isDragging || cardHovered || maxIndex <= 0) return;
+    const node = sectionRef.current;
+    if (!node) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const visible = Boolean(entry?.isIntersecting && entry.intersectionRatio >= 0.2);
+        if (visible && !wasInViewRef.current) {
+          setActiveIndex(0);
+        }
+        if (!visible && wasInViewRef.current) {
+          setActiveIndex(0);
+        }
+        wasInViewRef.current = visible;
+        setInView(visible);
+      },
+      { threshold: [0, 0.2, 0.35] },
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!inView || isDragging || cardHovered || maxIndex <= 0) return;
 
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (prefersReducedMotion) return;
@@ -103,7 +129,7 @@ export default function AILandscape() {
     }, AUTO_ADVANCE_MS);
 
     return () => window.clearInterval(id);
-  }, [activeIndex, isDragging, cardHovered, maxIndex]);
+  }, [activeIndex, cardHovered, inView, isDragging, maxIndex]);
 
   useEffect(() => {
     const track = trackRef.current;
@@ -177,6 +203,7 @@ export default function AILandscape() {
 
   return (
     <section
+      ref={sectionRef}
       className="bg-[#113D77] px-4 py-14 sm:px-6 sm:py-16 lg:px-10 lg:py-20 xl:px-12 xl:py-24 min-[1920px]:py-[100px]"
       aria-label="Our AI Landscape"
     >

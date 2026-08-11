@@ -12,7 +12,10 @@ import { uploadDemoFields } from "../middleware/upload.js";
 
 const router = express.Router();
 
-const demoMultipart = uploadDemoFields.fields([{ name: "thumbnail", maxCount: 1 }]);
+const demoMultipart = uploadDemoFields.fields([
+  { name: "thumbnail", maxCount: 1 },
+  { name: "video", maxCount: 1 },
+]);
 
 router.get("/", getPublicDemos);
 router.get("/admin", requireAuth, requireAdmin, getAdminDemos);

@@ -20,6 +20,7 @@ import {
   Tags,
   Trash2,
   Quote,
+  UploadCloud,
   Video,
   X,
 } from "lucide-react";
@@ -35,6 +36,7 @@ import { getErrorMessage } from "../../lib/api";
 import { logoutUser } from "../../lib/auth";
 import {
   createDemo,
+  DEMO_VIDEO_MAX_BYTES,
   deleteDemo,
   updateDemo,
 } from "../../lib/demosApi";
@@ -58,9 +60,8 @@ import {
 import { createDemoTag, deleteDemoTag, updateDemoTag, type DemoTag } from "../../lib/tagsApi";
 import BlogRichTextEditor from "../../components/blog/BlogRichTextEditor";
 import DemoPlayCover from "../../components/DemoPlayCover";
+import DemoVideoPlayer from "../../components/DemoVideoPlayer";
 import { excerptFromContent, isRichTextEmpty } from "../../lib/blogContent";
-import brainstormingIcon from "../../assets/OurServices/brainstorming.png";
-import analysisIcon from "../../assets/OurServices/analysis.png";
 import elevateLogo from "../../assets/nav/elevate-logo.svg";
 
 type Tab = "overview" | "demos" | "blogs" | "testimonials" | "tags" | "jobs" | "applications";
@@ -87,20 +88,6 @@ const emptyTestimonialForm = {
   fullQuote: "",
   sortOrder: "0",
 };
-
-function youtubeEmbed(videoId: string) {
-  const params = new URLSearchParams({
-    autoplay: "1",
-    rel: "0",
-    modestbranding: "1",
-    iv_load_policy: "3",
-    playsinline: "1",
-    fs: "1",
-    disablekb: "0",
-    cc_load_policy: "0",
-  });
-  return `https://www.youtube.com/embed/${videoId}?${params.toString()}`;
-}
 
 const emptyJobForm = {
   id: "",
@@ -130,7 +117,6 @@ export default function AdminDashboard() {
 
   const [tab, setTab] = useState<Tab>("overview");
   const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
-  const [showHomeStats, setShowHomeStats] = useState(false);
   const [homeDemoSearch, setHomeDemoSearch] = useState("");
   const [homeTagFilter, setHomeTagFilter] = useState("All");
   const [homeTagMenuOpen, setHomeTagMenuOpen] = useState(false);
@@ -140,6 +126,10 @@ export default function AdminDashboard() {
   const [demoForm, setDemoForm] = useState(emptyDemoForm);
   const [demoThumbnailFile, setDemoThumbnailFile] = useState<File | null>(null);
   const [demoThumbnailPreview, setDemoThumbnailPreview] = useState<string | null>(null);
+  const [demoVideoFile, setDemoVideoFile] = useState<File | null>(null);
+  const [demoVideoPreview, setDemoVideoPreview] = useState<string | null>(null);
+  const [demoExistingVideoUrl, setDemoExistingVideoUrl] = useState<string | null>(null);
+  const [demoVideoDragOver, setDemoVideoDragOver] = useState(false);
   const [blogForm, setBlogForm] = useState(emptyBlogForm);
   const [blogImageFile, setBlogImageFile] = useState<File | null>(null);
   const [blogImagePreview, setBlogImagePreview] = useState<string | null>(null);
@@ -158,6 +148,7 @@ export default function AdminDashboard() {
   const [testimonialSuccess, setTestimonialSuccess] = useState("");
   const [jobSuccess, setJobSuccess] = useState("");
   const [demoSaving, setDemoSaving] = useState(false);
+  const [demoUploadProgress, setDemoUploadProgress] = useState<number | null>(null);
   const [demoModalOpen, setDemoModalOpen] = useState(false);
   const [demoSearch, setDemoSearch] = useState("");
   const [demoCategoryFilter, setDemoCategoryFilter] = useState("All");
@@ -254,6 +245,10 @@ export default function AdminDashboard() {
         setDemoForm(emptyDemoForm);
         setDemoThumbnailFile(null);
         setDemoThumbnailPreview(null);
+        setDemoVideoFile(null);
+        setDemoVideoPreview(null);
+        setDemoExistingVideoUrl(null);
+        setDemoVideoDragOver(false);
         setDemoError("");
         setDemoSuccess("");
       }
@@ -393,6 +388,12 @@ export default function AdminDashboard() {
     setDemoForm(emptyDemoForm);
     setDemoThumbnailFile(null);
     setDemoThumbnailPreview(null);
+    setDemoVideoFile(null);
+    if (demoVideoPreview) URL.revokeObjectURL(demoVideoPreview);
+    setDemoVideoPreview(null);
+    setDemoExistingVideoUrl(null);
+    setDemoVideoDragOver(false);
+    setDemoUploadProgress(null);
     setDemoError("");
     setDemoSuccess("");
     setTagDropdownOpen(false);
@@ -425,6 +426,10 @@ export default function AdminDashboard() {
     });
     setDemoThumbnailFile(null);
     setDemoThumbnailPreview(demo.thumbnailUrl ?? null);
+    setDemoVideoFile(null);
+    if (demoVideoPreview) URL.revokeObjectURL(demoVideoPreview);
+    setDemoVideoPreview(null);
+    setDemoExistingVideoUrl(demo.videoUrl ?? null);
     setDemoSuccess("");
     setDemoError("");
     setTagDropdownOpen(false);
@@ -457,6 +462,26 @@ export default function AdminDashboard() {
     });
   };
 
+  const assignDemoVideoFile = (file: File | null) => {
+    if (demoVideoPreview) URL.revokeObjectURL(demoVideoPreview);
+    if (!file) {
+      setDemoVideoFile(null);
+      setDemoVideoPreview(null);
+      return;
+    }
+    if (!file.type.startsWith("video/") && !/\.(mp4|webm|mov|m4v|ogg)$/i.test(file.name)) {
+      setDemoError("Please upload a video file (MP4, WEBM, or MOV).");
+      return;
+    }
+    if (file.size > DEMO_VIDEO_MAX_BYTES) {
+      setDemoError("Video must be 500MB or smaller.");
+      return;
+    }
+    setDemoError("");
+    setDemoVideoFile(file);
+    setDemoVideoPreview(URL.createObjectURL(file));
+  };
+
   const submitDemo = async (event: FormEvent) => {
     event.preventDefault();
     setDemoError("");
@@ -467,8 +492,8 @@ export default function AdminDashboard() {
       setDemoError("Demo title is required.");
       return;
     }
-    if (!videoId) {
-      setDemoError("Enter a valid YouTube URL or video ID.");
+    if (!demoVideoFile && !demoExistingVideoUrl && !videoId) {
+      setDemoError("Upload a demo video or paste a YouTube URL (temporary).");
       return;
     }
     if (demoForm.industries.length === 0) {
@@ -482,14 +507,19 @@ export default function AdminDashboard() {
       industries: demoForm.industries,
       isPublic: demoForm.isPublic,
       thumbnailFile: demoThumbnailFile,
+      videoFile: demoVideoFile,
     };
 
     try {
       setDemoSaving(true);
+      setDemoUploadProgress(demoVideoFile || demoThumbnailFile ? 0 : null);
+      const uploadOpts = {
+        onUploadProgress: (percent: number) => setDemoUploadProgress(percent),
+      };
       if (editingDemo) {
-        await updateDemo(demoForm.id, payload);
+        await updateDemo(demoForm.id, payload, uploadOpts);
       } else {
-        await createDemo({ id: createId("demo"), ...payload });
+        await createDemo({ id: createId("demo"), ...payload }, uploadOpts);
       }
       const successMessage = editingDemo
         ? "Demo updated successfully."
@@ -502,6 +532,7 @@ export default function AdminDashboard() {
       setDemoError(getErrorMessage(err, "Unable to save demo."));
     } finally {
       setDemoSaving(false);
+      setDemoUploadProgress(null);
     }
   };
 
@@ -825,234 +856,149 @@ export default function AdminDashboard() {
         <main className="min-w-0 overflow-x-hidden">
           {tab === "overview" ? (
             <section className="space-y-5 sm:space-y-6 2xl:space-y-8">
-              <div className="rounded-[20px] border border-[#d7e6f3] bg-white p-5 sm:p-6 xl:rounded-[24px] 2xl:p-8">
-                <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
-                  <h2 className="m-0 shrink-0 text-xl font-bold text-[#1F2432] 2xl:text-2xl">
-                    Quick actions
-                  </h2>
+              <div className="flex flex-col gap-3 rounded-[18px] border border-[#d7e6f3] bg-white p-3 sm:p-3.5 xl:flex-row xl:items-center xl:gap-4">
+                <h2 className="m-0 shrink-0 px-1 text-xl font-bold text-[#1F2432] 2xl:text-2xl">
+                  Demos
+                </h2>
 
-                  <div className="flex w-full min-w-0 flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center xl:w-auto xl:flex-1 xl:justify-end">
-                    <label className="relative w-full min-w-0 sm:min-w-[180px] sm:max-w-[260px] sm:flex-1 xl:max-w-[240px]">
-                      <Search
-                        size={15}
-                        className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#8a94a6]"
+                <div className="flex min-w-0 flex-1 flex-col gap-2 sm:flex-row sm:items-center">
+                  <label className="relative min-w-0 flex-1">
+                    <Search
+                      size={15}
+                      className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#8a94a6]"
+                    />
+                    <input
+                      value={homeDemoSearch}
+                      onChange={(event) => setHomeDemoSearch(event.target.value)}
+                      className="h-10 w-full rounded-full border border-[#e2e8f0] bg-[#f7fafc] pl-9 pr-3 text-sm text-[#1F2432] outline-none transition placeholder:text-[#9aa3b2] focus:border-[#2365aa] focus:bg-white focus:ring-2 focus:ring-[#2365aa]/10"
+                      placeholder="Search demos…"
+                      aria-label="Search demos by title"
+                    />
+                  </label>
+
+                  <div className="relative w-full shrink-0 sm:w-[220px]">
+                    <button
+                      ref={homeTagButtonRef}
+                      type="button"
+                      onClick={() => {
+                        const button = homeTagButtonRef.current;
+                        if (button) {
+                          const rect = button.getBoundingClientRect();
+                          setHomeTagMenuPos({
+                            top: rect.bottom + 6,
+                            right: Math.max(12, window.innerWidth - rect.right),
+                          });
+                        }
+                        setHomeTagMenuOpen((open) => !open);
+                      }}
+                      className={`inline-flex h-10 w-full cursor-pointer items-center justify-between gap-1.5 rounded-full border px-3.5 text-sm font-semibold transition ${
+                        homeTagFilter === "All"
+                          ? "border-[#e2e8f0] bg-[#f7fafc] text-[#1F2432] hover:border-[#2365aa]/40 hover:bg-white"
+                          : "border-[#2365aa] bg-[#2365aa] text-white hover:bg-[#1a5490]"
+                      }`}
+                      aria-haspopup="listbox"
+                      aria-expanded={homeTagMenuOpen}
+                    >
+                      <span className="flex min-w-0 items-center gap-1.5">
+                        <ListFilter size={14} className="shrink-0" />
+                        <span className="truncate">
+                          {homeTagFilter === "All" ? "All tags" : homeTagFilter}
+                        </span>
+                      </span>
+                      <ChevronDown
+                        size={14}
+                        className={`shrink-0 transition-transform ${
+                          homeTagMenuOpen ? "rotate-180" : ""
+                        }`}
                       />
-                      <input
-                        value={homeDemoSearch}
-                        onChange={(event) => setHomeDemoSearch(event.target.value)}
-                        className="h-10 w-full rounded-full border border-[#d7e6f3] bg-[#f7fafc] pl-9 pr-3 text-sm text-[#1F2432] outline-none transition placeholder:text-[#9aa3b2] focus:border-[#2365aa] focus:bg-white focus:ring-2 focus:ring-[#2365aa]/10 sm:h-9"
-                        placeholder="Search demos…"
-                        aria-label="Search demos by title"
-                      />
-                    </label>
+                    </button>
 
-                    <div className="flex w-full items-center gap-2 sm:w-auto">
-                      <div className="relative min-w-0 flex-1 sm:flex-none">
-                        <button
-                          ref={homeTagButtonRef}
-                          type="button"
-                          onClick={() => {
-                            const button = homeTagButtonRef.current;
-                            if (button) {
-                              const rect = button.getBoundingClientRect();
-                              setHomeTagMenuPos({
-                                top: rect.bottom + 6,
-                                right: Math.max(12, window.innerWidth - rect.right),
-                              });
-                            }
-                            setHomeTagMenuOpen((open) => !open);
-                          }}
-                          className={`inline-flex h-10 w-full max-w-none cursor-pointer items-center justify-center gap-1.5 rounded-full border px-3 text-sm font-semibold transition sm:h-9 sm:w-auto sm:max-w-[210px] sm:justify-start ${
-                            homeTagFilter === "All"
-                              ? "border-[#d7e6f3] bg-[#EFF7FC] text-[#2365aa] hover:bg-[#e7f2fb]"
-                              : "border-[#2365aa] bg-[#2365aa] text-white hover:bg-[#1a5490]"
-                          }`}
-                          aria-haspopup="listbox"
-                          aria-expanded={homeTagMenuOpen}
-                        >
-                          <ListFilter size={14} className="shrink-0" />
-                          <span className="truncate">
-                            {homeTagFilter === "All" ? "All tags" : homeTagFilter}
-                          </span>
-                          <ChevronDown
-                            size={14}
-                            className={`shrink-0 transition-transform ${
-                              homeTagMenuOpen ? "rotate-180" : ""
-                            }`}
-                          />
-                        </button>
-
-                        {homeTagMenuOpen
-                          ? createPortal(
-                              <div
-                                ref={homeTagMenuRef}
-                                role="listbox"
-                                style={{
-                                  top: homeTagMenuPos.top,
-                                  right: homeTagMenuPos.right,
-                                }}
-                                className="fixed z-[250] w-[min(420px,calc(100vw-24px))] rounded-xl border border-[#d7e6f3] bg-white p-3 shadow-[0_22px_50px_-18px_rgba(17,61,119,0.55)]"
-                              >
-                                <button
-                                  type="button"
-                                  role="option"
-                                  aria-selected={homeTagFilter === "All"}
-                                  onClick={() => {
-                                    setHomeTagFilter("All");
-                                    setHomeTagMenuOpen(false);
-                                  }}
-                                  className={`mb-1.5 flex w-full cursor-pointer items-center justify-between rounded-lg border-0 px-3 py-2 text-left text-sm transition ${
-                                    homeTagFilter === "All"
-                                      ? "bg-[#EFF7FC] font-semibold text-[#113d77]"
-                                      : "bg-transparent font-medium text-[#1F2432] hover:bg-[#f5f9fd]"
-                                  }`}
-                                >
-                                  All tags
-                                  {homeTagFilter === "All" ? (
-                                    <Check size={15} className="shrink-0 text-[#2365aa]" />
-                                  ) : null}
-                                </button>
-                                <div className="grid grid-cols-2 gap-1">
-                                  {homeFilterTags.map((tag) => {
-                                    const active =
-                                      homeTagFilter.trim().toLowerCase() ===
-                                      tag.toLowerCase();
-                                    return (
-                                      <button
-                                        key={tag}
-                                        type="button"
-                                        role="option"
-                                        aria-selected={active}
-                                        onClick={() => {
-                                          setHomeTagFilter(tag);
-                                          setHomeTagMenuOpen(false);
-                                        }}
-                                        className={`flex w-full cursor-pointer items-start justify-between gap-2 rounded-lg border-0 px-3 py-2 text-left text-sm leading-snug transition ${
-                                          active
-                                            ? "bg-[#EFF7FC] font-semibold text-[#113d77]"
-                                            : "bg-transparent font-medium text-[#1F2432] hover:bg-[#f5f9fd]"
-                                        }`}
-                                      >
-                                        <span className="whitespace-normal break-words">
-                                          {tag}
-                                        </span>
-                                        {active ? (
-                                          <Check
-                                            size={15}
-                                            className="mt-0.5 shrink-0 text-[#2365aa]"
-                                          />
-                                        ) : null}
-                                      </button>
-                                    );
-                                  })}
-                                </div>
-                              </div>,
-                              document.body,
-                            )
-                          : null}
-                      </div>
-
-                      {homeFilterActive ? (
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setHomeDemoSearch("");
-                            setHomeTagFilter("All");
-                            setHomeTagMenuOpen(false);
-                          }}
-                          className="inline-flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full border border-[#d7e6f3] bg-white text-[#5b6b82] transition hover:border-[#2365aa]/35 hover:text-[#2365aa] sm:h-9 sm:w-9"
-                          aria-label="Clear filters"
-                          title="Clear"
-                        >
-                          <X size={15} />
-                        </button>
-                      ) : null}
-
-                      <button
-                        type="button"
-                        onClick={() => setShowHomeStats((open) => !open)}
-                        className="inline-flex h-10 shrink-0 cursor-pointer items-center gap-1.5 rounded-full border border-[#d7e6f3] bg-[#EFF7FC] px-3.5 text-xs font-semibold text-[#2365aa] sm:h-9 sm:text-sm"
-                      >
-                        {showHomeStats ? "Hide stats" : "Show stats"}
-                        <ChevronDown
-                          size={16}
-                          className={`transition-transform ${showHomeStats ? "rotate-180" : ""}`}
-                        />
-                      </button>
-                    </div>
+                    {homeTagMenuOpen
+                      ? createPortal(
+                          <div
+                            ref={homeTagMenuRef}
+                            role="listbox"
+                            style={{
+                              top: homeTagMenuPos.top,
+                              right: homeTagMenuPos.right,
+                            }}
+                            className="fixed z-[250] w-[min(420px,calc(100vw-24px))] rounded-xl border border-[#d7e6f3] bg-white p-3 shadow-[0_22px_50px_-18px_rgba(17,61,119,0.55)]"
+                          >
+                            <button
+                              type="button"
+                              role="option"
+                              aria-selected={homeTagFilter === "All"}
+                              onClick={() => {
+                                setHomeTagFilter("All");
+                                setHomeTagMenuOpen(false);
+                              }}
+                              className={`mb-1.5 flex w-full cursor-pointer items-center justify-between rounded-lg border-0 px-3 py-2 text-left text-sm transition ${
+                                homeTagFilter === "All"
+                                  ? "bg-[#EFF7FC] font-semibold text-[#113d77]"
+                                  : "bg-transparent font-medium text-[#1F2432] hover:bg-[#f5f9fd]"
+                              }`}
+                            >
+                              All tags
+                              {homeTagFilter === "All" ? (
+                                <Check size={15} className="shrink-0 text-[#2365aa]" />
+                              ) : null}
+                            </button>
+                            <div className="grid grid-cols-2 gap-1">
+                              {homeFilterTags.map((tag) => {
+                                const active =
+                                  homeTagFilter.trim().toLowerCase() ===
+                                  tag.toLowerCase();
+                                return (
+                                  <button
+                                    key={tag}
+                                    type="button"
+                                    role="option"
+                                    aria-selected={active}
+                                    onClick={() => {
+                                      setHomeTagFilter(tag);
+                                      setHomeTagMenuOpen(false);
+                                    }}
+                                    className={`flex w-full cursor-pointer items-start justify-between gap-2 rounded-lg border-0 px-3 py-2 text-left text-sm leading-snug transition ${
+                                      active
+                                        ? "bg-[#EFF7FC] font-semibold text-[#113d77]"
+                                        : "bg-transparent font-medium text-[#1F2432] hover:bg-[#f5f9fd]"
+                                    }`}
+                                  >
+                                    <span className="whitespace-normal break-words">
+                                      {tag}
+                                    </span>
+                                    {active ? (
+                                      <Check
+                                        size={15}
+                                        className="mt-0.5 shrink-0 text-[#2365aa]"
+                                      />
+                                    ) : null}
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          </div>,
+                          document.body,
+                        )
+                      : null}
                   </div>
-                </div>
 
-                <div className="mt-4 flex flex-wrap gap-2 sm:gap-3 2xl:mt-5">
-                  <button
-                    type="button"
-                    onClick={() => selectTab("demos")}
-                    className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-full border-0 bg-[#2365aa] px-4 py-2.5 text-sm font-semibold text-white sm:w-auto 2xl:px-5 2xl:py-3 2xl:text-base"
-                  >
-                    <Plus size={16} />
-                    Add demo
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => selectTab("blogs")}
-                    className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-full border border-[#d7e6f3] bg-[#EFF7FC] px-4 py-2.5 text-sm font-semibold text-[#2365aa] sm:w-auto 2xl:px-5 2xl:py-3 2xl:text-base"
-                  >
-                    <Plus size={16} />
-                    Add blog
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => selectTab("testimonials")}
-                    className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-full border border-[#d7e6f3] bg-[#EFF7FC] px-4 py-2.5 text-sm font-semibold text-[#2365aa] sm:w-auto 2xl:px-5 2xl:py-3 2xl:text-base"
-                  >
-                    <Plus size={16} />
-                    Add testimonial
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => selectTab("jobs")}
-                    className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-full border border-[#d7e6f3] bg-[#EFF7FC] px-4 py-2.5 text-sm font-semibold text-[#2365aa] sm:w-auto 2xl:px-5 2xl:py-3 2xl:text-base"
-                  >
-                    <Plus size={16} />
-                    Add job posting
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => selectTab("applications")}
-                    className="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-full border border-[#d7e6f3] bg-[#EFF7FC] px-4 py-2.5 text-sm font-semibold text-[#2365aa] sm:w-auto 2xl:px-5 2xl:py-3 2xl:text-base"
-                  >
-                    <FileText size={16} />
-                    View applications
-                  </button>
+                  {homeFilterActive ? (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setHomeDemoSearch("");
+                        setHomeTagFilter("All");
+                        setHomeTagMenuOpen(false);
+                      }}
+                      className="inline-flex h-10 w-full shrink-0 cursor-pointer items-center justify-center gap-1.5 rounded-full border border-[#d7e6f3] bg-white px-4 text-sm font-semibold text-[#5b6b82] transition hover:border-[#2365aa]/35 hover:text-[#2365aa] sm:w-auto"
+                      aria-label="Clear filters"
+                    >
+                      <X size={15} />
+                      Clear
+                    </button>
+                  ) : null}
                 </div>
-
-                {showHomeStats ? (
-                  <div className="mt-5 grid grid-cols-1 gap-3 border-t border-[#e8eef3] pt-5 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3 xl:grid-cols-6">
-                    {[
-                      { label: "Total demos", value: demos.length, icon: brainstormingIcon },
-                      { label: "Total blogs", value: blogs.length, icon: analysisIcon },
-                      { label: "Testimonials", value: testimonials.length, icon: brainstormingIcon },
-                      { label: "Demo tags", value: demoTags.length, icon: analysisIcon },
-                      { label: "Open jobs", value: jobs.length, icon: brainstormingIcon },
-                      {
-                        label: "Applications",
-                        value: applications.length,
-                        icon: analysisIcon,
-                      },
-                    ].map((card) => (
-                      <article
-                        key={card.label}
-                        className="rounded-[16px] border border-[#d7e6f3] bg-[#EFF7FC] p-4"
-                      >
-                        <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-white p-1.5">
-                          <img src={card.icon} alt="" aria-hidden className="h-6 w-6 object-contain" />
-                        </div>
-                        <p className="m-0 text-xs text-[#848b9b] sm:text-sm">{card.label}</p>
-                        <p className="mt-1 text-2xl font-bold text-[#113d77]">{card.value}</p>
-                      </article>
-                    ))}
-                  </div>
-                ) : null}
               </div>
 
               <div>
@@ -2087,272 +2033,425 @@ export default function AdminDashboard() {
 
       {demoModalOpen ? (
         <div
-          className="fixed inset-0 z-[200] flex items-center justify-center bg-[#0b1220]/55 p-4 backdrop-blur-[2px] sm:p-6"
+          className="fixed inset-0 z-[200] flex items-center justify-center bg-[#0b1220]/55 p-3 backdrop-blur-[2px] sm:p-5"
           role="dialog"
           aria-modal="true"
           aria-label={editingDemo ? "Update demo" : "Add demo"}
           onClick={closeDemoModal}
         >
           <div
-            className="relative max-h-[min(90vh,calc(100dvh-2rem))] w-full max-w-[720px] overflow-y-auto rounded-[20px] border border-[#d7e6f3] bg-white p-4 shadow-[0_30px_80px_-28px_rgba(17,61,119,0.45)] sm:p-6 xl:p-7"
+            className="relative flex w-full max-w-[1100px] flex-col overflow-visible rounded-[24px] border border-[#d7e6f3] bg-white shadow-[0_30px_80px_-28px_rgba(17,61,119,0.45)]"
             onClick={(event) => event.stopPropagation()}
           >
-            <div className="mb-5 flex items-start justify-between gap-3">
-              <div>
-                <h2 className="m-0 text-xl font-bold text-[#1F2432]">
-                  {editingDemo ? "Update demo" : "Add YouTube demo"}
+            <div className="flex items-start justify-between gap-4 border-b border-[#eef3f8] px-6 py-4 sm:px-8 sm:py-5">
+              <div className="min-w-0">
+                <h2 className="m-0 text-2xl font-bold tracking-tight text-[#1F2432]">
+                  {editingDemo ? "Update demo" : "Add demo"}
                 </h2>
-                <p className="mt-1 text-sm text-[#848b9b]">
-                  Fill in the details below to {editingDemo ? "update" : "publish"} a demo.
+                <p className="mt-1.5 text-sm text-[#848b9b]">
+                  Upload a video for the website player, or use YouTube as a temporary option.
                 </p>
               </div>
               <button
                 type="button"
                 onClick={closeDemoModal}
-                className="inline-flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-full border-0 bg-[#EFF7FC] text-[#2365aa]"
+                className="inline-flex size-10 shrink-0 cursor-pointer items-center justify-center rounded-full border-0 bg-[#EFF7FC] text-[#2365aa] transition hover:bg-[#e3eef8]"
                 aria-label="Close"
               >
                 <X size={18} />
               </button>
             </div>
 
-            <form onSubmit={submitDemo}>
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                <label className="flex flex-col gap-1.5 text-sm font-medium text-[#5a5a5a]">
-                  Demo title
+            <form onSubmit={submitDemo} className="flex flex-col">
+              <div className="grid grid-cols-1 gap-6 px-6 py-5 lg:grid-cols-2 lg:gap-x-8 lg:gap-y-0 sm:px-8 sm:py-6">
+                <div className="space-y-5">
+                <section className="space-y-2.5">
+                  <label className="block text-sm font-semibold text-[#1F2432]">
+                    Demo title
+                  </label>
                   <input
                     value={demoForm.title}
                     onChange={(event) =>
                       setDemoForm((prev) => ({ ...prev, title: event.target.value }))
                     }
-                    className="rounded-[12px] border border-[#d7e6f3] bg-[#f8fbfd] px-3.5 py-3 outline-none focus:border-[#2365aa]"
+                    className="w-full rounded-2xl border border-[#d7e6f3] bg-[#f8fbfd] px-4 py-3 text-sm text-[#1F2432] outline-none transition placeholder:text-[#9aa3b2] focus:border-[#2365aa] focus:bg-white focus:ring-4 focus:ring-[#2365aa]/10"
                     placeholder="e.g. Crowd Detection"
                   />
-                </label>
-                <label className="flex flex-col gap-1.5 text-sm font-medium text-[#5a5a5a]">
-                  YouTube URL
+                </section>
+
+                <section className="space-y-2.5 rounded-2xl border border-[#d7e6f3] bg-[#f7fafc] p-4">
+                  <div>
+                    <p className="m-0 text-sm font-semibold text-[#1F2432]">Demo video</p>
+                    <p className="mt-1 text-xs text-[#687181]">
+                      Recommended. Plays on your website without YouTube branding.
+                    </p>
+                  </div>
+                  {(demoVideoFile || demoVideoPreview) ? (
+                    <div className="flex items-stretch gap-3 rounded-2xl border border-[#d7e6f3] bg-white p-3">
+                      <div className="relative h-[88px] w-[148px] shrink-0 overflow-hidden rounded-xl bg-black">
+                        {demoVideoPreview ? (
+                          <video
+                            src={demoVideoPreview}
+                            className="h-full w-full object-cover"
+                            muted
+                            playsInline
+                            preload="metadata"
+                          />
+                        ) : (
+                          <div className="flex h-full items-center justify-center text-xs text-white/70">
+                            Video
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex min-w-0 flex-1 flex-col justify-between gap-2 py-0.5">
+                        <div className="min-w-0">
+                          <p className="m-0 truncate text-sm font-semibold text-[#1F2432]">
+                            {demoVideoFile?.name || "Selected video"}
+                          </p>
+                          <p className="mt-0.5 text-xs text-[#687181]">
+                            {demoVideoFile
+                              ? `${(demoVideoFile.size / (1024 * 1024)).toFixed(1)} MB · ready to upload`
+                              : "Ready to upload · click Change to replace"}
+                          </p>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          <label className="inline-flex cursor-pointer items-center rounded-full border border-[#d7e6f3] bg-[#EFF7FC] px-3 py-1.5 text-xs font-semibold text-[#2365aa] transition hover:bg-[#e7f1fa]">
+                            Change
+                            <input
+                              type="file"
+                              accept="video/mp4,video/webm,video/quicktime,video/*"
+                              className="sr-only"
+                              onChange={(event) => {
+                                const file = event.target.files?.[0] ?? null;
+                                assignDemoVideoFile(file);
+                                event.target.value = "";
+                              }}
+                            />
+                          </label>
+                          <button
+                            type="button"
+                            onClick={() => assignDemoVideoFile(null)}
+                            className="inline-flex cursor-pointer items-center rounded-full border border-[#d7e6f3] bg-white px-3 py-1.5 text-xs font-semibold text-[#5b6b82] transition hover:border-[#2365aa]/30 hover:text-[#2365aa]"
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ) : demoExistingVideoUrl ? (
+                    <div className="flex items-center justify-between gap-3 rounded-2xl border border-[#d7e6f3] bg-white px-4 py-3">
+                      <div className="min-w-0">
+                        <p className="m-0 truncate text-sm font-semibold text-[#1F2432]">
+                          Current uploaded video
+                        </p>
+                        <p className="mt-0.5 text-xs text-[#687181]">
+                          Kept unless you upload a new file
+                        </p>
+                      </div>
+                      <label className="inline-flex shrink-0 cursor-pointer items-center rounded-full border border-[#d7e6f3] bg-[#EFF7FC] px-3 py-1.5 text-xs font-semibold text-[#2365aa] transition hover:bg-[#e7f1fa]">
+                        Replace
+                        <input
+                          type="file"
+                          accept="video/mp4,video/webm,video/quicktime,video/*"
+                          className="sr-only"
+                          onChange={(event) => {
+                            const file = event.target.files?.[0] ?? null;
+                            assignDemoVideoFile(file);
+                            event.target.value = "";
+                          }}
+                        />
+                      </label>
+                    </div>
+                  ) : (
+                    <label
+                      onDragEnter={(event) => {
+                        event.preventDefault();
+                        setDemoVideoDragOver(true);
+                      }}
+                      onDragOver={(event) => {
+                        event.preventDefault();
+                        setDemoVideoDragOver(true);
+                      }}
+                      onDragLeave={(event) => {
+                        event.preventDefault();
+                        setDemoVideoDragOver(false);
+                      }}
+                      onDrop={(event) => {
+                        event.preventDefault();
+                        setDemoVideoDragOver(false);
+                        const file = event.dataTransfer.files?.[0] ?? null;
+                        assignDemoVideoFile(file);
+                      }}
+                      className={`flex min-h-[112px] cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed px-5 py-5 text-center transition ${
+                        demoVideoDragOver
+                          ? "border-[#2365aa] bg-white"
+                          : "border-[#cfe0ef] bg-white hover:border-[#2365aa]/55"
+                      }`}
+                    >
+                      <span className="inline-flex size-10 items-center justify-center rounded-full bg-[#EFF7FC] text-[#2365aa]">
+                        <UploadCloud size={20} />
+                      </span>
+                      <span className="text-sm font-semibold text-[#1F2432]">
+                        Drag & drop video here
+                      </span>
+                      <span className="text-xs text-[#687181]">
+                        or browse · MP4 / WEBM / MOV · up to 500MB
+                      </span>
+                      <input
+                        type="file"
+                        accept="video/mp4,video/webm,video/quicktime,video/*"
+                        className="sr-only"
+                        onChange={(event) => {
+                          const file = event.target.files?.[0] ?? null;
+                          assignDemoVideoFile(file);
+                          event.target.value = "";
+                        }}
+                      />
+                    </label>
+                  )}
+                </section>
+
+                <section className="space-y-2.5">
+                  <div>
+                    <p className="m-0 text-sm font-semibold text-[#1F2432]">
+                      YouTube URL
+                      <span className="ml-2 text-xs font-normal text-[#848b9b]">
+                        Temporary fallback
+                      </span>
+                    </p>
+                    <p className="mt-1 text-xs text-[#687181]">
+                      Use only if you are not uploading a video file right now.
+                    </p>
+                  </div>
                   <input
                     value={demoForm.youtubeUrl}
                     onChange={(event) =>
                       setDemoForm((prev) => ({ ...prev, youtubeUrl: event.target.value }))
                     }
-                    className="rounded-[12px] border border-[#d7e6f3] bg-[#f8fbfd] px-3.5 py-3 outline-none focus:border-[#2365aa]"
+                    className="w-full rounded-2xl border border-[#d7e6f3] bg-[#f8fbfd] px-4 py-3 text-sm text-[#1F2432] outline-none transition placeholder:text-[#9aa3b2] focus:border-[#2365aa] focus:bg-white focus:ring-4 focus:ring-[#2365aa]/10"
                     placeholder="https://www.youtube.com/watch?v=..."
                   />
-                </label>
-              </div>
+                </section>
+                </div>
 
-              <div className="mt-4">
-                <p className="mb-2 text-sm font-medium text-[#5a5a5a]">
-                  Thumbnail image{" "}
-                  <span className="font-normal text-[#848b9b]">
-                    (optional — replaces auto-generated YouTube thumbnail)
-                  </span>
-                </p>
-                <div className="flex flex-wrap items-start gap-4">
-                  <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-[12px] border-2 border-dashed border-[#d7e6f3] bg-[#f8fbfd] px-5 py-4 text-sm font-medium text-[#2365aa] transition-colors hover:border-[#2365aa] hover:bg-[#EFF7FC]">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                      <polyline points="17 8 12 3 7 8" />
-                      <line x1="12" y1="3" x2="12" y2="15" />
-                    </svg>
-                    <span className="max-w-full truncate">
-                      {demoThumbnailFile ? demoThumbnailFile.name : "Choose image"}
-                    </span>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      className="sr-only"
-                      onChange={(event) => {
-                        const file = event.target.files?.[0] ?? null;
-                        setDemoThumbnailFile(file);
-                        setDemoThumbnailPreview(file ? URL.createObjectURL(file) : null);
+                <div className="space-y-5">
+                <section className="space-y-2.5">
+                    <div>
+                      <p className="m-0 text-sm font-semibold text-[#1F2432]">Thumbnail</p>
+                      <p className="mt-1 text-xs text-[#687181]">Optional cover image</p>
+                    </div>
+                    <div className="flex flex-wrap items-start gap-3">
+                      <label className="flex min-h-[100px] min-w-[140px] flex-1 cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-[#d7e6f3] bg-[#f8fbfd] px-4 py-4 text-sm font-medium text-[#2365aa] transition hover:border-[#2365aa] hover:bg-[#EFF7FC]">
+                        <UploadCloud size={20} />
+                        <span className="max-w-full truncate px-1 text-xs">
+                          {demoThumbnailFile ? demoThumbnailFile.name : "Choose image"}
+                        </span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="sr-only"
+                          onChange={(event) => {
+                            const file = event.target.files?.[0] ?? null;
+                            setDemoThumbnailFile(file);
+                            setDemoThumbnailPreview(file ? URL.createObjectURL(file) : null);
+                          }}
+                        />
+                      </label>
+                      {demoThumbnailPreview ? (
+                        <div className="relative shrink-0">
+                          <img
+                            src={demoThumbnailPreview}
+                            alt="Thumbnail preview"
+                            className="h-[100px] w-[140px] rounded-2xl border border-[#d7e6f3] object-cover"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setDemoThumbnailFile(null);
+                              setDemoThumbnailPreview(null);
+                            }}
+                            className="absolute -right-2 -top-2 flex h-6 w-6 cursor-pointer items-center justify-center rounded-full border-0 bg-[#2365aa] text-[11px] font-bold text-white"
+                            aria-label="Remove thumbnail"
+                          >
+                            ✕
+                          </button>
+                        </div>
+                      ) : null}
+                    </div>
+                  </section>
+
+                <section className="space-y-2.5">
+                  <div className="flex flex-wrap items-end justify-between gap-2">
+                    <div>
+                      <p className="m-0 text-sm font-semibold text-[#1F2432]">Industry tags</p>
+                      <p className="mt-1 text-xs text-[#687181]">Select one or more categories</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        closeDemoModal();
+                        setTab("tags");
                       }}
-                    />
-                  </label>
-                  {demoThumbnailPreview ? (
-                    <div className="relative">
-                      <img
-                        src={demoThumbnailPreview}
-                        alt="Thumbnail preview"
-                        className="h-20 w-32 rounded-[10px] border border-[#d7e6f3] object-cover"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setDemoThumbnailFile(null);
-                          setDemoThumbnailPreview(null);
-                        }}
-                        className="absolute -right-2 -top-2 flex h-5 w-5 cursor-pointer items-center justify-center rounded-full border-0 bg-[#2365aa] text-[10px] font-bold text-white"
-                        aria-label="Remove thumbnail"
+                      className="cursor-pointer border-0 bg-transparent p-0 text-xs font-semibold text-[#2365aa] hover:underline"
+                    >
+                      Manage tags
+                    </button>
+                  </div>
+                  {tagsLoading ? (
+                    <p className="m-0 text-xs text-[#848b9b]">Loading tags...</p>
+                  ) : null}
+                  {tagsLoadError ? (
+                    <p className="m-0 text-xs text-[#2365aa]">{tagsLoadError}</p>
+                  ) : null}
+
+                  <div className="relative">
+                    <button
+                      type="button"
+                      onClick={() => setTagDropdownOpen((prev) => !prev)}
+                      className="flex w-full cursor-pointer items-center justify-between gap-3 rounded-2xl border border-[#d7e6f3] bg-[#f8fbfd] px-4 py-3.5 text-left text-sm outline-none transition hover:border-[#2365aa] focus:border-[#2365aa] focus:bg-white"
+                    >
+                      <span
+                        className={
+                          demoForm.industries.length > 0 ? "text-[#1F2432]" : "text-[#848b9b]"
+                        }
                       >
-                        ✕
-                      </button>
+                        {demoForm.industries.length > 0
+                          ? `${demoForm.industries.length} tag${demoForm.industries.length === 1 ? "" : "s"} selected`
+                          : "Select industry tags"}
+                      </span>
+                      <ChevronDown
+                        size={16}
+                        className={`shrink-0 text-[#848b9b] transition-transform ${tagDropdownOpen ? "rotate-180" : ""}`}
+                      />
+                    </button>
+
+                    {tagDropdownOpen ? (
+                        <div className="absolute left-0 top-full z-20 mt-2 w-full overflow-hidden rounded-2xl border border-[#d7e6f3] bg-white shadow-[0_18px_40px_-24px_rgba(17,61,119,0.45)]">
+                          <div className="max-h-40 overflow-y-auto p-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+                          {demoTags.length === 0 ? (
+                            <p className="px-3 py-2 text-sm text-[#848b9b]">No tags available.</p>
+                          ) : (
+                            demoTags.map((industry) => {
+                              const active = demoForm.industries.includes(industry);
+                              return (
+                                <button
+                                  key={industry}
+                                  type="button"
+                                  onClick={() => toggleIndustry(industry)}
+                                  className={`mb-1 flex w-full cursor-pointer items-center justify-between gap-3 rounded-xl border-0 px-3 py-2.5 text-left text-sm last:mb-0 ${
+                                    active
+                                      ? "bg-[#EFF7FC] font-semibold text-[#2365aa]"
+                                      : "bg-transparent text-[#5a5a5a] hover:bg-[#f8fbfd]"
+                                  }`}
+                                >
+                                  <span>{industry}</span>
+                                  {active ? <Check size={16} /> : null}
+                                </button>
+                              );
+                            })
+                          )}
+                        </div>
+
+                        <div className="flex items-center justify-between gap-2 border-t border-[#e2ebf3] bg-[#f8fbfd] px-3 py-2.5">
+                          <p className="m-0 text-xs text-[#848b9b]">
+                            {demoForm.industries.length > 0
+                              ? `${demoForm.industries.length} selected`
+                              : "Select one or more tags"}
+                          </p>
+                          <button
+                            type="button"
+                            onClick={() => setTagDropdownOpen(false)}
+                            className="cursor-pointer rounded-full border-0 bg-[#2365aa] px-3.5 py-1.5 text-xs font-semibold text-white hover:bg-[#1a5490]"
+                          >
+                            Done
+                          </button>
+                        </div>
+                      </div>
+                    ) : null}
+                  </div>
+
+                  {demoForm.industries.length > 0 ? (
+                    <div className="flex flex-wrap gap-2 pt-1">
+                      {demoForm.industries.map((industry) => (
+                        <button
+                          key={industry}
+                          type="button"
+                          onClick={() => toggleIndustry(industry)}
+                          className="inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-[#d7e6f3] bg-[#EFF7FC] px-3 py-1.5 text-xs font-semibold text-[#2365aa]"
+                        >
+                          {industry}
+                          <X size={12} />
+                        </button>
+                      ))}
                     </div>
                   ) : null}
+                </section>
+
+                <section className="space-y-2.5">
+                    <div>
+                      <p className="m-0 text-sm font-semibold text-[#1F2432]">Visibility</p>
+                      <p className="mt-1 text-xs text-[#687181]">
+                        Public shows on the website.
+                      </p>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setDemoForm((prev) => ({ ...prev, isPublic: true }))}
+                        className={`cursor-pointer rounded-full border px-4 py-2.5 text-sm font-semibold transition ${
+                          demoForm.isPublic
+                            ? "border-[#113d77] bg-[#113d77] text-white"
+                            : "border-[#d7e6f3] bg-[#EFF7FC] text-[#2365aa] hover:bg-[#e7f1fa]"
+                        }`}
+                      >
+                        Public
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setDemoForm((prev) => ({ ...prev, isPublic: false }))}
+                        className={`cursor-pointer rounded-full border px-4 py-2.5 text-sm font-semibold transition ${
+                          !demoForm.isPublic
+                            ? "border-[#113d77] bg-[#113d77] text-white"
+                            : "border-[#d7e6f3] bg-[#EFF7FC] text-[#2365aa] hover:bg-[#e7f1fa]"
+                        }`}
+                      >
+                        Private
+                      </button>
+                    </div>
+                  </section>
+
+                {demoError ? (
+                  <p className="rounded-2xl bg-[#EEF3FB] px-4 py-3 text-sm text-[#2365aa]">
+                    {demoError}
+                  </p>
+                ) : null}
                 </div>
               </div>
 
-              <div className="mt-4">
-                <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
-                  <p className="m-0 text-sm font-medium text-[#5a5a5a]">Industry tags</p>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      closeDemoModal();
-                      setTab("tags");
-                    }}
-                    className="cursor-pointer border-0 bg-transparent p-0 text-xs font-semibold text-[#2365aa] hover:underline"
-                  >
-                    Manage tags
-                  </button>
-                </div>
-                {tagsLoading ? (
-                  <p className="mb-2 text-xs text-[#848b9b]">Loading tags...</p>
-                ) : null}
-                {tagsLoadError ? (
-                  <p className="mb-2 text-xs text-[#2365aa]">{tagsLoadError}</p>
-                ) : null}
-
-                <div className="relative">
-                  <button
-                    type="button"
-                    onClick={() => setTagDropdownOpen((prev) => !prev)}
-                    className="flex w-full cursor-pointer items-center justify-between gap-3 rounded-[12px] border border-[#d7e6f3] bg-[#f8fbfd] px-3.5 py-3 text-left text-sm outline-none hover:border-[#2365aa]"
-                  >
-                    <span
-                      className={
-                        demoForm.industries.length > 0 ? "text-[#1F2432]" : "text-[#848b9b]"
-                      }
-                    >
-                      {demoForm.industries.length > 0
-                        ? `${demoForm.industries.length} tag${demoForm.industries.length === 1 ? "" : "s"} selected`
-                        : "Select industry tags"}
-                    </span>
-                    <ChevronDown
-                      size={16}
-                      className={`shrink-0 text-[#848b9b] transition-transform ${tagDropdownOpen ? "rotate-180" : ""}`}
-                    />
-                  </button>
-
-                  {tagDropdownOpen ? (
-                    <div className="absolute z-20 mt-2 w-full overflow-hidden rounded-[12px] border border-[#d7e6f3] bg-white shadow-[0_18px_40px_-24px_rgba(17,61,119,0.45)]">
-                      <div className="max-h-52 overflow-y-auto p-2">
-                        {demoTags.length === 0 ? (
-                          <p className="px-3 py-2 text-sm text-[#848b9b]">No tags available.</p>
-                        ) : (
-                          demoTags.map((industry) => {
-                            const active = demoForm.industries.includes(industry);
-                            return (
-                              <button
-                                key={industry}
-                                type="button"
-                                onClick={() => toggleIndustry(industry)}
-                                className={`mb-1 flex w-full cursor-pointer items-center justify-between gap-3 rounded-[10px] border-0 px-3 py-2.5 text-left text-sm last:mb-0 ${
-                                  active
-                                    ? "bg-[#EFF7FC] font-semibold text-[#2365aa]"
-                                    : "bg-transparent text-[#5a5a5a] hover:bg-[#f8fbfd]"
-                                }`}
-                              >
-                                <span>{industry}</span>
-                                {active ? <Check size={16} /> : null}
-                              </button>
-                            );
-                          })
-                        )}
-                      </div>
-
-                      <div className="flex items-center justify-between gap-2 border-t border-[#e2ebf3] bg-[#f8fbfd] px-3 py-2.5">
-                        <p className="m-0 text-xs text-[#848b9b]">
-                          {demoForm.industries.length > 0
-                            ? `${demoForm.industries.length} selected`
-                            : "Select one or more tags"}
-                        </p>
-                        <button
-                          type="button"
-                          onClick={() => setTagDropdownOpen(false)}
-                          className="cursor-pointer rounded-full border-0 bg-[#2365aa] px-3.5 py-1.5 text-xs font-semibold text-white hover:bg-[#1a5490]"
-                        >
-                          Done
-                        </button>
-                      </div>
+              <div className="flex flex-wrap items-center gap-3 border-t border-[#eef3f8] px-6 py-4 sm:px-8">
+                {demoSaving && demoUploadProgress !== null ? (
+                  <div className="w-full min-w-0 sm:mr-auto sm:max-w-xs">
+                    <div className="mb-1 flex items-center justify-between text-xs text-[#687181]">
+                      <span>Uploading video…</span>
+                      <span>{demoUploadProgress}%</span>
                     </div>
-                  ) : null}
-                </div>
-
-                {demoForm.industries.length > 0 ? (
-                  <div className="mt-2.5 flex flex-wrap gap-1.5">
-                    {demoForm.industries.map((industry) => (
-                      <button
-                        key={industry}
-                        type="button"
-                        onClick={() => toggleIndustry(industry)}
-                        className="inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-[#d7e6f3] bg-[#EFF7FC] px-2.5 py-1 text-[11px] font-semibold text-[#2365aa]"
-                      >
-                        {industry}
-                        <X size={12} />
-                      </button>
-                    ))}
+                    <div className="h-1.5 overflow-hidden rounded-full bg-[#e8eef5]">
+                      <div
+                        className="h-full rounded-full bg-[#2365aa] transition-[width] duration-200"
+                        style={{ width: `${demoUploadProgress}%` }}
+                      />
+                    </div>
                   </div>
                 ) : null}
-              </div>
-
-              <div className="mt-4">
-                <p className="mb-2 text-sm font-medium text-[#5a5a5a]">Visibility</p>
-                <div className="flex flex-wrap gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setDemoForm((prev) => ({ ...prev, isPublic: true }))}
-                    className={`cursor-pointer rounded-full border px-3 py-1.5 text-xs font-semibold ${
-                      demoForm.isPublic
-                        ? "border-[#113d77] bg-[#113d77] text-white"
-                        : "border-[#d7e6f3] bg-[#EFF7FC] text-[#2365aa]"
-                    }`}
-                  >
-                    Public
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setDemoForm((prev) => ({ ...prev, isPublic: false }))}
-                    className={`cursor-pointer rounded-full border px-3 py-1.5 text-xs font-semibold ${
-                      !demoForm.isPublic
-                        ? "border-[#113d77] bg-[#113d77] text-white"
-                        : "border-[#d7e6f3] bg-[#EFF7FC] text-[#2365aa]"
-                    }`}
-                  >
-                    Private
-                  </button>
-                </div>
-                <p className="mt-2 text-xs text-[#848b9b]">
-                  Public demos appear on the website. Private demos are only visible in this admin
-                  panel.
-                </p>
-              </div>
-
-              {demoError ? (
-                <p className="mt-4 rounded-[12px] bg-[#EEF3FB] px-3 py-2 text-sm text-[#2365aa]">
-                  {demoError}
-                </p>
-              ) : null}
-
-              <div className="mt-5 flex flex-wrap gap-2">
                 <button
                   type="submit"
                   disabled={demoSaving}
-                  className="inline-flex cursor-pointer items-center gap-2 rounded-full border-0 bg-[#2365aa] px-5 py-3 text-sm font-semibold uppercase text-white hover:bg-[#1a5490] disabled:cursor-not-allowed disabled:opacity-70"
+                  className="inline-flex cursor-pointer items-center gap-2 rounded-full border-0 bg-[#2365aa] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#1a5490] disabled:cursor-not-allowed disabled:opacity-70"
                 >
                   {demoSaving
-                    ? "Saving..."
+                    ? demoUploadProgress !== null
+                      ? `Uploading ${demoUploadProgress}%`
+                      : "Saving..."
                     : editingDemo
                       ? "Update demo"
                       : "Add demo"}
@@ -2361,7 +2460,7 @@ export default function AdminDashboard() {
                 <button
                   type="button"
                   onClick={closeDemoModal}
-                  className="cursor-pointer rounded-full border border-[#d7e6f3] bg-[#EFF7FC] px-5 py-3 text-sm font-semibold text-[#2365aa]"
+                  className="cursor-pointer rounded-full border border-[#d7e6f3] bg-[#EFF7FC] px-6 py-3 text-sm font-semibold text-[#2365aa] transition hover:bg-[#e7f1fa]"
                 >
                   Cancel
                 </button>
@@ -2397,13 +2496,11 @@ export default function AdminDashboard() {
               </button>
             </div>
             <div className="relative aspect-video w-full bg-black">
-              <iframe
-                key={playingDemo.videoId}
-                src={youtubeEmbed(playingDemo.videoId)}
+              <DemoVideoPlayer
                 title={playingDemo.title}
-                className="absolute inset-0 h-full w-full border-0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowFullScreen
+                videoUrl={playingDemo.videoUrl}
+                videoId={playingDemo.videoId}
+                poster={playingDemo.thumbnailUrl}
               />
             </div>
           </div>

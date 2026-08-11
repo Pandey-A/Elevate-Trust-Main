@@ -9,6 +9,7 @@ export type AdminDemo = {
   title: string;
   videoId: string;
   youtubeUrl: string;
+  videoUrl?: string | null;
   industries: IndustryTag[];
   thumbnailUrl: string | null;
   isPublic: boolean;

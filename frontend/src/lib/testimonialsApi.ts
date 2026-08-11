@@ -47,13 +47,24 @@ function notifyTestimonialsChanged() {
 }
 
 export async function fetchPublicTestimonials(): Promise<Testimonial[]> {
-  const { data } = await api.get<{ success: boolean; data: TestimonialApiRow[] }>(
-    "/api/testimonials",
-  );
-  if (!data.success || !Array.isArray(data.data)) {
-    throw new Error("Unable to load testimonials.");
+  let lastError: unknown;
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    try {
+      const { data } = await api.get<{ success: boolean; data: TestimonialApiRow[] }>(
+        "/api/testimonials",
+        { timeout: 12_000 },
+      );
+      if (!data.success || !Array.isArray(data.data)) {
+        throw new Error("Unable to load testimonials.");
+      }
+      return data.data.map(mapTestimonial);
+    } catch (error) {
+      lastError = error;
+    }
   }
-  return data.data.map(mapTestimonial);
+  throw lastError instanceof Error
+    ? lastError
+    : new Error("Unable to load testimonials.");
 }
 
 export async function fetchAdminTestimonials(): Promise<Testimonial[]> {
