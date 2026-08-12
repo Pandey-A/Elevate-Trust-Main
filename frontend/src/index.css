@@ -28,6 +28,10 @@
   --fs-body-lg: 15px;
   --fs-body-xl: 16px;
   --fs-section-label: 11px;
+  --fs-hero-title: clamp(36px, 4vw, 72px);
+  --fs-section-title: clamp(28px, 3vw, 48px);
+  --fs-card-title: clamp(20px, 1.5vw, 28px);
+  --fs-subtitle: clamp(14px, 1.2vw, 18px);
   --sans: var(--font-lay-grotesk);
   --heading: var(--font-lay-grotesk);
   --mono: ui-monospace, Consolas, monospace;

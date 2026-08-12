@@ -52,7 +52,7 @@
 }
 
 .service-section__heading-title {
-  font-size: clamp(1.125rem, 2vw, 2rem);
+  font-size: var(--fs-section-title);
   font-weight: 700;
   color: #272935;
   line-height: 1.25;
@@ -173,7 +173,7 @@
 }
 
 .service-section__card-title {
-  font-size: clamp(1.25rem, 2vw, 1.75rem);
+  font-size: var(--fs-card-title);
   font-weight: 700;
   color: #272935;
   line-height: 1.25;
@@ -249,7 +249,6 @@
   }
 
   .service-section__heading-title {
-    font-size: clamp(1.25rem, 5.2vw, 1.5rem);
     line-height: 1.3;
     margin-top: 0.65rem;
   }
@@ -312,7 +311,6 @@
   }
 
   .service-section__card-title {
-    font-size: clamp(1.35rem, 5.8vw, 1.6rem);
     line-height: 1.25;
     margin-bottom: 0.7rem;
     color: #1f2430;
@@ -385,7 +383,6 @@
   }
 
   .service-section__card-title {
-    font-size: clamp(1.25rem, 5.5vw, 1.45rem);
   }
 
   .service-section__card-desc {
@@ -409,7 +406,7 @@
 */
 @media (min-width: 1024px) and (max-width: 1919px) {
   .service-section {
-    padding: 3.5rem 1.5rem 4rem;
+    padding: 2rem 1.5rem 2.5rem;
   }
 
   .service-section__vector {
@@ -435,7 +432,6 @@
   .service-section__heading-title {
     margin: 0.65rem auto 0;
     max-width: 36rem;
-    font-size: clamp(1.5rem, 2.2vw, 1.85rem);
     font-weight: 700;
     line-height: 1.15;
   }
@@ -465,7 +461,7 @@
     display: block;
     min-width: 0;
     width: 100%;
-    height: 72px;
+    height: 56px;
     padding: 0;
     border: none;
     border-radius: 16px;
@@ -526,7 +522,7 @@
     flex: 1;
     height: 100%;
     min-height: 0;
-    padding: 28px 28px 24px 32px;
+    padding: 24px 24px 20px 24px;
     border: none;
     border-radius: 16px;
     box-shadow: none;
@@ -541,7 +537,6 @@
 
   .service-section__card-title {
     margin: 0 0 18px;
-    font-size: 20px;
     font-weight: 600;
     line-height: 1.2;
     color: #272935;
@@ -602,7 +597,7 @@
 /* Mid laptop / desktop — scale up toward Figma */
 @media (min-width: 1280px) and (max-width: 1919px) {
   .service-section {
-    padding: 4rem 2rem 4.5rem;
+    padding: 2.5rem 2rem 3rem;
   }
 
   .service-section__heading-label {
@@ -610,7 +605,6 @@
   }
 
   .service-section__heading-title {
-    font-size: clamp(1.65rem, 2vw, 2rem);
     max-width: 40rem;
   }
 
@@ -623,7 +617,7 @@
   }
 
   .service-section__tab {
-    height: 82px;
+    height: 64px;
     border-radius: 18px;
   }
 
@@ -644,7 +638,7 @@
   }
 
   .service-section__card {
-    padding: 36px 34px 28px 38px;
+    padding: 28px 28px 24px 32px;
     border-radius: 20px;
   }
 
@@ -694,7 +688,7 @@
 
 @media (min-width: 1440px) and (max-width: 1919px) {
   .service-section {
-    padding: 4.5rem 2.5rem 5rem;
+    padding: 3rem 2.5rem 3.5rem;
   }
 
   .service-section__vector {
@@ -706,7 +700,6 @@
   }
 
   .service-section__heading-title {
-    font-size: clamp(1.85rem, 2vw, 2.25rem);
     max-width: 44rem;
   }
 
@@ -719,7 +712,7 @@
   }
 
   .service-section__tab {
-    height: 96px;
+    height: 72px;
     border-radius: 22px;
   }
 
@@ -742,7 +735,7 @@
   }
 
   .service-section__card {
-    padding: 44px 40px 32px 44px;
+    padding: 32px 32px 28px 36px;
     border-radius: 24px;
   }
 
@@ -808,7 +801,7 @@
   }
 
   .service-section__tab {
-    height: 110px;
+    height: 82px;
     border-radius: 26px;
   }
 
@@ -829,7 +822,7 @@
   }
 
   .service-section__card {
-    padding: 52px 48px 36px 52px;
+    padding: 40px 40px 32px 44px;
     border-radius: 28px;
   }
 
@@ -877,7 +870,7 @@
   .service-section {
     width: 100%;
     max-width: none;
-    min-height: 1542px;
+    min-height: 1000px;
     margin-inline: 0;
     padding: 0;
     box-sizing: border-box;
@@ -894,7 +887,7 @@
     position: relative;
     width: 2012px;
     max-width: 2012px;
-    min-height: 1542px;
+    min-height: 1000px;
     margin-inline: auto;
     padding: 0;
     display: block;
@@ -903,18 +896,17 @@
   .service-section__header {
     position: relative;
     width: 100%;
-    height: 277px;
+    height: 180px;
     text-align: center;
     margin-bottom: 0;
   }
 
   .service-section__heading-label {
     position: absolute;
-    top: 113px;
+    top: 60px;
     left: 50%;
     transform: translateX(-50%);
     margin: 0;
-    font-family: "Lay Grotesk Trial", "Lay Grotesk - Trial", sans-serif;
     font-size: 20px;
     font-weight: 600;
     line-height: 1.1;
@@ -925,13 +917,12 @@
 
   .service-section__heading-title {
     position: absolute;
-    top: 169px;
+    top: 100px;
     left: 50%;
     transform: translateX(-50%);
     width: 736px;
     max-width: 736px;
     margin: 0;
-    font-family: "Lay Grotesk Trial", "Lay Grotesk - Trial", sans-serif;
     font-size: 48px;
     font-weight: 700;
     line-height: 1.12;
@@ -943,7 +934,7 @@
     position: relative;
     display: block;
     width: 100%;
-    min-height: 1265px;
+    min-height: 800px;
     margin: 0;
     grid-template-columns: none;
   }
@@ -951,7 +942,7 @@
   .service-section__tabs {
     position: absolute;
     left: 159px;
-    top: 100px;
+    top: 50px;
     width: 536px;
     display: flex;
     flex-direction: column;
@@ -967,7 +958,7 @@
     position: relative;
     flex-shrink: 0;
     width: 441px;
-    height: 140px;
+    height: 96px;
     min-width: 0;
     margin: 0;
     padding: 0;
@@ -980,7 +971,7 @@
 
   .service-section__tab--active {
     width: 468px;
-    height: 139px;
+    height: 96px;
     background-color: #2365aa;
     border: none;
     border-radius: 30px 0 0 30px;
@@ -1010,7 +1001,6 @@
     top: 50%;
     transform: translateY(-50%);
     flex: none;
-    font-family: "Lay Grotesk Trial", "Lay Grotesk - Trial", sans-serif;
     font-size: 28px;
     font-weight: 600;
     line-height: 34px;
@@ -1026,18 +1016,18 @@
   .service-section__panel {
     position: absolute;
     left: 610px;
-    top: 99px;
+    top: 50px;
     width: 1243px;
-    height: 1040px;
+    height: 750px;
     display: block;
     z-index: 2;
   }
 
   .service-section__card {
     width: 1243px;
-    height: 1040px;
-    min-height: 1040px;
-    padding: 69px 67px 44px;
+    height: 750px;
+    min-height: 750px;
+    padding: 48px 48px 32px;
     border-radius: 30px;
     border: none;
     background: #ffffff;
@@ -1053,7 +1043,6 @@
 
   .service-section__card-title {
     margin: 0 0 53px;
-    font-family: "Lay Grotesk Trial", "Lay Grotesk - Trial", sans-serif;
     font-size: 35px;
     font-weight: 600;
     line-height: 1.2;
@@ -1062,7 +1051,6 @@
 
   .service-section__card-desc {
     margin: 0 0 49px;
-    font-family: "Lay Grotesk Trial", "Lay Grotesk - Trial", sans-serif;
     font-size: 25px;
     font-weight: 500;
     line-height: 1.39;
@@ -1092,7 +1080,6 @@
 
   .service-section__feature-title {
     margin: 0 0 10px;
-    font-family: "Lay Grotesk Trial", "Lay Grotesk - Trial", sans-serif;
     font-size: 24px;
     font-weight: 500;
     line-height: 34px;
@@ -1101,7 +1088,6 @@
 
   .service-section__feature-text {
     max-width: 777px;
-    font-family: "Lay Grotesk Trial", "Lay Grotesk - Trial", sans-serif;
     font-size: 20px;
     font-weight: 500;
     line-height: 1.39;

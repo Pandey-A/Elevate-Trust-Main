@@ -53,7 +53,7 @@
 }
 
 .fly-cta__title {
-  font-size: clamp(28px, 3.5vw, 44px);
+  font-size: var(--fs-section-title);
   font-weight: 800;
   line-height: 1.15;
   letter-spacing: -0.02em;
@@ -121,7 +121,6 @@
 
 @media (min-width: 1920px) {
   .fly-cta__title {
-    font-size: clamp(30px, 2.8vw, 42px);
   }
 
   .fly-cta__desc {
@@ -204,7 +203,6 @@
   }
 
   .fly-cta__title {
-    font-size: 48px;
   }
 
   .fly-cta__illustration-wrapper {
@@ -237,7 +235,6 @@
   }
 
   .fly-cta__title {
-    font-size: 36px;
   }
 
   .fly-cta__desc {
