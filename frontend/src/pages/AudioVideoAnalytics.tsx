@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Sparkles } from "lucide-react";
 import FlyCTA from "../components/FlyCTA";
 import worldMapBackground from "../assets/homepage-icons/Group(3).png";
 import simpleSetupIcon from "../assets/OurServices/Audio-simple.png";
@@ -12,6 +12,7 @@ import cameraHealthIcon from "../assets/OurServices/Audio-camera.png";
 import audioBg1 from "../assets/OurServices/Audiobg-1.png";
 import audioBg2 from "../assets/OurServices/Audiobg-2.png";
 import elevateIcon from "../assets/service/AI-process/elevateIcon.svg";
+import deepfakeImg from "../assets/OurServices/deepfake-detection.png";
 
 const coreOfferings = [
   {
@@ -333,6 +334,58 @@ export default function AudioVideoAnalytics() {
                   </p>
                 </article>
               ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Deepfake Detection Product Section */}
+      <section className="w-full bg-white pb-[clamp(40px,5vw,72px)]">
+        <div className="mx-auto w-full max-w-[1692px] px-5 sm:px-8 lg:px-10 xl:px-12">
+          <div className="relative overflow-hidden rounded-[28px] border border-[#e2ebf3] bg-gradient-to-br from-[#113d77] via-[#1a4a8a] to-[#0f3466] p-6 text-white shadow-xl sm:p-10 lg:p-12">
+            <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-12 lg:gap-12">
+              <div className="lg:col-span-6 xl:col-span-7">
+                <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-blue-200 backdrop-blur-md">
+                  <Sparkles className="h-3.5 w-3.5 text-blue-300" /> Our AI Product
+                </span>
+                <h2 className="mt-4 text-[clamp(28px,3.5vw,46px)] font-extrabold leading-[1.15] text-white">
+                  Upload to Uncover <span className="font-serif italic font-normal text-blue-200">Deepfakes</span> with AI Precision
+                </h2>
+                <p className="mt-4 text-[clamp(14px,1.2vw,17px)] leading-relaxed text-blue-100/90 2xl:text-[18px]">
+                  Discover an advanced AI-assisted verifier that detects facial inconsistencies, lip-sync drift, and audio manipulation with high confidence.
+                </p>
+                <div className="mt-6 flex flex-wrap gap-3 text-xs font-medium text-blue-100 sm:text-sm">
+                  <div className="flex items-center gap-2 rounded-lg bg-white/10 px-3.5 py-2 backdrop-blur-sm">
+                    <span className="h-2 w-2 rounded-full bg-emerald-400" /> Facial Inconsistencies
+                  </div>
+                  <div className="flex items-center gap-2 rounded-lg bg-white/10 px-3.5 py-2 backdrop-blur-sm">
+                    <span className="h-2 w-2 rounded-full bg-emerald-400" /> Lip-Sync Drift
+                  </div>
+                  <div className="flex items-center gap-2 rounded-lg bg-white/10 px-3.5 py-2 backdrop-blur-sm">
+                    <span className="h-2 w-2 rounded-full bg-emerald-400" /> Audio Manipulation Detection
+                  </div>
+                </div>
+                <div className="mt-8 flex flex-wrap items-center gap-4">
+                  <a
+                    href="https://elevatetrust.in/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2.5 rounded-full bg-white px-6 py-3.5 text-sm font-bold text-[#113d77] shadow-lg transition-all duration-300 hover:bg-blue-50 hover:shadow-xl hover:-translate-y-0.5"
+                  >
+                    <span>Try Deepfake Detector</span>
+                    <ArrowUpRight className="h-4 w-4" />
+                  </a>
+                </div>
+              </div>
+              <div className="lg:col-span-6 xl:col-span-5">
+                <div className="group relative overflow-hidden rounded-2xl border border-white/20 bg-white/5 p-2 shadow-2xl backdrop-blur-sm transition-all duration-300 hover:border-white/40">
+                  <img
+                    src={deepfakeImg}
+                    alt="Deepfake Detection AI Verifier Platform"
+                    className="h-auto w-full rounded-xl object-cover shadow-md transition-transform duration-500 group-hover:scale-[1.02]"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
