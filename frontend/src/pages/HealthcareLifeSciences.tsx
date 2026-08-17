@@ -21,13 +21,13 @@ import {
 } from "lucide-react";
 import FlyCTA from "../components/FlyCTA";
 import worldMapBackground from "../assets/homepage-icons/Group(3).png";
-import healthcareAgentIcon from "../assets/OurServices/GenAI-healthcare.png";
-import virtualAssistant from "../assets/OurServices/virtual-assistant.png";
+import healthcareAgentIcon from "../assets/OurServices/GenAI-healthcare.svg";
+import virtualAssistant from "../assets/OurServices/virtual-assistant.svg";
 import healthcareChallengesImage from "../assets/industries/healthcare.svg";
 import techStackImage from "../assets/OurServices/techstack-light.png";
-import knowledgeIcon from "../assets/OurServices/GenAI-knowledge.png";
+import knowledgeIcon from "../assets/OurServices/GenAI-knowledge.svg";
 import dataIcon from "../assets/OurServices/GenAI-Data.png";
-import optimizeIcon from "../assets/OurServices/GenAI-Optimize.png";
+import optimizeIcon from "../assets/OurServices/GenAI-Optimize.svg";
 import checkIcon from "../assets/technology-trends/check-icon.svg";
 
 const challengeCards = [

@@ -319,44 +319,24 @@ export default function StoriesOfImpact() {
                             className={[
                               "relative flex shrink-0 cursor-pointer flex-col overflow-hidden rounded-[20px] sm:rounded-[24px] lg:rounded-[30px]",
                               "min-h-0 lg:min-h-[480px] xl:min-h-[520px] 2xl:min-h-[640px] min-[1920px]:min-h-[711px]",
-                              focused
-                                ? "w-[min(86vw,300px)] bg-white sm:w-[340px] md:w-[420px] lg:w-[560px] xl:w-[620px] 2xl:w-[740px] min-[1920px]:w-[798px]"
-                                : "w-[180px] bg-[#F4F7F9] sm:w-[210px] md:w-[260px] lg:w-[360px] xl:w-[420px] 2xl:w-[520px] min-[1920px]:w-[590px]",
+                              "w-[min(86vw,300px)] sm:w-[340px] md:w-[420px] lg:w-[560px] xl:w-[620px] 2xl:w-[740px] min-[1920px]:w-[798px]",
+                              focused ? "bg-white" : "bg-[#F4F7F9]",
                             ].join(" ")}
                           >
-                            <div
-                              className={[
-                                "relative flex h-full flex-col",
-                                focused
-                                  ? "p-3.5 sm:p-4 md:p-5 lg:p-6 xl:px-8 xl:pt-8 xl:pb-7 2xl:px-12 2xl:pt-12 2xl:pb-10"
-                                  : "p-3 sm:p-3.5 md:p-4 lg:p-5 xl:p-6 2xl:p-8",
-                              ].join(" ")}
-                            >
+                            <div className="relative flex h-full flex-col p-3.5 sm:p-4 md:p-5 lg:p-6 xl:px-8 xl:pt-8 xl:pb-7 2xl:px-12 2xl:pt-12 2xl:pb-10">
                               <div className="flex items-start justify-between gap-2 sm:gap-3">
                                 {story.logo ? (
                                   <img
                                     src={story.logo}
                                     alt=""
-                                    className={[
-                                      "w-auto object-contain",
-                                      focused
-                                        ? "h-7 max-w-[110px] sm:h-8 sm:max-w-[130px] md:h-9 md:max-w-[150px] lg:h-[48px] lg:max-w-[180px] xl:h-[56px] xl:max-w-[200px] 2xl:h-[76px] 2xl:max-w-[222px]"
-                                        : "h-6 max-w-[90px] sm:h-7 sm:max-w-[110px] md:h-8 md:max-w-[130px] lg:h-9 lg:max-w-[150px] xl:h-10 xl:max-w-[170px] 2xl:h-12 2xl:max-w-[206px]",
-                                    ].join(" ")}
+                                    className="h-7 w-auto max-w-[110px] object-contain sm:h-8 sm:max-w-[130px] md:h-9 md:max-w-[150px] lg:h-[48px] lg:max-w-[180px] xl:h-[56px] xl:max-w-[200px] 2xl:h-[76px] 2xl:max-w-[222px]"
                                   />
                                 ) : (
                                   <span />
                                 )}
                               </div>
 
-                              <p
-                                className={[
-                                  "mt-2 flex-1 text-[#5A5A5A] sm:mt-2.5 lg:mt-3",
-                                  focused
-                                    ? "w-full text-[13px] leading-5 sm:text-sm sm:leading-5 md:text-[15px] md:leading-6 lg:text-lg lg:leading-7 xl:text-xl xl:leading-8 2xl:text-2xl 2xl:leading-[35px]"
-                                    : "w-full text-[11px] leading-4 sm:text-xs sm:leading-4 md:text-sm md:leading-5 lg:text-base lg:leading-6 xl:text-lg xl:leading-7 2xl:text-xl 2xl:leading-8",
-                                ].join(" ")}
-                              >
+                              <p className="mt-2 flex-1 w-full text-[13px] leading-5 text-[#5A5A5A] sm:mt-2.5 sm:text-sm sm:leading-5 md:text-[15px] md:leading-6 lg:mt-3 lg:text-lg lg:leading-7 xl:text-xl xl:leading-8 2xl:text-2xl 2xl:leading-[35px]">
                                 {story.quote.replace(/^["“]|["”]$/g, "")}
                                 {story.fullQuote ? "..." : ""}
                               </p>
@@ -379,32 +359,13 @@ export default function StoriesOfImpact() {
                                 <img
                                   src={story.profile}
                                   alt={story.name}
-                                  className={[
-                                    "shrink-0 rounded-full object-cover object-top",
-                                    focused
-                                      ? "size-16 sm:size-[72px] md:size-20 lg:size-24 xl:size-[104px] 2xl:size-[120px]"
-                                      : "size-12 sm:size-14 md:size-16 lg:size-[72px] xl:size-20 2xl:size-24",
-                                  ].join(" ")}
+                                  className="size-16 shrink-0 rounded-full object-cover object-top sm:size-[72px] md:size-20 lg:size-24 xl:size-[104px] 2xl:size-[120px]"
                                 />
                                 <div className="min-w-0">
-                                  <p
-                                    className={[
-                                      "font-bold text-[#272935]",
-                                      focused
-                                        ? "text-sm sm:text-[15px] md:text-base lg:text-lg 2xl:text-xl"
-                                        : "text-xs sm:text-sm lg:text-sm 2xl:text-base",
-                                    ].join(" ")}
-                                  >
+                                  <p className="text-sm font-bold text-[#272935] sm:text-[15px] md:text-base lg:text-lg 2xl:text-xl">
                                     {story.name}
                                   </p>
-                                  <p
-                                    className={[
-                                      "mt-0.5 text-[#272935]/60",
-                                      focused
-                                        ? "text-[11px] sm:text-xs md:text-sm lg:text-sm 2xl:text-base"
-                                        : "text-[10px] sm:text-[11px] md:text-xs lg:text-xs 2xl:text-sm",
-                                    ].join(" ")}
-                                  >
+                                  <p className="mt-0.5 text-[11px] text-[#272935]/60 sm:text-xs md:text-sm lg:text-sm 2xl:text-base">
                                     {story.title}
                                   </p>
                                 </div>

@@ -22,33 +22,32 @@ import customSoftwareImage from "../assets/OurServices/custom-software.svg";
 import ecommerceImage from "../assets/OurServices/ecom-dev.svg";
 import digitalMarketingImage from "../assets/OurServices/digital-service.svg";
 import erpImage from "../assets/OurServices/erp.svg";
-import webDesignDevImage from "../assets/OurServices/webdesignanddev.png";
-import mobileAppDevImage from "../assets/OurServices/mobile-app-development-img.png";
-import ecommerceCompanyImage from "../assets/OurServices/E-commerce-company.png";
-import digitalMarketingAgencyImage from "../assets/OurServices/digital-marketing-agency-popular-services.png";
+import webDesignDevImage from "../assets/OurServices/webdesignanddev.svg";
+import mobileAppDevImage from "../assets/OurServices/mobile-app-development-img.svg";
+import ecommerceCompanyImage from "../assets/OurServices/E-commerce-company.svg";
+import digitalMarketingAgencyImage from "../assets/OurServices/digital-marketing-agency-popular-services.svg";
 import erpSoftwareImage from "../assets/OurServices/ERP-SOFTWARE-COMPANY-IN-NASHIK.png";
 import happyFeetImage from "../assets/OurServices/happyfeet.png";
-import genData from "../assets/OurServices/seo.png";
-import genSoftware from "../assets/OurServices/corporate.png";
+import genData from "../assets/OurServices/seo.svg";
+import genSoftware from "../assets/OurServices/corporate.svg";
 import genOptimize from "../assets/OurServices/modernization.png";
-import genCustomer from "../assets/OurServices/GenAI-customService.png";
-import genHealthcare from "../assets/OurServices/GenAI-healthcare.png";
-import genHr from "../assets/OurServices/GenAI-HR.png";
-import genKnowledge from "../assets/OurServices/cms.png";
-import genFinance from "../assets/OurServices/GenAI-Finance.png";
+import genCustomer from "../assets/OurServices/GenAI-customService.svg";
+import genHealthcare from "../assets/OurServices/GenAI-healthcare.svg";
+import genHr from "../assets/OurServices/GenAI-HR.svg";
+import genFinance from "../assets/OurServices/GenAI-Finance.svg";
 import audioAccuracy from "../assets/OurServices/Audio-accuracy.png";
 import audioCamera from "../assets/OurServices/Audio-camera.png";
 import audioDeploy from "../assets/OurServices/Audio-deployment.png";
-import audioInsights from "../assets/OurServices/ongoing.png";
+import audioInsights from "../assets/OurServices/ongoing.svg";
 import audioIntegration from "../assets/OurServices/Api-first.png";
 import audioSimple from "../assets/OurServices/Audio-simple.png";
-import audioBg1 from "../assets/OurServices/Audiobg-1.png";
-import audioBg2 from "../assets/OurServices/Audiobg-2.png";
-import agileImage from "../assets/OurServices/agile-light.png";
-import llmAgentsImage from "../assets/OurServices/llm-agents-light.png";
-import roadmapImage from "../assets/OurServices/roadmap-light.png";
+import audioBg1 from "../assets/OurServices/Audiobg-1.svg";
+import audioBg2 from "../assets/OurServices/Audiobg-2.svg";
+import agileImage from "../assets/OurServices/agile-light.svg";
+import llmAgentsImage from "../assets/OurServices/llm-agents-light.svg";
+import roadmapImage from "../assets/OurServices/roadmap-light.svg";
 import techStackImage from "../assets/OurServices/techstack-light.png";
-import virtualAssistant from "../assets/OurServices/virtual-assistant.png";
+import virtualAssistant from "../assets/OurServices/virtual-assistant.svg";
 import trendsAi from "../assets/technology-trends/Trends-AI.png";
 import trendsCloud from "../assets/technology-trends/Trends-cloud.png";
 import trendsData from "../assets/technology-trends/Trends-data.png";
@@ -100,6 +99,8 @@ export type DigitalServicePageProps = {
   capabilitiesImage?: string;
   showTechStacks?: boolean;
   deliveredWork?: DeliveredWorkProject[];
+  plainOfferings?: boolean;
+  roundedHeroImage?: boolean;
 };
 
 const techStacks = [
@@ -187,7 +188,6 @@ export const digitalServiceImages = {
   genCustomer,
   genHealthcare,
   genHr,
-  genKnowledge,
   genFinance,
   audioAccuracy,
   audioCamera,
@@ -251,6 +251,8 @@ export default function DigitalServicePage({
   capabilitiesImage = flowchartImage,
   showTechStacks = false,
   deliveredWork,
+  plainOfferings = false,
+  roundedHeroImage = false,
 }: DigitalServicePageProps) {
   const [activeStack, setActiveStack] = useState(0);
   const selectedStack = techStacks[activeStack] ?? techStacks[0];
@@ -341,7 +343,9 @@ export default function DigitalServicePage({
               <img
                 src={heroImage}
                 alt=""
-                className="mx-auto block h-auto w-full max-w-full object-contain object-center"
+                className={`mx-auto block h-auto w-full max-w-full object-contain object-center ${
+                  roundedHeroImage ? "rounded-[16px]" : ""
+                }`}
               />
             </div>
           </div>
@@ -359,17 +363,34 @@ export default function DigitalServicePage({
             </p>
           </header>
 
-          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-10 xl:gap-x-10">
+          <div
+            className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 ${
+              plainOfferings
+                ? "gap-x-6 gap-y-8 sm:gap-y-12 lg:gap-x-8 lg:gap-y-14 xl:gap-x-10"
+                : "gap-8 sm:gap-x-6 sm:gap-y-10 lg:gap-x-8 xl:gap-x-10"
+            }`}
+          >
             {offerings.map((item) => (
               <article key={item.title} className="flex min-w-0 flex-col">
-                <div className="mb-5 flex aspect-[1.1] w-full items-center justify-center rounded-[24px] bg-[#e5ecf3] p-8 sm:mb-6">
-                  <img
-                    src={item.icon}
-                    alt=""
-                    className="h-full w-full object-contain drop-shadow-sm"
-                    aria-hidden
-                  />
-                </div>
+                {plainOfferings ? (
+                  <div className="mb-4 aspect-[3/2] w-full shrink-0 overflow-hidden rounded-[20px] sm:mb-5">
+                    <img
+                      src={item.icon}
+                      alt=""
+                      className="h-full w-full object-contain object-center"
+                      aria-hidden
+                    />
+                  </div>
+                ) : (
+                  <div className="mb-5 flex aspect-[1.1] w-full items-center justify-center rounded-[24px] bg-[#e5ecf3] p-8 sm:mb-6">
+                    <img
+                      src={item.icon}
+                      alt=""
+                      className="h-full w-full object-contain drop-shadow-sm"
+                      aria-hidden
+                    />
+                  </div>
+                )}
                 <h3 className="m-0 text-[clamp(16px,1.3vw,20px)] font-bold leading-snug text-[#1F2432] 2xl:text-[22px]">
                   {item.title}
                 </h3>

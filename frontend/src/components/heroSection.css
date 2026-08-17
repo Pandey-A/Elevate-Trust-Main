@@ -1163,15 +1163,7 @@
     }
   
     .hero-globe {
-      display: block;
-      position: absolute;
-      left: 50%;
-      bottom: -18%;
-      z-index: 0;
-      width: min(135vw, 560px);
-      aspect-ratio: 1;
-      transform: translateX(-50%);
-      pointer-events: none;
+      display: none;
     }
   
     .hero-globe__rings {

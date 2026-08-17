@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowUpRight, type LucideProps } from "lucide-react";
 import FlyCTA from "../FlyCTA";
 import worldMapBackground from "../../assets/homepage-icons/Group(3).png";
-import virtualAssistant from "../../assets/OurServices/virtual-assistant.png";
+import virtualAssistant from "../../assets/OurServices/virtual-assistant.svg";
 import techStackImage from "../../assets/OurServices/techstack-light.png";
 import checkIcon from "../../assets/technology-trends/check-icon.svg";
 import "./IndustryPageTemplate.css";

@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { FormEvent, useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import elevateFooterLogo from "../assets/footer/elevatelogo.svg";
 import facebookLogo from "../assets/footer/FacebookLogo.svg";
@@ -11,6 +11,8 @@ import elevateFooterServiceLogo from "../assets/footer/elevateservicelogo.svg";
 import paperplanefooter from "../assets/footer/PaperPlaneTilt.svg";
 import { activePartners } from "../data/activePartners";
 import { digitalServicePaths } from "../data/digitalServices";
+import { getErrorMessage, submitContactLead } from "../lib/contactApi";
+import { useToast } from "./ui/ToastProvider";
 import "./footerSection.css";
 
 type FooterLinkItem = {
@@ -142,6 +144,36 @@ function FooterColumn({
 }
 
 export default function FooterSection() {
+  const { showToast } = useToast();
+  const [newsletterEmail, setNewsletterEmail] = useState("");
+  const [newsletterSubmitting, setNewsletterSubmitting] = useState(false);
+
+  const onNewsletterSubmit = async (event: FormEvent) => {
+    event.preventDefault();
+
+    if (!newsletterEmail.trim()) {
+      showToast("Please enter your email.", "error");
+      return;
+    }
+
+    try {
+      setNewsletterSubmitting(true);
+      const message = await submitContactLead({
+        email: newsletterEmail.trim(),
+        source: "footer",
+      });
+      showToast(message, "success");
+      setNewsletterEmail("");
+    } catch (err) {
+      showToast(
+        getErrorMessage(err, "Unable to subscribe right now. Please try again."),
+        "error",
+      );
+    } finally {
+      setNewsletterSubmitting(false);
+    }
+  };
+
   return (
     <footer className="footer">
       <img
@@ -196,16 +228,25 @@ export default function FooterSection() {
           <div className="footer__column footer__column--wide">
             <h3 className="footer__heading">Newsletter</h3>
             <div className="footer__newsletter">
-              <form className="footer__newsletter-form">
+              <form
+                className="footer__newsletter-form"
+                onSubmit={onNewsletterSubmit}
+                noValidate
+              >
                 <input
                   type="email"
                   placeholder="Email"
+                  value={newsletterEmail}
+                  onChange={(event) => setNewsletterEmail(event.target.value)}
+                  autoComplete="email"
+                  disabled={newsletterSubmitting}
                   className="footer__newsletter-input"
                 />
                 <button
                   type="submit"
                   className="footer__newsletter-submit"
                   aria-label="Submit newsletter email"
+                  disabled={newsletterSubmitting}
                 >
                   <img src={paperplanefooter} alt="" aria-hidden className="h-3.5 w-3.5" />
                 </button>

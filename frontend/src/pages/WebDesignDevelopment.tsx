@@ -2,12 +2,12 @@ import DigitalServicePage, {
   digitalServiceImages,
 } from "./DigitalServicePage";
 
-import corporateImg from "../assets/OurServices/corporate.png";
-import responsiveImg from "../assets/OurServices/responsive.png";
-import cmsImg from "../assets/OurServices/cms.png";
-import seoImg from "../assets/OurServices/seo.png";
-import integrationForumsImg from "../assets/OurServices/integration-forums.png";
-import ongoingImg from "../assets/OurServices/ongoing.png";
+import corporateImg from "../assets/OurServices/corporate.svg";
+import responsiveImg from "../assets/OurServices/responsive.svg";
+import cmsImg from "../assets/OurServices/cms.svg";
+import seoImg from "../assets/OurServices/seo.svg";
+import integrationForumsImg from "../assets/OurServices/integration-forums.svg";
+import ongoingImg from "../assets/OurServices/ongoing.svg";
 
 const {
   website,
@@ -23,6 +23,7 @@ export default function WebDesignDevelopment() {
   return (
     <DigitalServicePage
       breadcrumb="Web Design & Development"
+      plainOfferings
       heroTitle="Web Design & Development for Business Growth"
       heroSubtitle="Friendly, responsive, and high-performing websites that look great, load fast, and help you achieve measurable business goals."
       heroImage={website}

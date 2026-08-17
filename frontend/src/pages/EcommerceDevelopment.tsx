@@ -1,15 +1,15 @@
 import DigitalServicePage, {
   digitalServiceImages,
 } from "./DigitalServicePage";
-import catalogImg from "../assets/OurServices/catalog.png";
-import promotionImg from "../assets/OurServices/promotion.png";
-import orderFulfillmentImg from "../assets/OurServices/order-fullfilment.png";
+import customStorefrontExperiences from "../assets/OurServices/CustomStorefrontExperiences.svg";
+import catalogEcommerce from "../assets/OurServices/Catalog-Ecommerce2.svg";
+import paymentsImg from "../assets/OurServices/Payments.svg";
+import orderAndWorkflows from "../assets/OurServices/OrderAndWorkflows.svg";
+import promotionsPersonalization from "../assets/OurServices/PromotionsPersonalization.svg";
+import analyticsAndGrowth from "../assets/OurServices/AnalyticsAndGrowth.svg";
 
 const {
   ecommerce,
-  genFinance,
-  genCustomer,
-  audioInsights,
   processFrame1,
   processFrame2,
   processFrame5,
@@ -21,6 +21,8 @@ export default function EcommerceDevelopment() {
   return (
     <DigitalServicePage
       breadcrumb="Ecommerce Development"
+      roundedHeroImage
+      plainOfferings
       heroTitle="Ecommerce Development for Modern Digital Storefronts"
       heroSubtitle="Secure, scalable, and user-focused commerce platforms with custom UX, payment flexibility, and end-to-end delivery."
       heroImage={ecommerce}
@@ -33,37 +35,37 @@ export default function EcommerceDevelopment() {
           title: "Custom storefront experiences",
           description:
             "Brand-led product discovery, category pages, and checkout flows that convert.",
-          icon: genCustomer,
+          icon: customStorefrontExperiences,
         },
         {
           title: "Catalog & inventory systems",
           description:
             "Flexible product data models, variants, and inventory sync for growing catalogs.",
-          icon: catalogImg,
+          icon: catalogEcommerce,
         },
         {
           title: "Payments & checkout",
           description:
             "Payment-agnostic integrations with secure, friction-light purchase journeys.",
-          icon: genFinance,
+          icon: paymentsImg,
         },
         {
           title: "Order & fulfillment workflows",
           description:
             "Order management, notifications, and operational tools for reliable fulfillment.",
-          icon: orderFulfillmentImg,
+          icon: orderAndWorkflows,
         },
         {
           title: "Promotions & personalization",
           description:
             "Campaigns, coupons, and recommendation patterns that lift average order value.",
-          icon: promotionImg,
+          icon: promotionsPersonalization,
         },
         {
           title: "Analytics & growth loops",
           description:
             "Commerce KPIs and funnel insights that guide merchandising and UX improvements.",
-          icon: audioInsights,
+          icon: analyticsAndGrowth,
         },
       ]}
       processTitle="From Store Concept to Scale"

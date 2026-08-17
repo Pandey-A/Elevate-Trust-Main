@@ -37,13 +37,13 @@ import {
   Workflow,
 } from "lucide-react";
 import type { IndustryPageContent } from "../components/industry/IndustryPageTemplate";
-import fintechChallengesImage from "../assets/OurServices/fintech-2.svg";
-import ecommerceChallengesImage from "../assets/industries/ecommerce.svg";
-import educationChallengesImage from "../assets/OurServices/education.svg";
-import logisticsChallengesImage from "../assets/OurServices/logistics.svg";
-import manufacturingChallengesImage from "../assets/OurServices/Future-of-Manufacturing-with-Industry-4.0.svg";
-import socialMediaChallengesImage from "../assets/OurServices/socialmedia.svg";
-import publicSectorChallengesImage from "../assets/OurServices/publicsector.svg";
+import fintechChallengesImage from "../assets/industries/DigitalFinance.jpg";
+import ecommerceChallengesImage from "../assets/industries/EcommerceRetail.svg";
+import educationChallengesImage from "../assets/industries/Education.svg";
+import logisticsChallengesImage from "../assets/industries/Logistics.svg";
+import manufacturingChallengesImage from "../assets/industries/Manufacturing.svg";
+import socialMediaChallengesImage from "../assets/industries/Security.svg";
+import publicSectorChallengesImage from "../assets/industries/PublicSectorGovernment.svg";
 
 import imgAiKyc from "../assets/industries/ai-kyc.jpeg";
 import imgAiTutor from "../assets/industries/ai-tutor.jpeg";

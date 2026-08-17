@@ -3,20 +3,20 @@ import { Link } from "react-router-dom";
 import { ArrowUpRight, ChevronLeft, ChevronRight } from "lucide-react";
 import FlyCTA from "../components/FlyCTA";
 import worldMapBackground from "../assets/homepage-icons/Group(3).png";
-import dataAgentIcon from "../assets/OurServices/GenAI-Data.png";
-import softwareAgentIcon from "../assets/OurServices/GenAI-Software.png";
-import optimizeAgentIcon from "../assets/OurServices/GenAI-Optimize.png";
-import customerServiceIcon from "../assets/OurServices/GenAI-customService.png";
-import healthcareAgentIcon from "../assets/OurServices/GenAI-healthcare.png";
-import hrAgentIcon from "../assets/OurServices/GenAI-HR.png";
-import knowledgeAgentIcon from "../assets/OurServices/GenAI-knowledge.png";
-import financeAgentIcon from "../assets/OurServices/GenAI-Finance.png";
-import roadmapImage from "../assets/OurServices/roadmap-light.png";
-import llmAgentsImage from "../assets/OurServices/llm-agents-light.png";
+import dataAgentIcon from "../assets/OurServices/Autonomous-analytics-agent.svg";
+import softwareAgentIcon from "../assets/OurServices/GenAI-Software.svg";
+import optimizeAgentIcon from "../assets/OurServices/GenAI-Optimize.svg";
+import customerServiceIcon from "../assets/OurServices/GenAI-customService.svg";
+import healthcareAgentIcon from "../assets/OurServices/GenAI-healthcare.svg";
+import hrAgentIcon from "../assets/OurServices/GenAI-HR.svg";
+import knowledgeAgentIcon from "../assets/OurServices/GenAI-knowledge.svg";
+import financeAgentIcon from "../assets/OurServices/GenAI-Finance.svg";
+import roadmapImage from "../assets/OurServices/roadmap-light.svg";
+import llmAgentsImage from "../assets/OurServices/llm-agents-light.svg";
 import techStackImage from "../assets/OurServices/techstack-light.png";
 import elevateIcon from "../assets/service/AI-process/elevateIcon.svg";
 import checkIcon from "../assets/technology-trends/check-icon.svg";
-import virtualAgentImage from "../assets/OurServices/virtual-assistant.png";
+import virtualAgentImage from "../assets/OurServices/virtual-assistant.svg";
 import genAiSdlcCaseImage from "../assets/case-studies/c7-1.png";
 
 const coreOfferings = [
@@ -329,7 +329,7 @@ export default function AgenticAI() {
             <img
               src={roadmapImage}
               alt="Agentic AI roadmap from classical NLP to autonomous multi-agent systems"
-              className="mx-auto block h-auto w-full max-w-[520px] object-contain"
+              className="block h-auto w-full rounded-[12px] object-contain sm:rounded-[16px]"
             />
           </div>
         </div>
@@ -413,12 +413,12 @@ export default function AgenticAI() {
           </div>
 
           {/* Carousel Slider */}
-          <div 
+          <div
             className="relative w-full overflow-hidden pb-4"
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
           >
-            <div 
+            <div
               className="flex transition-transform duration-700 ease-in-out"
               style={{ transform: `translateX(-${activeStory * 100}%)` }}
             >
@@ -521,9 +521,8 @@ export default function AgenticAI() {
                     type="button"
                     aria-label={`Go to slide ${idx + 1}`}
                     onClick={() => setActiveStory(idx)}
-                    className={`h-2.5 rounded-full transition-all duration-300 ${
-                      activeStory === idx ? "w-8 bg-[#2365aa]" : "w-2.5 bg-[#c5d8eb] hover:bg-[#a1b1cb]"
-                    }`}
+                    className={`h-2.5 rounded-full transition-all duration-300 ${activeStory === idx ? "w-8 bg-[#2365aa]" : "w-2.5 bg-[#c5d8eb] hover:bg-[#a1b1cb]"
+                      }`}
                   />
                 ))}
               </div>
@@ -570,13 +569,13 @@ export default function AgenticAI() {
               >
                 {/* Decorative dots in background */}
                 <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(#113d77 2px, transparent 2px)', backgroundSize: '24px 24px' }} />
-                
+
                 <img
                   src={genAiSdlcCaseImage}
                   alt="Expected effort savings across agentic AI-enabled SDLC roles"
                   className="relative z-10 block h-auto w-full max-w-[540px] rounded-[16px] object-contain shadow-[0_16px_40px_-12px_rgba(17,61,119,0.25)] transition-transform duration-700 ease-out group-hover:scale-[1.03]"
                 />
-                
+
                 {/* Overlay gradient on hover */}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#113d77]/10 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
               </Link>
@@ -585,7 +584,7 @@ export default function AgenticAI() {
               <div className="flex flex-col justify-center bg-white p-8 sm:p-10 lg:p-12 xl:p-16 relative">
                 {/* Accent line */}
                 <div className="absolute left-0 top-1/2 h-[60%] w-1 -translate-y-1/2 rounded-r-full bg-gradient-to-b from-[#2365aa] to-[#518bcf] opacity-0 transition-opacity duration-500 group-hover:opacity-100 hidden lg:block" />
-                
+
                 <div className="flex flex-wrap gap-2 mb-6">
                   {['12-Week Rollout', 'ROI Modeling', 'Governance'].map(tag => (
                     <span key={tag} className="inline-block rounded bg-[#f4f7f9] px-3 py-1 text-xs font-semibold text-[#5a5a5a] transition-colors group-hover:bg-[#eaf3fa] group-hover:text-[#2365aa]">
@@ -597,7 +596,7 @@ export default function AgenticAI() {
                 <h3 className="m-0 text-[clamp(22px,2.5vw,32px)] font-bold leading-[1.2] text-[#1F2432] group-hover:text-[#2365aa] transition-colors duration-300">
                   Agentic AI Adoption Plan Across the SDLC
                 </h3>
-                
+
                 <p className="mt-5 text-[clamp(14px,1.1vw,16px)] leading-[1.8] text-[#5a5a5a] 2xl:text-[18px]">
                   A phase-wise agentic AI adoption roadmap across the full software
                   delivery lifecycle with tool guidance, a 12-week rollout, ROI

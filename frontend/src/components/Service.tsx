@@ -145,7 +145,7 @@ export default function Service() {
 
     const syncPanelHeight = () => {
       if (window.innerWidth >= 1920) {
-        setPanelHeight(750); // Reduced from 1040 to make it fit in one screen
+        setPanelHeight(1040);
       } else if (window.innerWidth >= 1024) {
         // Match Figma: panel height = full tabs column (connected layout)
         setPanelHeight(tabsEl.offsetHeight);

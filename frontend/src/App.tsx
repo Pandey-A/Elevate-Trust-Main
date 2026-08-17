@@ -45,6 +45,7 @@ import DigitalMarketing from './pages/DigitalMarketing';
 import ErpSolutions from './pages/ErpSolutions';
 import AdminAuth from './pages/admin/AdminAuth';
 import AdminDashboard from './pages/admin/AdminDashboard';
+import { ToastProvider } from './components/ui/ToastProvider';
 
 function AppShell() {
   const location = useLocation();
@@ -109,7 +110,9 @@ function AppShell() {
 export default function App() {
   return (
     <BrowserRouter>
-      <AppShell />
+      <ToastProvider>
+        <AppShell />
+      </ToastProvider>
     </BrowserRouter>
   );
 }

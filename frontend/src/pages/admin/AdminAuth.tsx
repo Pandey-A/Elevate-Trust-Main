@@ -2,7 +2,7 @@ import { useEffect, useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ArrowUpRight, Eye, EyeOff } from "lucide-react";
 import worldMapBackground from "../../assets/homepage-icons/Group(3).png";
-import agileImage from "../../assets/OurServices/agile-light.png";
+import agileImage from "../../assets/OurServices/agile-light.svg";
 import { getErrorMessage } from "../../lib/api";
 import { getAuthSession, loginUser } from "../../lib/auth";
 

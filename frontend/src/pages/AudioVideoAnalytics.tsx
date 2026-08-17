@@ -3,14 +3,14 @@ import { Link } from "react-router-dom";
 import { ArrowUpRight, Sparkles } from "lucide-react";
 import FlyCTA from "../components/FlyCTA";
 import worldMapBackground from "../assets/homepage-icons/Group(3).png";
-import simpleSetupIcon from "../assets/OurServices/Audio-simple.png";
-import accuracyIcon from "../assets/OurServices/Audio-accuracy.png";
-import insightsIcon from "../assets/OurServices/Audio-Insights.png";
-import integrationIcon from "../assets/OurServices/Audio-integration.png";
-import deploymentIcon from "../assets/OurServices/Audio-deployment.png";
-import cameraHealthIcon from "../assets/OurServices/Audio-camera.png";
-import audioBg1 from "../assets/OurServices/Audiobg-1.png";
-import audioBg2 from "../assets/OurServices/Audiobg-2.png";
+import simpleSetupIcon from "../assets/OurServices/AudioVideoSimpleSetup.svg";
+import accuracyIcon from "../assets/OurServices/AudioVideoSuperiorAccuracy.svg";
+import insightsIcon from "../assets/OurServices/AudioVideoLiveInsights.svg";
+import integrationIcon from "../assets/OurServices/AudioVideoSeamlessIntegration.svg";
+import deploymentIcon from "../assets/OurServices/AudioVideoFlexibleDeployment.svg";
+import cameraHealthIcon from "../assets/OurServices/AudioVideoCameraHealthMonitoring.svg";
+import audioBg1 from "../assets/OurServices/Audiobg-1.svg";
+import audioBg2 from "../assets/OurServices/Audiobg-2.svg";
 import elevateIcon from "../assets/service/AI-process/elevateIcon.svg";
 import deepfakeImg from "../assets/OurServices/deepfake-detection.png";
 
@@ -213,12 +213,14 @@ export default function AudioVideoAnalytics() {
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-10 xl:gap-x-10">
             {coreOfferings.map((item) => (
               <article key={item.title} className="mx-auto flex w-full min-w-0 max-w-[360px] flex-col sm:max-w-none">
-                <img
-                  src={item.icon}
-                  alt=""
-                  className="mb-5 h-auto w-full max-h-[260px] rounded-[20px] object-cover object-center sm:mb-6 sm:max-h-[280px] lg:max-h-[300px]"
-                  aria-hidden
-                />
+                <div className="mb-5 overflow-hidden rounded-[20px] sm:mb-6">
+                  <img
+                    src={item.icon}
+                    alt=""
+                    className="block h-auto w-full object-cover object-center"
+                    aria-hidden
+                  />
+                </div>
                 <h3 className="text-[clamp(16px,1.3vw,20px)] font-bold leading-snug text-[#1F2432] 2xl:text-[22px]">
                   {item.title}
                 </h3>
@@ -248,11 +250,13 @@ export default function AudioVideoAnalytics() {
               </p>
             </div>
             <div className="overflow-hidden rounded-[20px] border border-[#e2ebf3] bg-white p-3 shadow-[0_18px_50px_-24px_rgba(17,61,119,0.35)] sm:rounded-[24px] sm:p-5">
-              <img
-                src={audioBg1}
-                alt="Audio and video analytics camera intelligence"
-                className="mx-auto block h-auto w-full max-w-[560px] object-contain"
-              />
+              <div className="overflow-hidden rounded-[15px] sm:rounded-[18px]">
+                <img
+                  src={audioBg1}
+                  alt="Audio and video analytics camera intelligence"
+                  className="block h-auto w-full object-contain"
+                />
+              </div>
             </div>
           </div>
 
@@ -312,12 +316,14 @@ export default function AudioVideoAnalytics() {
           </header>
 
           <div className="grid grid-cols-1 items-stretch gap-6 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-8">
-            <div className="flex h-full items-center justify-center overflow-hidden rounded-[20px] border border-[#e2ebf3] bg-[#EFF7FC] p-5 sm:p-6 lg:p-8">
-              <img
-                src={audioBg2}
-                alt="Audio and video analytics value delivery"
-                className="mx-auto block h-auto w-full max-w-[420px] object-contain"
-              />
+            <div className="flex h-full items-center justify-center overflow-hidden rounded-[20px] border border-[#e2ebf3] bg-[#EFF7FC] p-4 sm:p-5 lg:p-6">
+              <div className="w-full overflow-hidden rounded-[15px]">
+                <img
+                  src={audioBg2}
+                  alt="Audio and video analytics value delivery"
+                  className="block h-auto w-full object-contain"
+                />
+              </div>
             </div>
 
             <div className="grid h-full grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5">

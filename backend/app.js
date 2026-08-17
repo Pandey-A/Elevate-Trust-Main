@@ -12,6 +12,8 @@ import demoRouter from "./route/demo.js";
 import tagRouter from "./route/tags.js";
 import blogRouter from "./route/blogs.js";
 import testimonialRouter from "./route/testimonials.js";
+import contactRouter from "./route/contact.js";
+import { logMailStatus } from "./config/mail.js";
 
 dotenv.config();
 
@@ -26,16 +28,24 @@ const allowedOrigins = (
   "http://localhost:5173,https://et-revamp-2-1.vercel.app"
 )
   .split(",")
-  .map((origin) => origin.trim());
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+function isLocalDevOrigin(origin) {
+  if (process.env.NODE_ENV === "production") return false;
+  return /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i.test(origin);
+}
 
 app.use(
   cors({
     origin(origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
+      // Same-origin / non-browser tools (curl, Postman) have no Origin header.
+      if (!origin || allowedOrigins.includes(origin) || isLocalDevOrigin(origin)) {
         return callback(null, true);
       }
 
-      return callback(new Error("Not allowed by CORS"));
+      // Reject without throwing — throwing floods the global error handler.
+      return callback(null, false);
     },
     credentials: true,
   }),
@@ -71,6 +81,7 @@ app.use("/api/demos", demoRouter);
 app.use("/api/demo-tags", tagRouter);
 app.use("/api/blogs", blogRouter);
 app.use("/api/testimonials", testimonialRouter);
+app.use("/api/contact", contactRouter);
 
 app.use((error, _req, res, _next) => {
   console.error("Unhandled error:", error);
@@ -146,6 +157,8 @@ async function startServer() {
       console.log(`Server is running on http://localhost:${port}`);
       console.log(`Auth API: POST http://localhost:${port}/api/auth/register|login`);
       console.log(`Career API: POST http://localhost:${port}/api/careers`);
+      console.log(`Contact API: POST http://localhost:${port}/api/contact`);
+      logMailStatus();
 
       if (port !== PREFERRED_PORT) {
         console.warn(

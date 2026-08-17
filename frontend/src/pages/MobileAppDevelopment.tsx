@@ -1,12 +1,12 @@
 import DigitalServicePage, {
   digitalServiceImages,
 } from "./DigitalServicePage";
-import iosAndroid from "../assets/OurServices/iosandroid.png";
-import crossPlatform from "../assets/OurServices/cross-platform.png";
-import mvpScale from "../assets/OurServices/mvp-scale.png";
-import apiBackend from "../assets/OurServices/api-backend.png";
-import pushNotification from "../assets/OurServices/push-notification.png";
-import launchSupport from "../assets/OurServices/launch-support.png";
+import iosAndroid from "../assets/OurServices/iosandroid.svg";
+import crossPlatform from "../assets/OurServices/cross-platform.svg";
+import mvpScale from "../assets/OurServices/mvp-scale.svg";
+import apiBackend from "../assets/OurServices/api-backend.svg";
+import pushNotification from "../assets/OurServices/push-notification.svg";
+import launchSupport from "../assets/OurServices/launch-support.svg";
 
 const {
   appDev,
@@ -21,6 +21,7 @@ export default function MobileAppDevelopment() {
   return (
     <DigitalServicePage
       breadcrumb="Mobile App Development"
+      plainOfferings
       heroTitle="Mobile App Development That Drives Engagement"
       heroSubtitle="Custom iOS and Android experiences built for performance, retention, and growth, from first idea to App Store launch."
       heroImage={appDev}

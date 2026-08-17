@@ -1,15 +1,15 @@
 import DigitalServicePage, {
   digitalServiceImages,
 } from "./DigitalServicePage";
-import landingPagesConversion from "../assets/OurServices/landingpages-conversion.png";
+import contentMarketing from "../assets/OurServices/ContentMarketing.svg";
+import paidMediaCampaigns from "../assets/OurServices/PaidMediaCampaigns.svg";
+import landingPagesConversion from "../assets/OurServices/LandingPagesConversion.svg";
+import analyticsAttribution from "../assets/OurServices/AnalyticsAttribution.svg";
 
 const {
   digitalMarketing,
   genCustomer,
-  genKnowledge,
   genData,
-  genSoftware,
-  genFinance,
   processFrame1,
   processFrame2,
   processFrame3,
@@ -21,6 +21,7 @@ export default function DigitalMarketing() {
   return (
     <DigitalServicePage
       breadcrumb="Digital Marketing Services"
+      plainOfferings
       heroTitle="Digital Marketing Services That Build Measurable Growth"
       heroSubtitle="SEO, social, content, and paid media strategies tailored with data, so you reach the right audience and convert attention into leads."
       heroImage={digitalMarketing}
@@ -39,7 +40,7 @@ export default function DigitalMarketing() {
           title: "Content marketing",
           description:
             "Thought leadership, case narratives, and educational assets that build credibility.",
-          icon: genKnowledge,
+          icon: contentMarketing,
         },
         {
           title: "Social media programs",
@@ -51,7 +52,7 @@ export default function DigitalMarketing() {
           title: "Paid media & campaigns",
           description:
             "Targeted acquisition campaigns with clear KPIs, creative testing, and budget discipline.",
-          icon: genSoftware,
+          icon: paidMediaCampaigns,
         },
         {
           title: "Landing pages & conversion",
@@ -63,7 +64,7 @@ export default function DigitalMarketing() {
           title: "Analytics & attribution",
           description:
             "Measurement frameworks that show what works, and where to invest next.",
-          icon: genFinance,
+          icon: analyticsAttribution,
         },
       ]}
       processTitle="How We Drive Demand"

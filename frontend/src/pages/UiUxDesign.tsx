@@ -1,12 +1,12 @@
 import DigitalServicePage, {
   digitalServiceImages,
 } from "./DigitalServicePage";
-import productDiscovery from "../assets/OurServices/product-discovery.png";
-import wireframes from "../assets/OurServices/wireframes.png";
-import highFidelity from "../assets/OurServices/high-fidelty.png";
-import interactivePrototypes from "../assets/OurServices/interactive-prototypes.png";
-import responsive from "../assets/OurServices/responsive.png";
-import handoff from "../assets/OurServices/handoff.png";
+import productDiscovery from "../assets/OurServices/product-discovery.svg";
+import wireframes from "../assets/OurServices/wireframes.svg";
+import highFidelity from "../assets/OurServices/high-fidelty.svg";
+import interactivePrototypes from "../assets/OurServices/interactive-prototypes.svg";
+import responsive from "../assets/OurServices/responsive.svg";
+import handoff from "../assets/OurServices/handoff.svg";
 
 const {
   uiUx,
@@ -21,6 +21,7 @@ export default function UiUxDesign() {
   return (
     <DigitalServicePage
       breadcrumb="UI/UX Design Content"
+      plainOfferings
       heroTitle="UI/UX Design That Elevates Product Experience"
       heroSubtitle="User-centered wireframes, interfaces, and interaction design that make products feel clear, responsive, and built for conversion."
       heroImage={uiUx}

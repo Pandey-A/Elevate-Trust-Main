@@ -1,15 +1,14 @@
 import DigitalServicePage, {
   digitalServiceImages,
 } from "./DigitalServicePage";
-
+import businessProcess from "../assets/OurServices/BusinessProcess.svg";
+import seoImg from "../assets/OurServices/seo.svg";
+import apiArchitecture from "../assets/OurServices/api-architecture.png";
+import SecureEnterpriseApplications from "../assets/OurServices/SecureEnterpriseApplications.svg";
+import Cloud from "../assets/OurServices/Cloud.svg";
+import ModernizationRebuilds from "../assets/OurServices/Mordenization.svg";
 const {
   customSoftware,
-  genSoftware,
-  genData,
-  genFinance,
-  genOptimize,
-  audioDeploy,
-  audioIntegration,
   processFrame1,
   processFrame4,
   processFrame5,
@@ -21,6 +20,7 @@ export default function CustomSoftwareDevelopment() {
   return (
     <DigitalServicePage
       breadcrumb="Custom Software Development"
+      plainOfferings
       heroTitle="Custom Software Development for High-Impact Systems"
       heroSubtitle="Scalable, secure, and efficient software tailored to your operations, from startups to enterprise platforms ready for tomorrow."
       heroImage={customSoftware}
@@ -33,37 +33,37 @@ export default function CustomSoftwareDevelopment() {
           title: "Business process platforms",
           description:
             "Digitize and automate core workflows with software shaped around your operations.",
-          icon: genSoftware,
+          icon: businessProcess,
         },
         {
           title: "Internal tools & portals",
           description:
             "Employee and partner portals that reduce manual work and improve visibility.",
-          icon: genData,
+          icon: seoImg,
         },
         {
           title: "API-first architectures",
           description:
             "Composable services that integrate cleanly with existing systems and future apps.",
-          icon: audioIntegration,
+          icon: apiArchitecture,
         },
         {
           title: "Secure enterprise applications",
           description:
             "Role-based access, auditability, and security practices suited to regulated environments.",
-          icon: genFinance,
+          icon: SecureEnterpriseApplications,
         },
         {
           title: "Cloud & on-premise deployment",
           description:
             "Flexible hosting models aligned to your IT, compliance, and cost constraints.",
-          icon: audioDeploy,
+          icon: Cloud,
         },
         {
           title: "Modernization & rebuilds",
           description:
             "Upgrade legacy systems into maintainable platforms without disrupting operations.",
-          icon: genOptimize,
+          icon: ModernizationRebuilds,
         },
       ]}
       processTitle="Engineering Approach"

@@ -5,12 +5,12 @@ import FlyCTA from "../components/FlyCTA";
 import worldMapBackground from "../assets/homepage-icons/Group(3).png";
 import machineLearningIcon from "../assets/OurServices/machine-learning.png";
 import cloudComputIcon from "../assets/OurServices/cloud-comput.png";
-import agileImage from "../assets/OurServices/agile-light.png";
+import agileImage from "../assets/OurServices/agile-light.svg";
 import trainingIllustration from "../assets/OurServices/GenAI-Data.png";
-import versionIllustration from "../assets/OurServices/GenAI-Software.png";
-import buildIllustration from "../assets/OurServices/GenAI-Optimize.png";
+import versionIllustration from "../assets/OurServices/GenAI-Software.svg";
+import buildIllustration from "../assets/OurServices/GenAI-Optimize.svg";
 import stagingIllustration from "../assets/OurServices/Audio-deployment.png";
-import cloudIllustration from "../assets/OurServices/GenAI-customService.png";
+import cloudIllustration from "../assets/OurServices/GenAI-customService.svg";
 import onPremIllustration from "../assets/OurServices/Audio-simple.png";
 import monitoringIllustration from "../assets/OurServices/Audio-Insights.png";
 import checkIcon from "../assets/technology-trends/check-icon.svg";
@@ -373,30 +373,30 @@ export default function CloudOnPremiseDeployment() {
 
         <div className="mx-auto w-full max-w-[1692px] px-5 pb-[clamp(48px,6vw,80px)] pt-0 sm:px-8 lg:px-10 xl:px-12">
           <div className="grid grid-cols-1 items-center gap-[clamp(28px,4vw,56px)] lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
-            <div className="overflow-hidden rounded-[20px] border border-[#e2ebf3] bg-white p-3 shadow-[0_18px_50px_-24px_rgba(17,61,119,0.35)] sm:rounded-[24px] sm:p-5 lg:p-6">
+            <div className="overflow-hidden rounded-[20px] sm:rounded-[24px]">
               <img
                 src={agileImage}
                 alt="Agile cloud and on-premise deployment collaboration"
-                className="mx-auto block h-auto w-full max-w-[560px] object-contain"
+                className="block h-auto w-full object-contain"
               />
             </div>
 
             <div>
-                <p className="mb-2 text-sm font-semibold uppercase tracking-[0.16em] text-[#2365aa] 2xl:text-base">
-                  Core Offerings
-                </p>
-                <h2 className="m-0 text-[clamp(26px,3.5vw,48px)] font-bold leading-[1.15] text-[#1F2432]">
-                  AI/ML Ops
-                </h2>
-                <p className="mt-5 max-w-[46rem] text-[clamp(13px,1.2vw,16px)] leading-7 text-[#848b9b] sm:mt-6 2xl:text-[18px] 2xl:leading-8">
-                  We specialize in implementing AI/ML operations practices that
-                  deliver scalable and automated solutions, emphasizing efficient
-                  model development, continuous integration, and seamless deployment
-                  pipelines. Our use of Docker for containerization and Kubernetes
-                  for orchestration ensures that machine learning models are easily
-                  deployable and can scale effectively across different environments.
-                </p>
-                <ul className="mt-6 flex list-none flex-col gap-3.5 p-0 sm:mt-8">
+              <p className="mb-2 text-sm font-semibold uppercase tracking-[0.16em] text-[#2365aa] 2xl:text-base">
+                Core Offerings
+              </p>
+              <h2 className="m-0 text-[clamp(26px,3.5vw,48px)] font-bold leading-[1.15] text-[#1F2432]">
+                AI/ML Ops
+              </h2>
+              <p className="mt-5 max-w-[46rem] text-[clamp(13px,1.2vw,16px)] leading-7 text-[#848b9b] sm:mt-6 2xl:text-[18px] 2xl:leading-8">
+                We specialize in implementing AI/ML operations practices that
+                deliver scalable and automated solutions, emphasizing efficient
+                model development, continuous integration, and seamless deployment
+                pipelines. Our use of Docker for containerization and Kubernetes
+                for orchestration ensures that machine learning models are easily
+                deployable and can scale effectively across different environments.
+              </p>
+              <ul className="mt-6 flex list-none flex-col gap-3.5 p-0 sm:mt-8">
                 {mlOpsPoints.map((point) => (
                   <li
                     key={point}
@@ -448,9 +448,8 @@ export default function CloudOnPremiseDeployment() {
                 {activeStage < stageCount - 1 && (
                   <div
                     key={segmentAnimKey}
-                    className={`pipeline-stage-advance-forced absolute inset-y-0 origin-left rounded-full bg-[#2365aa] ${
-                      stagePaused ? "pipeline-stage-advance--paused" : ""
-                    }`}
+                    className={`pipeline-stage-advance-forced absolute inset-y-0 origin-left rounded-full bg-[#2365aa] ${stagePaused ? "pipeline-stage-advance--paused" : ""
+                      }`}
                     style={{
                       left: `${completedPercent}%`,
                       width: `${segmentPercent}%`,
@@ -482,13 +481,12 @@ export default function CloudOnPremiseDeployment() {
                       className="group flex min-w-[64px] flex-1 cursor-pointer flex-col items-center border-0 bg-transparent p-0 outline-none"
                     >
                       <span
-                        className={`relative flex h-10 w-10 items-center justify-center rounded-full text-xs font-bold transition-all duration-300 sm:h-12 sm:w-12 sm:text-sm ${
-                          isActive
+                        className={`relative flex h-10 w-10 items-center justify-center rounded-full text-xs font-bold transition-all duration-300 sm:h-12 sm:w-12 sm:text-sm ${isActive
                             ? "scale-[1.05] bg-[#113d77] text-white shadow-[0_8px_18px_-12px_rgba(17,61,119,0.7)]"
                             : isDone
                               ? "bg-[#2365aa] text-white"
                               : "bg-white text-[#2365aa] ring-2 ring-[#c5d8eb] group-hover:ring-[#2365aa]"
-                        }`}
+                          }`}
                       >
                         {isActive && (
                           <span
@@ -499,9 +497,8 @@ export default function CloudOnPremiseDeployment() {
                         {step}
                       </span>
                       <span
-                        className={`mt-2 max-w-[7.5rem] text-center text-[10px] font-semibold leading-snug transition-colors sm:text-[11px] lg:text-xs ${
-                          isActive ? "text-[#113d77]" : "text-[#848b9b] group-hover:text-[#2365aa]"
-                        }`}
+                        className={`mt-2 max-w-[7.5rem] text-center text-[10px] font-semibold leading-snug transition-colors sm:text-[11px] lg:text-xs ${isActive ? "text-[#113d77]" : "text-[#848b9b] group-hover:text-[#2365aa]"
+                          }`}
                       >
                         {item.title}
                       </span>
@@ -536,9 +533,8 @@ export default function CloudOnPremiseDeployment() {
               <div className="relative border-t border-[#e8eef3] lg:border-l lg:border-t-0">
                 <div
                   key={`stage-detail-${activeStage}`}
-                  className={`flex h-full flex-col justify-center p-5 sm:p-7 lg:p-9 transition-opacity duration-300 ${
-                    panelReady ? "opacity-100" : "opacity-0"
-                  }`}
+                  className={`flex h-full flex-col justify-center p-5 sm:p-7 lg:p-9 transition-opacity duration-300 ${panelReady ? "opacity-100" : "opacity-0"
+                    }`}
                 >
                   <p className="mb-2 text-sm font-semibold uppercase tracking-[0.14em] text-[#2365aa]">
                     Stage {String(activeStage + 1).padStart(2, "0")} of{" "}
@@ -589,11 +585,10 @@ export default function CloudOnPremiseDeployment() {
                   key={tab.id}
                   type="button"
                   onClick={() => selectStackTab(tab.id)}
-                  className={`flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-full border-0 px-4 py-2.5 text-sm font-semibold transition-all duration-300 ${
-                    isActive
+                  className={`flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-full border-0 px-4 py-2.5 text-sm font-semibold transition-all duration-300 ${isActive
                       ? "bg-[#113d77] text-white shadow-[0_10px_24px_-12px_rgba(17,61,119,0.65)]"
                       : "bg-transparent text-[#2365aa] hover:bg-white/70"
-                  }`}
+                    }`}
                 >
                   <img
                     src={tab.icon}
@@ -611,9 +606,8 @@ export default function CloudOnPremiseDeployment() {
           <div
             onMouseEnter={() => setToolPaused(true)}
             onMouseLeave={() => setToolPaused(false)}
-            className={`mx-auto max-w-[1100px] overflow-hidden rounded-[24px] border border-[#d7e6f3] bg-[#EFF7FC] shadow-[0_20px_60px_-34px_rgba(17,61,119,0.4)] transition-opacity duration-300 ease-out ${
-              stackReady ? "opacity-100" : "opacity-0"
-            }`}
+            className={`mx-auto max-w-[1100px] overflow-hidden rounded-[24px] border border-[#d7e6f3] bg-[#EFF7FC] shadow-[0_20px_60px_-34px_rgba(17,61,119,0.4)] transition-opacity duration-300 ease-out ${stackReady ? "opacity-100" : "opacity-0"
+              }`}
           >
             {/* Fixed-height inner grid — tall enough for 2 rows of tool cards + detail */}
             <div className="grid min-h-[480px] grid-cols-1 lg:min-h-[360px] lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
@@ -640,11 +634,10 @@ export default function CloudOnPremiseDeployment() {
                         key={item.name}
                         type="button"
                         onClick={() => { setActiveTool(index); setToolPaused(false); }}
-                        className={`flex min-h-[96px] cursor-pointer flex-col items-center justify-center gap-2 rounded-[18px] border px-3 py-4 transition-all duration-300 ${
-                          isActive
+                        className={`flex min-h-[96px] cursor-pointer flex-col items-center justify-center gap-2 rounded-[18px] border px-3 py-4 transition-all duration-300 ${isActive
                             ? "border-[#2365aa] bg-white shadow-[0_14px_30px_-18px_rgba(17,61,119,0.55)] scale-[1.03]"
                             : "border-transparent bg-white/80 hover:border-[#c5d8eb] hover:bg-white hover:shadow-[0_10px_24px_-18px_rgba(17,61,119,0.35)]"
-                        }`}
+                          }`}
                       >
                         <img
                           src={item.logo}

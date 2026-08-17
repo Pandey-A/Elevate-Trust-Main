@@ -1,26 +1,27 @@
 import DigitalServicePage, {
   digitalServiceImages,
 } from "./DigitalServicePage";
-import genAiData from "../assets/OurServices/GenAI-Data.png";
-import genAiCustomService from "../assets/OurServices/GenAI-customService.png";
-import catalogImg from "../assets/OurServices/catalog.png";
+import genAiCustomService from "../assets/OurServices/GenAI-customService.svg";
+import integratedOperations from "../assets/OurServices/IntegratedOperationsBetterDecisions.svg";
+import financeAccounting from "../assets/OurServices/Accounting.svg";
+import hrPeopleOperations from "../assets/OurServices/HrPeopleOperations.svg";
+import inventorySupplyChain from "../assets/OurServices/InventorySupplyChain.svg";
+import educationInstitutionalErp from "../assets/OurServices/EducationInstitutionalErp.svg";
+import analyticsDecisionSupport from "../assets/OurServices/AnalyticsDecisionSupport.svg";
 
 const {
   erp,
-  genFinance,
-  genHr,
   processFrame1,
   processFrame4,
   processFrame5,
   processFrame6,
-  genSoftware,
-  erpSoftware,
 } = digitalServiceImages;
 
 export default function ErpSolutions() {
   return (
     <DigitalServicePage
       breadcrumb="ERP Solutions"
+      plainOfferings
       heroTitle="ERP Solutions That Unify Business Operations"
       heroSubtitle="Customized, scalable, and integrated ERP systems that improve productivity, data management, and decision-making across your organization."
       heroImage={erp}
@@ -33,19 +34,19 @@ export default function ErpSolutions() {
           title: "Finance & accounting",
           description:
             "Unified ledgers, reporting, and controls that improve financial visibility.",
-          icon: genFinance,
+          icon: financeAccounting,
         },
         {
           title: "HR & people operations",
           description:
             "Employee records, payroll workflows, and people processes in one place.",
-          icon: genHr,
+          icon: hrPeopleOperations,
         },
         {
           title: "Inventory & supply chain",
           description:
             "Stock, procurement, and logistics visibility that reduces waste and delays.",
-          icon: catalogImg,
+          icon: inventorySupplyChain,
         },
         {
           title: "Sales & customer operations",
@@ -57,13 +58,13 @@ export default function ErpSolutions() {
           title: "Education & institutional ERP",
           description:
             "Specialized workflows for academic and institutional operations where needed.",
-          icon: genSoftware,
+          icon: educationInstitutionalErp,
         },
         {
           title: "Analytics & decision support",
           description:
             "Dashboards and operational KPIs that help leaders act with confidence.",
-          icon: genAiData,
+          icon: analyticsDecisionSupport,
         },
       ]}
       processTitle="ERP Delivery Approach"
@@ -99,7 +100,7 @@ export default function ErpSolutions() {
         "Scalable architecture for multi-location growth",
         "Enablement and change management for user adoption",
       ]}
-      capabilitiesImage={erpSoftware}
+      capabilitiesImage={integratedOperations}
       valueTitle="Value Added"
       valueSubtitle="ERP outcomes that reduce fragmentation, improve control, and give leadership a single source of truth."
       valuePoints={[
