@@ -3,7 +3,7 @@ import DigitalServicePage, {
 } from "./DigitalServicePage";
 
 import corporateImg from "../assets/OurServices/corporate.svg";
-import responsiveImg from "../assets/OurServices/responsive.svg";
+import responsiveImg from "../assets/OurServices/Responsive.svg";
 import cmsImg from "../assets/OurServices/cms.svg";
 import seoImg from "../assets/OurServices/seo.svg";
 import integrationForumsImg from "../assets/OurServices/integration-forums.svg";

@@ -5,7 +5,7 @@ import productDiscovery from "../assets/OurServices/product-discovery.svg";
 import wireframes from "../assets/OurServices/wireframes.svg";
 import highFidelity from "../assets/OurServices/high-fidelty.svg";
 import interactivePrototypes from "../assets/OurServices/interactive-prototypes.svg";
-import responsive from "../assets/OurServices/responsive.svg";
+import responsive from "../assets/OurServices/Responsive.svg";
 import handoff from "../assets/OurServices/handoff.svg";
 
 const {
