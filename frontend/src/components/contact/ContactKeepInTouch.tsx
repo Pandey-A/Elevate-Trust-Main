@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import { useState, type FormEvent } from "react";
 import paperPlaneIcon from "../../assets/footer/PaperPlaneTilt.svg";
 import { useToast } from "../ui/ToastProvider";
 import { getErrorMessage, submitContactLead } from "../../lib/contactApi";
