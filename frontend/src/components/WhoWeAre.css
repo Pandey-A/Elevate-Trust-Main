@@ -60,7 +60,7 @@
 }
 
 .who-we-are__paragraph {
-  font-size: var(--fs-body);
+  font-size: var(--fs-body-xl);
   line-height: 1.8;
   color: #000000;
   text-align: center;
@@ -116,7 +116,9 @@
   .who-we-are__title {
   }
 
-  .who-we-are__paragraph,
+  .who-we-are__paragraph {
+    font-size: var(--fs-body-xl);
+  }
   .who-we-are__stat-label {
     font-size: var(--fs-body-lg);
   }
@@ -163,7 +165,7 @@
   }
 
   .who-we-are__paragraph {
-    font-size: 14px;
+    font-size: 16px;
     line-height: 1.7;
   }
 
@@ -224,7 +226,7 @@
   .who-we-are__paragraph {
     font-family: "Lay Grotesk Trial", "Lay Grotesk - Trial", sans-serif;
     font-weight: 500;
-    font-size: 20px;
+    font-size: 24px;
     line-height: 1.25;
     letter-spacing: 0;
     text-align: center;
@@ -285,7 +287,7 @@
   }
 
   .who-we-are__paragraph {
-    font-size: 20px;
+    font-size: 24px;
   }
 
   .who-we-are__stat-label {

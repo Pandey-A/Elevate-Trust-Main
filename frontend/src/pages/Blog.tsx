@@ -44,7 +44,7 @@ export default function Blog() {
             Blog
           </h1>
           <p className="mt-[clamp(12px,1.5vw,20px)] max-w-[783px] font-['Ubuntu',sans-serif] text-[clamp(14px,1.4vw,18px)] font-normal leading-6 text-[#a1b1cb] lg:text-[clamp(13px,1.1vw,15px)] 2xl:text-[clamp(14px,1.4vw,18px)]">
-            Advancing Your Business with Smart Tech — insights on AI agents,
+            Advancing Your Business with Smart Tech insights on AI agents,
             generative AI, and enterprise delivery from ElevateTrust.AI.
           </p>
           <Link

@@ -349,7 +349,8 @@ body {
   justify-content: center;
   overflow: hidden;
   background-color: #113d77;
-  height: var(--service-hero-height);
+  min-height: var(--service-hero-height);
+  padding: clamp(60px, 8vw, 80px) 0;
   box-sizing: border-box;
 }
 
@@ -387,6 +388,8 @@ body {
 /* Shared hero h1 font size — same on every page using this blue hero */
 .service-page-hero__content h1 {
   font-size: clamp(32px, 4vw, 48px) !important;
+  line-height: 1.25 !important;
+  margin-bottom: clamp(16px, 2vw, 24px) !important;
 }
 
 @media (min-width: 1024px) {
@@ -404,6 +407,7 @@ body {
 /* Shared hero paragraph font size */
 .service-page-hero__content p {
   font-size: clamp(14px, 1.4vw, 18px) !important;
+  line-height: 1.6 !important;
 }
 
 @media (min-width: 1024px) {
@@ -421,7 +425,7 @@ body {
 /* Shared hero CTA button size — same on every page using this blue hero */
 .service-page-hero__content > a {
   box-sizing: border-box;
-  margin-top: clamp(16px, 2vw, 28px) !important;
+  margin-top: clamp(24px, 3.5vw, 36px) !important;
   display: inline-flex !important;
   align-items: center !important;
   gap: 6px !important;

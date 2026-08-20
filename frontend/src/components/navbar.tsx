@@ -249,7 +249,7 @@ export default function Navbar() {
         <p className="mb-4 text-base font-semibold leading-tight text-[#272935] min-[1920px]:mb-5 min-[1920px]:text-[22px] min-[2012px]:mb-5 min-[2012px]:text-2xl min-[2012px]:leading-[1.2]">
           {menu.title}
         </p>
-        <div className="grid grid-cols-1 content-start gap-x-10 gap-y-1 sm:grid-cols-2 min-[1920px]:gap-x-16 min-[2012px]:gap-x-[72px]">
+        <div className="grid grid-cols-1 content-start gap-x-10 gap-y-3 sm:grid-cols-2 min-[1920px]:gap-x-16 min-[2012px]:gap-x-[72px]">
           <ul className="m-0 flex list-none flex-col gap-3 p-0 min-[1920px]:gap-3.5 min-[2012px]:gap-[14px]">
             {menu.leftColumn.map((item) => (
               <li key={item}>
@@ -414,7 +414,12 @@ export default function Navbar() {
             className="navbar__mobile-toggle inline-flex items-center justify-center justify-self-end rounded-md p-2 text-gray-700 transition-colors hover:bg-gray-100 hover:text-gray-900 lg:hidden"
             aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={mobileMenuOpen}
-            onClick={() => setMobileMenuOpen((open) => !open)}
+            onClick={() => {
+              if (!mobileMenuOpen) {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }
+              setMobileMenuOpen((open) => !open);
+            }}
           >
             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
@@ -467,14 +472,14 @@ export default function Navbar() {
       ) : null}
 
       {mobileMenuOpen && (
-        <div className="lg:hidden fixed inset-0 top-14 sm:top-16 z-40">
+        <div className="lg:hidden absolute inset-x-0 top-full z-40 h-[100dvh]">
           <button
             type="button"
             className="absolute inset-0 bg-black/40"
             aria-label="Close menu"
             onClick={closeMobileMenu}
           />
-          <div className="relative bg-white border-t border-gray-200 max-h-[calc(100vh-3.5rem)] sm:max-h-[calc(100vh-4rem)] overflow-y-auto shadow-lg">
+          <div className="relative bg-white border-t border-gray-200 max-h-[calc(100dvh-3.5rem)] sm:max-h-[calc(100dvh-4rem)] overflow-y-auto shadow-lg">
             <div className="px-4 py-4 space-y-1">
               {navLinks.map((link) => (
                 <div key={link.label} className="border-b border-gray-100 last:border-b-0">
@@ -515,33 +520,34 @@ export default function Navbar() {
                         />
                       </button>
                       {mobileExpanded === link.label && (
-                        <div className="pb-3 pl-3 space-y-1">
-                          <Link
-                            to={link.href}
-                            className="block py-2 text-sm font-medium text-[#2365AA]"
-                            onClick={closeMobileMenu}
-                          >
-                            View all {link.label}
-                          </Link>
-                          {link.dropdown.map((item) => (
-                            <Link
-                              key={item}
-                              to={
-                                link.label === 'Resources'
-                                  ? getResourceItemPath(item)
-                                  : `${link.href}/${toSlug(item)}`
-                              }
-                              className="block py-2 text-sm text-gray-600 hover:text-gray-900"
-                              onMouseEnter={() => {
-                                if (link.label === 'Resources') {
-                                  prefetchResourceItem(item);
-                                }
-                              }}
-                              onClick={closeMobileMenu}
-                            >
-                              {item}
-                            </Link>
-                          ))}
+                        <div className="pb-4 pl-1">
+                          <div className="flex flex-col px-1 pt-1 min-[2012px]:px-2 min-[2012px]:pt-2">
+                            <p className="mb-4 text-base font-semibold leading-tight text-[#272935] min-[1920px]:mb-5 min-[1920px]:text-[22px] min-[2012px]:mb-5 min-[2012px]:text-2xl min-[2012px]:leading-[1.2]">
+                              {link.label}
+                            </p>
+                            <ul className="m-0 flex list-none flex-col gap-3 p-0 min-[1920px]:gap-3.5 min-[2012px]:gap-[14px]">
+                              {link.dropdown.map((item) => (
+                                <li key={item}>
+                                  <Link
+                                    to={
+                                      link.label === 'Resources'
+                                        ? getResourceItemPath(item)
+                                        : `${link.href}/${toSlug(item)}`
+                                    }
+                                    className="inline-flex w-fit max-w-full rounded-md px-2.5 py-2 text-sm font-medium leading-snug text-[#4B5563] transition-all duration-200 hover:scale-[1.04] hover:bg-[#EFF7FC] hover:text-[#111827] min-[1920px]:text-[15px] min-[1920px]:leading-[1.5] min-[2012px]:text-base min-[2012px]:leading-[1.55] origin-left"
+                                    onMouseEnter={() => {
+                                      if (link.label === 'Resources') {
+                                        prefetchResourceItem(item);
+                                      }
+                                    }}
+                                    onClick={closeMobileMenu}
+                                  >
+                                    {item}
+                                  </Link>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
                         </div>
                       )}
                     </>

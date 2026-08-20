@@ -216,6 +216,9 @@ export default function AgenticAI() {
           className="service-page-hero__map"
         />
         <div className="service-page-hero__content">
+          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.16em] text-[#8eb4df] 2xl:text-base">
+            Our Services
+          </p>
           <h1 className="m-0 text-[clamp(28px,3.8vw,48px)] font-bold leading-[1.29] tracking-tight text-white lg:text-[clamp(26px,3vw,34px)] 2xl:text-[clamp(32px,4vw,48px)]">
             Agentic AI Solutions That Reason, Act, and Deliver Business Outcomes
           </h1>
@@ -268,7 +271,7 @@ export default function AgenticAI() {
             </h2>
             <p className="mx-auto mt-5 max-w-[48rem] text-[clamp(13px,1.2vw,16px)] leading-7 text-[#9CA3AF] sm:mt-6 2xl:text-[18px] 2xl:leading-8">
               Purpose-built agents that plan, use tools, and execute multi-step
-              workflows — delivering measurable outcomes across analytics,
+              workflows delivering measurable outcomes across analytics,
               engineering, support, healthcare, HR, knowledge, and finance.
             </p>
           </header>
@@ -347,12 +350,12 @@ export default function AgenticAI() {
                 Proven agentic AI deliveries across analytics, support, knowledge
                 retrieval, and sales enablement.
               </p>
-              <div className="mt-8 hidden justify-center lg:mt-12 lg:flex">
+              <div className="mt-8 hidden justify-center lg:mt-12 lg:flex lg:justify-start">
                 <img
                   src={virtualAgentImage}
                   alt=""
                   aria-hidden
-                  className="h-auto w-full max-w-[220px] object-contain"
+                  className="h-auto w-full max-w-[280px] xl:max-w-[340px] 2xl:max-w-[400px] object-contain"
                 />
               </div>
             </div>

@@ -77,7 +77,7 @@ const rightColumnCards: FeatureCard[] = [
 function FeatureCardItem({ card }: { card: FeatureCard }) {
   return (
     <article className="relative flex min-h-[220px] w-full flex-col overflow-hidden rounded-[20px] bg-white p-5 sm:min-h-[240px] sm:p-6 lg:min-h-[260px]">
-      <h3 className="pr-24 text-base font-bold leading-snug text-[#1F2432] sm:text-lg lg:text-[20px] lg:leading-[28px]">
+      <h3 className="pr-24 text-[clamp(16px,1.3vw,20px)] font-bold leading-snug text-[#1F2432] 2xl:text-[22px]">
         {card.title}
       </h3>
 
@@ -85,12 +85,12 @@ function FeatureCardItem({ card }: { card: FeatureCard }) {
         {card.features.map((feature) => (
           <li
             key={feature}
-            className="flex items-start gap-2.5 text-xs leading-[1.45] text-[#9CA3AF] sm:text-sm sm:leading-5"
+            className="flex items-start gap-2.5 text-[clamp(12px,1.1vw,14px)] leading-[1.45] text-[#9CA3AF] sm:leading-5 2xl:text-[18px] 2xl:leading-8"
           >
             <img
               src={elevateIcon}
               alt=""
-              className="mt-[5px] h-[8px] w-[8px] shrink-0 object-contain"
+              className="mt-[5px] h-[8px] w-[8px] shrink-0 object-contain 2xl:mt-[9px] 2xl:h-[10px] 2xl:w-[10px]"
               aria-hidden
             />
             {feature}
@@ -111,14 +111,14 @@ function FeatureCardItem({ card }: { card: FeatureCard }) {
 export default function ProcessAutomationFeatures() {
   return (
     <section className="w-full bg-[#EFF7FC]">
-      <div className="mx-auto w-full max-w-site px-5 py-10 sm:px-8 sm:py-12 md:px-10 lg:px-20 lg:py-16">
-        <header className="mx-auto mb-10 max-w-[52rem] text-center sm:mb-12 lg:mb-14">
-          <h2 className="text-[1.75rem] font-bold leading-[1.2] text-[#1F2432] sm:text-[2rem] md:text-[2.5rem] lg:text-[56px] lg:leading-[62px]">
+      <div className="mx-auto w-full max-w-[1692px] px-5 py-[clamp(40px,5vw,72px)] sm:px-8 lg:px-10 xl:px-12">
+        <header className="mx-auto mb-[clamp(32px,4vw,56px)] max-w-[52rem] text-center">
+          <h2 className="m-0 text-[clamp(28px,4vw,56px)] font-bold leading-[1.15] text-[#1F2432]">
             AI-Based
             <br />
             Process Automation
           </h2>
-          <p className="mx-auto mt-5 max-w-[42rem] text-xs leading-6 text-[#9CA3AF] sm:mt-6 sm:text-sm sm:leading-7 lg:mt-8">
+          <p className="mx-auto mt-5 max-w-[48rem] text-[clamp(13px,1.2vw,16px)] leading-7 text-[#9CA3AF] sm:mt-6 2xl:text-[18px] 2xl:leading-8">
             We develop custom solutions for text and image/video analytics,
             which include document parsing, understanding meaning in texts,
             analyzing warranties and claims, inspecting visuals for defects in

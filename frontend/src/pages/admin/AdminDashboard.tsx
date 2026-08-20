@@ -1242,7 +1242,7 @@ export default function AdminDashboard() {
 
                 <div className="mt-4">
                   <p className="mb-2 text-sm font-medium text-[#5a5a5a]">
-                    Cover image {editingBlog ? "(optional — leave unchanged to keep current)" : "(required)"}
+                    Cover image {editingBlog ? "(optional leave unchanged to keep current)" : "(required)"}
                   </p>
                   <div className="flex flex-wrap items-start gap-4">
                     <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-[12px] border-2 border-dashed border-[#d7e6f3] bg-[#f8fbfd] px-5 py-4 text-sm font-medium text-[#2365aa] transition-colors hover:border-[#2365aa] hover:bg-[#EFF7FC]">
@@ -1477,7 +1477,7 @@ export default function AdminDashboard() {
                     <p className="mb-2 text-sm font-medium text-[#5a5a5a]">
                       Profile image{" "}
                       {editingTestimonial
-                        ? "(optional — leave unchanged to keep current)"
+                        ? "(optional leave unchanged to keep current)"
                         : "(required)"}
                     </p>
                     <div className="flex flex-wrap items-start gap-4">

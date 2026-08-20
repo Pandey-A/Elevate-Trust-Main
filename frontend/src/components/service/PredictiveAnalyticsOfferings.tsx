@@ -95,7 +95,7 @@ export default function PredictiveAnalyticsOfferings() {
                 </p>
               ) : null}
 
-              <p className="mt-3 text-[clamp(12px,1.1vw,14px)] leading-6 text-[#9CA3AF] sm:mt-4">
+              <p className="mt-3 text-[clamp(12px,1.1vw,14px)] leading-6 text-[#9CA3AF] sm:mt-4 2xl:text-[18px] 2xl:leading-8">
                 {item.description}
               </p>
             </article>

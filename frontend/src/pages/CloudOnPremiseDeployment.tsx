@@ -326,7 +326,7 @@ export default function CloudOnPremiseDeployment() {
         />
         <div className="service-page-hero__content max-w-[min(900px,92%)]">
           <p className="mb-3 text-sm font-semibold uppercase tracking-[0.16em] text-[#8eb4df] 2xl:text-base">
-            Cloud / On-Premise
+            Our Services
           </p>
           <h1 className="m-0 text-[clamp(26px,3.6vw,46px)] font-bold leading-[1.29] tracking-tight text-white lg:text-[clamp(24px,2.8vw,34px)] 2xl:text-[clamp(30px,3.8vw,46px)]">
             Comprehensive AI/ML Deployment Solutions for Cloud and On-Premise

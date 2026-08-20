@@ -62,7 +62,7 @@ export async function submitContactLead(req, res) {
 
     return res.status(200).json({
       success: true,
-      message: "Thanks — we received your email and will reach out soon.",
+      message: "Thanks we received your email and will reach out soon.",
     });
   } catch (error) {
     console.error("Contact lead email error:", error);

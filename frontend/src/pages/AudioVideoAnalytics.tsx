@@ -1,6 +1,6 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { ArrowUpRight, Sparkles } from "lucide-react";
+import { ArrowUpRight, Sparkles, ChevronLeft, ChevronRight } from "lucide-react";
 import FlyCTA from "../components/FlyCTA";
 import worldMapBackground from "../assets/homepage-icons/Group(3).png";
 import simpleSetupIcon from "../assets/OurServices/AudioVideoSimpleSetup.svg";
@@ -134,6 +134,29 @@ const valueAdded = [
 ];
 
 export default function AudioVideoAnalytics() {
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const scroll = (direction: "left" | "right") => {
+    if (scrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+      const scrollAmount = clientWidth > 768 ? 400 : 340;
+      
+      let newScrollLeft = direction === "left" ? scrollLeft - scrollAmount : scrollLeft + scrollAmount;
+      const maxScrollLeft = scrollWidth - clientWidth;
+      
+      if (direction === "right" && scrollLeft >= maxScrollLeft - 5) {
+        newScrollLeft = 0;
+      } else if (direction === "left" && scrollLeft <= 5) {
+        newScrollLeft = maxScrollLeft;
+      }
+
+      scrollRef.current.scrollTo({
+        left: newScrollLeft,
+        behavior: "smooth",
+      });
+    }
+  };
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -150,7 +173,7 @@ export default function AudioVideoAnalytics() {
         />
         <div className="service-page-hero__content">
           <p className="mb-3 text-sm font-semibold uppercase tracking-[0.16em] text-[#8eb4df] 2xl:text-base">
-            Audio &amp; Video
+            Our Services
           </p>
           <h1 className="m-0 text-[clamp(28px,3.8vw,48px)] font-bold leading-[1.29] tracking-tight text-white lg:text-[clamp(26px,3vw,34px)] 2xl:text-[clamp(32px,4vw,48px)]">
             Advanced Audio &amp; Video Analytics for Business Innovation
@@ -260,12 +283,15 @@ export default function AudioVideoAnalytics() {
             </div>
           </div>
 
-          <div className="relative w-full overflow-hidden py-4">
-            <div className="industry-marquee-track items-stretch gap-5 hover:[animation-play-state:paused] sm:gap-6">
-              {[...industrySolutions, ...industrySolutions].map((solution, index) => (
+          <div className="relative w-full py-4">
+            <div 
+              ref={scrollRef}
+              className="flex items-stretch gap-5 sm:gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth scrollbar-none"
+            >
+              {industrySolutions.map((solution, index) => (
                 <article
                   key={`${solution.title}-${index}`}
-                  className="flex w-[320px] shrink-0 flex-col overflow-hidden rounded-[20px] border border-[#e0e9f1] bg-white shadow-[0_14px_40px_-28px_rgba(17,61,119,0.4)] sm:w-[380px] xl:w-[420px]"
+                  className="flex w-[320px] shrink-0 snap-start flex-col overflow-hidden rounded-[20px] border border-[#e0e9f1] bg-white shadow-[0_14px_40px_-28px_rgba(17,61,119,0.4)] sm:w-[380px] xl:w-[420px]"
                 >
                   <header className="relative flex min-h-[168px] shrink-0 flex-col overflow-hidden bg-[#113d77] px-5 py-5 text-white sm:min-h-[180px] sm:px-6 sm:py-6">
                     <span className="absolute -bottom-10 -right-8 h-28 w-28 rounded-full border-[20px] border-white/[0.06]" />
@@ -297,6 +323,24 @@ export default function AudioVideoAnalytics() {
                   </ul>
                 </article>
               ))}
+            </div>
+
+            {/* Navigation Buttons */}
+            <div className="mt-10 flex items-center justify-center gap-4">
+              <button
+                onClick={() => scroll("left")}
+                className="flex h-12 w-12 items-center justify-center rounded-full border border-[#e0e9f1] bg-white text-[#113d77] shadow-[0_4px_14px_rgba(17,61,119,0.12)] transition-all duration-300 hover:scale-110 hover:bg-[#113d77] hover:text-white hover:shadow-[0_8px_20px_rgba(17,61,119,0.2)] active:scale-95"
+                aria-label="Scroll left"
+              >
+                <ChevronLeft className="h-6 w-6" />
+              </button>
+              <button
+                onClick={() => scroll("right")}
+                className="flex h-12 w-12 items-center justify-center rounded-full border border-[#e0e9f1] bg-white text-[#113d77] shadow-[0_4px_14px_rgba(17,61,119,0.12)] transition-all duration-300 hover:scale-110 hover:bg-[#113d77] hover:text-white hover:shadow-[0_8px_20px_rgba(17,61,119,0.2)] active:scale-95"
+                aria-label="Scroll right"
+              >
+                <ChevronRight className="h-6 w-6" />
+              </button>
             </div>
           </div>
         </div>

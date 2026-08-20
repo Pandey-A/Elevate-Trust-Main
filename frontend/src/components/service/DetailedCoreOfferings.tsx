@@ -10,20 +10,20 @@ const outcomeParagraphs = [
 export default function DetailedCoreOfferings() {
   return (
     <section className="w-full bg-white">
-      <div className="mx-auto w-full max-w-site px-5 py-10 sm:px-8 md:px-10 lg:px-20 lg:py-16">
-        <div className="grid grid-cols-1 items-center gap-10 md:gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-16 xl:gap-20">
+      <div className="mx-auto w-full max-w-[1692px] px-5 py-[clamp(40px,5vw,72px)] sm:px-8 lg:px-10 xl:px-12">
+        <div className="grid grid-cols-1 items-center gap-[clamp(28px,4vw,64px)] lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)]">
           {/* Left, heading + outcome paragraphs */}
           <div className="text-center lg:text-left">
-            <h2 className="text-[1.75rem] font-bold leading-[1.2]   text-[#1F2432] sm:text-[2rem] md:text-[2.25rem] lg:text-[60px] lg:leading-[62px]">
+            <h2 className="m-0 text-[clamp(26px,3.5vw,48px)] font-bold leading-[1.15] text-[#1F2432]">
               Core Offerings
-              
+              <br />
               Predictive Analytics
             </h2>
-            <div className="mx-auto mt-6 max-w-[34rem] space-y-5 text-left sm:mt-8 sm:space-y-6 lg:mx-0 lg:mt-10 lg:max-w-[28rem]">
+            <div className="mx-auto mt-5 max-w-[34rem] space-y-5 text-left lg:mx-0 lg:mt-8 lg:max-w-[28rem]">
               {outcomeParagraphs.map((paragraph) => (
                 <p
                   key={paragraph}
-                  className="text-xs leading-6 text-[#9CA3AF] sm:text-sm sm:leading-7"
+                  className="text-[clamp(13px,1.2vw,16px)] leading-7 text-[#9CA3AF] 2xl:text-[18px] 2xl:leading-8"
                 >
                   {paragraph}
                 </p>

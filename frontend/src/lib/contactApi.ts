@@ -18,7 +18,7 @@ export async function submitContactLead(input: {
     throw new Error(data.message || "Unable to submit email.");
   }
 
-  return data.message || "Thanks — we received your email and will reach out soon.";
+  return data.message || "Thanks we received your email and will reach out soon.";
 }
 
 export { getErrorMessage };
