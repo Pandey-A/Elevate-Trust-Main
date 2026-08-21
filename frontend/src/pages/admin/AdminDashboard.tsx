@@ -857,8 +857,8 @@ export default function AdminDashboard() {
       <div
         className={`mx-auto grid w-full max-w-[1692px] grid-cols-1 gap-4 py-4 transition-all duration-300 ease-out sm:gap-6 sm:py-6 xl:gap-8 2xl:gap-10 2xl:py-8 ${
           sidebarCollapsed
-            ? "pl-[72px] pr-4 sm:pl-[76px] sm:pr-6 lg:px-8 lg:pl-[88px] xl:px-10 xl:pl-[92px] 2xl:pl-[96px]"
-            : "pl-[72px] pr-4 sm:pl-[76px] sm:pr-6 lg:px-8 lg:pl-[240px] xl:px-10 xl:pl-[280px] 2xl:pl-[300px]"
+            ? "px-3.5 pl-[68px] sm:px-6 sm:pl-[76px] lg:px-8 lg:pl-[88px] xl:px-10 xl:pl-[92px] 2xl:pl-[96px]"
+            : "px-3.5 pl-[68px] sm:px-6 sm:pl-[76px] lg:px-8 lg:pl-[240px] xl:px-10 xl:pl-[280px] 2xl:pl-[300px]"
         }`}
       >
         <aside
@@ -1364,7 +1364,7 @@ export default function AdminDashboard() {
             <section className="space-y-5 sm:space-y-6 2xl:space-y-8">
               <form
                 onSubmit={submitBlog}
-                className="rounded-[20px] border border-[#d7e6f3] bg-white p-5 shadow-[0_14px_40px_-28px_rgba(17,61,119,0.3)] sm:p-6 xl:rounded-[24px] xl:p-7 2xl:p-8"
+                className="rounded-[20px] border border-[#d7e6f3] bg-white p-4 shadow-[0_14px_40px_-28px_rgba(17,61,119,0.3)] sm:p-6 xl:rounded-[24px] xl:p-7 2xl:p-8"
               >
                 <div className="mb-4 flex flex-wrap items-center justify-between gap-3 2xl:mb-5">
                   <h2 className="m-0 text-xl font-bold text-[#1F2432] 2xl:text-2xl">
@@ -1409,8 +1409,8 @@ export default function AdminDashboard() {
                   <p className="mb-2 text-sm font-medium text-[#5a5a5a]">
                     Cover image {editingBlog ? "(optional leave unchanged to keep current)" : "(required)"}
                   </p>
-                  <div className="flex flex-wrap items-start gap-4">
-                    <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-[12px] border-2 border-dashed border-[#d7e6f3] bg-[#f8fbfd] px-5 py-4 text-sm font-medium text-[#2365aa] transition-colors hover:border-[#2365aa] hover:bg-[#EFF7FC]">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-4">
+                    <label className="flex w-full cursor-pointer flex-col items-center justify-center gap-2 rounded-[12px] border-2 border-dashed border-[#d7e6f3] bg-[#f8fbfd] px-5 py-4 text-sm font-medium text-[#2365aa] transition-colors hover:border-[#2365aa] hover:bg-[#EFF7FC] sm:w-auto">
                       Choose image
                       <input
                         type="file"
@@ -1427,7 +1427,7 @@ export default function AdminDashboard() {
                       <img
                         src={blogImagePreview}
                         alt="Blog cover preview"
-                        className="h-24 w-40 rounded-[10px] border border-[#d7e6f3] object-cover"
+                        className="h-28 w-full rounded-[10px] border border-[#d7e6f3] object-cover sm:h-24 sm:w-40"
                       />
                     ) : null}
                   </div>
@@ -1447,7 +1447,7 @@ export default function AdminDashboard() {
                 <button
                   type="submit"
                   disabled={blogSaving}
-                  className="mt-5 inline-flex cursor-pointer items-center gap-2 rounded-full border-0 bg-[#2365aa] px-5 py-3 text-sm font-semibold uppercase text-white hover:bg-[#1a5490] disabled:cursor-not-allowed disabled:opacity-70"
+                  className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full border-0 bg-[#2365aa] px-5 py-3 text-sm font-semibold uppercase text-white hover:bg-[#1a5490] disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto"
                 >
                   {blogSaving ? "Saving..." : editingBlog ? "Update blog" : "Publish blog"}
                   <ArrowUpRight size={16} />
@@ -1469,17 +1469,17 @@ export default function AdminDashboard() {
                     key={blog.id}
                     className="rounded-[18px] border border-[#d7e6f3] bg-white p-4 shadow-[0_12px_30px_-22px_rgba(17,61,119,0.35)] sm:p-5"
                   >
-                    <div className="flex flex-wrap items-start justify-between gap-4">
-                      <div className="flex min-w-0 flex-1 gap-4">
+                    <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:min-w-0 sm:flex-1 sm:gap-4">
                         {blog.imageUrl ? (
                           <img
                             src={blog.imageUrl}
                             alt=""
-                            className="size-20 shrink-0 rounded-[12px] object-cover"
+                            className="h-40 w-full rounded-[12px] object-cover sm:size-20 sm:shrink-0"
                           />
                         ) : null}
                         <div className="min-w-0">
-                          <h3 className="m-0 text-lg font-bold text-[#1F2432]">{blog.title}</h3>
+                          <h3 className="m-0 text-base font-bold text-[#1F2432] sm:text-lg">{blog.title}</h3>
                           <p className="mt-1 text-xs text-[#848b9b]">
                             {formatDate(blog.createdAt)}
                           </p>
@@ -1488,11 +1488,11 @@ export default function AdminDashboard() {
                           </p>
                         </div>
                       </div>
-                      <div className="flex flex-wrap gap-2">
+                      <div className="flex w-full items-center gap-2 border-t border-[#e8eef3] pt-3 sm:w-auto sm:border-t-0 sm:pt-0">
                         <button
                           type="button"
                           onClick={() => onEditBlog(blog)}
-                          className="inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-[#d7e6f3] bg-[#EFF7FC] px-3 py-2 text-xs font-semibold text-[#2365aa]"
+                          className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-full border border-[#d7e6f3] bg-[#EFF7FC] px-3.5 py-2 text-xs font-semibold text-[#2365aa] sm:flex-initial"
                         >
                           <Pencil size={14} />
                           Edit
@@ -1510,7 +1510,7 @@ export default function AdminDashboard() {
                               );
                             }
                           }}
-                          className="inline-flex cursor-pointer items-center gap-1.5 rounded-full border-0 bg-[#EEF3FB] px-3 py-2 text-xs font-semibold text-[#2365aa]"
+                          className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-full border-0 bg-[#EEF3FB] px-3.5 py-2 text-xs font-semibold text-[#2365aa] sm:flex-initial"
                         >
                           <Trash2 size={14} />
                           Delete
@@ -1527,7 +1527,7 @@ export default function AdminDashboard() {
             <section className="space-y-5 sm:space-y-6 2xl:space-y-8">
               <form
                 onSubmit={submitTestimonial}
-                className="rounded-[20px] border border-[#d7e6f3] bg-white p-5 shadow-[0_14px_40px_-28px_rgba(17,61,119,0.3)] sm:p-6 xl:rounded-[24px] xl:p-7 2xl:p-8"
+                className="rounded-[20px] border border-[#d7e6f3] bg-white p-4 shadow-[0_14px_40px_-28px_rgba(17,61,119,0.3)] sm:p-6 xl:rounded-[24px] xl:p-7 2xl:p-8"
               >
                 <div className="mb-4 flex flex-wrap items-center justify-between gap-3 2xl:mb-5">
                   <h2 className="m-0 text-xl font-bold text-[#1F2432] 2xl:text-2xl">
@@ -1595,7 +1595,7 @@ export default function AdminDashboard() {
                   />
                 </label>
 
-                <label className="mt-4 flex max-w-[220px] flex-col gap-1.5 text-sm font-medium text-[#5a5a5a]">
+                <label className="mt-4 flex w-full flex-col gap-1.5 text-sm font-medium text-[#5a5a5a] sm:max-w-[220px]">
                   Sort order
                   <input
                     type="number"
@@ -1612,8 +1612,8 @@ export default function AdminDashboard() {
                     <p className="mb-2 text-sm font-medium text-[#5a5a5a]">
                       Company logo {editingTestimonial ? "(optional)" : "(optional)"}
                     </p>
-                    <div className="flex flex-wrap items-start gap-4">
-                      <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-[12px] border-2 border-dashed border-[#d7e6f3] bg-[#f8fbfd] px-5 py-4 text-sm font-medium text-[#2365aa] transition-colors hover:border-[#2365aa] hover:bg-[#EFF7FC]">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-4">
+                      <label className="flex w-full cursor-pointer flex-col items-center justify-center gap-2 rounded-[12px] border-2 border-dashed border-[#d7e6f3] bg-[#f8fbfd] px-5 py-4 text-sm font-medium text-[#2365aa] transition-colors hover:border-[#2365aa] hover:bg-[#EFF7FC] sm:w-auto">
                         Choose logo
                         <input
                           type="file"
@@ -1632,7 +1632,7 @@ export default function AdminDashboard() {
                         <img
                           src={testimonialLogoPreview}
                           alt="Logo preview"
-                          className="h-16 w-28 rounded-[10px] border border-[#d7e6f3] object-contain bg-white p-2"
+                          className="h-16 w-full max-w-[160px] rounded-[10px] border border-[#d7e6f3] bg-white p-2 object-contain sm:w-28"
                         />
                       ) : null}
                     </div>
@@ -1645,8 +1645,8 @@ export default function AdminDashboard() {
                         ? "(optional leave unchanged to keep current)"
                         : "(required)"}
                     </p>
-                    <div className="flex flex-wrap items-start gap-4">
-                      <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-[12px] border-2 border-dashed border-[#d7e6f3] bg-[#f8fbfd] px-5 py-4 text-sm font-medium text-[#2365aa] transition-colors hover:border-[#2365aa] hover:bg-[#EFF7FC]">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-4">
+                      <label className="flex w-full cursor-pointer flex-col items-center justify-center gap-2 rounded-[12px] border-2 border-dashed border-[#d7e6f3] bg-[#f8fbfd] px-5 py-4 text-sm font-medium text-[#2365aa] transition-colors hover:border-[#2365aa] hover:bg-[#EFF7FC] sm:w-auto">
                         Choose photo
                         <input
                           ref={profileFileInputRef}
@@ -1664,7 +1664,7 @@ export default function AdminDashboard() {
                         />
                       </label>
                       {testimonialProfilePreview ? (
-                        <div className="flex flex-col items-center gap-2">
+                        <div className="flex flex-col items-center gap-2 sm:items-start">
                           <img
                             src={testimonialProfilePreview}
                             alt="Profile preview"
@@ -1705,7 +1705,7 @@ export default function AdminDashboard() {
                 <button
                   type="submit"
                   disabled={testimonialSaving}
-                  className="mt-5 inline-flex cursor-pointer items-center gap-2 rounded-full border-0 bg-[#2365aa] px-5 py-3 text-sm font-semibold uppercase text-white hover:bg-[#1a5490] disabled:cursor-not-allowed disabled:opacity-70"
+                  className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full border-0 bg-[#2365aa] px-5 py-3 text-sm font-semibold uppercase text-white hover:bg-[#1a5490] disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto"
                 >
                   {testimonialSaving
                     ? "Saving..."
@@ -1766,18 +1766,18 @@ export default function AdminDashboard() {
                     key={item.id}
                     className="rounded-[18px] border border-[#d7e6f3] bg-white p-4 shadow-[0_12px_30px_-22px_rgba(17,61,119,0.35)] sm:p-5"
                   >
-                    <div className="flex flex-wrap items-start justify-between gap-4">
-                      <div className="flex min-w-0 flex-1 gap-4">
+                    <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:min-w-0 sm:flex-1 sm:gap-4">
                         {item.profileUrl ? (
                           <img
                             src={item.profileUrl}
                             alt=""
-                            className="size-20 shrink-0 rounded-[12px] object-cover"
+                            className="size-16 rounded-[12px] object-cover sm:size-20 sm:shrink-0"
                           />
                         ) : null}
                         <div className="min-w-0">
                           <div className="flex flex-wrap items-center gap-3">
-                            <h3 className="m-0 text-lg font-bold text-[#1F2432]">{item.name}</h3>
+                            <h3 className="m-0 text-base font-bold text-[#1F2432] sm:text-lg">{item.name}</h3>
                             {item.logoUrl ? (
                               <img
                                 src={item.logoUrl}
@@ -1786,7 +1786,7 @@ export default function AdminDashboard() {
                               />
                             ) : null}
                           </div>
-                          <p className="mt-1 text-sm text-[#848b9b]">{item.title}</p>
+                          <p className="mt-1 text-xs text-[#848b9b] sm:text-sm">{item.title}</p>
                           <p className="mt-1 text-xs text-[#848b9b]">
                             Order {item.sortOrder} · {formatDate(item.createdAt)}
                           </p>
@@ -1795,11 +1795,11 @@ export default function AdminDashboard() {
                           </p>
                         </div>
                       </div>
-                      <div className="flex flex-wrap gap-2">
+                      <div className="flex w-full items-center gap-2 border-t border-[#e8eef3] pt-3 sm:w-auto sm:border-t-0 sm:pt-0">
                         <button
                           type="button"
                           onClick={() => onEditTestimonial(item)}
-                          className="inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-[#d7e6f3] bg-[#EFF7FC] px-3 py-2 text-xs font-semibold text-[#2365aa]"
+                          className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-full border border-[#d7e6f3] bg-[#EFF7FC] px-3.5 py-2 text-xs font-semibold text-[#2365aa] sm:flex-initial"
                         >
                           <Pencil size={14} />
                           Edit
@@ -1817,7 +1817,7 @@ export default function AdminDashboard() {
                               );
                             }
                           }}
-                          className="inline-flex cursor-pointer items-center gap-1.5 rounded-full border-0 bg-[#EEF3FB] px-3 py-2 text-xs font-semibold text-[#2365aa]"
+                          className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-full border-0 bg-[#EEF3FB] px-3.5 py-2 text-xs font-semibold text-[#2365aa] sm:flex-initial"
                         >
                           <Trash2 size={14} />
                           Delete

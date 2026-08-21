@@ -254,7 +254,7 @@ export default function CloudComputing() {
           className="grid grid-cols-1 lg:grid-cols-[0.95fr_1.05fr] gap-[clamp(32px,4vw,56px)] lg:gap-[clamp(40px,5vw,80px)] items-center pb-[clamp(48px,6vw,80px)]"
           aria-label="Cloud architecture"
         >
-          <h2 className="m-0 font-bold leading-[1.12] text-[#272935] max-w-[16ch] text-[clamp(28px,4.2vw,64px)] lg:text-[clamp(26px,3.2vw,40px)] 2xl:text-[clamp(28px,4.2vw,64px)]">
+          <h2 className="m-0 w-full max-w-full font-bold text-[#272935] text-[clamp(22px,5vw,32px)] leading-[1.25] sm:text-[clamp(26px,3.5vw,44px)] sm:leading-[1.15] lg:max-w-[16ch] lg:text-[clamp(26px,3.2vw,40px)] 2xl:text-[clamp(28px,4.2vw,64px)]">
             Enterprise cloud architecture and technology: Building the scalable future
           </h2>
           <div className="relative w-full max-w-[875px] mx-auto">

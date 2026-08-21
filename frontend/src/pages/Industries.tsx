@@ -364,7 +364,7 @@ export default function Industries() {
           className="pb-[clamp(48px,6vw,80px)] text-center"
           aria-label={active.sectionTitle}
         >
-          <h2 className="mx-auto mb-[clamp(24px,3vw,48px)] max-w-[18ch] text-[clamp(28px,3.5vw,48px)] font-bold leading-[1.12] text-[#272935] lg:text-[clamp(24px,2.8vw,34px)] 2xl:text-[clamp(28px,3.5vw,48px)]">
+          <h2 className="mx-auto mb-[clamp(24px,3vw,48px)] w-full max-w-full font-bold text-[#272935] text-[clamp(22px,5vw,32px)] leading-[1.25] sm:text-[clamp(26px,3.5vw,44px)] sm:leading-[1.15] lg:max-w-[18ch] lg:text-[clamp(24px,2.8vw,34px)] 2xl:text-[clamp(28px,3.5vw,48px)]">
             {active.sectionTitle}
           </h2>
           <div className="mx-auto flex max-w-[1100px] flex-col gap-4 sm:gap-[18px]">

@@ -305,7 +305,7 @@ export default function AgenticAI() {
               Agentic AI Strategy &amp; Architecture Consulting
             </h2>
             <p className="mt-5 max-w-[46rem] text-[clamp(13px,1.2vw,16px)] leading-7 text-[#848b9b] sm:mt-6 2xl:text-[18px] 2xl:leading-8">
-              We help you move from idea to production-ready agentic systems —
+              We help you move from idea to production-ready agentic systems
               identifying the right use cases, designing agent architectures,
               selecting orchestration frameworks, and building the governance
               controls needed to trust autonomous AI in your workflows.
@@ -392,7 +392,7 @@ export default function AgenticAI() {
               </h2>
               <p className="mt-4 max-w-[42rem] text-[clamp(13px,1.2vw,16px)] leading-7 text-[#848b9b] 2xl:text-[18px] 2xl:leading-8">
                 Our battle-tested agentic framework connects LLMs, tool libraries,
-                memory stores, retrieval layers, and human-in-the-loop controls —
+                memory stores, retrieval layers, and human-in-the-loop controls
                 so you can adapt agents to new domains and tasks without rebuilding
                 from scratch every time.
               </p>
