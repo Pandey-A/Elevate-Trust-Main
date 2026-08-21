@@ -4,7 +4,7 @@ import { ArrowUpRight } from "lucide-react";
 import FlyCTA from "../components/FlyCTA";
 import worldMapBackground from "../assets/homepage-icons/Group(3).png";
 import partnerGlobe from "../assets/homepage-icons/partner-globe.png";
-import architectureImg from "../assets/case-studies/rfp/rfp-architecture.png";
+import architectureImg from "../assets/case-studies/cs-rfp.png";
 import clientBgImg from "../assets/case-studies/rfp/rfp-client-bg.png";
 import challengeImg from "../assets/case-studies/rfp/rfp-challenge.png";
 import solutionImg from "../assets/case-studies/rfp/rfp-solution.png";
@@ -131,7 +131,7 @@ export default function CaseStudyDetail() {
               </div>
             </div>
 
-            <div className="csd-intro__diagram">
+            <div className="csd-intro__diagram csd-intro__diagram--rfp">
               <img
                 src={architectureImg}
                 alt="RFP Query and Compliance Check system architecture diagram"

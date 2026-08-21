@@ -18,6 +18,19 @@ export type AuthSession = {
   role: string;
 };
 
+export function isSuperAdminRole(role?: string | null) {
+  return String(role || "") === "superAdmin";
+}
+
+export function isDashboardRole(role?: string | null) {
+  const value = String(role || "");
+  return value === "admin" || value === "superAdmin";
+}
+
+export function canManageAdminContent(role?: string | null) {
+  return isSuperAdminRole(role);
+}
+
 type AuthResponse = {
   success: boolean;
   message?: string;

@@ -172,6 +172,8 @@ export default function Service() {
         src={storiesVector}
         alt=""
         aria-hidden="true"
+        loading="lazy"
+        decoding="async"
         className="service-section__vector"
       />
 
@@ -211,6 +213,8 @@ export default function Service() {
                   className="service-section__tab-icon"
                   alt=""
                   aria-hidden="true"
+                  loading="lazy"
+                  decoding="async"
                 />
                 <span className="service-section__tab-label">{service.title}</span>
               </button>
@@ -253,6 +257,8 @@ export default function Service() {
                 src={activeService.image}
                 alt=""
                 aria-hidden="true"
+                loading="lazy"
+                decoding="async"
                 className="service-section__card-illustration"
               />
             </div>

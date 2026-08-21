@@ -1,5 +1,5 @@
 // components/Navbar.tsx
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ChevronDown, Menu, X } from 'lucide-react';
 import elevateLogo from '../assets/nav/elevate-logo.svg';
@@ -182,6 +182,9 @@ export default function Navbar() {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileExpanded, setMobileExpanded] = useState<string | null>(null);
+  const [menuOffsetLeft, setMenuOffsetLeft] = useState(0);
+  const navRef = useRef<HTMLElement>(null);
+  const triggerRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const location = useLocation();
 
   useEffect(() => {
@@ -196,6 +199,15 @@ export default function Navbar() {
       document.body.style.overflow = '';
     };
   }, [mobileMenuOpen]);
+
+  useLayoutEffect(() => {
+    if (!activeDropdown || !navRef.current) return;
+    const trigger = triggerRefs.current[activeDropdown];
+    if (!trigger) return;
+    const navRect = navRef.current.getBoundingClientRect();
+    const triggerRect = trigger.getBoundingClientRect();
+    setMenuOffsetLeft(Math.max(0, triggerRect.left - navRect.left));
+  }, [activeDropdown]);
 
   const closeMobileMenu = () => {
     setMobileMenuOpen(false);
@@ -249,7 +261,7 @@ export default function Navbar() {
         <p className="mb-4 text-base font-semibold leading-tight text-[#272935] min-[1920px]:mb-5 min-[1920px]:text-[22px] min-[2012px]:mb-5 min-[2012px]:text-2xl min-[2012px]:leading-[1.2]">
           {menu.title}
         </p>
-        <div className="grid grid-cols-1 content-start gap-x-10 gap-y-3 sm:grid-cols-2 min-[1920px]:gap-x-16 min-[2012px]:gap-x-[72px]">
+        <div className="grid grid-cols-1 content-start gap-x-6 gap-y-3 sm:grid-cols-[auto_auto] min-[1920px]:gap-x-8 min-[2012px]:gap-x-10">
           <ul className="m-0 flex list-none flex-col gap-3 p-0 min-[1920px]:gap-3.5 min-[2012px]:gap-[14px]">
             {menu.leftColumn.map((item) => (
               <li key={item}>
@@ -293,6 +305,7 @@ export default function Navbar() {
 
   return (
     <nav
+      ref={navRef}
       className="navbar sticky top-0 z-50 w-full border-b border-gray-200 bg-white"
       onMouseLeave={() => setActiveDropdown(null)}
     >
@@ -310,7 +323,13 @@ export default function Navbar() {
             <div className="flex items-center gap-1 min-[1440px]:gap-1.5 min-[1680px]:gap-2.5">
               {navLinks.map((link) => (
                 isMegaMenuLink(link) ? (
-                  <div key={link.label} className="relative shrink-0">
+                  <div
+                    key={link.label}
+                    className="relative shrink-0"
+                    ref={(el) => {
+                      triggerRefs.current[link.label] = el;
+                    }}
+                  >
                     <button
                       type="button"
                       className={`navbar__link flex cursor-pointer items-center gap-0.5 whitespace-nowrap rounded-md px-1 py-1 text-[12px] font-medium transition-colors sm:px-1.5
@@ -331,7 +350,13 @@ export default function Navbar() {
                     </button>
                   </div>
                 ) : isDropdownLink(link) ? (
-                  <div key={link.label} className="relative shrink-0">
+                  <div
+                    key={link.label}
+                    className="relative shrink-0"
+                    ref={(el) => {
+                      triggerRefs.current[link.label] = el;
+                    }}
+                  >
                     <button
                       type="button"
                       className={`navbar__link flex cursor-pointer items-center gap-0.5 whitespace-nowrap rounded-md px-1 py-1 text-[12px] font-medium transition-colors sm:px-1.5
@@ -427,13 +452,19 @@ export default function Navbar() {
       </div>
 
       {activeMegaLink ? (
-        <div className="navbar__mega absolute inset-x-0 top-full z-50 hidden justify-center px-4 pt-2 lg:flex">
-          <div className="w-[min(899px,calc(100vw-2rem))] rounded-[16px] border border-gray-100 bg-white px-6 py-5 shadow-[0_12px_40px_rgba(0,0,0,0.12)] max-h-[70vh] overflow-auto min-[1920px]:px-8 min-[1920px]:py-6 min-[2012px]:max-h-none min-[2012px]:w-[899px] min-[2012px]:overflow-visible">
+        <div
+          className="navbar__mega absolute top-full z-50 hidden pt-3 lg:block"
+          style={{ left: menuOffsetLeft }}
+        >
+          <div className="w-fit max-w-[calc(100vw-2rem)] rounded-[16px] border border-gray-100 bg-white px-6 py-5 shadow-[0_12px_40px_rgba(0,0,0,0.12)] min-[1920px]:px-8 min-[1920px]:py-6">
             {renderMegaMenu(activeMegaLink.megaMenu)}
           </div>
         </div>
       ) : activeDropdownLink ? (
-        <div className="navbar__mega absolute inset-x-0 top-full z-50 hidden justify-center px-4 pt-2 lg:flex">
+        <div
+          className="navbar__mega absolute top-full z-50 hidden pt-3 lg:block"
+          style={{ left: menuOffsetLeft }}
+        >
           <div className="w-[min(260px,calc(100vw-2rem))] rounded-[16px] border border-gray-100 bg-white px-5 py-4 shadow-[0_12px_40px_rgba(0,0,0,0.12)] min-[1920px]:w-[280px] min-[1920px]:px-6 min-[1920px]:py-5">
             <div className="flex flex-col">
               <p className="mb-3 text-base font-semibold leading-tight text-[#272935] min-[1920px]:mb-4 min-[1920px]:text-[22px]">

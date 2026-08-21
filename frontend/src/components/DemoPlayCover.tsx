@@ -1,6 +1,7 @@
 import { Play } from "lucide-react";
 import type { AdminDemo } from "../data/adminDefaults";
 import { getDemoTitleImage, hasDemoTitleImage } from "../lib/demoThumbnails";
+import { getOptimizedImageUrl } from "../lib/optimizeImageUrl";
 
 type DemoPlayCoverProps = {
   demo: AdminDemo;
@@ -22,7 +23,11 @@ export default function DemoPlayCover({
   asButton = true,
   compact = false,
 }: DemoPlayCoverProps) {
-  const src = getDemoTitleImage(demo);
+  const src = getOptimizedImageUrl(getDemoTitleImage(demo), {
+    width: 960,
+    height: 540,
+    crop: "fill",
+  });
   const branded = hasDemoTitleImage(demo);
 
   const content = (
@@ -30,6 +35,8 @@ export default function DemoPlayCover({
       <img
         src={src}
         alt={demo.title}
+        loading="lazy"
+        decoding="async"
         className="absolute inset-0 h-full w-full object-cover object-center transition duration-500 ease-out group-hover:scale-[1.03]"
       />
 

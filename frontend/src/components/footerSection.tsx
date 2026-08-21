@@ -12,6 +12,11 @@ import paperplanefooter from "../assets/footer/PaperPlaneTilt.svg";
 import { activePartners } from "../data/activePartners";
 import { digitalServicePaths } from "../data/digitalServices";
 import { getErrorMessage, submitContactLead } from "../lib/contactApi";
+import {
+  FORM_LIMITS,
+  isValidEmail,
+  sanitizePlainText,
+} from "../lib/formValidation";
 import { useToast } from "./ui/ToastProvider";
 import "./footerSection.css";
 
@@ -151,15 +156,20 @@ export default function FooterSection() {
   const onNewsletterSubmit = async (event: FormEvent) => {
     event.preventDefault();
 
-    if (!newsletterEmail.trim()) {
+    const cleanedEmail = sanitizePlainText(newsletterEmail, FORM_LIMITS.email);
+    if (!cleanedEmail) {
       showToast("Please enter your email.", "error");
+      return;
+    }
+    if (!isValidEmail(cleanedEmail)) {
+      showToast("Please provide a valid email address.", "error");
       return;
     }
 
     try {
       setNewsletterSubmitting(true);
       const message = await submitContactLead({
-        email: newsletterEmail.trim(),
+        email: cleanedEmail,
         source: "footer",
       });
       showToast(message, "success");
@@ -237,6 +247,7 @@ export default function FooterSection() {
                   type="email"
                   placeholder="Email"
                   value={newsletterEmail}
+                  maxLength={FORM_LIMITS.email}
                   onChange={(event) => setNewsletterEmail(event.target.value)}
                   autoComplete="email"
                   disabled={newsletterSubmitting}
@@ -292,28 +303,14 @@ export default function FooterSection() {
                 const slotClass = partner.tall
                   ? "footer__partner-slot footer__partner-slot--tall"
                   : "footer__partner-slot";
-                const logo = (
-                  <img
-                    src={partner.logo}
-                    alt={partner.name}
-                    className="footer__partner-logo"
-                  />
-                );
 
-                return partner.href ? (
-                  <a
-                    key={partner.name}
-                    href={partner.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={slotClass}
-                    aria-label={`${partner.name} (opens in a new tab)`}
-                  >
-                    {logo}
-                  </a>
-                ) : (
+                return (
                   <div key={partner.name} className={slotClass}>
-                    {logo}
+                    <img
+                      src={partner.logo}
+                      alt={partner.name}
+                      className="footer__partner-logo"
+                    />
                   </div>
                 );
               })}

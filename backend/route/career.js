@@ -6,13 +6,20 @@ import {
   removeCareerApplication,
 } from "../controllers/careerForm.js";
 import { uploadCv } from "../middleware/upload.js";
-import { requireAdmin, requireAuth } from "../middleware/auth.js";
+import { requireAuth, requireSuperAdmin } from "../middleware/auth.js";
+import { createRateLimiter } from "../middleware/rateLimit.js";
 
 const router = express.Router();
 
-router.get("/", requireAuth, requireAdmin, getCareerApplications);
-router.delete("/", requireAuth, requireAdmin, removeAllCareerApplications);
-router.delete("/:id", requireAuth, requireAdmin, removeCareerApplication);
-router.post("/", uploadCv.single("cv"), careerForm);
+const careerSubmitRateLimit = createRateLimiter({
+  windowMs: 15 * 60 * 1000,
+  max: 8,
+  message: "Too many applications. Please try again later.",
+});
+
+router.get("/", requireAuth, requireSuperAdmin, getCareerApplications);
+router.delete("/", requireAuth, requireSuperAdmin, removeAllCareerApplications);
+router.delete("/:id", requireAuth, requireSuperAdmin, removeCareerApplication);
+router.post("/", careerSubmitRateLimit, uploadCv.single("cv"), careerForm);
 
 export default router;

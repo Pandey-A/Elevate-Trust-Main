@@ -33,6 +33,8 @@ export default function WhoWeAre() {
         src={storiesVector}
         alt=""
         aria-hidden
+        loading="lazy"
+        decoding="async"
         className="who-we-are__decor-vector"
       />
 

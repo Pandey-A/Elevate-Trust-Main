@@ -211,34 +211,36 @@ export default function IndustryPageTemplate({ content }: Props) {
       </section>
 
       <section className="w-full bg-white" aria-label={content.solutionsTitle}>
-        <div className="mx-auto w-full max-w-[1692px] px-5 py-[clamp(40px,5vw,72px)] sm:px-8 lg:px-10 xl:px-12">
-          <header className="mx-auto mb-[clamp(28px,3.5vw,48px)] max-w-[52rem] text-center">
-            <h2 className="m-0 text-[clamp(26px,3.5vw,48px)] font-bold leading-[1.15] text-[#1F2432]">
+        <div className="mx-auto w-full max-w-[1692px] px-5 py-[clamp(48px,6vw,80px)] sm:px-8 lg:px-10 xl:px-12">
+          <header className="mx-auto mb-[clamp(32px,4vw,56px)] max-w-[52rem] text-center">
+            <h2 className="m-0 text-[clamp(28px,4vw,56px)] font-bold leading-[1.15] text-[#1F2432]">
               {content.solutionsTitle}
             </h2>
-            <p className="mx-auto mt-4 max-w-[42rem] text-[clamp(13px,1.2vw,16px)] leading-7 text-[#687181] 2xl:text-[18px]">
+            <p className="mx-auto mt-5 max-w-[48rem] text-[clamp(13px,1.2vw,16px)] leading-7 text-[#9CA3AF] sm:mt-6 2xl:text-[18px] 2xl:leading-8">
               {content.solutionsSubtitle}
             </p>
           </header>
 
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-10 xl:gap-x-10">
             {content.solutions.map((item) => (
               <article
                 key={item.title}
-                className="group flex h-full min-w-0 flex-col rounded-[20px] border border-[#e8eef3] bg-[#f8fbfd] p-4 transition-all hover:-translate-y-1 hover:border-[#2365aa]/30 hover:shadow-[0_18px_40px_-24px_rgba(17,61,119,0.4)] sm:p-5"
+                className="mx-auto flex w-full min-w-0 max-w-[360px] flex-col sm:max-w-none"
               >
-                <div className="mb-5 aspect-[4/3] w-full overflow-hidden rounded-[16px] bg-[#f8fbfd]">
+                <div className="mb-5 overflow-hidden rounded-[20px] sm:mb-6">
                   <img
                     src={item.icon}
                     alt=""
                     aria-hidden
-                    className="h-full w-full object-contain object-center"
+                    loading="lazy"
+                    decoding="async"
+                    className="block h-auto w-full object-cover object-center"
                   />
                 </div>
-                <h3 className="m-0 text-[clamp(16px,1.3vw,20px)] font-bold leading-snug text-[#1F2432]">
+                <h3 className="text-[clamp(16px,1.3vw,20px)] font-bold leading-snug text-[#1F2432] 2xl:text-[22px]">
                   {item.title}
                 </h3>
-                <p className="mt-3 text-[clamp(12px,1.1vw,14px)] leading-6 text-[#687181] 2xl:text-[16px]">
+                <p className="mt-3 text-[clamp(12px,1.1vw,14px)] leading-6 text-[#9CA3AF] sm:mt-4 2xl:text-[18px] 2xl:leading-8">
                   {item.text}
                 </p>
               </article>
@@ -262,6 +264,8 @@ export default function IndustryPageTemplate({ content }: Props) {
               <img
                 src={techStackImage}
                 alt=""
+                loading="lazy"
+                decoding="async"
                 className="mx-auto block h-auto w-full max-w-[560px] object-contain"
               />
             </div>

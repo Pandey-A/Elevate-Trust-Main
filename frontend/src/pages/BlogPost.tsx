@@ -11,6 +11,7 @@ import { looksLikeHtml } from "../lib/blogContent";
 import { usePublicBlogs } from "../hooks/useAdminData";
 import { fetchPublicBlogById, type BlogPost as ApiBlogPost } from "../lib/blogsApi";
 import { getErrorMessage } from "../lib/api";
+import { getOptimizedImageUrl } from "../lib/optimizeImageUrl";
 
 function formatDate(iso: string) {
   const date = new Date(iso);
@@ -136,8 +137,14 @@ export default function BlogPostPage() {
           {post.imageUrl ? (
             <div className="overflow-hidden rounded-[20px] border border-[#e2ebf3] bg-[#e8eef3] shadow-[0_18px_50px_-32px_rgba(17,61,119,0.45)]">
               <img
-                src={post.imageUrl}
+                src={getOptimizedImageUrl(post.imageUrl, {
+                  width: 1200,
+                  height: 675,
+                  crop: "fill",
+                })}
                 alt=""
+                decoding="async"
+                fetchPriority="high"
                 className="aspect-[16/9] h-auto w-full object-cover"
               />
             </div>
@@ -165,7 +172,7 @@ export default function BlogPostPage() {
             </Link>
             <Link
               to="/contact"
-              className="inline-flex items-center gap-1.5 rounded-full bg-[#2365aa] px-5 py-2.5 text-sm font-medium text-white no-underline transition-colors hover:bg-[#1a5490]"
+              className="inline-flex w-full items-center justify-center gap-1.5 rounded-full bg-[#2365aa] px-5 py-2.5 text-sm font-medium text-white no-underline transition-colors hover:bg-[#1a5490] sm:w-auto"
             >
               Talk to our team
               <ArrowUpRight size={15} strokeWidth={2.4} />
@@ -189,8 +196,14 @@ export default function BlogPostPage() {
                   <Link to={`/resources/blogs/${item.id}`} className="block bg-[#e8eef3]">
                     {item.imageUrl ? (
                       <img
-                        src={item.imageUrl}
+                        src={getOptimizedImageUrl(item.imageUrl, {
+                          width: 640,
+                          height: 400,
+                          crop: "fill",
+                        })}
                         alt=""
+                        loading="lazy"
+                        decoding="async"
                         className="aspect-[16/10] w-full object-cover"
                       />
                     ) : (

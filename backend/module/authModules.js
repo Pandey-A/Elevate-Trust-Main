@@ -29,3 +29,16 @@ export async function createUser({ fullName, email, passwordHash, role }) {
   );
   return result.rows[0];
 }
+
+export async function updateUserRoleByEmail(email, role) {
+  const result = await pool.query(
+    `
+      UPDATE admin_users
+      SET role = $2
+      WHERE LOWER(email) = LOWER($1)
+      RETURNING id, full_name, email, role, created_at
+    `,
+    [email, role],
+  );
+  return result.rows[0] || null;
+}

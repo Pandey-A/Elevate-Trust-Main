@@ -24,10 +24,18 @@ import facebookLogo from "../assets/footer/FacebookLogo.svg";
 import linkedinLogo from "../assets/footer/LinkedinLogo.svg";
 import instagramLogo from "../assets/footer/InstagramLogo.svg";
 import xLogo from "../assets/footer/xlogo.svg";
-import { useAdminJobs } from "../hooks/useAdminData";
+import { usePublicJobs } from "../hooks/useAdminData";
 import { getErrorMessage } from "../lib/api";
 import { groupJobsByCategory } from "../lib/adminStorage";
 import { submitCareerEnquiry } from "../lib/careersApi";
+import {
+  FORM_LIMITS,
+  isAllowedCvFile,
+  isValidEmail,
+  isValidPhone,
+  looksUnsafe,
+  sanitizePlainText,
+} from "../lib/formValidation";
 import "./Careers.css";
 
 const socialLinks = [
@@ -39,7 +47,7 @@ const socialLinks = [
 ];
 
 export default function Careers() {
-  const jobs = useAdminJobs();
+  const { jobs } = usePublicJobs();
   const [fileName, setFileName] = useState("No File Selected");
   const [filter, setFilter] = useState("All");
   const [submitting, setSubmitting] = useState(false);
@@ -80,21 +88,64 @@ export default function Careers() {
 
     const form = event.currentTarget;
     const formData = new FormData(form);
-    const fullName = String(formData.get("fullName") || "").trim();
-    const email = String(formData.get("email") || "").trim();
-    const phone = String(formData.get("phone") || "").trim();
-    const jobTitle = String(formData.get("jobTitle") || "").trim();
-    const education = String(formData.get("education") || "").trim();
-    const expertise = String(formData.get("expertise") || "").trim();
-    const message = String(formData.get("message") || "").trim();
+    const fullName = sanitizePlainText(
+      String(formData.get("fullName") || ""),
+      FORM_LIMITS.fullName,
+    );
+    const email = sanitizePlainText(
+      String(formData.get("email") || ""),
+      FORM_LIMITS.email,
+    );
+    const phone = sanitizePlainText(
+      String(formData.get("phone") || ""),
+      FORM_LIMITS.phone,
+    );
+    const jobTitle = sanitizePlainText(
+      String(formData.get("jobTitle") || ""),
+      FORM_LIMITS.jobTitle,
+    );
+    const education = sanitizePlainText(
+      String(formData.get("education") || ""),
+      FORM_LIMITS.education,
+    );
+    const expertise = sanitizePlainText(
+      String(formData.get("expertise") || ""),
+      FORM_LIMITS.expertise,
+    );
+    const message = sanitizePlainText(
+      String(formData.get("message") || ""),
+      FORM_LIMITS.message,
+    );
     const cv = fileInputRef.current?.files?.[0];
 
     if (!fullName || !email || !phone) {
       setFormError("Full name, email, and phone are required.");
       return;
     }
+    if (
+      looksUnsafe(fullName) ||
+      looksUnsafe(jobTitle) ||
+      looksUnsafe(education) ||
+      looksUnsafe(expertise) ||
+      looksUnsafe(message)
+    ) {
+      setFormError("Please remove invalid characters from your submission.");
+      return;
+    }
+    if (!isValidEmail(email)) {
+      setFormError("Please provide a valid email address.");
+      return;
+    }
+    if (!isValidPhone(phone)) {
+      setFormError("Please provide a valid phone number.");
+      return;
+    }
     if (!cv) {
       setFormError("Please upload your CV (PDF, DOC, or DOCX).");
+      return;
+    }
+    if (!isAllowedCvFile(cv)) {
+      setFormError("CV must be PDF/DOC/DOCX and under 5MB.");
       return;
     }
 
@@ -217,32 +268,62 @@ export default function Careers() {
             >
               <label className="careers-form__field careers-form__field--full">
                 <span>Full Name</span>
-                <input type="text" name="fullName" required />
+                <input
+                  type="text"
+                  name="fullName"
+                  required
+                  maxLength={FORM_LIMITS.fullName}
+                  autoComplete="name"
+                />
               </label>
 
               <label className="careers-form__field">
                 <span>Email</span>
-                <input type="email" name="email" required />
+                <input
+                  type="email"
+                  name="email"
+                  required
+                  maxLength={FORM_LIMITS.email}
+                  autoComplete="email"
+                />
               </label>
 
               <label className="careers-form__field">
                 <span>Phone Number</span>
-                <input type="tel" name="phone" required />
+                <input
+                  type="tel"
+                  name="phone"
+                  required
+                  maxLength={FORM_LIMITS.phone}
+                  autoComplete="tel"
+                />
               </label>
 
               <label className="careers-form__field">
                 <span>Job Title</span>
-                <input type="text" name="jobTitle" />
+                <input
+                  type="text"
+                  name="jobTitle"
+                  maxLength={FORM_LIMITS.jobTitle}
+                />
               </label>
 
               <label className="careers-form__field">
                 <span>Education</span>
-                <input type="text" name="education" />
+                <input
+                  type="text"
+                  name="education"
+                  maxLength={FORM_LIMITS.education}
+                />
               </label>
 
               <label className="careers-form__field">
                 <span>Expertise</span>
-                <input type="text" name="expertise" />
+                <input
+                  type="text"
+                  name="expertise"
+                  maxLength={FORM_LIMITS.expertise}
+                />
               </label>
 
               <div className="careers-form__field careers-form__upload">
@@ -269,7 +350,7 @@ export default function Careers() {
 
               <label className="careers-form__field careers-form__field--full careers-form__field--textarea">
                 <span>Message</span>
-                <textarea name="message" rows={3} />
+                <textarea name="message" rows={3} maxLength={FORM_LIMITS.message} />
               </label>
 
               {formError ? (
@@ -308,24 +389,26 @@ export default function Careers() {
             building production-ready solutions for real business outcomes.
           </p>
 
-          <div className="careers-jobs__filter">
-            <select
-              value={filter}
-              onChange={(event) => setFilter(event.target.value)}
-              aria-label="Filter jobs"
-            >
-              <option value="All">All</option>
-              <option value="Remotely">Remotely</option>
-              <option value="Full-time">Full-time</option>
-              <option value="Design">Design</option>
-              <option value="Software">Software</option>
-              <option value="Software Development">Software Development</option>
-            </select>
-            <ChevronDown size={16} strokeWidth={2} aria-hidden="true" />
-          </div>
+          {jobs.length > 0 ? (
+            <div className="careers-jobs__filter">
+              <select
+                value={filter}
+                onChange={(event) => setFilter(event.target.value)}
+                aria-label="Filter jobs"
+              >
+                <option value="All">All</option>
+                <option value="Remotely">Remotely</option>
+                <option value="Full-time">Full-time</option>
+                <option value="Design">Design</option>
+                <option value="Software">Software</option>
+                <option value="Software Development">Software Development</option>
+              </select>
+              <ChevronDown size={16} strokeWidth={2} aria-hidden="true" />
+            </div>
+          ) : null}
         </div>
 
-        <div className="careers-jobs__list">
+        <div className={`careers-jobs__list${jobs.length === 0 ? " careers-jobs__list--empty" : ""}`}>
           {jobGroups.length > 0 ? (
             jobGroups.map((group, groupIndex) => (
               <div key={group.category}>
@@ -370,6 +453,11 @@ export default function Careers() {
                 </div>
               </div>
             ))
+          ) : jobs.length === 0 ? (
+            <p className="careers-jobs__empty">
+              No open positions right now. Please check back soon, or send us a
+              career enquiry above.
+            </p>
           ) : (
             <p className="careers-jobs__subtitle">
               No open positions match this filter.

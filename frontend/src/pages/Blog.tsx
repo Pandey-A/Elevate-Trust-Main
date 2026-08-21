@@ -5,6 +5,7 @@ import FlyCTA from "../components/FlyCTA";
 import worldMapBackground from "../assets/homepage-icons/Group(3).png";
 import { usePublicBlogs } from "../hooks/useAdminData";
 import { excerptFromContent } from "../lib/blogContent";
+import { getOptimizedImageUrl } from "../lib/optimizeImageUrl";
 
 function formatDate(iso: string) {
   const date = new Date(iso);
@@ -122,8 +123,16 @@ export default function Blog() {
                 >
                   {post.imageUrl ? (
                     <img
-                      src={post.imageUrl}
+                      src={getOptimizedImageUrl(post.imageUrl, {
+                        width: 800,
+                        height: 500,
+                        crop: "fill",
+                      })}
                       alt=""
+                      loading="lazy"
+                      decoding="async"
+                      width={800}
+                      height={500}
                       className="aspect-[16/10] h-auto w-full object-cover transition-transform duration-500 hover:scale-[1.03]"
                     />
                   ) : (

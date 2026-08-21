@@ -45,44 +45,48 @@ import manufacturingChallengesImage from "../assets/industries/Manufacturing.svg
 import socialMediaChallengesImage from "../assets/industries/Security.svg";
 import publicSectorChallengesImage from "../assets/industries/PublicSectorGovernment.svg";
 
-import imgAiKyc from "../assets/industries/ai-kyc.jpeg";
-import imgAiTutor from "../assets/industries/ai-tutor.jpeg";
-import imgAml from "../assets/industries/aml.jpeg";
-import imgAudioVerification from "../assets/industries/audio-verification.png";
-import imgBrandProtection from "../assets/industries/brand-protection.png";
-import imgComputerVision from "../assets/industries/computer-vision.png";
-import imgCustomerSupport from "../assets/industries/customer-support.jpeg";
-import imgDeepfake from "../assets/industries/deepfake.png";
-import imgDeliveryTracking from "../assets/industries/delivery-tracking.png";
-import imgDigitalTwin from "../assets/industries/digital-twin.png";
-import imgDocumentIntelligence from "../assets/industries/document-intelligence.jpeg";
-import imgFaceRecognition from "../assets/industries/face-recogintion.png";
-import imgFleetIntelligence from "../assets/industries/fleet-intelligence.jpeg";
-import imgFraudRisk from "../assets/industries/fraud-risk.jpeg";
-import imgImageForensics from "../assets/industries/image-forensic.png";
-import imgInventory from "../assets/industries/inventory.png";
-import imgInventoryIntelligence from "../assets/industries/inventory-intelligence.jpeg";
-import imgIotAnalytics from "../assets/industries/iot-analytics.png";
-import imgLearningAnalytics from "../assets/industries/learning-analytics.jpeg";
-import imgOcrAutomation from "../assets/industries/ocr-automation.png";
-import imgOcrDoc from "../assets/industries/ocr-doc.jpeg";
-import imgOcrInvoice from "../assets/industries/ocr-invoice.jpeg";
-import imgPredictiveMaintenance from "../assets/industries/predictive-maintenance.png";
-import imgQualityInspection from "../assets/industries/quality-inspection.png";
-import imgQuiz from "../assets/industries/quiz.jpeg";
-import imgRecommendation from "../assets/industries/recommendation.jpeg";
-import imgRoutePlanning from "../assets/industries/route-planning.png";
-import imgSentiment from "../assets/industries/sentiment.jpeg";
-import imgShopping from "../assets/industries/shopping.jpeg";
-import imgSmartSurveillance from "../assets/industries/smart-surveliance.png";
-import imgTextAnalysis from "../assets/industries/text-analysis.png";
-import imgTranscript from "../assets/industries/transcript.jpeg";
-import imgVehicleTracking from "../assets/industries/vehicle-tracking.png";
-import imgVideoAnalytics from "../assets/industries/video-analytics.png";
-import imgVideoIntelligence from "../assets/industries/video-intelligence.png";
-import imgVirtualFencing from "../assets/industries/virtual-fencing.png";
-import imgVoiceAuth from "../assets/industries/voice-auth.jpeg";
-import imgWarehouse from "../assets/industries/warehouse.png";
+import imgAiKyc from "../assets/industries/finance~AI-KYC-Verification.svg";
+import imgAiTutor from "../assets/industries/edu~AI-Tutor.svg";
+import imgAml from "../assets/industries/finance~AIML-Intelligence.svg";
+import imgAudioVerification from "../assets/industries/Social~Audio-Verification.svg";
+import imgBrandProtection from "../assets/industries/Social~Brand-Protection.svg";
+import imgComputerVision from "../assets/industries/Industry~Computer-Vision.svg";
+import imgCustomerSupportEcommerce from "../assets/industries/Ecommerce~Customer-Support-Automation.svg";
+import imgCitizenAiGovt from "../assets/industries/govt~Citizen-AI.svg";
+import imgDeepfake from "../assets/industries/Social~Deepfake-Detection.svg";
+import imgDeepfakeFinance from "../assets/industries/finance~Deepfake-Detection.svg";
+import imgDeliveryTracking from "../assets/industries/Logistic~Delivery-Tracking.svg";
+import imgDigitalTwin from "../assets/industries/Industry~Digital-Twin-Support.svg";
+import imgDocumentIntelligence from "../assets/industries/govt~Document-Intelligence.svg";
+import imgFaceRecognition from "../assets/industries/govt~Face-Recogonition.svg";
+import imgFleetIntelligence from "../assets/industries/Logistic~Fleet-Intelligence.svg";
+import imgFraudRisk from "../assets/industries/finance~Fraud-Risk-Scoring.svg";
+import imgImageForensics from "../assets/industries/Social~Image-Forencis.svg";
+import imgInventory from "../assets/industries/Logistic~Inventory-analytics.svg";
+import imgInventoryIntelligence from "../assets/industries/Ecommerce~Inventory-intelligence.svg";
+import imgIotAnalytics from "../assets/industries/Industry~IOT-Ananlytics.svg";
+import imgLearningAnalytics from "../assets/industries/edu~Learning-Analytics.svg";
+import imgOcrAutomation from "../assets/industries/Logistic~OCR-automation.svg";
+import imgOcrDocFinance from "../assets/industries/finance~OCR-Document-Processing.svg";
+import imgOcrInvoice from "../assets/industries/Ecommerce~OCR-invoice.svg";
+import imgOcrNotesEdu from "../assets/industries/edu~OCR-Notes.svg";
+import imgPredictiveMaintenance from "../assets/industries/Industry~Predictive-Maintainance.svg";
+import imgQualityInspection from "../assets/industries/Industry~Quality-Inspection.svg";
+import imgQuiz from "../assets/industries/edu~Quiz-Generator.svg";
+import imgRecommendation from "../assets/industries/Ecommerce~Recommendation-Engine.svg";
+import imgRoutePlanning from "../assets/industries/Logistic~Route-Planning.svg";
+import imgSentimentEcommerce from "../assets/industries/Ecommerce~Sentiment-Analysis.svg";
+import imgShopping from "../assets/industries/Ecommerce~AI-Assistant.svg";
+import imgSmartSurveillance from "../assets/industries/govt~Smart-Survillence.svg";
+import imgSpeechToTextEdu from "../assets/industries/edu~Speech-To-Text.svg";
+import imgTextAnalysis from "../assets/industries/Social~Text-Analysis.svg";
+import imgTranslationEdu from "../assets/industries/edu~Translation.svg";
+import imgVehicleTracking from "../assets/industries/govt~Vehicle-Tracking.svg";
+import imgVideoAnalytics from "../assets/industries/Industry~Video-Analytics.svg";
+import imgVideoIntelligence from "../assets/industries/Social~Video-Intelligence.svg";
+import imgVirtualFencing from "../assets/industries/govt~Virtual-Fencing.svg";
+import imgVoiceAuth from "../assets/industries/finance~Voice-Authentication.svg";
+import imgWarehouse from "../assets/industries/Logistic~Warehouse-Vision.svg";
 
 const whyDefault = [
   {
@@ -152,9 +156,9 @@ export const industryPagesBySlug: Record<string, IndustryPageContent> = {
       "Purpose-built AI capabilities that strengthen trust, reduce fraud losses, and accelerate digital financial operations.",
     solutions: [
       { title: "AI KYC Verification", text: "Automate identity and document checks with accurate extraction and validation.", icon: imgAiKyc },
-      { title: "Deepfake Detection", text: "Detect manipulated faces, videos, and synthetic media used in fraud attempts.", icon: imgDeepfake },
+      { title: "Deepfake Detection", text: "Detect manipulated faces, videos, and synthetic media used in fraud attempts.", icon: imgDeepfakeFinance },
       { title: "Voice Authentication", text: "Verify callers and reduce voice-based social engineering risks.", icon: imgVoiceAuth },
-      { title: "OCR Document Processing", text: "Digitize KYC packs, applications, and claims into structured records.", icon: imgOcrDoc },
+      { title: "OCR Document Processing", text: "Digitize KYC packs, applications, and claims into structured records.", icon: imgOcrDocFinance },
       { title: "AML Intelligence", text: "Support monitoring teams with AI-assisted pattern detection and case prioritization.", icon: imgAml },
       { title: "Fraud Risk Scoring", text: "Score risk across onboarding, payments, and account activity with actionable alerts.", icon: imgFraudRisk },
     ],
@@ -232,10 +236,10 @@ export const industryPagesBySlug: Record<string, IndustryPageContent> = {
     solutions: [
       { title: "AI Shopping Assistant", text: "Guide shoppers with conversational product discovery and purchase support.", icon: imgShopping },
       { title: "Recommendation Engine", text: "Personalize product suggestions across browse, cart, and post-purchase journeys.", icon: imgRecommendation },
-      { title: "Sentiment Analysis", text: "Understand customer feedback from reviews, chats, and support conversations.", icon: imgSentiment },
+      { title: "Sentiment Analysis", text: "Understand customer feedback from reviews, chats, and support conversations.", icon: imgSentimentEcommerce },
       { title: "Inventory Intelligence", text: "Improve stock planning with AI-assisted demand and inventory insights.", icon: imgInventoryIntelligence },
       { title: "OCR Invoice Processing", text: "Automate extraction from invoices, packing slips, and returns documents.", icon: imgOcrInvoice },
-      { title: "Customer Support Automation", text: "Reduce ticket volume with agents grounded in your catalog and policies.", icon: imgCustomerSupport },
+      { title: "Customer Support Automation", text: "Reduce ticket volume with agents grounded in your catalog and policies.", icon: imgCustomerSupportEcommerce },
     ],
     useCasesIntro:
       "Retail use cases that connect personalization, support automation, and smarter inventory decisions.",
@@ -312,9 +316,9 @@ export const industryPagesBySlug: Record<string, IndustryPageContent> = {
       { title: "AI Tutor", text: "Offer guided learning support with human oversight and curriculum-grounded answers.", icon: imgAiTutor },
       { title: "Quiz Generator", text: "Generate practice questions and assessments from approved learning content.", icon: imgQuiz },
       { title: "Learning Analytics", text: "Track engagement and progress to help educators intervene earlier.", icon: imgLearningAnalytics },
-      { title: "OCR Notes", text: "Digitize handwritten or scanned notes into searchable learning assets.", icon: imgOcrDoc },
-      { title: "Speech-to-Text", text: "Capture lectures and discussions for accessible transcripts and study aids.", icon: imgTranscript },
-      { title: "Translation AI", text: "Support multilingual learners with faster content localization.", icon: imgSentiment },
+      { title: "OCR Notes", text: "Digitize handwritten or scanned notes into searchable learning assets.", icon: imgOcrNotesEdu },
+      { title: "Speech-to-Text", text: "Capture lectures and discussions for accessible transcripts and study aids.", icon: imgSpeechToTextEdu },
+      { title: "Translation AI", text: "Support multilingual learners with faster content localization.", icon: imgTranslationEdu },
     ],
     useCasesIntro:
       "Education scenarios where AI improves teaching support, learner experience, and institutional efficiency.",
@@ -630,7 +634,7 @@ export const industryPagesBySlug: Record<string, IndustryPageContent> = {
       { title: "Virtual Fencing", text: "Detect perimeter breaches and restricted-zone activity more reliably.", icon: imgVirtualFencing },
       { title: "Vehicle Tracking", text: "Support traffic and security teams with vehicle-oriented analytics.", icon: imgVehicleTracking },
       { title: "Document Intelligence", text: "Extract and organize information from government forms and records.", icon: imgDocumentIntelligence },
-      { title: "Citizen AI Assistant", text: "Help citizens get answers and complete service journeys more easily.", icon: imgCustomerSupport },
+      { title: "Citizen AI Assistant", text: "Help citizens get answers and complete service journeys more easily.", icon: imgCitizenAiGovt },
     ],
     useCasesIntro:
       "Government scenarios where AI improves safety, response speed, and citizen experience.",

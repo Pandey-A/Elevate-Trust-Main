@@ -97,3 +97,19 @@ CREATE TABLE IF NOT EXISTS testimonials (
 
 CREATE INDEX IF NOT EXISTS idx_testimonials_sort_order ON testimonials (sort_order ASC, created_at DESC);
 
+CREATE TABLE IF NOT EXISTS jobs (
+  id VARCHAR(120) PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  tag VARCHAR(120) NOT NULL DEFAULT '',
+  description TEXT NOT NULL DEFAULT '',
+  type VARCHAR(120) NOT NULL DEFAULT 'Full-time',
+  location VARCHAR(120) NOT NULL DEFAULT 'Remotely',
+  category VARCHAR(255) NOT NULL DEFAULT '',
+  category_subtitle VARCHAR(255) NOT NULL DEFAULT '',
+  sort_order INTEGER NOT NULL DEFAULT 0,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_jobs_sort_order ON jobs (sort_order ASC, created_at DESC);
+

@@ -65,7 +65,19 @@ export async function listCareerApplications() {
     ORDER BY created_at DESC
   `);
 
-  return result.rows;
+  return result.rows.map((row) => ({
+    id: row.id,
+    fullName: row.full_name || "",
+    email: row.email || "",
+    phone: row.phone || "",
+    jobTitle: row.job_title || "",
+    education: row.education || "",
+    expertise: row.expertise || "",
+    message: row.message || "",
+    cvFilename: row.cv_filename || "",
+    cvUrl: row.cv_url || "",
+    createdAt: row.created_at,
+  }));
 }
 
 export async function deleteCareerApplication(id) {

@@ -35,6 +35,8 @@ export default function WhyPartner() {
               src={visionGlobe}
               alt=""
               aria-hidden
+              loading="lazy"
+              decoding="async"
               draggable={false}
               className="pointer-events-none absolute bottom-0 left-0 z-0 h-auto w-[85%] max-w-[520px] -translate-x-[12%] translate-y-[18%] object-contain object-left-bottom opacity-90 mix-blend-screen sm:w-[90%] sm:max-w-[580px] lg:w-[95%] lg:max-w-[640px] xl:max-w-[720px] min-[1920px]:max-w-[780px]"
             />
@@ -61,6 +63,8 @@ export default function WhyPartner() {
                 src={partners1}
                 alt=""
                 aria-hidden
+                loading="lazy"
+                decoding="async"
                 draggable={false}
                 className="h-auto w-[160px] object-contain pointer-events-none sm:w-[190px] lg:w-[210px] xl:w-[240px] min-[1920px]:w-[280px]"
               />
@@ -92,6 +96,8 @@ export default function WhyPartner() {
                 src={partners2}
                 alt=""
                 aria-hidden
+                loading="lazy"
+                decoding="async"
                 draggable={false}
                 className="h-auto w-[150px] object-contain pointer-events-none sm:w-[180px] lg:w-[200px] xl:w-[220px] min-[1920px]:w-[227px]"
               />

@@ -93,6 +93,8 @@ export default function WorkImpact() {
                       src={card.image}
                       alt=""
                       aria-hidden
+                      loading="lazy"
+                      decoding="async"
                       draggable={false}
                       className="h-auto w-[110px] object-contain pointer-events-none sm:w-[120px] lg:w-[130px] xl:w-[150px] min-[1920px]:w-[167px]"
                     />

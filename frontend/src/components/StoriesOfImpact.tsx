@@ -5,6 +5,7 @@ import { ArrowLeft, ArrowRight, X } from "lucide-react";
 import blueArrow from "../assets/homepage-icons/blue-arrow.png";
 import storiesVector from "../assets/homepage-icons/stories-vector.png";
 import { usePublicTestimonials } from "../hooks/useAdminData";
+import { getOptimizedImageUrl } from "../lib/optimizeImageUrl";
 import "./StoriesOfImpact.css";
 
 type Story = {
@@ -55,8 +56,12 @@ export default function StoriesOfImpact() {
 
   const stories: Story[] = testimonials.map((item) => ({
     id: item.id,
-    logo: item.logoUrl,
-    profile: item.profileUrl,
+    logo: getOptimizedImageUrl(item.logoUrl, { width: 240, crop: "limit" }),
+    profile: getOptimizedImageUrl(item.profileUrl, {
+      width: 240,
+      height: 240,
+      crop: "fill",
+    }),
     quote: item.quote,
     fullQuote: item.fullQuote || undefined,
     name: item.name,
@@ -220,6 +225,8 @@ export default function StoriesOfImpact() {
         src={storiesVector}
         alt=""
         aria-hidden
+        loading="lazy"
+        decoding="async"
         className="pointer-events-none absolute right-0 top-0 h-[340px] w-auto object-contain object-right-top opacity-95 sm:h-[440px] lg:h-[560px] xl:h-[640px]"
       />
 
@@ -227,7 +234,7 @@ export default function StoriesOfImpact() {
         <div className="text-center">
           <p className="section-eyebrow font-semibold uppercase tracking-[0.16em]">
             <span className="text-white">Client </span>
-            <span className="text-[#2365AA]">Testimonials</span>
+            <span className="text-[#7DD3FC]">Testimonials</span>
           </p>
 
           <h2 className="mt-3 text-3xl font-bold text-white sm:text-4xl lg:text-[44px] xl:text-[50px] 2xl:text-[56px] min-[1920px]:text-[75px] min-[1920px]:leading-[0.97]">
@@ -239,7 +246,14 @@ export default function StoriesOfImpact() {
             className="btn-cta mt-5 bg-white text-[#272935] hover:bg-white/90 sm:mt-6"
           >
             View all
-            <img src={blueArrow} alt="" aria-hidden className="h-7 w-7 object-contain" />
+            <img
+              src={blueArrow}
+              alt=""
+              aria-hidden
+              loading="lazy"
+              decoding="async"
+              className="h-7 w-7 object-contain"
+            />
           </Link>
         </div>
 
@@ -329,6 +343,8 @@ export default function StoriesOfImpact() {
                                   <img
                                     src={story.logo}
                                     alt=""
+                                    loading={focused ? "eager" : "lazy"}
+                                    decoding="async"
                                     className="h-7 w-auto max-w-[110px] object-contain sm:h-8 sm:max-w-[130px] md:h-9 md:max-w-[150px] lg:h-[48px] lg:max-w-[180px] xl:h-[56px] xl:max-w-[200px] 2xl:h-[76px] 2xl:max-w-[222px]"
                                   />
                                 ) : (
@@ -359,6 +375,8 @@ export default function StoriesOfImpact() {
                                 <img
                                   src={story.profile}
                                   alt={story.name}
+                                  loading={focused ? "eager" : "lazy"}
+                                  decoding="async"
                                   className="size-16 shrink-0 rounded-full object-cover object-top sm:size-[72px] md:size-20 lg:size-24 xl:size-[104px] 2xl:size-[120px]"
                                 />
                                 <div className="min-w-0">
@@ -410,6 +428,7 @@ export default function StoriesOfImpact() {
                     <img
                       src={expandedStory.logo}
                       alt=""
+                      decoding="async"
                       className="h-8 w-auto max-w-[140px] object-contain sm:h-10 sm:max-w-[180px] lg:h-12 lg:max-w-[220px]"
                     />
                   ) : null}
@@ -424,6 +443,7 @@ export default function StoriesOfImpact() {
                   <img
                     src={expandedStory.profile}
                     alt={expandedStory.name}
+                    decoding="async"
                     className="size-14 shrink-0 rounded-full object-cover object-top sm:size-16 lg:size-[72px]"
                   />
                   <div>

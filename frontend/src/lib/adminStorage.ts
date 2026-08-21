@@ -1,5 +1,4 @@
 import {
-  DEFAULT_JOBS,
   type AdminDemo,
   type AdminJob,
   type IndustryTag,
@@ -70,9 +69,9 @@ export function extractYoutubeId(input: string): string | null {
   return null;
 }
 
-/** Jobs stay on localStorage until a jobs API exists. */
+/** Prefer API-backed jobs. Local helpers kept only for grouping/utilities. */
 export function getJobs(): AdminJob[] {
-  return readJson(JOBS_KEY, DEFAULT_JOBS);
+  return readJson(JOBS_KEY, [] as AdminJob[]);
 }
 
 export function saveJobs(jobs: AdminJob[]) {

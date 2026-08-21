@@ -2,6 +2,7 @@ import elevateBadgeIcon from "../assets/testimonial/Group 84.svg";
 import smartArrow from "../assets/homepage-icons/smart-arrow.png";
 import { activePartners } from "../data/activePartners";
 import { usePublicBlogs } from "../hooks/useAdminData";
+import { getOptimizedImageUrl } from "../lib/optimizeImageUrl";
 import WhoWeAre from "./WhoWeAre";
 import { Link } from "react-router-dom";
 
@@ -39,6 +40,8 @@ export default function Testimonials() {
                   <img
                     src={partner.logo}
                     alt={partner.name}
+                    loading="lazy"
+                    decoding="async"
                     className={
                       partner.tall
                         ? "h-10 w-auto max-w-[64px] object-contain sm:h-12 sm:max-w-[72px] md:h-14 md:max-w-[84px] 2xl:h-16 2xl:max-w-[96px]"
@@ -61,35 +64,67 @@ export default function Testimonials() {
               </span>
             </div>
 
-            <h2 className="text-3xl font-bold text-[#272935] sm:text-4xl lg:text-[44px] xl:text-[50px] 2xl:text-[56px] min-[1920px]:text-[62px]">Explore Blogs</h2>
+            <h2 className="text-3xl font-bold text-[#272935] sm:text-4xl lg:text-[44px] xl:text-[50px] 2xl:text-[56px] min-[1920px]:text-[62px]">
+              Explore Blogs
+            </h2>
 
             <Link
               to="/resources/blogs"
               className="btn-cta mt-5 bg-[#2365AA] text-white hover:bg-[#1a5490]"
             >
               View All
-              <img src={smartArrow} alt="" aria-hidden className="h-7 w-7 object-contain" />
+              <img
+                src={smartArrow}
+                alt=""
+                aria-hidden
+                loading="lazy"
+                decoding="async"
+                className="h-7 w-7 object-contain"
+              />
             </Link>
           </div>
 
           <div className="mt-12 grid grid-cols-1 divide-y divide-[#E5E7EB] lg:mt-14 lg:grid-cols-3 lg:divide-x lg:divide-y-0">
             {blogPosts.map((post) => (
-              <article key={post.id} className="px-0 py-8 first:pt-0 last:pb-0 lg:px-8 lg:py-0">
+              <article
+                key={post.id}
+                className="px-0 py-8 first:pt-0 last:pb-0 lg:px-8 lg:py-0"
+              >
                 <div className="mb-4 flex items-center justify-between gap-3">
                   <div className="flex items-center gap-2.5">
-                    <img src={elevateBadgeIcon} alt="" aria-hidden className="h-9 w-9 shrink-0" />
-                    <span className="section-body-lg font-semibold text-[#272935]">Elevate Trust AI</span>
+                    <img
+                      src={elevateBadgeIcon}
+                      alt=""
+                      aria-hidden
+                      loading="lazy"
+                      decoding="async"
+                      className="h-9 w-9 shrink-0"
+                    />
+                    <span className="section-body-lg font-semibold text-[#272935]">
+                      Elevate Trust AI
+                    </span>
                   </div>
                   <time className="section-body-sm shrink-0 text-[#272935]/60">
                     {formatBlogDate(post.createdAt)}
                   </time>
                 </div>
 
-                <Link to={`/resources/blogs/${post.id}`} className="block overflow-hidden rounded-3xl">
+                <Link
+                  to={`/resources/blogs/${post.id}`}
+                  className="block overflow-hidden rounded-3xl"
+                >
                   {post.imageUrl ? (
                     <img
-                      src={post.imageUrl}
+                      src={getOptimizedImageUrl(post.imageUrl, {
+                        width: 720,
+                        height: 540,
+                        crop: "fill",
+                      })}
                       alt={post.title}
+                      loading="lazy"
+                      decoding="async"
+                      width={720}
+                      height={540}
                       className="aspect-[4/3] w-full object-cover"
                     />
                   ) : (

@@ -5,26 +5,15 @@ import {
   listCareerApplications,
 } from "../module/careerModules.js";
 import { storeCvFile } from "../middleware/upload.js";
-
-function requiredFields(body) {
-  const missing = [];
-  if (!body.fullName?.trim()) missing.push("fullName");
-  if (!body.email?.trim()) missing.push("email");
-  if (!body.phone?.trim()) missing.push("phone");
-  return missing;
-}
+import {
+  FORM_LIMITS,
+  validateEmail,
+  validatePhone,
+  validatePlainField,
+} from "../utils/formSecurity.js";
 
 export async function careerForm(req, res) {
   try {
-    const missing = requiredFields(req.body);
-
-    if (missing.length > 0) {
-      return res.status(400).json({
-        success: false,
-        message: `Missing required fields: ${missing.join(", ")}`,
-      });
-    }
-
     if (!req.file) {
       return res.status(400).json({
         success: false,
@@ -32,13 +21,37 @@ export async function careerForm(req, res) {
       });
     }
 
-    const email = String(req.body.email).trim().toLowerCase();
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const fullName = validatePlainField(req.body?.fullName, {
+      required: true,
+      maxLength: FORM_LIMITS.fullName,
+      label: "Full name",
+    });
+    const email = validateEmail(req.body?.email);
+    const phone = validatePhone(req.body?.phone);
+    const jobTitle = validatePlainField(req.body?.jobTitle, {
+      maxLength: FORM_LIMITS.jobTitle,
+      label: "Job title",
+    });
+    const education = validatePlainField(req.body?.education, {
+      maxLength: FORM_LIMITS.education,
+      label: "Education",
+    });
+    const expertise = validatePlainField(req.body?.expertise, {
+      maxLength: FORM_LIMITS.expertise,
+      label: "Expertise",
+    });
+    const message = validatePlainField(req.body?.message, {
+      maxLength: FORM_LIMITS.message,
+      label: "Message",
+    });
 
-    if (!emailPattern.test(email)) {
+    const firstError = [fullName, email, phone, jobTitle, education, expertise, message].find(
+      (item) => !item.ok,
+    );
+    if (firstError) {
       return res.status(400).json({
         success: false,
-        message: "Please provide a valid email address",
+        message: firstError.message,
       });
     }
 
@@ -51,33 +64,33 @@ export async function careerForm(req, res) {
       });
     }
 
-    const application = await createCareerApplication({
-      fullName: String(req.body.fullName).trim(),
-      email,
-      phone: String(req.body.phone).trim(),
-      jobTitle: req.body.jobTitle?.trim() || "",
-      education: req.body.education?.trim() || "",
-      expertise: req.body.expertise?.trim() || "",
-      message: req.body.message?.trim() || "",
-      cvFilename: storedCv.cvFilename,
+    await createCareerApplication({
+      fullName: fullName.value,
+      email: email.value,
+      phone: phone.value,
+      jobTitle: jobTitle.value,
+      education: education.value,
+      expertise: expertise.value,
+      message: message.value,
+      cvFilename: String(storedCv.cvFilename || "resume").slice(0, 180),
       cvPath: storedCv.cvPath,
       cvUrl: storedCv.cvUrl,
     });
 
     return res.status(201).json({
       success: true,
-      message: "Your application was sent successfully. Our team will contact you soon.",
-      data: application,
+      message:
+        "Your application was sent successfully. Our team will contact you soon.",
     });
   } catch (error) {
-    console.error("Career form submit error:", error);
+    console.error("Career form submit error:", {
+      name: error?.name,
+      code: error?.code,
+    });
 
     return res.status(500).json({
       success: false,
-      message:
-        error instanceof Error
-          ? error.message
-          : "Unable to submit your application right now. Please try again.",
+      message: "Unable to submit your application right now. Please try again.",
     });
   }
 }
@@ -90,7 +103,7 @@ export async function getCareerApplications(_req, res) {
       data: applications,
     });
   } catch (error) {
-    console.error("List career applications error:", error);
+    console.error("List career applications error:", error?.name || error);
     return res.status(500).json({
       success: false,
       message: "Unable to load applications right now.",
@@ -122,7 +135,7 @@ export async function removeCareerApplication(req, res) {
       data: { id: deleted.id },
     });
   } catch (error) {
-    console.error("Delete career application error:", error);
+    console.error("Delete career application error:", error?.name || error);
     return res.status(500).json({
       success: false,
       message: "Unable to delete application right now.",
@@ -142,7 +155,7 @@ export async function removeAllCareerApplications(_req, res) {
       data: { deletedCount },
     });
   } catch (error) {
-    console.error("Delete all career applications error:", error);
+    console.error("Delete all career applications error:", error?.name || error);
     return res.status(500).json({
       success: false,
       message: "Unable to delete applications right now.",

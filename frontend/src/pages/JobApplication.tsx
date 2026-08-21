@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type ChangeEvent } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ArrowUpRight, Check, Plus, Trash2, Upload } from "lucide-react";
 import FlyCTA from "../components/FlyCTA";
-import { useAdminJobs } from "../hooks/useAdminData";
+import { usePublicJobs } from "../hooks/useAdminData";
 import { parseResumeFile } from "../lib/resumeParser";
 import linkedinLogo from "../assets/footer/LinkedinLogo.svg";
 
@@ -59,7 +59,7 @@ const initialFormData: FormData = {
 
 export default function JobApplication() {
   const { jobId } = useParams<{ jobId: string }>();
-  const jobs = useAdminJobs();
+  const { jobs } = usePublicJobs();
   const job = jobs.find((j) => j.id === jobId);
   const [currentStep, setCurrentStep] = useState<Step>("My Information");
   const [formData, setFormData] = useState<FormData>(initialFormData);

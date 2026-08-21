@@ -14,7 +14,11 @@ import { prefetchPublicTestimonials } from "../hooks/useAdminData";
 
 export default function Home() {
   useEffect(() => {
-    void prefetchPublicTestimonials();
+    // Defer testimonials prefetch so hero/LCP images get bandwidth first.
+    const timer = window.setTimeout(() => {
+      void prefetchPublicTestimonials();
+    }, 1200);
+    return () => window.clearTimeout(timer);
   }, []);
 
   return (

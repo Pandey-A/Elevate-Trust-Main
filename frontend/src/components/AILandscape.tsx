@@ -211,7 +211,7 @@ export default function AILandscape() {
         <div className="text-center">
           <p className="section-eyebrow font-semibold uppercase tracking-[0.16em]">
             <span className="text-white">Smart Solutions for a </span>
-            <span className="text-[#2365AA]">Smarter Tomorrow</span>
+            <span className="text-[#7DD3FC]">Smarter Tomorrow</span>
           </p>
           <h2 className="mt-3 text-3xl font-bold leading-[0.97] text-white sm:text-4xl lg:text-[44px] xl:text-[50px] 2xl:text-[56px] min-[1920px]:text-[75px]">
             Our AI Landscape
@@ -299,6 +299,8 @@ export default function AILandscape() {
                         src={card.image}
                         alt=""
                         aria-hidden
+                        loading="lazy"
+                        decoding="async"
                         draggable={false}
                         className="pointer-events-none h-auto w-[120px] object-contain sm:w-[140px] lg:w-[150px] xl:w-[160px] min-[1920px]:w-[172px]"
                       />

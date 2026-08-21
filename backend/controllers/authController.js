@@ -4,7 +4,7 @@ import {
   createUser,
   findUserByEmail,
 } from "../module/authModules.js";
-import { signAuthToken } from "../middleware/auth.js";
+import { isDashboardRole, signAuthToken } from "../middleware/auth.js";
 
 function publicUser(user) {
   return {
@@ -112,10 +112,10 @@ export async function login(req, res) {
       });
     }
 
-    if (user.role !== "admin") {
+    if (!isDashboardRole(user.role)) {
       return res.status(403).json({
         success: false,
-        message: "This account is not an admin. Use the first registered admin account.",
+        message: "This account cannot access the admin dashboard.",
       });
     }
 

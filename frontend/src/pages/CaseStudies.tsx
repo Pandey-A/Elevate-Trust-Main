@@ -106,7 +106,6 @@ const caseStudies: CaseStudy[] = [
       "ElevateTrust built a deep learning semantic segmentation pipeline using a CNN-based U-Net architecture trained on labelled satellite imagery. The model produces binarised roof masks, applies post-processing morphological operations to remove noise and small artefacts, and then overlays detected rooftops onto the source image. The inference engine integrates with Google Maps imagery APIs and outputs GIS-compatible data for downstream solar feasibility scoring, fully automated end-to-end.",
     image: csSolar,
     href: "/case-studies/solar-rooftop-detection",
-    imageClassName: "cs-card__media--cover",
     titleClassName: "cs-card__title--lg",
   },
   {
@@ -175,11 +174,15 @@ export default function CaseStudies() {
           <img
             src={storiesVector}
             alt=""
+            loading="lazy"
+            decoding="async"
             className="cs-section__decor-vector"
           />
           <img
             src={partnerGlobe}
             alt=""
+            loading="lazy"
+            decoding="async"
             className="cs-section__decor-globe"
           />
         </div>
@@ -198,7 +201,7 @@ export default function CaseStudies() {
             {caseStudies.map((study, index) => (
               <article key={index} className="cs-card">
                 <div className={`cs-card__media ${study.imageClassName ?? ""}`}>
-                  <img src={study.image} alt="" />
+                  <img src={study.image} alt="" loading="lazy" decoding="async" />
                 </div>
                 <div className="cs-card__body">
                   <h3

@@ -1,10 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import type { AdminDemo, AdminJob } from "../data/adminDefaults";
 import { getErrorMessage } from "../lib/api";
-import {
-  ADMIN_DATA_EVENT,
-  getJobs,
-} from "../lib/adminStorage";
+import { ADMIN_DATA_EVENT } from "../lib/adminStorage";
 import {
   AUTH_CHANGED_EVENT,
   getAuthSession,
@@ -15,6 +12,7 @@ import type { BlogPost } from "../lib/blogsApi";
 import { fetchAdminBlogs, fetchPublicBlogs } from "../lib/blogsApi";
 import type { Testimonial } from "../lib/testimonialsApi";
 import { fetchAdminTestimonials, fetchPublicTestimonials } from "../lib/testimonialsApi";
+import { fetchAdminJobs, fetchPublicJobs } from "../lib/jobsApi";
 import { fetchDemoTags, type DemoTag } from "../lib/tagsApi";
 import { INDUSTRY_TAGS } from "../data/adminDefaults";
 
@@ -63,6 +61,7 @@ function createResourceCache<T>(fetcher: () => Promise<T>): ResourceCache<T> {
 const publicDemosCache = createResourceCache(fetchPublicDemos);
 const publicBlogsCache = createResourceCache(fetchPublicBlogs);
 const publicTestimonialsCache = createResourceCache(fetchPublicTestimonials);
+const publicJobsCache = createResourceCache(fetchPublicJobs);
 const publicDemoTagsCache = createResourceCache(async () => {
   const data = await fetchDemoTags();
   const names = data.map((tag: DemoTag) => tag.name).filter(Boolean);
@@ -82,6 +81,10 @@ export function prefetchPublicTestimonials() {
   return publicTestimonialsCache.get(false);
 }
 
+export function prefetchPublicJobs() {
+  return publicJobsCache.get(false);
+}
+
 export function prefetchDemoTags() {
   return publicDemoTagsCache.get(false);
 }
@@ -90,21 +93,40 @@ export function prefetchDemoPage() {
   return Promise.all([prefetchPublicDemos(), prefetchDemoTags()]);
 }
 
-function useJobsSnapshot() {
-  const [value, setValue] = useState<AdminJob[]>(() => getJobs());
+export function usePublicJobs() {
+  const initial = publicJobsCache.peek();
+  const [jobs, setJobs] = useState<AdminJob[]>(() => initial ?? []);
+  const [loading, setLoading] = useState(() => initial === null);
+  const [error, setError] = useState("");
 
-  useEffect(() => {
-    const refresh = () => setValue(getJobs());
-    refresh();
-    window.addEventListener(ADMIN_DATA_EVENT, refresh);
-    window.addEventListener("storage", refresh);
-    return () => {
-      window.removeEventListener(ADMIN_DATA_EVENT, refresh);
-      window.removeEventListener("storage", refresh);
-    };
+  const refresh = useCallback(async (force = false) => {
+    const hadCache = publicJobsCache.peek() !== null;
+    try {
+      if (!hadCache) setLoading(true);
+      const data = await publicJobsCache.get(force);
+      setJobs(data);
+      setError("");
+    } catch (err) {
+      if (publicJobsCache.peek() === null) {
+        setJobs([]);
+        setError(getErrorMessage(err, "Unable to load jobs."));
+      }
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  return value;
+  useEffect(() => {
+    void refresh(false);
+    const onChange = () => {
+      publicJobsCache.invalidate();
+      void refresh(true);
+    };
+    window.addEventListener(ADMIN_DATA_EVENT, onChange);
+    return () => window.removeEventListener(ADMIN_DATA_EVENT, onChange);
+  }, [refresh]);
+
+  return { jobs, loading, error, refresh: () => refresh(true) };
 }
 
 export function usePublicDemos() {
@@ -369,8 +391,35 @@ export function useAdminDemoTags() {
   return { tags, loading, error, refresh };
 }
 
-export function useAdminJobs(): AdminJob[] {
-  return useJobsSnapshot();
+export function useAdminJobs() {
+  const [jobs, setJobs] = useState<AdminJob[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  const refresh = useCallback(async () => {
+    try {
+      setLoading(true);
+      const data = await fetchAdminJobs();
+      setJobs(data);
+      setError("");
+    } catch (err) {
+      setJobs([]);
+      setError(getErrorMessage(err, "Unable to load jobs."));
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    void refresh();
+    const onChange = () => {
+      void refresh();
+    };
+    window.addEventListener(ADMIN_DATA_EVENT, onChange);
+    return () => window.removeEventListener(ADMIN_DATA_EVENT, onChange);
+  }, [refresh]);
+
+  return { jobs, loading, error, refresh };
 }
 
 export function useAdminAuth(): AuthSession | null {

@@ -429,6 +429,25 @@
   margin: 48px 0;
 }
 
+.careers-jobs__list--empty {
+  border: none;
+  box-shadow: none;
+}
+
+.careers-jobs__list--empty .careers-jobs__divider {
+  display: none;
+}
+
+.careers-jobs__empty {
+  margin: 0 auto;
+  max-width: 640px;
+  text-align: center;
+  color: #848b9b;
+  font-size: clamp(16px, 1.5vw, 20px);
+  font-weight: 500;
+  line-height: 1.55;
+}
+
 .careers-jobs__group {
   display: grid;
   grid-template-columns: 1fr;

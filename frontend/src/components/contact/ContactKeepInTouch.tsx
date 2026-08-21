@@ -2,6 +2,11 @@ import { useState, type FormEvent } from "react";
 import paperPlaneIcon from "../../assets/footer/PaperPlaneTilt.svg";
 import { useToast } from "../ui/ToastProvider";
 import { getErrorMessage, submitContactLead } from "../../lib/contactApi";
+import {
+  FORM_LIMITS,
+  isValidEmail,
+  sanitizePlainText,
+} from "../../lib/formValidation";
 
 export default function ContactKeepInTouch() {
   const { showToast } = useToast();
@@ -12,8 +17,13 @@ export default function ContactKeepInTouch() {
   const onSubmit = async (event: FormEvent) => {
     event.preventDefault();
 
-    if (!email.trim()) {
+    const cleanedEmail = sanitizePlainText(email, FORM_LIMITS.email);
+    if (!cleanedEmail) {
       showToast("Please enter your email.", "error");
+      return;
+    }
+    if (!isValidEmail(cleanedEmail)) {
+      showToast("Please provide a valid email address.", "error");
       return;
     }
     if (!agreed) {
@@ -24,7 +34,7 @@ export default function ContactKeepInTouch() {
     try {
       setSubmitting(true);
       const message = await submitContactLead({
-        email: email.trim(),
+        email: cleanedEmail,
         source: "contact",
       });
       showToast(message, "success");
@@ -49,6 +59,7 @@ export default function ContactKeepInTouch() {
             type="email"
             required
             value={email}
+            maxLength={FORM_LIMITS.email}
             onChange={(event) => setEmail(event.target.value)}
             placeholder="YOUR EMAIL"
             autoComplete="email"

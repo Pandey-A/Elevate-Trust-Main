@@ -28,12 +28,16 @@ import { type AdminDemo, type AdminJob, type IndustryTag } from "../../data/admi
 import { useAdminAuth, useAdminBlogs, useAdminDemos, useAdminJobs, useAdminDemoTags, useAdminTestimonials, useDemoTags } from "../../hooks/useAdminData";
 import {
   createId,
-  deleteJob,
   extractYoutubeId,
-  upsertJob,
 } from "../../lib/adminStorage";
 import { getErrorMessage } from "../../lib/api";
-import { logoutUser } from "../../lib/auth";
+import { canManageAdminContent, getAuthSession, logoutUser } from "../../lib/auth";
+import {
+  createJob,
+  deleteJob,
+  updateJob,
+} from "../../lib/jobsApi";
+import { useToast } from "../../components/ui/ToastProvider";
 import {
   createDemo,
   DEMO_VIDEO_MAX_BYTES,
@@ -59,6 +63,7 @@ import {
 } from "../../lib/careersApi";
 import { createDemoTag, deleteDemoTag, updateDemoTag, type DemoTag } from "../../lib/tagsApi";
 import BlogRichTextEditor from "../../components/blog/BlogRichTextEditor";
+import CircularImageCropper from "../../components/admin/CircularImageCropper";
 import DemoPlayCover from "../../components/DemoPlayCover";
 import DemoVideoPlayer from "../../components/DemoVideoPlayer";
 import { excerptFromContent, isRichTextEmpty } from "../../lib/blogContent";
@@ -103,6 +108,7 @@ const emptyJobForm = {
 export default function AdminDashboard() {
   const navigate = useNavigate();
   const session = useAdminAuth();
+  const isSuperAdmin = canManageAdminContent(session?.role);
   const { demos, loading: demosLoading, error: demosLoadError, refresh: refreshDemos } = useAdminDemos();
   const { blogs, loading: blogsLoading, error: blogsLoadError, refresh: refreshBlogs } = useAdminBlogs();
   const {
@@ -113,9 +119,17 @@ export default function AdminDashboard() {
   } = useAdminTestimonials();
   const { tags: demoTags, loading: tagsLoading, error: tagsLoadError, refresh: refreshTags } = useDemoTags();
   const { tags: adminDemoTags, loading: adminTagsLoading, error: adminTagsLoadError, refresh: refreshAdminTags } = useAdminDemoTags();
-  const jobs = useAdminJobs();
+  const {
+    jobs,
+    loading: jobsLoading,
+    error: jobsLoadError,
+    refresh: refreshJobs,
+  } = useAdminJobs();
+  const { showToast } = useToast();
 
-  const [tab, setTab] = useState<Tab>("overview");
+  const [tab, setTab] = useState<Tab>(() =>
+    canManageAdminContent(getAuthSession()?.role) ? "overview" : "demos",
+  );
   const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
   const [homeDemoSearch, setHomeDemoSearch] = useState("");
   const [homeTagFilter, setHomeTagFilter] = useState("All");
@@ -138,6 +152,9 @@ export default function AdminDashboard() {
   const [testimonialLogoPreview, setTestimonialLogoPreview] = useState<string | null>(null);
   const [testimonialProfileFile, setTestimonialProfileFile] = useState<File | null>(null);
   const [testimonialProfilePreview, setTestimonialProfilePreview] = useState<string | null>(null);
+  const [profileCropSrc, setProfileCropSrc] = useState<string | null>(null);
+  const [profileCropName, setProfileCropName] = useState("profile.jpg");
+  const profileFileInputRef = useRef<HTMLInputElement>(null);
   const [jobForm, setJobForm] = useState(emptyJobForm);
   const [demoError, setDemoError] = useState("");
   const [blogError, setBlogError] = useState("");
@@ -152,6 +169,9 @@ export default function AdminDashboard() {
   const [demoModalOpen, setDemoModalOpen] = useState(false);
   const [demoSearch, setDemoSearch] = useState("");
   const [demoCategoryFilter, setDemoCategoryFilter] = useState("All");
+  const [demoCategoryMenuOpen, setDemoCategoryMenuOpen] = useState(false);
+  const demoCategoryMenuRef = useRef<HTMLDivElement>(null);
+  const demoCategoryButtonRef = useRef<HTMLButtonElement>(null);
   const [tagDropdownOpen, setTagDropdownOpen] = useState(false);
   const [blogSaving, setBlogSaving] = useState(false);
   const [testimonialSaving, setTestimonialSaving] = useState(false);
@@ -226,13 +246,60 @@ export default function AdminDashboard() {
   }, [homeTagMenuOpen]);
 
   useEffect(() => {
+    if (!demoCategoryMenuOpen) return;
+
+    const closeMenu = () => setDemoCategoryMenuOpen(false);
+    const onPointerDown = (event: MouseEvent) => {
+      const target = event.target as Node;
+      if (
+        demoCategoryMenuRef.current?.contains(target) ||
+        demoCategoryButtonRef.current?.contains(target)
+      ) {
+        return;
+      }
+      closeMenu();
+    };
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") closeMenu();
+    };
+    const onScroll = (event: Event) => {
+      const target = event.target;
+      if (
+        target instanceof Node &&
+        demoCategoryMenuRef.current?.contains(target)
+      ) {
+        return;
+      }
+      closeMenu();
+    };
+
+    window.addEventListener("scroll", onScroll, true);
+    window.addEventListener("resize", closeMenu);
+    document.addEventListener("mousedown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      window.removeEventListener("scroll", onScroll, true);
+      window.removeEventListener("resize", closeMenu);
+      document.removeEventListener("mousedown", onPointerDown);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [demoCategoryMenuOpen]);
+
+  useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   useEffect(() => {
     if (!session) return;
+    if (!isSuperAdmin && tab !== "demos") {
+      setTab("demos");
+    }
+  }, [session, isSuperAdmin, tab]);
+
+  useEffect(() => {
+    if (!session || !isSuperAdmin) return;
     void loadApplications();
-  }, [session, loadApplications]);
+  }, [session, isSuperAdmin, loadApplications]);
 
   useEffect(() => {
     if (!playingDemo && !demoModalOpen) return;
@@ -288,6 +355,9 @@ export default function AdminDashboard() {
     setTestimonialLogoPreview(null);
     setTestimonialProfileFile(null);
     setTestimonialProfilePreview(null);
+    setProfileCropSrc(null);
+    setProfileCropName("profile.jpg");
+    if (profileFileInputRef.current) profileFileInputRef.current.value = "";
     setTestimonialError("");
     setTestimonialSuccess("");
   };
@@ -358,23 +428,16 @@ export default function AdminDashboard() {
   };
 
   const onDeleteApplication = async (application: CareerApplication) => {
-    if (
-      !window.confirm(
-        `Remove application from ${application.fullName}? This cannot be undone.`,
-      )
-    ) {
-      return;
-    }
-
     try {
       setDeletingApplicationId(application.id);
       setApplicationsError("");
       await deleteCareerApplication(application.id);
       setApplications((prev) => prev.filter((item) => item.id !== application.id));
+      showToast("Application removed successfully.", "success");
     } catch (err) {
-      setApplicationsError(
-        getErrorMessage(err, "Unable to delete application."),
-      );
+      const message = getErrorMessage(err, "Unable to delete application.");
+      setApplicationsError(message);
+      showToast(message, "error");
     } finally {
       setDeletingApplicationId(null);
     }
@@ -405,6 +468,7 @@ export default function AdminDashboard() {
   };
 
   const openAddDemoModal = () => {
+    if (!isSuperAdmin) return;
     resetDemoForm();
     setDemoModalOpen(true);
   };
@@ -416,6 +480,7 @@ export default function AdminDashboard() {
   };
 
   const onEditDemo = (demo: AdminDemo) => {
+    if (!isSuperAdmin) return;
     setTab("demos");
     setDemoForm({
       id: demo.id,
@@ -693,7 +758,7 @@ export default function AdminDashboard() {
     }
   };
 
-  const submitJob = (event: FormEvent) => {
+  const submitJob = async (event: FormEvent) => {
     event.preventDefault();
     setJobError("");
     setJobSuccess("");
@@ -703,8 +768,7 @@ export default function AdminDashboard() {
       return;
     }
 
-    upsertJob({
-      id: jobForm.id || createId("job"),
+    const payload = {
       title: jobForm.title.trim(),
       tag: jobForm.tag.trim() || jobForm.category.trim(),
       description: jobForm.description.trim(),
@@ -714,10 +778,31 @@ export default function AdminDashboard() {
       categorySubtitle:
         jobForm.categorySubtitle.trim() ||
         `Open position in our ${jobForm.category.trim().toLowerCase()} team.`,
-    });
+    };
 
-    setJobSuccess(editingJob ? "Job updated successfully." : "Job posting added successfully.");
-    resetJobForm();
+    try {
+      if (editingJob && jobForm.id) {
+        await updateJob(jobForm.id, payload);
+        showToast("Job updated successfully.", "success");
+        setJobSuccess("Job updated successfully.");
+      } else {
+        await createJob({
+          id: jobForm.id || createId("job"),
+          ...payload,
+        });
+        showToast("Job posting added successfully.", "success");
+        setJobSuccess("Job posting added successfully.");
+      }
+      void refreshJobs();
+      resetJobForm();
+    } catch (err) {
+      const message = getErrorMessage(
+        err,
+        editingJob ? "Unable to update job." : "Unable to add job.",
+      );
+      setJobError(message);
+      showToast(message, "error");
+    }
   };
 
   const onLogout = () => {
@@ -821,7 +906,9 @@ export default function AdminDashboard() {
                 ["jobs", "Manage Jobs", Briefcase],
                 ["applications", "Manage Applications", FileText],
               ] as const
-            ).map(([id, label, Icon]) => (
+            )
+              .filter(([id]) => isSuperAdmin || id === "demos")
+              .map(([id, label, Icon]) => (
               <button
                 key={id}
                 type="button"
@@ -846,7 +933,7 @@ export default function AdminDashboard() {
                       : "max-w-[12rem] opacity-100"
                   }`}
                 >
-                  {label}
+                  {isSuperAdmin ? label : "Demos"}
                 </span>
               </button>
             ))}
@@ -854,7 +941,7 @@ export default function AdminDashboard() {
         </aside>
 
         <main className="min-w-0 overflow-x-hidden">
-          {tab === "overview" ? (
+          {tab === "overview" && isSuperAdmin ? (
             <section className="space-y-5 sm:space-y-6 2xl:space-y-8">
               <div className="flex flex-col gap-3 rounded-[18px] border border-[#d7e6f3] bg-white p-3 sm:p-3.5 xl:flex-row xl:items-center xl:gap-4">
                 <h2 className="m-0 shrink-0 px-1 text-xl font-bold text-[#1F2432] 2xl:text-2xl">
@@ -922,7 +1009,7 @@ export default function AdminDashboard() {
                               top: homeTagMenuPos.top,
                               right: homeTagMenuPos.right,
                             }}
-                            className="fixed z-[250] w-[min(420px,calc(100vw-24px))] rounded-xl border border-[#d7e6f3] bg-white p-3 shadow-[0_22px_50px_-18px_rgba(17,61,119,0.55)]"
+                            className="fixed z-[250] w-[min(280px,calc(100vw-24px))] rounded-[16px] border border-gray-100 bg-white px-3 py-3 shadow-[0_12px_40px_rgba(0,0,0,0.12)]"
                           >
                             <button
                               type="button"
@@ -932,10 +1019,10 @@ export default function AdminDashboard() {
                                 setHomeTagFilter("All");
                                 setHomeTagMenuOpen(false);
                               }}
-                              className={`mb-1.5 flex w-full cursor-pointer items-center justify-between rounded-lg border-0 px-3 py-2 text-left text-sm transition ${
+                              className={`mb-0.5 flex w-full cursor-pointer items-center justify-between rounded-md border-0 px-2.5 py-1.5 text-left text-sm font-medium leading-snug transition-all duration-200 hover:scale-[1.02] hover:bg-[#EFF7FC] hover:text-[#111827] origin-left ${
                                 homeTagFilter === "All"
-                                  ? "bg-[#EFF7FC] font-semibold text-[#113d77]"
-                                  : "bg-transparent font-medium text-[#1F2432] hover:bg-[#f5f9fd]"
+                                  ? "bg-[#EFF7FC] text-[#111827]"
+                                  : "bg-transparent text-[#4B5563]"
                               }`}
                             >
                               All tags
@@ -943,7 +1030,7 @@ export default function AdminDashboard() {
                                 <Check size={15} className="shrink-0 text-[#2365aa]" />
                               ) : null}
                             </button>
-                            <div className="grid grid-cols-2 gap-1">
+                            <div className="scrollbar-none flex max-h-[min(480px,65vh)] flex-col gap-0 overflow-y-auto overflow-x-hidden">
                               {homeFilterTags.map((tag) => {
                                 const active =
                                   homeTagFilter.trim().toLowerCase() ===
@@ -958,10 +1045,10 @@ export default function AdminDashboard() {
                                       setHomeTagFilter(tag);
                                       setHomeTagMenuOpen(false);
                                     }}
-                                    className={`flex w-full cursor-pointer items-start justify-between gap-2 rounded-lg border-0 px-3 py-2 text-left text-sm leading-snug transition ${
+                                    className={`flex w-full cursor-pointer items-start justify-between gap-2 rounded-md border-0 px-2.5 py-1.5 text-left text-sm font-medium leading-snug transition-all duration-200 hover:scale-[1.02] hover:bg-[#EFF7FC] hover:text-[#111827] origin-left ${
                                       active
-                                        ? "bg-[#EFF7FC] font-semibold text-[#113d77]"
-                                        : "bg-transparent font-medium text-[#1F2432] hover:bg-[#f5f9fd]"
+                                        ? "bg-[#EFF7FC] text-[#111827]"
+                                        : "bg-transparent text-[#4B5563]"
                                     }`}
                                   >
                                     <span className="whitespace-normal break-words">
@@ -1056,7 +1143,7 @@ export default function AdminDashboard() {
             <section className="space-y-5 sm:space-y-6 2xl:space-y-8">
               <div className="flex flex-col gap-3 rounded-[18px] border border-[#d7e6f3] bg-white p-3 sm:p-3.5 xl:flex-row xl:items-center xl:gap-4">
                 <h2 className="m-0 shrink-0 px-1 text-xl font-bold text-[#1F2432] 2xl:text-2xl">
-                  Manage Demos
+                  {isSuperAdmin ? "Manage Demos" : "Demos"}
                 </h2>
 
                 <div className="flex min-w-0 flex-1 flex-col gap-2 sm:flex-row sm:items-center">
@@ -1073,34 +1160,102 @@ export default function AdminDashboard() {
                     />
                   </label>
 
-                  <label className="relative w-full shrink-0 sm:w-[200px]">
-                    <span className="sr-only">Filter by category</span>
-                    <select
-                      value={demoCategoryFilter}
-                      onChange={(event) => setDemoCategoryFilter(event.target.value)}
-                      className="h-10 w-full appearance-none rounded-full border border-[#e2e8f0] bg-[#f7fafc] py-0 pl-4 pr-9 text-sm font-medium text-[#1F2432] outline-none transition focus:border-[#2365aa] focus:bg-white focus:ring-2 focus:ring-[#2365aa]/10"
+                  <div className="relative w-full shrink-0 sm:w-[240px]">
+                    <button
+                      ref={demoCategoryButtonRef}
+                      type="button"
+                      onClick={() => setDemoCategoryMenuOpen((open) => !open)}
+                      className="inline-flex h-10 w-full cursor-pointer items-center justify-between gap-1.5 rounded-full border border-[#e2e8f0] bg-[#f7fafc] px-4 text-sm font-medium text-[#1F2432] outline-none transition hover:border-[#2365aa]/40 hover:bg-white focus:border-[#2365aa] focus:bg-white focus:ring-2 focus:ring-[#2365aa]/10"
+                      aria-haspopup="listbox"
+                      aria-expanded={demoCategoryMenuOpen}
+                      aria-label="Filter by category"
                     >
-                      <option value="All">All categories</option>
-                      {demoTags.map((tag) => (
-                        <option key={tag} value={tag}>
-                          {tag}
-                        </option>
-                      ))}
-                    </select>
-                    <ChevronDown
-                      size={15}
-                      className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[#8a94a6]"
-                    />
-                  </label>
+                      <span className="truncate">
+                        {demoCategoryFilter === "All"
+                          ? "All categories"
+                          : demoCategoryFilter}
+                      </span>
+                      <ChevronDown
+                        size={15}
+                        className={`shrink-0 text-[#8a94a6] transition-transform ${
+                          demoCategoryMenuOpen ? "rotate-180" : ""
+                        }`}
+                      />
+                    </button>
 
-                  <button
-                    type="button"
-                    onClick={openAddDemoModal}
-                    className="inline-flex h-10 w-full shrink-0 cursor-pointer items-center justify-center gap-2 rounded-full border-0 bg-[#2365aa] px-4 text-sm font-semibold text-white transition hover:bg-[#1a5490] sm:w-auto"
-                  >
-                    <Plus size={16} />
-                    Add Demo
-                  </button>
+                    {demoCategoryMenuOpen ? (
+                      <div
+                        ref={demoCategoryMenuRef}
+                        role="listbox"
+                        className="absolute right-0 top-[calc(100%+8px)] z-50 w-[min(280px,calc(100vw-2rem))] rounded-[16px] border border-gray-100 bg-white px-3 py-3 shadow-[0_12px_40px_rgba(0,0,0,0.12)]"
+                      >
+                        <button
+                          type="button"
+                          role="option"
+                          aria-selected={demoCategoryFilter === "All"}
+                          onClick={() => {
+                            setDemoCategoryFilter("All");
+                            setDemoCategoryMenuOpen(false);
+                          }}
+                          className={`mb-0.5 flex w-full cursor-pointer items-center justify-between rounded-md border-0 px-2.5 py-1.5 text-left text-sm font-medium leading-snug transition-all duration-200 hover:scale-[1.02] hover:bg-[#EFF7FC] hover:text-[#111827] origin-left ${
+                            demoCategoryFilter === "All"
+                              ? "bg-[#EFF7FC] text-[#111827]"
+                              : "bg-transparent text-[#4B5563]"
+                          }`}
+                        >
+                          All categories
+                          {demoCategoryFilter === "All" ? (
+                            <Check size={15} className="shrink-0 text-[#2365aa]" />
+                          ) : null}
+                        </button>
+                        <div className="scrollbar-none flex max-h-[min(480px,65vh)] flex-col gap-0 overflow-y-auto overflow-x-hidden">
+                          {demoTags.map((tag) => {
+                            const active =
+                              demoCategoryFilter.trim().toLowerCase() ===
+                              tag.toLowerCase();
+                            return (
+                              <button
+                                key={tag}
+                                type="button"
+                                role="option"
+                                aria-selected={active}
+                                onClick={() => {
+                                  setDemoCategoryFilter(tag);
+                                  setDemoCategoryMenuOpen(false);
+                                }}
+                                className={`flex w-full cursor-pointer items-start justify-between gap-2 rounded-md border-0 px-2.5 py-1.5 text-left text-sm font-medium leading-snug transition-all duration-200 hover:scale-[1.02] hover:bg-[#EFF7FC] hover:text-[#111827] origin-left ${
+                                  active
+                                    ? "bg-[#EFF7FC] text-[#111827]"
+                                    : "bg-transparent text-[#4B5563]"
+                                }`}
+                              >
+                                <span className="whitespace-normal break-words">
+                                  {tag}
+                                </span>
+                                {active ? (
+                                  <Check
+                                    size={15}
+                                    className="mt-0.5 shrink-0 text-[#2365aa]"
+                                  />
+                                ) : null}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    ) : null}
+                  </div>
+
+                  {isSuperAdmin ? (
+                    <button
+                      type="button"
+                      onClick={openAddDemoModal}
+                      className="inline-flex h-10 w-full shrink-0 cursor-pointer items-center justify-center gap-2 rounded-full border-0 bg-[#2365aa] px-4 text-sm font-semibold text-white transition hover:bg-[#1a5490] sm:w-auto"
+                    >
+                      <Plus size={16} />
+                      Add Demo
+                    </button>
+                  ) : null}
                 </div>
               </div>
 
@@ -1127,7 +1282,9 @@ export default function AdminDashboard() {
                 <div className="rounded-[20px] border border-[#d7e6f3] bg-white px-6 py-14 text-center shadow-[0_14px_40px_-28px_rgba(17,61,119,0.3)]">
                   <p className="m-0 text-sm text-[#687181]">
                     {demos.length === 0
-                      ? "No demos yet. Click Add Demo to create one."
+                      ? isSuperAdmin
+                        ? "No demos yet. Click Add Demo to create one."
+                        : "No demos available yet."
                       : "No demos match your search or category filter."}
                   </p>
                 </div>
@@ -1161,32 +1318,40 @@ export default function AdminDashboard() {
                         ))}
                       </div>
                       <div className="mt-auto flex flex-col gap-2 pt-4 md:flex-row md:flex-wrap">
-                        <button
-                          type="button"
-                          onClick={() => onEditDemo(demo)}
-                          className="inline-flex w-full cursor-pointer items-center justify-center gap-1.5 rounded-full border border-[#d7e6f3] bg-[#EFF7FC] px-3 py-2 text-xs font-semibold text-[#2365aa] md:flex-1"
-                        >
-                          <Pencil size={14} />
-                          Edit
-                        </button>
-                        <button
-                          type="button"
-                          onClick={async () => {
-                            if (!window.confirm(`Delete "${demo.title}"?`)) return;
-                            try {
-                              await deleteDemo(demo.id);
-                              void refreshDemos();
-                            } catch (err) {
-                              setDemoError(
-                                getErrorMessage(err, "Unable to delete demo."),
-                              );
-                            }
-                          }}
-                          className="inline-flex w-full cursor-pointer items-center justify-center gap-1.5 rounded-full border-0 bg-[#EEF3FB] px-3 py-2 text-xs font-semibold text-[#2365aa] md:flex-1"
-                        >
-                          <Trash2 size={14} />
-                          Delete
-                        </button>
+                        {isSuperAdmin ? (
+                          <>
+                            <button
+                              type="button"
+                              onClick={() => onEditDemo(demo)}
+                              className="inline-flex w-full cursor-pointer items-center justify-center gap-1.5 rounded-full border border-[#d7e6f3] bg-[#EFF7FC] px-3 py-2 text-xs font-semibold text-[#2365aa] md:flex-1"
+                            >
+                              <Pencil size={14} />
+                              Edit
+                            </button>
+                            <button
+                              type="button"
+                              onClick={async () => {
+                                if (!window.confirm(`Delete "${demo.title}"?`)) return;
+                                try {
+                                  await deleteDemo(demo.id);
+                                  void refreshDemos();
+                                } catch (err) {
+                                  setDemoError(
+                                    getErrorMessage(err, "Unable to delete demo."),
+                                  );
+                                }
+                              }}
+                              className="inline-flex w-full cursor-pointer items-center justify-center gap-1.5 rounded-full border-0 bg-[#EEF3FB] px-3 py-2 text-xs font-semibold text-[#2365aa] md:flex-1"
+                            >
+                              <Trash2 size={14} />
+                              Delete
+                            </button>
+                          </>
+                        ) : (
+                          <p className="m-0 text-xs font-medium text-[#848b9b]">
+                            View only — play demos from the cover above.
+                          </p>
+                        )}
                       </div>
                     </div>
                   </article>
@@ -1195,7 +1360,7 @@ export default function AdminDashboard() {
             </section>
           ) : null}
 
-          {tab === "blogs" ? (
+          {tab === "blogs" && isSuperAdmin ? (
             <section className="space-y-5 sm:space-y-6 2xl:space-y-8">
               <form
                 onSubmit={submitBlog}
@@ -1358,7 +1523,7 @@ export default function AdminDashboard() {
             </section>
           ) : null}
 
-          {tab === "testimonials" ? (
+          {tab === "testimonials" && isSuperAdmin ? (
             <section className="space-y-5 sm:space-y-6 2xl:space-y-8">
               <form
                 onSubmit={submitTestimonial}
@@ -1484,24 +1649,43 @@ export default function AdminDashboard() {
                       <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-[12px] border-2 border-dashed border-[#d7e6f3] bg-[#f8fbfd] px-5 py-4 text-sm font-medium text-[#2365aa] transition-colors hover:border-[#2365aa] hover:bg-[#EFF7FC]">
                         Choose photo
                         <input
+                          ref={profileFileInputRef}
                           type="file"
-                          accept="image/*,.svg"
+                          accept="image/jpeg,image/png,image/webp,image/gif"
                           className="sr-only"
                           onChange={(event) => {
                             const file = event.target.files?.[0] ?? null;
-                            setTestimonialProfileFile(file);
-                            setTestimonialProfilePreview(
-                              file ? URL.createObjectURL(file) : testimonialProfilePreview,
-                            );
+                            if (!file) return;
+                            if (profileCropSrc) URL.revokeObjectURL(profileCropSrc);
+                            setProfileCropName(file.name || "profile.jpg");
+                            setProfileCropSrc(URL.createObjectURL(file));
+                            event.target.value = "";
                           }}
                         />
                       </label>
                       {testimonialProfilePreview ? (
-                        <img
-                          src={testimonialProfilePreview}
-                          alt="Profile preview"
-                          className="size-20 rounded-[10px] border border-[#d7e6f3] object-cover"
-                        />
+                        <div className="flex flex-col items-center gap-2">
+                          <img
+                            src={testimonialProfilePreview}
+                            alt="Profile preview"
+                            className="size-20 rounded-full border border-[#d7e6f3] object-cover"
+                          />
+                          <p className="m-0 text-xs text-[#848b9b]">
+                            Circle preview (site view)
+                          </p>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setProfileCropName(
+                                testimonialProfileFile?.name || "profile.jpg",
+                              );
+                              setProfileCropSrc(testimonialProfilePreview);
+                            }}
+                            className="text-xs font-semibold text-[#2365aa] underline-offset-2 hover:underline"
+                          >
+                            Adjust crop
+                          </button>
+                        </div>
                       ) : null}
                     </div>
                   </div>
@@ -1531,6 +1715,41 @@ export default function AdminDashboard() {
                   <ArrowUpRight size={16} />
                 </button>
               </form>
+
+              {profileCropSrc ? (
+                <CircularImageCropper
+                  open
+                  imageSrc={profileCropSrc}
+                  fileName={profileCropName}
+                  onCancel={() => {
+                    // Only revoke temp pick URLs, never the active preview.
+                    if (
+                      profileCropSrc.startsWith("blob:") &&
+                      profileCropSrc !== testimonialProfilePreview
+                    ) {
+                      URL.revokeObjectURL(profileCropSrc);
+                    }
+                    setProfileCropSrc(null);
+                  }}
+                  onComplete={(file, previewUrl) => {
+                    if (
+                      profileCropSrc.startsWith("blob:") &&
+                      profileCropSrc !== testimonialProfilePreview
+                    ) {
+                      URL.revokeObjectURL(profileCropSrc);
+                    }
+                    if (
+                      testimonialProfilePreview &&
+                      testimonialProfilePreview.startsWith("blob:")
+                    ) {
+                      URL.revokeObjectURL(testimonialProfilePreview);
+                    }
+                    setTestimonialProfileFile(file);
+                    setTestimonialProfilePreview(previewUrl);
+                    setProfileCropSrc(null);
+                  }}
+                />
+              ) : null}
 
               {testimonialsLoadError ? (
                 <p className="rounded-[12px] bg-[#EEF3FB] px-3 py-2 text-sm text-[#2365aa]">
@@ -1611,7 +1830,7 @@ export default function AdminDashboard() {
             </section>
           ) : null}
 
-          {tab === "tags" ? (
+          {tab === "tags" && isSuperAdmin ? (
             <section className="space-y-5 sm:space-y-6 2xl:space-y-8">
               <form
                 onSubmit={submitTag}
@@ -1725,7 +1944,7 @@ export default function AdminDashboard() {
             </section>
           ) : null}
 
-          {tab === "jobs" ? (
+          {tab === "jobs" && isSuperAdmin ? (
             <section className="space-y-5 sm:space-y-6 2xl:space-y-8">
               <form
                 onSubmit={submitJob}
@@ -1835,6 +2054,11 @@ export default function AdminDashboard() {
                     {jobError}
                   </p>
                 ) : null}
+                {jobsLoadError ? (
+                  <p className="mt-4 rounded-[12px] bg-[#EEF3FB] px-3 py-2 text-sm text-[#2365aa]">
+                    {jobsLoadError}
+                  </p>
+                ) : null}
                 {jobSuccess ? (
                   <p className="mt-4 rounded-[12px] bg-[#e8f6ee] px-3 py-2 text-sm text-[#1d5c3a]">
                     {jobSuccess}
@@ -1851,6 +2075,12 @@ export default function AdminDashboard() {
               </form>
 
               <div className="space-y-3">
+                {jobsLoading ? (
+                  <p className="m-0 text-sm text-[#848b9b]">Loading jobs…</p>
+                ) : null}
+                {!jobsLoading && jobs.length === 0 ? (
+                  <p className="m-0 text-sm text-[#848b9b]">No job postings yet.</p>
+                ) : null}
                 {jobs.map((job) => (
                   <article
                     key={job.id}
@@ -1880,8 +2110,20 @@ export default function AdminDashboard() {
                         </button>
                         <button
                           type="button"
-                          onClick={() => {
-                            if (window.confirm(`Delete "${job.title}"?`)) deleteJob(job.id);
+                          onClick={async () => {
+                            if (!window.confirm(`Delete "${job.title}"?`)) return;
+                            try {
+                              await deleteJob(job.id);
+                              void refreshJobs();
+                              showToast("Job deleted successfully.", "success");
+                            } catch (err) {
+                              const message = getErrorMessage(
+                                err,
+                                "Unable to delete job.",
+                              );
+                              setJobError(message);
+                              showToast(message, "error");
+                            }
                           }}
                           className="inline-flex cursor-pointer items-center gap-1.5 rounded-full border-0 bg-[#EEF3FB] px-3 py-2 text-xs font-semibold text-[#2365aa]"
                         >
@@ -1896,7 +2138,7 @@ export default function AdminDashboard() {
             </section>
           ) : null}
 
-          {tab === "applications" ? (
+          {tab === "applications" && isSuperAdmin ? (
             <section className="space-y-5 sm:space-y-6 2xl:space-y-8">
               <div className="rounded-[20px] border border-[#d7e6f3] bg-white p-5 shadow-[0_14px_40px_-28px_rgba(17,61,119,0.3)] sm:p-6 xl:rounded-[24px] xl:p-7 2xl:p-8">
                 <div className="flex flex-wrap items-center justify-between gap-3">

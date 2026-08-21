@@ -128,10 +128,7 @@
   text-decoration: none;
   color: inherit;
   cursor: default;
-}
-
-.footer__partner-slot[href] {
-  cursor: pointer;
+  pointer-events: none;
 }
 
 .footer__partner-slot--tall {
@@ -149,12 +146,6 @@
   /* Light grey monochrome logos on dark footer */
   filter: brightness(0) invert(0.72);
   opacity: 0.55;
-  transition: opacity 0.2s ease, filter 0.2s ease;
-}
-
-.footer__partner-slot:hover .footer__partner-logo {
-  opacity: 1;
-  filter: none;
 }
 
 .footer__newsletter {
@@ -670,11 +661,6 @@
   .footer__partner-logo {
     filter: brightness(0) invert(0.88);
     opacity: 0.45;
-  }
-
-  .footer__partner-slot:hover .footer__partner-logo {
-    opacity: 1;
-    filter: none;
   }
 
   .footer__newsletter {

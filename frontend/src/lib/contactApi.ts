@@ -9,7 +9,7 @@ export async function submitContactLead(input: {
   const { data } = await api.post<{ success: boolean; message?: string }>(
     "/api/contact",
     {
-      email: input.email.trim(),
+      email: input.email.trim().slice(0, 254),
       source: input.source,
     },
   );

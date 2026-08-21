@@ -402,7 +402,7 @@
   }
   
   .hero-bottom-label__cust {
-    color: var(--blue);
+    color: #7DD3FC;
   }
 
   /* ── Desktop Card Placement (laptop only — NOT exact Figma / NOT 2012) ─────── */
@@ -2019,7 +2019,7 @@
     }
   
     .hero-bottom-label__cust {
-      color: #2365aa;
+      color: #7DD3FC;
     }
   
     .hero-card--we:hover,

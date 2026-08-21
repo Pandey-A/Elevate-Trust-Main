@@ -13,6 +13,7 @@ import tagRouter from "./route/tags.js";
 import blogRouter from "./route/blogs.js";
 import testimonialRouter from "./route/testimonials.js";
 import contactRouter from "./route/contact.js";
+import jobRouter from "./route/jobs.js";
 import { logMailStatus } from "./config/mail.js";
 
 dotenv.config();
@@ -56,8 +57,8 @@ app.use(
   }),
 );
 app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev"));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: "32kb" }));
+app.use(express.urlencoded({ extended: true, limit: "32kb" }));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.get("/", (_req, res) => {
@@ -82,6 +83,7 @@ app.use("/api/demo-tags", tagRouter);
 app.use("/api/blogs", blogRouter);
 app.use("/api/testimonials", testimonialRouter);
 app.use("/api/contact", contactRouter);
+app.use("/api/jobs", jobRouter);
 
 app.use((error, _req, res, _next) => {
   console.error("Unhandled error:", error);
@@ -100,9 +102,12 @@ app.use((error, _req, res, _next) => {
   }
 
   if (error?.code === "LIMIT_FILE_SIZE") {
+    const isCareerCv = String(_req?.originalUrl || "").includes("/api/careers");
     return res.status(400).json({
       success: false,
-      message: "File is too large. Max demo video size is 500MB.",
+      message: isCareerCv
+        ? "Resume file is too large. Maximum size is 5MB."
+        : "File is too large. Please try a smaller file.",
     });
   }
 
@@ -141,6 +146,27 @@ async function startServer() {
     console.warn("Demo schema ensure skipped:", error?.message || error);
   }
 
+  try {
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS jobs (
+        id VARCHAR(120) PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        tag VARCHAR(120) NOT NULL DEFAULT '',
+        description TEXT NOT NULL DEFAULT '',
+        type VARCHAR(120) NOT NULL DEFAULT 'Full-time',
+        location VARCHAR(120) NOT NULL DEFAULT 'Remotely',
+        category VARCHAR(255) NOT NULL DEFAULT '',
+        category_subtitle VARCHAR(255) NOT NULL DEFAULT '',
+        sort_order INTEGER NOT NULL DEFAULT 0,
+        created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+        updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+      );
+      CREATE INDEX IF NOT EXISTS idx_jobs_sort_order ON jobs (sort_order ASC, created_at DESC);
+    `);
+  } catch (error) {
+    console.warn("Jobs schema ensure skipped:", error?.message || error);
+  }
+
   let lastError = null;
 
   for (let offset = 0; offset < MAX_PORT_TRIES; offset += 1) {
@@ -157,6 +183,7 @@ async function startServer() {
       console.log(`Server is running on http://localhost:${port}`);
       console.log(`Auth API: POST http://localhost:${port}/api/auth/register|login`);
       console.log(`Career API: POST http://localhost:${port}/api/careers`);
+      console.log(`Jobs API: GET/POST http://localhost:${port}/api/jobs`);
       console.log(`Contact API: POST http://localhost:${port}/api/contact`);
       logMailStatus();
 

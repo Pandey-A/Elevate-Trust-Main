@@ -133,16 +133,22 @@ export default function LatestWorks() {
         <img
           src={partnerGlobe}
           alt=""
+          loading="lazy"
+          decoding="async"
           className="latest-works__decor-globe"
         />
         <img
           src={GlobeDecor}
           alt=""
+          loading="lazy"
+          decoding="async"
           className="latest-works__decor-globe-xl"
         />
         <img
           src={storiesVector}
           alt=""
+          loading="lazy"
+          decoding="async"
           className="latest-works__decor-vector"
         />
       </div>
@@ -162,6 +168,8 @@ export default function LatestWorks() {
                 src={smartArrow}
                 alt=""
                 aria-hidden
+                loading="lazy"
+                decoding="async"
                 className="latest-works__btn-icon"
               />
             </Link>
@@ -270,13 +278,17 @@ export default function LatestWorks() {
                         )}
 
                         <div className="latest-works__illustration-container">
-                          <img
-                            src={work.image}
-                            alt=""
-                            aria-hidden
-                            className="latest-works__illustration"
-                            draggable={false}
-                          />
+                          {isOpen ? (
+                            <img
+                              src={work.image}
+                              alt=""
+                              aria-hidden
+                              loading="lazy"
+                              decoding="async"
+                              className="latest-works__illustration"
+                              draggable={false}
+                            />
+                          ) : null}
                         </div>
 
                         <div className="latest-works__card latest-works__card--blue-glass">

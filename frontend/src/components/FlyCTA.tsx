@@ -11,11 +11,12 @@ import "./FlyCTA.css";
 export default function FlyCTA() {
   return (
     <section className="fly-cta" aria-label="Fly Beyond Limits">
-      { }
       <img
         src={worldMapFooter}
         alt=""
         aria-hidden
+        loading="lazy"
+        decoding="async"
         className="fly-cta__bg-globe"
       />
 
@@ -23,6 +24,8 @@ export default function FlyCTA() {
         src={fly2}
         alt=""
         aria-hidden
+        loading="lazy"
+        decoding="async"
         className="fly-cta__bg-wave"
       />
 
@@ -31,6 +34,8 @@ export default function FlyCTA() {
           src={fly1}
           alt=""
           aria-hidden
+          loading="lazy"
+          decoding="async"
           className="fly-cta__ill-left-people"
           draggable={false}
         />
@@ -48,6 +53,8 @@ export default function FlyCTA() {
                 src={blueArrow}
                 alt=""
                 aria-hidden
+                loading="lazy"
+                decoding="async"
                 className="fly-cta__btn-icon"
               />
             </Link>
@@ -65,6 +72,8 @@ export default function FlyCTA() {
             src={fly4}
             alt=""
             aria-hidden
+            loading="lazy"
+            decoding="async"
             className="fly-cta__ill-slabs"
             draggable={false}
           />
@@ -72,6 +81,8 @@ export default function FlyCTA() {
             src={fly3}
             alt=""
             aria-hidden
+            loading="lazy"
+            decoding="async"
             className="fly-cta__ill-people"
             draggable={false}
           />
