@@ -11,7 +11,9 @@ import {
   cleanupDemoTempFiles,
   storeDemoThumbnail,
   storeDemoVideo,
+  storeGeneratedDocumentCover,
 } from "../middleware/upload.js";
+import { getDemoDocumentKind, getDemoDocumentKindFromFile } from "../utils/demoMedia.js";
 
 function extractYoutubeId(input) {
   const value = String(input || "").trim();
@@ -86,14 +88,18 @@ function getUploadedFile(req, field) {
   return undefined;
 }
 
-function validateDemoPayload(body, { hasVideoFile = false, existingVideoUrl = "" } = {}) {
+function validateDemoPayload(
+  body,
+  { hasVideoFile = false, existingVideoUrl = "", isDocument = false } = {},
+) {
   const title = String(body.title || "").trim();
   const youtubeUrl = String(body.youtubeUrl || body.youtube_url || "").trim();
-  const industries = parseIndustries(body);
-  const videoId =
-    extractYoutubeId(youtubeUrl) ||
-    extractYoutubeId(body.videoId || body.video_id || "") ||
-    "";
+  const industries = isDocument ? [] : parseIndustries(body);
+  const videoId = isDocument
+    ? ""
+    : extractYoutubeId(youtubeUrl) ||
+      extractYoutubeId(body.videoId || body.video_id || "") ||
+      "";
   const isPublic = parseVisibility(body);
   const hasYoutube = Boolean(videoId);
   const hasCloudVideo = hasVideoFile || Boolean(existingVideoUrl);
@@ -101,7 +107,7 @@ function validateDemoPayload(body, { hasVideoFile = false, existingVideoUrl = ""
   const errors = [];
   if (!title) errors.push("title");
   if (!hasYoutube && !hasCloudVideo) errors.push("video");
-  if (industries.length === 0) errors.push("industries");
+  if (!isDocument && industries.length === 0) errors.push("industries");
 
   return {
     title,
@@ -113,6 +119,12 @@ function validateDemoPayload(body, { hasVideoFile = false, existingVideoUrl = ""
     isPublic,
     errors,
   };
+}
+
+async function maybeStoreDocumentCover(kind, thumbnailFile, req) {
+  if (!kind || thumbnailFile) return null;
+  const stored = await storeGeneratedDocumentCover(kind, req);
+  return stored?.imageUrl || null;
 }
 
 /** Public website: only public demos */
@@ -153,8 +165,10 @@ export async function createDemoHandler(req, res) {
   try {
     const videoFile = getUploadedFile(req, "video");
     const thumbnailFile = getUploadedFile(req, "thumbnail");
+    const documentKind = getDemoDocumentKindFromFile(videoFile);
     const payload = validateDemoPayload(req.body, {
       hasVideoFile: Boolean(videoFile),
+      isDocument: Boolean(documentKind),
     });
     if (payload.errors.length > 0) {
       await cleanupDemoTempFiles(req);
@@ -185,6 +199,8 @@ export async function createDemoHandler(req, res) {
     if (thumbnailFile) {
       const storedThumb = await storeDemoThumbnail(thumbnailFile, req);
       thumbnailUrl = storedThumb.imageUrl;
+    } else {
+      thumbnailUrl = await maybeStoreDocumentCover(documentKind, thumbnailFile, req);
     }
 
     const demo = await createDemo({
@@ -236,9 +252,13 @@ export async function updateDemoHandler(req, res) {
 
     const videoFile = getUploadedFile(req, "video");
     const thumbnailFile = getUploadedFile(req, "thumbnail");
+    const documentKind =
+      getDemoDocumentKindFromFile(videoFile) ||
+      getDemoDocumentKind(existing.videoUrl || "");
     const payload = validateDemoPayload(req.body, {
       hasVideoFile: Boolean(videoFile),
       existingVideoUrl: existing.videoUrl || "",
+      isDocument: Boolean(documentKind),
     });
     if (payload.errors.length > 0) {
       await cleanupDemoTempFiles(req);
@@ -259,6 +279,12 @@ export async function updateDemoHandler(req, res) {
     if (thumbnailFile) {
       const storedThumb = await storeDemoThumbnail(thumbnailFile, req);
       thumbnailUrl = storedThumb.imageUrl;
+    } else if (getDemoDocumentKindFromFile(videoFile)) {
+      thumbnailUrl =
+        (await maybeStoreDocumentCover(documentKind, thumbnailFile, req)) ||
+        thumbnailUrl;
+    } else if (!thumbnailUrl && documentKind) {
+      thumbnailUrl = await maybeStoreDocumentCover(documentKind, thumbnailFile, req);
     }
 
     const demo = await updateDemo(id, {

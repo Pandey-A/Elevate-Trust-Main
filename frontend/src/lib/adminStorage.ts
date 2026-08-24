@@ -91,7 +91,9 @@ export function deleteJob(id: string) {
 }
 
 export function youtubeThumb(videoId: string) {
-  return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+  const id = String(videoId || "").trim();
+  if (!id) return "";
+  return `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
 }
 
 export function groupJobsByCategory(jobs: AdminJob[]) {

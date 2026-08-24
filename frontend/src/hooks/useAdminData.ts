@@ -5,6 +5,7 @@ import { ADMIN_DATA_EVENT } from "../lib/adminStorage";
 import {
   AUTH_CHANGED_EVENT,
   getAuthSession,
+  getToken,
   type AuthSession,
 } from "../lib/auth";
 import { fetchAdminDemos, fetchPublicDemos } from "../lib/demosApi";
@@ -170,6 +171,12 @@ export function useAdminDemos() {
   const [error, setError] = useState("");
 
   const refresh = useCallback(async () => {
+    if (!getToken()) {
+      setDemos([]);
+      setLoading(false);
+      setError("");
+      return;
+    }
     try {
       setLoading(true);
       const data = await fetchAdminDemos();
@@ -188,7 +195,11 @@ export function useAdminDemos() {
       void refresh();
     };
     window.addEventListener(ADMIN_DATA_EVENT, onChange);
-    return () => window.removeEventListener(ADMIN_DATA_EVENT, onChange);
+    window.addEventListener(AUTH_CHANGED_EVENT, onChange);
+    return () => {
+      window.removeEventListener(ADMIN_DATA_EVENT, onChange);
+      window.removeEventListener(AUTH_CHANGED_EVENT, onChange);
+    };
   }, [refresh]);
 
   return { demos, loading, error, refresh };
@@ -235,6 +246,12 @@ export function useAdminBlogs() {
   const [error, setError] = useState("");
 
   const refresh = useCallback(async () => {
+    if (!getToken()) {
+      setBlogs([]);
+      setLoading(false);
+      setError("");
+      return;
+    }
     try {
       setLoading(true);
       const data = await fetchAdminBlogs();
@@ -253,7 +270,11 @@ export function useAdminBlogs() {
       void refresh();
     };
     window.addEventListener(ADMIN_DATA_EVENT, onChange);
-    return () => window.removeEventListener(ADMIN_DATA_EVENT, onChange);
+    window.addEventListener(AUTH_CHANGED_EVENT, onChange);
+    return () => {
+      window.removeEventListener(ADMIN_DATA_EVENT, onChange);
+      window.removeEventListener(AUTH_CHANGED_EVENT, onChange);
+    };
   }, [refresh]);
 
   return { blogs, loading, error, refresh };
@@ -300,6 +321,12 @@ export function useAdminTestimonials() {
   const [error, setError] = useState("");
 
   const refresh = useCallback(async () => {
+    if (!getToken()) {
+      setTestimonials([]);
+      setLoading(false);
+      setError("");
+      return;
+    }
     try {
       setLoading(true);
       const data = await fetchAdminTestimonials();
@@ -318,7 +345,11 @@ export function useAdminTestimonials() {
       void refresh();
     };
     window.addEventListener(ADMIN_DATA_EVENT, onChange);
-    return () => window.removeEventListener(ADMIN_DATA_EVENT, onChange);
+    window.addEventListener(AUTH_CHANGED_EVENT, onChange);
+    return () => {
+      window.removeEventListener(ADMIN_DATA_EVENT, onChange);
+      window.removeEventListener(AUTH_CHANGED_EVENT, onChange);
+    };
   }, [refresh]);
 
   return { testimonials, loading, error, refresh };
@@ -397,6 +428,12 @@ export function useAdminJobs() {
   const [error, setError] = useState("");
 
   const refresh = useCallback(async () => {
+    if (!getToken()) {
+      setJobs([]);
+      setLoading(false);
+      setError("");
+      return;
+    }
     try {
       setLoading(true);
       const data = await fetchAdminJobs();
@@ -416,7 +453,11 @@ export function useAdminJobs() {
       void refresh();
     };
     window.addEventListener(ADMIN_DATA_EVENT, onChange);
-    return () => window.removeEventListener(ADMIN_DATA_EVENT, onChange);
+    window.addEventListener(AUTH_CHANGED_EVENT, onChange);
+    return () => {
+      window.removeEventListener(ADMIN_DATA_EVENT, onChange);
+      window.removeEventListener(AUTH_CHANGED_EVENT, onChange);
+    };
   }, [refresh]);
 
   return { jobs, loading, error, refresh };

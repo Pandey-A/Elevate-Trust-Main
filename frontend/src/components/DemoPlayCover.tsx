@@ -1,5 +1,6 @@
 import { Play } from "lucide-react";
 import type { AdminDemo } from "../data/adminDefaults";
+import { getDemoDocumentKind, isDemoDocumentDemo } from "../lib/demoMedia";
 import { getDemoTitleImage, hasDemoTitleImage } from "../lib/demoThumbnails";
 import { getOptimizedImageUrl } from "../lib/optimizeImageUrl";
 
@@ -23,22 +24,32 @@ export default function DemoPlayCover({
   asButton = true,
   compact = false,
 }: DemoPlayCoverProps) {
+  const documentKind = getDemoDocumentKind(demo.videoUrl || "");
+  const isDocument = Boolean(documentKind);
   const src = getOptimizedImageUrl(getDemoTitleImage(demo), {
     width: 960,
     height: 540,
     crop: "fill",
   });
-  const branded = hasDemoTitleImage(demo);
+  const branded = hasDemoTitleImage(demo) || isDocument;
 
   const content = (
     <>
-      <img
-        src={src}
-        alt={demo.title}
-        loading="lazy"
-        decoding="async"
-        className="absolute inset-0 h-full w-full object-cover object-center transition duration-500 ease-out group-hover:scale-[1.03]"
-      />
+      {demo.thumbnailUrl || !isDocument ? (
+        <img
+          src={src || undefined}
+          alt={demo.title}
+          loading="lazy"
+          decoding="async"
+          className="absolute inset-0 h-full w-full object-cover object-center transition duration-500 ease-out group-hover:scale-[1.03]"
+        />
+      ) : (
+        <div className="absolute inset-0 flex items-center justify-center bg-[#DC2626] transition duration-500 ease-out group-hover:scale-[1.03]">
+          <span className="text-[clamp(28px,4vw,56px)] font-bold tracking-wide text-white">
+            {documentKind}
+          </span>
+        </div>
+      )}
 
       {/* Top title bar — always readable */}
       {showTitle ? (
@@ -81,9 +92,9 @@ export default function DemoPlayCover({
     return (
       <button
         type="button"
-        onClick={onPlay}
+        onClick={() => onPlay?.()}
         className={`${sharedClassName} cursor-pointer border-0 p-0 text-left`}
-        aria-label={`Play ${demo.title}`}
+        aria-label={isDemoDocumentDemo(demo) ? `Open ${demo.title}` : `Play ${demo.title}`}
       >
         {content}
       </button>

@@ -4,6 +4,10 @@ import multer from "multer";
 import { Readable } from "stream";
 import { fileURLToPath } from "url";
 import cloudinary from "../config/cloudinary.js";
+import {
+  createDocumentCoverSvg,
+  getDemoDocumentKindFromFile,
+} from "../utils/demoMedia.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -171,16 +175,31 @@ export const uploadDemoFields = multer({
     if (field === "video") {
       const mime = String(file.mimetype || "").toLowerCase();
       const ext = getFileExtension(file.originalname);
-      const mimeOk =
+      const videoExts = ["mp4", "webm", "mov", "m4v", "ogg"];
+      const documentExts = ["pdf", "ppt", "pptx", "doc", "docx"];
+      const documentMimes = [
+        "application/pdf",
+        "application/msword",
+        "application/vnd.ms-powerpoint",
+        "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      ];
+      const isDocument =
+        documentExts.includes(ext) || documentMimes.includes(mime);
+      const isVideo =
         mime.startsWith("video/") ||
-        mime === "" ||
-        mime === "application/octet-stream";
-      const extOk = !ext || ["mp4", "webm", "mov", "m4v", "ogg"].includes(ext);
-      if (mimeOk && extOk) {
+        videoExts.includes(ext) ||
+        ((mime === "" || mime === "application/octet-stream") &&
+          (!ext || videoExts.includes(ext)));
+      if (isDocument || isVideo) {
         cb(null, true);
         return;
       }
-      cb(new Error("Only video files are allowed (MP4, WEBM, MOV)."));
+      cb(
+        new Error(
+          "Only video (MP4, WEBM, MOV) or document (PPTX, PDF, DOCX) files are allowed.",
+        ),
+      );
       return;
     }
 
@@ -205,6 +224,19 @@ function getExtension(originalName, mimetype) {
   if (fromName) return fromName;
   if (mimetype === "application/pdf") return "pdf";
   if (mimetype === "application/msword") return "doc";
+  if (mimetype === "application/vnd.ms-powerpoint") return "ppt";
+  if (
+    mimetype ===
+    "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+  ) {
+    return "pptx";
+  }
+  if (
+    mimetype ===
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+  ) {
+    return "docx";
+  }
   if (mimetype === "image/png") return "png";
   if (mimetype === "image/webp") return "webp";
   if (mimetype === "image/gif") return "gif";
@@ -278,6 +310,48 @@ function uploadImageToCloudinary(file, folder = "elevate-trust/blogs") {
     type: "upload",
     access_mode: "public",
     overwrite: false,
+  };
+
+  if (file.path) {
+    return cloudinary.uploader.upload(file.path, options);
+  }
+
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(options, (error, result) => {
+      if (error) {
+        reject(error);
+        return;
+      }
+      resolve(result);
+    });
+
+    Readable.from(file.buffer).pipe(stream);
+  });
+}
+
+function uploadRawToCloudinary(file, folder = "elevate-trust/demos") {
+  if (!hasUploadPayload(file)) {
+    return Promise.resolve(null);
+  }
+
+  if (
+    !process.env.CLOUDINARY_CLOUD_NAME ||
+    !process.env.CLOUDINARY_API_KEY ||
+    !process.env.CLOUDINARY_API_SECRET
+  ) {
+    return Promise.reject(new Error("Cloudinary is not configured"));
+  }
+
+  const ext = getExtension(file.originalname, file.mimetype);
+  const publicId = `${Date.now()}-${safeBaseName(file.originalname)}.${ext}`;
+  const options = {
+    resource_type: "raw",
+    folder,
+    public_id: publicId,
+    type: "upload",
+    access_mode: "public",
+    overwrite: false,
+    chunk_size: 6_000_000,
   };
 
   if (file.path) {
@@ -547,15 +621,19 @@ export async function storeDemoThumbnail(file, req) {
   }
 }
 
-/** Demo video file: Cloudinary with local fallback. */
+/** Demo video or document file: Cloudinary with local fallback. */
 export async function storeDemoVideo(file, req) {
   if (!hasUploadPayload(file)) {
     throw new Error("Demo video file is required.");
   }
 
+  const isDocument = Boolean(getDemoDocumentKindFromFile(file));
+
   try {
     try {
-      const uploaded = await uploadVideoToCloudinary(file, "elevate-trust/demos");
+      const uploaded = isDocument
+        ? await uploadRawToCloudinary(file, "elevate-trust/demos")
+        : await uploadVideoToCloudinary(file, "elevate-trust/demos");
       if (uploaded?.secure_url) {
         return {
           videoUrl: uploaded.secure_url,
@@ -565,7 +643,7 @@ export async function storeDemoVideo(file, req) {
       }
     } catch (error) {
       console.warn(
-        "Cloudinary demo video upload failed, saving locally:",
+        `Cloudinary demo ${isDocument ? "document" : "video"} upload failed, saving locally:`,
         error?.message || error,
       );
     }
@@ -579,4 +657,14 @@ export async function storeDemoVideo(file, req) {
   } finally {
     await cleanupTempUpload(file);
   }
+}
+
+export async function storeGeneratedDocumentCover(kind, req) {
+  const svg = createDocumentCoverSvg(kind);
+  const file = {
+    originalname: `cover-${String(kind).toLowerCase()}.svg`,
+    mimetype: "image/svg+xml",
+    buffer: Buffer.from(svg),
+  };
+  return storeDemoThumbnail(file, req);
 }

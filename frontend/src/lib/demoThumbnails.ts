@@ -180,7 +180,7 @@ export function getDemoTitleImage(
   const byTitle = demo.title ? BY_TITLE[normalizeTitle(demo.title)] : undefined;
   if (byTitle) return byTitle;
 
-  return youtubeThumb(demo.videoId);
+  return demo.videoId ? youtubeThumb(demo.videoId) : "";
 }
 
 /** True when we resolved a branded title card (not a raw YouTube frame). */

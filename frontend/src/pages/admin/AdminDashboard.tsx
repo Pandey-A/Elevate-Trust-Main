@@ -22,6 +22,8 @@ import {
   Quote,
   UploadCloud,
   Video,
+  Maximize2,
+  Minimize2,
   X,
 } from "lucide-react";
 import { type AdminDemo, type AdminJob, type IndustryTag } from "../../data/adminDefaults";
@@ -68,6 +70,13 @@ import DemoPlayCover from "../../components/DemoPlayCover";
 import DemoVideoPlayer from "../../components/DemoVideoPlayer";
 import { excerptFromContent, isRichTextEmpty } from "../../lib/blogContent";
 import elevateLogo from "../../assets/nav/elevate-logo.svg";
+import {
+  createDocumentCoverFile,
+  DEMO_MEDIA_ACCEPT,
+  getDemoDocumentKind,
+  getDemoDocumentKindFromFile,
+  isDemoDocumentDemo,
+} from "../../lib/demoMedia";
 
 type Tab = "overview" | "demos" | "blogs" | "testimonials" | "tags" | "jobs" | "applications";
 
@@ -143,6 +152,7 @@ export default function AdminDashboard() {
   const [demoVideoFile, setDemoVideoFile] = useState<File | null>(null);
   const [demoVideoPreview, setDemoVideoPreview] = useState<string | null>(null);
   const [demoExistingVideoUrl, setDemoExistingVideoUrl] = useState<string | null>(null);
+  const autoDocCoverRef = useRef(false);
   const [demoVideoDragOver, setDemoVideoDragOver] = useState(false);
   const [blogForm, setBlogForm] = useState(emptyBlogForm);
   const [blogImageFile, setBlogImageFile] = useState<File | null>(null);
@@ -181,6 +191,7 @@ export default function AdminDashboard() {
   const [tagSuccess, setTagSuccess] = useState("");
   const [tagSaving, setTagSaving] = useState(false);
   const [playingDemo, setPlayingDemo] = useState<AdminDemo | null>(null);
+  const [playingDemoExpanded, setPlayingDemoExpanded] = useState(false);
   const [applications, setApplications] = useState<CareerApplication[]>([]);
   const [applicationsLoading, setApplicationsLoading] = useState(false);
   const [applicationsError, setApplicationsError] = useState("");
@@ -303,8 +314,11 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     if (!playingDemo && !demoModalOpen) return;
+
+    setPlayingDemoExpanded(false);
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key !== "Escape") return;
+      setPlayingDemoExpanded(false);
       setPlayingDemo(null);
       if (demoModalOpen) {
         setDemoModalOpen(false);
@@ -455,6 +469,7 @@ export default function AdminDashboard() {
     if (demoVideoPreview) URL.revokeObjectURL(demoVideoPreview);
     setDemoVideoPreview(null);
     setDemoExistingVideoUrl(null);
+    autoDocCoverRef.current = false;
     setDemoVideoDragOver(false);
     setDemoUploadProgress(null);
     setDemoError("");
@@ -495,6 +510,7 @@ export default function AdminDashboard() {
     if (demoVideoPreview) URL.revokeObjectURL(demoVideoPreview);
     setDemoVideoPreview(null);
     setDemoExistingVideoUrl(demo.videoUrl ?? null);
+    autoDocCoverRef.current = false;
     setDemoSuccess("");
     setDemoError("");
     setTagDropdownOpen(false);
@@ -527,25 +543,59 @@ export default function AdminDashboard() {
     });
   };
 
-  const assignDemoVideoFile = (file: File | null) => {
+  const assignDemoVideoFile = async (file: File | null) => {
     if (demoVideoPreview) URL.revokeObjectURL(demoVideoPreview);
     if (!file) {
       setDemoVideoFile(null);
       setDemoVideoPreview(null);
+      if (autoDocCoverRef.current) {
+        setDemoThumbnailFile(null);
+        setDemoThumbnailPreview(null);
+        autoDocCoverRef.current = false;
+      }
       return;
     }
-    if (!file.type.startsWith("video/") && !/\.(mp4|webm|mov|m4v|ogg)$/i.test(file.name)) {
-      setDemoError("Please upload a video file (MP4, WEBM, or MOV).");
+
+    const documentKind = getDemoDocumentKindFromFile(file);
+    const isVideo =
+      file.type.startsWith("video/") || /\.(mp4|webm|mov|m4v|ogg)$/i.test(file.name);
+    if (!documentKind && !isVideo) {
+      setDemoError("Please upload a video (MP4, WEBM, MOV) or document (PPTX, PDF, DOCX).");
       return;
     }
     if (file.size > DEMO_VIDEO_MAX_BYTES) {
-      setDemoError("Video must be 500MB or smaller.");
+      setDemoError("File must be 500MB or smaller.");
       return;
     }
+
     setDemoError("");
     setDemoVideoFile(file);
-    setDemoVideoPreview(URL.createObjectURL(file));
+    setDemoVideoPreview(documentKind ? null : URL.createObjectURL(file));
+
+    if (documentKind) {
+      setDemoForm((prev) => ({ ...prev, industries: [], youtubeUrl: "" }));
+      try {
+        const cover = await createDocumentCoverFile(documentKind);
+        setDemoThumbnailFile(cover);
+        setDemoThumbnailPreview(URL.createObjectURL(cover));
+        autoDocCoverRef.current = true;
+      } catch {
+        autoDocCoverRef.current = false;
+      }
+      return;
+    }
+
+    if (autoDocCoverRef.current) {
+      setDemoThumbnailFile(null);
+      setDemoThumbnailPreview(null);
+      autoDocCoverRef.current = false;
+    }
   };
+
+  const selectedDocumentKind =
+    getDemoDocumentKindFromFile(demoVideoFile) ||
+    getDemoDocumentKind(demoExistingVideoUrl || "");
+  const isDocumentDemo = Boolean(selectedDocumentKind);
 
   const submitDemo = async (event: FormEvent) => {
     event.preventDefault();
@@ -558,18 +608,18 @@ export default function AdminDashboard() {
       return;
     }
     if (!demoVideoFile && !demoExistingVideoUrl && !videoId) {
-      setDemoError("Upload a demo video or paste a YouTube URL (temporary).");
+      setDemoError("Upload a demo video or document, or paste a YouTube URL (temporary).");
       return;
     }
-    if (demoForm.industries.length === 0) {
+    if (!isDocumentDemo && demoForm.industries.length === 0) {
       setDemoError("Select at least one industry tag.");
       return;
     }
 
     const payload = {
       title: demoForm.title.trim(),
-      youtubeUrl: demoForm.youtubeUrl.trim(),
-      industries: demoForm.industries,
+      youtubeUrl: isDocumentDemo ? "" : demoForm.youtubeUrl.trim(),
+      industries: isDocumentDemo ? [] : demoForm.industries,
       isPublic: demoForm.isPublic,
       thumbnailFile: demoThumbnailFile,
       videoFile: demoVideoFile,
@@ -1130,7 +1180,9 @@ export default function AdminDashboard() {
                         demo={demo}
                         compact
                         showTitle
-                        onPlay={() => setPlayingDemo(demo)}
+                        onPlay={() => {
+                          setPlayingDemo(demo);
+                        }}
                       />
                     </article>
                   ))}
@@ -1300,7 +1352,9 @@ export default function AdminDashboard() {
                       <DemoPlayCover
                         demo={demo}
                         showTitle
-                        onPlay={() => setPlayingDemo(demo)}
+                        onPlay={() => {
+                          setPlayingDemo(demo);
+                        }}
                       />
                     </div>
                     <div className="flex flex-1 flex-col p-4">
@@ -1308,14 +1362,20 @@ export default function AdminDashboard() {
                         {demo.title}
                       </h3>
                       <div className="mt-2 flex min-h-[3.25rem] flex-wrap content-start gap-1.5">
-                        {demo.industries.map((industry) => (
-                          <span
-                            key={industry}
-                            className="rounded-full bg-[#EFF7FC] px-2.5 py-1 text-[11px] font-semibold text-[#2365aa]"
-                          >
-                            {industry}
+                        {demo.industries.length > 0 ? (
+                          demo.industries.map((industry) => (
+                            <span
+                              key={industry}
+                              className="rounded-full bg-[#EFF7FC] px-2.5 py-1 text-[11px] font-semibold text-[#2365aa]"
+                            >
+                              {industry}
+                            </span>
+                          ))
+                        ) : (
+                          <span className="rounded-full bg-[#fff1f1] px-2.5 py-1 text-[11px] font-semibold text-[#DC2626]">
+                            {isDemoDocumentDemo(demo) ? "Document · no tags" : "No tags"}
                           </span>
-                        ))}
+                        )}
                       </div>
                       <div className="mt-auto flex flex-col gap-2 pt-4 md:flex-row md:flex-wrap">
                         {isSuperAdmin ? (
@@ -2291,7 +2351,7 @@ export default function AdminDashboard() {
                   {editingDemo ? "Update demo" : "Add demo"}
                 </h2>
                 <p className="mt-1.5 text-sm text-[#848b9b]">
-                  Upload a video for the website player, or use YouTube as a temporary option.
+                  Upload a video or document (PPTX, PDF, DOCX), or use YouTube as a temporary option.
                 </p>
               </div>
               <button
@@ -2323,15 +2383,19 @@ export default function AdminDashboard() {
 
                 <section className="space-y-2.5 rounded-2xl border border-[#d7e6f3] bg-[#f7fafc] p-4">
                   <div>
-                    <p className="m-0 text-sm font-semibold text-[#1F2432]">Demo video</p>
+                    <p className="m-0 text-sm font-semibold text-[#1F2432]">Demo file</p>
                     <p className="mt-1 text-xs text-[#687181]">
-                      Recommended. Plays on your website without YouTube branding.
+                      Video plays on the website. Documents open in a new tab and stay without industry tags.
                     </p>
                   </div>
                   {(demoVideoFile || demoVideoPreview) ? (
                     <div className="flex items-stretch gap-3 rounded-2xl border border-[#d7e6f3] bg-white p-3">
                       <div className="relative h-[88px] w-[148px] shrink-0 overflow-hidden rounded-xl bg-black">
-                        {demoVideoPreview ? (
+                        {selectedDocumentKind ? (
+                          <div className="flex h-full w-full items-center justify-center bg-[#DC2626] text-2xl font-bold text-white">
+                            {selectedDocumentKind}
+                          </div>
+                        ) : demoVideoPreview ? (
                           <video
                             src={demoVideoPreview}
                             className="h-full w-full object-cover"
@@ -2348,7 +2412,7 @@ export default function AdminDashboard() {
                       <div className="flex min-w-0 flex-1 flex-col justify-between gap-2 py-0.5">
                         <div className="min-w-0">
                           <p className="m-0 truncate text-sm font-semibold text-[#1F2432]">
-                            {demoVideoFile?.name || "Selected video"}
+                            {demoVideoFile?.name || "Selected file"}
                           </p>
                           <p className="mt-0.5 text-xs text-[#687181]">
                             {demoVideoFile
@@ -2361,18 +2425,18 @@ export default function AdminDashboard() {
                             Change
                             <input
                               type="file"
-                              accept="video/mp4,video/webm,video/quicktime,video/*"
+                              accept={DEMO_MEDIA_ACCEPT}
                               className="sr-only"
                               onChange={(event) => {
                                 const file = event.target.files?.[0] ?? null;
-                                assignDemoVideoFile(file);
+                                void assignDemoVideoFile(file);
                                 event.target.value = "";
                               }}
                             />
                           </label>
                           <button
                             type="button"
-                            onClick={() => assignDemoVideoFile(null)}
+                            onClick={() => void assignDemoVideoFile(null)}
                             className="inline-flex cursor-pointer items-center rounded-full border border-[#d7e6f3] bg-white px-3 py-1.5 text-xs font-semibold text-[#5b6b82] transition hover:border-[#2365aa]/30 hover:text-[#2365aa]"
                           >
                             Remove
@@ -2384,7 +2448,9 @@ export default function AdminDashboard() {
                     <div className="flex items-center justify-between gap-3 rounded-2xl border border-[#d7e6f3] bg-white px-4 py-3">
                       <div className="min-w-0">
                         <p className="m-0 truncate text-sm font-semibold text-[#1F2432]">
-                          Current uploaded video
+                          {selectedDocumentKind
+                            ? `Current uploaded ${selectedDocumentKind}`
+                            : "Current uploaded video"}
                         </p>
                         <p className="mt-0.5 text-xs text-[#687181]">
                           Kept unless you upload a new file
@@ -2394,11 +2460,11 @@ export default function AdminDashboard() {
                         Replace
                         <input
                           type="file"
-                          accept="video/mp4,video/webm,video/quicktime,video/*"
+                          accept={DEMO_MEDIA_ACCEPT}
                           className="sr-only"
                           onChange={(event) => {
                             const file = event.target.files?.[0] ?? null;
-                            assignDemoVideoFile(file);
+                            void assignDemoVideoFile(file);
                             event.target.value = "";
                           }}
                         />
@@ -2422,7 +2488,7 @@ export default function AdminDashboard() {
                         event.preventDefault();
                         setDemoVideoDragOver(false);
                         const file = event.dataTransfer.files?.[0] ?? null;
-                        assignDemoVideoFile(file);
+                        void assignDemoVideoFile(file);
                       }}
                       className={`flex min-h-[112px] cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed px-5 py-5 text-center transition ${
                         demoVideoDragOver
@@ -2434,18 +2500,18 @@ export default function AdminDashboard() {
                         <UploadCloud size={20} />
                       </span>
                       <span className="text-sm font-semibold text-[#1F2432]">
-                        Drag & drop video here
+                        Drag & drop video or document here
                       </span>
                       <span className="text-xs text-[#687181]">
-                        or browse · MP4 / WEBM / MOV · up to 500MB
+                        or browse · MP4 / WEBM / MOV / PPTX / PDF / DOCX · up to 500MB
                       </span>
                       <input
                         type="file"
-                        accept="video/mp4,video/webm,video/quicktime,video/*"
+                        accept={DEMO_MEDIA_ACCEPT}
                         className="sr-only"
                         onChange={(event) => {
                           const file = event.target.files?.[0] ?? null;
-                          assignDemoVideoFile(file);
+                          void assignDemoVideoFile(file);
                           event.target.value = "";
                         }}
                       />
@@ -2453,6 +2519,7 @@ export default function AdminDashboard() {
                   )}
                 </section>
 
+                {!isDocumentDemo ? (
                 <section className="space-y-2.5">
                   <div>
                     <p className="m-0 text-sm font-semibold text-[#1F2432]">
@@ -2474,6 +2541,7 @@ export default function AdminDashboard() {
                     placeholder="https://www.youtube.com/watch?v=..."
                   />
                 </section>
+                ) : null}
                 </div>
 
                 <div className="space-y-5">
@@ -2494,6 +2562,7 @@ export default function AdminDashboard() {
                           className="sr-only"
                           onChange={(event) => {
                             const file = event.target.files?.[0] ?? null;
+                            autoDocCoverRef.current = false;
                             setDemoThumbnailFile(file);
                             setDemoThumbnailPreview(file ? URL.createObjectURL(file) : null);
                           }}
@@ -2509,6 +2578,7 @@ export default function AdminDashboard() {
                           <button
                             type="button"
                             onClick={() => {
+                              autoDocCoverRef.current = false;
                               setDemoThumbnailFile(null);
                               setDemoThumbnailPreview(null);
                             }}
@@ -2522,6 +2592,14 @@ export default function AdminDashboard() {
                     </div>
                   </section>
 
+                {isDocumentDemo ? (
+                  <section className="space-y-2.5 rounded-2xl border border-[#d7e6f3] bg-[#fff7f7] p-4">
+                    <p className="m-0 text-sm font-semibold text-[#1F2432]">Industry tags</p>
+                    <p className="m-0 text-xs leading-5 text-[#687181]">
+                      Document demos stay without tags and only appear under All on the website.
+                    </p>
+                  </section>
+                ) : (
                 <section className="space-y-2.5">
                   <div className="flex flex-wrap items-end justify-between gap-2">
                     <div>
@@ -2628,6 +2706,7 @@ export default function AdminDashboard() {
                     </div>
                   ) : null}
                 </section>
+                )}
 
                 <section className="space-y-2.5">
                     <div>
@@ -2714,30 +2793,64 @@ export default function AdminDashboard() {
 
       {playingDemo ? (
         <div
-          className="fixed inset-0 z-[200] flex items-center justify-center bg-[#0b1220]/72 p-4 backdrop-blur-[2px] sm:p-6"
+          className={`fixed inset-0 z-[200] flex bg-[#0b1220]/72 backdrop-blur-[2px] ${
+            playingDemoExpanded
+              ? "items-stretch p-0"
+              : "items-center justify-center p-4 sm:p-6"
+          }`}
           role="dialog"
           aria-modal="true"
           aria-label={playingDemo.title}
-          onClick={() => setPlayingDemo(null)}
+          onClick={() => {
+            setPlayingDemoExpanded(false);
+            setPlayingDemo(null);
+          }}
         >
           <div
-            className="relative w-full max-w-[960px] overflow-hidden rounded-[20px] bg-[#0b1220] shadow-[0_30px_80px_-20px_rgba(0,0,0,0.65)]"
+            className={`relative w-full overflow-hidden bg-[#0b1220] shadow-[0_30px_80px_-20px_rgba(0,0,0,0.65)] ${
+              playingDemoExpanded
+                ? "h-full max-w-none rounded-none shadow-none"
+                : "max-w-[960px] rounded-[20px]"
+            }`}
             onClick={(event) => event.stopPropagation()}
           >
             <div className="flex items-center justify-between gap-4 border-b border-white/10 px-4 py-3 sm:px-5">
               <h3 className="m-0 truncate text-sm font-semibold text-white sm:text-base">
                 {playingDemo.title}
               </h3>
-              <button
-                type="button"
-                onClick={() => setPlayingDemo(null)}
-                className="inline-flex size-9 cursor-pointer items-center justify-center rounded-full border-0 bg-white/10 text-white transition-colors hover:bg-white/20"
-                aria-label="Close video"
-              >
-                <X size={18} />
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setPlayingDemoExpanded((v) => !v)}
+                  className="inline-flex size-9 cursor-pointer items-center justify-center rounded-full border-0 bg-white/10 text-white transition-colors hover:bg-white/20"
+                  aria-label={playingDemoExpanded ? "Minimize" : "Maximize"}
+                >
+                  {playingDemoExpanded ? (
+                    <Minimize2 size={18} />
+                  ) : (
+                    <Maximize2 size={18} />
+                  )}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setPlayingDemoExpanded(false);
+                    setPlayingDemo(null);
+                  }}
+                  className="inline-flex size-9 cursor-pointer items-center justify-center rounded-full border-0 bg-white/10 text-white transition-colors hover:bg-white/20"
+                  aria-label="Close video"
+                >
+                  <X size={18} />
+                </button>
+              </div>
             </div>
-            <div className="relative aspect-video w-full bg-black">
+            <div
+              className={
+                playingDemoExpanded
+                  ? "relative h-full w-full bg-black"
+                  : "relative aspect-video w-full bg-black"
+              }
+            >
               <DemoVideoPlayer
                 title={playingDemo.title}
                 videoUrl={playingDemo.videoUrl}

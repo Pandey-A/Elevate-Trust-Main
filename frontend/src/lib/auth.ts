@@ -127,8 +127,18 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
+    // Only clear session when a token was sent and rejected (expired/invalid).
+    // Unauthenticated probes (no Bearer) also return 401 — do not treat those as logout.
     if (error?.response?.status === 401) {
-      logoutUser();
+      const hadToken = Boolean(getToken());
+      const authHeader = String(
+        error?.config?.headers?.Authorization ||
+          error?.config?.headers?.authorization ||
+          "",
+      );
+      if (hadToken || authHeader.startsWith("Bearer ")) {
+        logoutUser();
+      }
     }
     return Promise.reject(error);
   },

@@ -22,10 +22,7 @@ function mapDemo(row: DemoApiRow): AdminDemo {
     videoId: row.videoId || "",
     youtubeUrl: row.youtubeUrl || "",
     videoUrl: row.videoUrl ?? null,
-    industries:
-      industries.length > 0
-        ? industries
-        : (["Financial Services & FinTech"] as IndustryTag[]),
+    industries,
     thumbnailUrl: row.thumbnailUrl ?? null,
     isPublic: row.isPublic !== false,
   };

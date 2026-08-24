@@ -1,3 +1,4 @@
+import { getDemoDocumentKind } from "../lib/demoMedia";
 import { getOptimizedDemoVideoUrl } from "../lib/demoVideoUrl";
 
 type Props = {
@@ -20,6 +21,22 @@ function youtubeEmbed(videoId: string) {
 /** Prefer Cloudinary/native video; temporary YouTube iframe fallback. */
 export default function DemoVideoPlayer({ title, videoUrl, videoId, poster }: Props) {
   if (videoUrl) {
+    const documentKind = getDemoDocumentKind(videoUrl);
+    if (documentKind) {
+      const isPdf = documentKind === "PDF";
+      const viewerUrl = isPdf
+        ? videoUrl
+        : `https://docs.google.com/gview?url=${encodeURIComponent(videoUrl)}&embedded=true`;
+      return (
+        <iframe
+          key={videoUrl}
+          src={viewerUrl}
+          title={title}
+          className="absolute inset-0 h-full w-full border-0 bg-white"
+          allowFullScreen
+        />
+      );
+    }
     const playbackUrl = getOptimizedDemoVideoUrl(videoUrl);
     return (
       <video

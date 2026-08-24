@@ -8,14 +8,14 @@ import {
   toggleBlogVisibilityHandler,
   updateBlogHandler,
 } from "../controllers/blogController.js";
-import { requireAuth, requireSuperAdmin } from "../middleware/auth.js";
+import { requireAdmin, requireAuth, requireSuperAdmin } from "../middleware/auth.js";
 import { uploadBlogImage } from "../middleware/upload.js";
 
 const router = express.Router();
 
 router.get("/", getPublicBlogs);
-router.get("/admin", requireAuth, requireSuperAdmin, getAdminBlogs);
-router.get("/admin/all", requireAuth, requireSuperAdmin, getAdminBlogs);
+router.get("/admin", requireAuth, requireAdmin, getAdminBlogs);
+router.get("/admin/all", requireAuth, requireAdmin, getAdminBlogs);
 router.get("/:id", getPublicBlogById);
 router.post(
   "/",

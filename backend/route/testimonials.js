@@ -6,14 +6,14 @@ import {
   getPublicTestimonials,
   updateTestimonialHandler,
 } from "../controllers/testimonialController.js";
-import { requireAuth, requireSuperAdmin } from "../middleware/auth.js";
+import { requireAdmin, requireAuth, requireSuperAdmin } from "../middleware/auth.js";
 import { uploadTestimonialImages } from "../middleware/upload.js";
 
 const router = express.Router();
 
 router.get("/", getPublicTestimonials);
-router.get("/admin", requireAuth, requireSuperAdmin, getAdminTestimonials);
-router.get("/admin/all", requireAuth, requireSuperAdmin, getAdminTestimonials);
+router.get("/admin", requireAuth, requireAdmin, getAdminTestimonials);
+router.get("/admin/all", requireAuth, requireAdmin, getAdminTestimonials);
 router.post(
   "/",
   requireAuth,
