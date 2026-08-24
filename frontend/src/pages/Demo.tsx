@@ -460,7 +460,7 @@ export default function Demo() {
                           className="inline-flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-full border-0 bg-[#2365aa] px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[#1a5490]"
                         >
                           <Play size={15} fill="currentColor" />
-                          {isDemoDocumentDemo(demo) ? "Open file" : "See demo"}
+                          {isDemoDocumentDemo(demo) ? "View demo" : "See demo"}
                         </button>
 
                         {caseStudyHref ? (
@@ -504,14 +504,14 @@ export default function Demo() {
           }}
         >
           <div
-            className={`relative w-full overflow-hidden bg-[#0b1220] shadow-[0_30px_80px_-20px_rgba(0,0,0,0.65)] ${
+            className={`relative flex w-full flex-col overflow-hidden bg-[#0b1220] shadow-[0_30px_80px_-20px_rgba(0,0,0,0.65)] ${
               activeDemoExpanded
                 ? "h-full max-w-none rounded-none shadow-none"
                 : "max-w-[960px] rounded-[20px]"
             }`}
             onClick={(event) => event.stopPropagation()}
           >
-            <div className="flex items-center justify-between gap-4 border-b border-white/10 px-4 py-3 sm:px-5">
+            <div className="flex shrink-0 items-center justify-between gap-4 border-b border-white/10 px-4 py-3 sm:px-5">
               <h3 className="m-0 truncate text-sm font-semibold text-white sm:text-base">
                 {activeDemo.title}
               </h3>
@@ -537,12 +537,19 @@ export default function Demo() {
                 </button>
               </div>
             </div>
-            <div className={activeDemoExpanded ? "relative h-full w-full bg-black" : "relative aspect-video w-full bg-black"}>
+            <div
+              className={
+                activeDemoExpanded
+                  ? "relative min-h-0 w-full flex-1 bg-black"
+                  : "relative aspect-video w-full bg-black"
+              }
+            >
               <DemoVideoPlayer
                 title={activeDemo.title}
                 videoUrl={activeDemo.videoUrl}
                 videoId={activeDemo.videoId}
                 poster={activeDemo.thumbnailUrl}
+                blockDocumentClicks
               />
             </div>
           </div>

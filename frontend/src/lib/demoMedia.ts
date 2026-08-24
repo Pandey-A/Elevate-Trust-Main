@@ -52,12 +52,10 @@ export function isDemoDocumentDemo(
 }
 
 export function openDemoDocument(
-  demo: Pick<AdminDemo, "videoUrl" | "title"> | null | undefined,
+  _demo: Pick<AdminDemo, "videoUrl" | "title"> | null | undefined,
 ) {
-  const url = demo?.videoUrl;
-  if (!url || !getDemoDocumentKind(url)) return false;
-  window.open(url, "_blank", "noopener,noreferrer");
-  return true;
+  // Downloads / raw file opens are disabled for demos.
+  return false;
 }
 
 export async function createDocumentCoverFile(kind: DemoDocumentKind) {
