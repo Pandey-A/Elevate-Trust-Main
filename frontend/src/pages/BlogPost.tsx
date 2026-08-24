@@ -100,7 +100,7 @@ export default function BlogPostPage() {
           className="service-page-hero__map"
         />
         <div className="service-page-hero__content max-w-[920px]">
-          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.16em] text-[#8eb4df]">
+          <p className="service-page-hero__eyebrow">
             Blog
           </p>
           <h1 className="m-0 text-[clamp(26px,3.4vw,42px)] font-bold leading-[1.25] tracking-tight text-white">

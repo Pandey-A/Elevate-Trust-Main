@@ -385,6 +385,21 @@ body {
   text-align: center;
 }
 
+.service-page-hero__eyebrow {
+  margin-bottom: 0.75rem !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.16em !important;
+  color: #8eb4df !important;
+}
+
+@media (min-width: 1536px) {
+  .service-page-hero__eyebrow {
+    font-size: 16px !important;
+  }
+}
+
 /* Shared hero h1 font size — same on every page using this blue hero */
 .service-page-hero__content h1 {
   font-size: clamp(32px, 4vw, 48px) !important;
@@ -405,19 +420,19 @@ body {
 }
 
 /* Shared hero paragraph font size */
-.service-page-hero__content p {
+.service-page-hero__content p:not(.service-page-hero__eyebrow) {
   font-size: clamp(14px, 1.4vw, 18px) !important;
   line-height: 1.6 !important;
 }
 
 @media (min-width: 1024px) {
-  .service-page-hero__content p {
+  .service-page-hero__content p:not(.service-page-hero__eyebrow) {
     font-size: clamp(13px, 1.1vw, 15px) !important;
   }
 }
 
 @media (min-width: 1536px) {
-  .service-page-hero__content p {
+  .service-page-hero__content p:not(.service-page-hero__eyebrow) {
     font-size: clamp(14px, 1.4vw, 18px) !important;
   }
 }

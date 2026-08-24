@@ -134,20 +134,23 @@ export default function CaseStudies() {
           aria-hidden="true"
         />
         <div className="service-page-hero__content">
-          <span className="mb-3 text-sm font-semibold uppercase tracking-[0.16em] text-[#8eb4df]">
+          <p className="service-page-hero__eyebrow">
             Resources
-          </span>
-          <h1 className="m-0 font-bold leading-[1.29] tracking-tight text-white">
+          </p>
+          <h1 className="m-0 text-[clamp(32px,4vw,48px)] font-bold leading-[1.29] tracking-tight text-white lg:text-[clamp(26px,3vw,34px)] 2xl:text-[clamp(32px,4vw,48px)]">
             Case Studies That Show Real AI Impact
           </h1>
-          <p className="m-0 mt-4 max-w-[783px] font-['Ubuntu',sans-serif] font-normal leading-6 text-[#a1b1cb]">
+          <p className="mt-[clamp(12px,1.5vw,20px)] max-w-[783px] font-['Ubuntu',sans-serif] text-[clamp(14px,1.4vw,18px)] font-normal leading-6 text-[#a1b1cb] lg:text-[clamp(13px,1.1vw,15px)] 2xl:text-[clamp(14px,1.4vw,18px)]">
             Explore how ElevateTrust.AI partners with enterprises to solve complex
             problems, from agentic automation and predictive maintenance to video
             analytics and document intelligence, with measurable business outcomes.
           </p>
-          <Link to="/contact">
+          <Link
+            to="/contact"
+            className="mt-[clamp(16px,2vw,28px)] inline-flex items-center gap-1.5 rounded-full bg-[#2365aa] py-3 pl-[26px] pr-3.5 text-base font-normal uppercase leading-[1.2] text-white no-underline transition-colors hover:bg-[#1a5490] lg:py-2.5 lg:pl-[22px] lg:pr-2.5 lg:text-sm 2xl:py-3 2xl:pl-[26px] 2xl:pr-3.5 2xl:text-base"
+          >
             Contact Us
-            <span>
+            <span className="inline-flex h-[37px] w-[37px] items-center justify-center rounded-full bg-white text-[#2365aa]">
               <ArrowUpRight size={18} strokeWidth={2.5} />
             </span>
           </Link>
