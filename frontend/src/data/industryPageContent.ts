@@ -125,7 +125,7 @@ export const industryPagesBySlug: Record<string, IndustryPageContent> = {
   "financial-services-&-fintech": {
     slug: "financial-services-&-fintech",
     label: "Financial Services & FinTech",
-    eyebrow: "Financial Services & FinTech",
+    eyebrow: "Industries",
     heroTitle: "Secure Every Digital Transaction with AI-Powered Financial Intelligence",
     heroSubtitle:
       "Prevent fraud, accelerate customer onboarding, automate compliance, and build trust across banking, insurance, lending, and payment platforms using AI-native financial solutions.",
@@ -204,7 +204,7 @@ export const industryPagesBySlug: Record<string, IndustryPageContent> = {
   "e-commerce-&-retail": {
     slug: "e-commerce-&-retail",
     label: "E-commerce & Retail",
-    eyebrow: "E-commerce & Retail",
+    eyebrow: "Industries",
     heroTitle: "Deliver Smarter Shopping Experiences with AI",
     heroSubtitle:
       "Personalize customer journeys, automate operations, improve customer support, and optimize retail performance through intelligent AI solutions.",
@@ -283,7 +283,7 @@ export const industryPagesBySlug: Record<string, IndustryPageContent> = {
   "education-&-e-learning": {
     slug: "education-&-e-learning",
     label: "Education & E-Learning",
-    eyebrow: "Education & E-Learning",
+    eyebrow: "Industries",
     heroTitle: "Create Personalized Learning Experiences with AI",
     heroSubtitle:
       "Empower educators and learners through intelligent content delivery, automated assessments, multilingual learning, and AI-powered education platforms.",
@@ -362,7 +362,7 @@ export const industryPagesBySlug: Record<string, IndustryPageContent> = {
   "logistics-&-supply-chain": {
     slug: "logistics-&-supply-chain",
     label: "Logistics & Supply Chain",
-    eyebrow: "Logistics & Supply Chain",
+    eyebrow: "Industries",
     heroTitle: "Optimize Every Movement with AI-Driven Logistics",
     heroSubtitle:
       "Increase operational efficiency, improve visibility, automate fleet management, and deliver smarter supply chain decisions through AI.",
@@ -441,7 +441,7 @@ export const industryPagesBySlug: Record<string, IndustryPageContent> = {
   "manufacturing-&-industry-4.0": {
     slug: "manufacturing-&-industry-4.0",
     label: "Manufacturing & Industry 4.0",
-    eyebrow: "Manufacturing & Industry 4.0",
+    eyebrow: "Industries",
     heroTitle: "Build Intelligent Factories with AI",
     heroSubtitle:
       "Transform manufacturing operations using predictive analytics, computer vision, automation, and industrial AI.",
@@ -520,7 +520,7 @@ export const industryPagesBySlug: Record<string, IndustryPageContent> = {
   "social-media-&-entertainment": {
     slug: "social-media-&-entertainment",
     label: "Social Media & Entertainment",
-    eyebrow: "Social Media & Entertainment",
+    eyebrow: "Industries",
     heroTitle: "Protect Digital Content with AI",
     heroSubtitle:
       "Safeguard digital platforms from deepfakes, misinformation, copyright abuse, and harmful content using advanced AI moderation.",
@@ -599,7 +599,7 @@ export const industryPagesBySlug: Record<string, IndustryPageContent> = {
   "public-sector-&-government": {
     slug: "public-sector-&-government",
     label: "Public Sector & Government",
-    eyebrow: "Public Sector & Government",
+    eyebrow: "Industries",
     heroTitle: "Power Safer Cities with AI",
     heroSubtitle:
       "Improve public safety, strengthen digital governance, and enhance citizen services through AI-powered automation and intelligent surveillance.",
