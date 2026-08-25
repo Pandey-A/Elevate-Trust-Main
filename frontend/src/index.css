@@ -326,7 +326,13 @@ body {
 
 /* Shared page hero height — Our Services, Industries, Technology Trends, Resources, Careers */
 :root {
-  --service-hero-height: clamp(400px, 42vw, 492px);
+  --service-hero-height: 540px;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --service-hero-height: 492px;
+  }
 }
 
 @media (min-width: 1920px) {
@@ -350,7 +356,7 @@ body {
   overflow: hidden;
   background-color: #113d77;
   height: var(--service-hero-height);
-  padding: clamp(60px, 8vw, 80px) 0;
+  padding: clamp(40px, 8vw, 80px) 0;
   box-sizing: border-box;
 }
 
