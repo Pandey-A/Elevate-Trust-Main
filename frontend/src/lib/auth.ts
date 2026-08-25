@@ -18,13 +18,14 @@ export type AuthSession = {
   role: string;
 };
 
+/** Full dashboard access (role: admin). */
 export function isSuperAdminRole(role?: string | null) {
-  return String(role || "") === "superAdmin";
+  return String(role || "") === "admin";
 }
 
 export function isDashboardRole(role?: string | null) {
   const value = String(role || "");
-  return value === "admin" || value === "superAdmin";
+  return value === "admin" || value === "sales";
 }
 
 export function canManageAdminContent(role?: string | null) {

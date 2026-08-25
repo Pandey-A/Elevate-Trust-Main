@@ -908,7 +908,7 @@ export default function AdminDashboard() {
         </div>
       </header>
 
-      {!sidebarCollapsed ? (
+      {isSuperAdmin && !sidebarCollapsed ? (
         <button
           type="button"
           aria-label="Close sidebar"
@@ -919,11 +919,14 @@ export default function AdminDashboard() {
 
       <div
         className={`mx-auto grid w-full max-w-[1692px] grid-cols-1 gap-4 py-4 transition-all duration-300 ease-out sm:gap-6 sm:py-6 xl:gap-8 2xl:gap-10 2xl:py-8 ${
-          sidebarCollapsed
-            ? "px-3.5 pl-[68px] sm:px-6 sm:pl-[76px] lg:px-8 lg:pl-[88px] xl:px-10 xl:pl-[92px] 2xl:pl-[96px]"
-            : "px-3.5 pl-[68px] sm:px-6 sm:pl-[76px] lg:px-8 lg:pl-[240px] xl:px-10 xl:pl-[280px] 2xl:pl-[300px]"
+          !isSuperAdmin
+            ? "px-3.5 sm:px-6 lg:px-8 xl:px-10"
+            : sidebarCollapsed
+              ? "px-3.5 pl-[68px] sm:px-6 sm:pl-[76px] lg:px-8 lg:pl-[88px] xl:px-10 xl:pl-[92px] 2xl:pl-[96px]"
+              : "px-3.5 pl-[68px] sm:px-6 sm:pl-[76px] lg:px-8 lg:pl-[240px] xl:px-10 xl:pl-[280px] 2xl:pl-[300px]"
         }`}
       >
+        {isSuperAdmin ? (
         <aside
           className={`fixed left-2 top-20 z-50 max-h-[calc(100dvh-6rem)] overflow-y-auto border border-[#d7e6f3] bg-white shadow-[0_14px_40px_-28px_rgba(17,61,119,0.35)] transition-all duration-300 ease-out [scrollbar-width:thin] sm:left-3 lg:top-1/2 lg:max-h-[min(90dvh,calc(100dvh-2rem))] lg:-translate-y-1/2 ${
             sidebarCollapsed
@@ -1002,6 +1005,7 @@ export default function AdminDashboard() {
             ))}
           </div>
         </aside>
+        ) : null}
 
         <main className="min-w-0 overflow-x-hidden">
           {tab === "overview" && isSuperAdmin ? (

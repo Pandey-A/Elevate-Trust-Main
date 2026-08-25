@@ -8,34 +8,55 @@ import pool from "../config/db.js";
 
 const USERS = [
   {
-    oldEmail: "sachin@elevatetrust.ai",
-    email: "sachin2026@ET.example",
+    oldEmail: "sachin2026@ET.example",
+    email: "sachin2026@elevatetrust.ai",
     fullName: "Sachin",
     passwordPlain: "sachin2026@ET",
-    role: "admin",
+    role: "sales",
   },
   {
-    oldEmail: "om@elevatetrust.ai",
-    email: "om2026@ET.example",
+    oldEmail: "om2026@ET.example",
+    email: "om2026@elevatetrust.ai",
     fullName: "Om",
     passwordPlain: "om2026@ET",
-    role: "admin",
+    role: "sales",
   },
   {
-    oldEmail: "shivanshi@elevatetrust.ai",
-    email: "shivanshi2026@ET.example",
+    oldEmail: "shivanshi2026@ET.example",
+    email: "shivanshi2026@elevatetrust.ai",
     fullName: "Shivanshi",
     passwordPlain: "shivanshi2026@ET",
-    role: "admin",
+    role: "sales",
   },
   {
-    oldEmail: "diksha@elevatetrust.ai",
-    email: "diksha2026@ET.example",
+    oldEmail: "diksha2026@ET.example",
+    email: "diksha2026@elevatetrust.ai",
     fullName: "Diksha",
     passwordPlain: "diksha2026@ET",
-    role: "admin",
+    role: "sales",
   },
 ];
+
+/** Rename legacy roles once: admin → sales, superAdmin → admin (order matters). */
+async function migrateLegacyRoles() {
+  const legacy = await pool.query(
+    `SELECT 1 FROM admin_users WHERE role = 'superAdmin' LIMIT 1`,
+  );
+  if (legacy.rowCount === 0) {
+    console.log("role migrate: skipped (no legacy superAdmin)");
+    return;
+  }
+
+  const toSales = await pool.query(
+    `UPDATE admin_users SET role = 'sales' WHERE role = 'admin'`,
+  );
+  const toAdmin = await pool.query(
+    `UPDATE admin_users SET role = 'admin' WHERE role = 'superAdmin'`,
+  );
+  console.log(
+    `role migrate: admin→sales (${toSales.rowCount}), superAdmin→admin (${toAdmin.rowCount})`,
+  );
+}
 
 async function upsertAdminUser({
   oldEmail,
@@ -107,6 +128,8 @@ async function upsertAdminUser({
 }
 
 async function main() {
+  await migrateLegacyRoles();
+
   const createdOrUpdated = [];
   for (const user of USERS) {
     const result = await upsertAdminUser(user);
@@ -116,7 +139,7 @@ async function main() {
     );
   }
 
-  console.log("\n=== Admin Login List (NEW) ===");
+  console.log("\n=== Sales Login List ===");
   for (const item of createdOrUpdated) {
     console.log(`${item.id}\t${item.email}\t${item.passwordPlain}`);
   }

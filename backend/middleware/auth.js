@@ -4,14 +4,15 @@ function getJwtSecret() {
   return process.env.JWT_SECRET || "elevate-trust-dev-secret-change-me";
 }
 
-const DASHBOARD_ROLES = new Set(["admin", "superAdmin"]);
+const DASHBOARD_ROLES = new Set(["admin", "sales"]);
 
 export function isDashboardRole(role) {
   return DASHBOARD_ROLES.has(String(role || ""));
 }
 
+/** Full dashboard access (role: admin). Legacy name kept for call sites. */
 export function isSuperAdminRole(role) {
-  return String(role || "") === "superAdmin";
+  return String(role || "") === "admin";
 }
 
 export function signAuthToken(user) {
@@ -59,23 +60,23 @@ export function requireAuth(req, res, next) {
   }
 }
 
-/** Admin or SuperAdmin — dashboard login / demos view. */
+/** Admin or Sales — dashboard login / demos view. */
 export function requireAdmin(req, res, next) {
   if (!isDashboardRole(req.user?.role)) {
     return res.status(403).json({
       success: false,
-      message: "Admin access required.",
+      message: "Dashboard access required.",
     });
   }
   return next();
 }
 
-/** SuperAdmin only — create / edit / delete and non-demo admin APIs. */
+/** Admin only — create / edit / delete and full admin APIs. */
 export function requireSuperAdmin(req, res, next) {
   if (!isSuperAdminRole(req.user?.role)) {
     return res.status(403).json({
       success: false,
-      message: "Super admin access required.",
+      message: "Admin access required.",
     });
   }
   return next();
