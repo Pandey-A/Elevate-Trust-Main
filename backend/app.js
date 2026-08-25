@@ -59,7 +59,29 @@ app.use(
 app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev"));
 app.use(express.json({ limit: "32kb" }));
 app.use(express.urlencoded({ extended: true, limit: "32kb" }));
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use(
+  "/uploads",
+  express.static(path.join(__dirname, "uploads"), {
+    setHeaders(res, filePath) {
+      // Prefer inline viewing; never force attachment download for demo media.
+      res.setHeader("Content-Disposition", "inline");
+      res.setHeader("X-Content-Type-Options", "nosniff");
+      const lower = String(filePath || "").toLowerCase();
+      if (
+        lower.endsWith(".pdf") ||
+        lower.endsWith(".ppt") ||
+        lower.endsWith(".pptx") ||
+        lower.endsWith(".doc") ||
+        lower.endsWith(".docx") ||
+        lower.endsWith(".mp4") ||
+        lower.endsWith(".webm") ||
+        lower.endsWith(".mov")
+      ) {
+        res.setHeader("Cache-Control", "public, max-age=3600");
+      }
+    },
+  }),
+);
 
 app.get("/", (_req, res) => {
   res.status(200).json({
