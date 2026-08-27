@@ -14,11 +14,16 @@ type Props = {
 function youtubeEmbed(videoId: string) {
   const params = new URLSearchParams({
     autoplay: "1",
+    mute: "0",
     rel: "0",
     modestbranding: "1",
     playsinline: "1",
   });
-  return `https://www.youtube.com/embed/${videoId}?${params.toString()}`;
+  if (typeof window !== "undefined") {
+    params.set("origin", window.location.origin);
+    params.set("widget_referrer", window.location.origin);
+  }
+  return `https://www.youtube-nocookie.com/embed/${videoId}?${params.toString()}`;
 }
 
 /** Prefer embedded viewers over raw file URLs so the browser download UI is reduced. */
@@ -122,6 +127,58 @@ function DocumentViewer({
 }
 
 /** Prefer Cloudinary/native video; temporary YouTube iframe fallback. */
+function NativeVideoPlayer({
+  videoUrl,
+  poster,
+}: {
+  videoUrl: string;
+  poster?: string | null;
+}) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const optimizedUrl = getOptimizedDemoVideoUrl(videoUrl);
+  const [playbackUrl, setPlaybackUrl] = useState(optimizedUrl);
+
+  useEffect(() => {
+    setPlaybackUrl(getOptimizedDemoVideoUrl(videoUrl));
+  }, [videoUrl]);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    // Modal opens on user click — try play with sound first.
+    void video.play().catch(() => {
+      video.muted = true;
+      void video.play().catch(() => {});
+    });
+  }, [playbackUrl]);
+
+  return (
+    <video
+      ref={videoRef}
+      key={playbackUrl}
+      className="absolute inset-0 h-full w-full bg-black object-contain"
+      src={playbackUrl}
+      poster={poster || undefined}
+      controls
+      playsInline
+      preload="auto"
+      controlsList="nodownload noremoteplayback"
+      disablePictureInPicture
+      disableRemotePlayback
+      onContextMenu={blockContextMenu}
+      onDragStart={(event) => event.preventDefault()}
+      onError={() => {
+        if (playbackUrl !== videoUrl) {
+          setPlaybackUrl(videoUrl);
+        }
+      }}
+    >
+      Your browser does not support HTML5 video.
+    </video>
+  );
+}
+
 export default function DemoVideoPlayer({
   title,
   videoUrl,
@@ -142,26 +199,7 @@ export default function DemoVideoPlayer({
       );
     }
 
-    const playbackUrl = getOptimizedDemoVideoUrl(videoUrl);
-    return (
-      <video
-        key={playbackUrl}
-        className="absolute inset-0 h-full w-full bg-black object-contain"
-        src={playbackUrl}
-        poster={poster || undefined}
-        controls
-        autoPlay
-        playsInline
-        preload="metadata"
-        controlsList="nodownload noremoteplayback"
-        disablePictureInPicture
-        disableRemotePlayback
-        onContextMenu={blockContextMenu}
-        onDragStart={(event) => event.preventDefault()}
-      >
-        Your browser does not support HTML5 video.
-      </video>
-    );
+    return <NativeVideoPlayer videoUrl={videoUrl} poster={poster} />;
   }
 
   if (videoId) {
@@ -173,7 +211,7 @@ export default function DemoVideoPlayer({
         className="absolute inset-0 h-full w-full border-0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         allowFullScreen
-        referrerPolicy="no-referrer"
+        referrerPolicy="strict-origin-when-cross-origin"
         onContextMenu={blockContextMenu}
       />
     );

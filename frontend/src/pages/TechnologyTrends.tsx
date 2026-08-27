@@ -267,9 +267,6 @@ export default function TechnologyTrends() {
               alt="Explore our expertise across AI and related technology domains"
               className="block w-full h-auto"
             />
-            <span className="absolute left-[17%] top-[28%] px-1.5 py-0.5 bg-[#fdfdfe] text-[#1d212b] text-sm font-semibold leading-[1.2] whitespace-nowrap pointer-events-none hidden sm:block">
-              On Premise
-            </span>
           </div>
         </section>
 
