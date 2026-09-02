@@ -27,16 +27,41 @@ type ResourceCache<T> = {
   get: (force?: boolean) => Promise<T>;
 };
 
-function createResourceCache<T>(fetcher: () => Promise<T>): ResourceCache<T> {
+function createResourceCache<T>(
+  fetcher: () => Promise<T>,
+  storageKey?: string,
+): ResourceCache<T> {
   let data: T | null = null;
   let fetchedAt = 0;
   let inflight: Promise<T> | null = null;
+
+  if (storageKey) {
+    try {
+      const raw = localStorage.getItem(storageKey);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed && parsed.data !== undefined) {
+          data = parsed.data;
+          fetchedAt = parsed.fetchedAt || 0;
+        }
+      }
+    } catch {
+      // Ignore storage read error
+    }
+  }
 
   return {
     peek: () => data,
     isFresh: () => data !== null && Date.now() - fetchedAt < PUBLIC_CACHE_TTL_MS,
     invalidate: () => {
       fetchedAt = 0;
+      if (storageKey) {
+        try {
+          localStorage.removeItem(storageKey);
+        } catch {
+          // Ignore
+        }
+      }
     },
     get: (force = false) => {
       if (!force && data !== null && Date.now() - fetchedAt < PUBLIC_CACHE_TTL_MS) {
@@ -48,6 +73,16 @@ function createResourceCache<T>(fetcher: () => Promise<T>): ResourceCache<T> {
         .then((result) => {
           data = result;
           fetchedAt = Date.now();
+          if (storageKey) {
+            try {
+              localStorage.setItem(
+                storageKey,
+                JSON.stringify({ data: result, fetchedAt: Date.now() }),
+              );
+            } catch {
+              // Ignore storage write error
+            }
+          }
           return result;
         })
         .finally(() => {
@@ -59,15 +94,15 @@ function createResourceCache<T>(fetcher: () => Promise<T>): ResourceCache<T> {
   };
 }
 
-const publicDemosCache = createResourceCache(fetchPublicDemos);
-const publicBlogsCache = createResourceCache(fetchPublicBlogs);
-const publicTestimonialsCache = createResourceCache(fetchPublicTestimonials);
-const publicJobsCache = createResourceCache(fetchPublicJobs);
+const publicDemosCache = createResourceCache(fetchPublicDemos, "et_cache_public_demos");
+const publicBlogsCache = createResourceCache(fetchPublicBlogs, "et_cache_public_blogs");
+const publicTestimonialsCache = createResourceCache(fetchPublicTestimonials, "et_cache_public_testimonials");
+const publicJobsCache = createResourceCache(fetchPublicJobs, "et_cache_public_jobs");
 const publicDemoTagsCache = createResourceCache(async () => {
   const data = await fetchDemoTags();
   const names = data.map((tag: DemoTag) => tag.name).filter(Boolean);
   return names.length > 0 ? names : [...INDUSTRY_TAGS];
-});
+}, "et_cache_public_tags");
 
 /** Warm cache before the user lands on Demo/Blog (e.g. nav hover). */
 export function prefetchPublicDemos() {

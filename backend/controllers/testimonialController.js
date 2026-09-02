@@ -55,6 +55,10 @@ function getUploadedFile(req, field) {
 export async function getPublicTestimonials(_req, res) {
   try {
     const testimonials = await listTestimonials();
+    res.setHeader(
+      "Cache-Control",
+      "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400",
+    );
     return res.status(200).json({
       success: true,
       data: testimonials,

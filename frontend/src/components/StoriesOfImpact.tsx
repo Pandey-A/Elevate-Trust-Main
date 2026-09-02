@@ -260,18 +260,12 @@ export default function StoriesOfImpact() {
         <div className="relative mt-10 sm:mt-12 lg:mt-14">
           <div className="overflow-hidden rounded-[28px] border border-white/10 bg-[#1a4d8c]/40 sm:rounded-[40px] lg:rounded-[48px] xl:rounded-[56px]">
             <div className="px-4 pb-7 pt-5 sm:px-6 sm:pb-9 sm:pt-6 lg:px-8 lg:pb-10 lg:pt-7 xl:px-10">
-              {loading ? (
-                <div className="flex flex-col items-center gap-3 py-16 text-center">
-                  <p className="m-0 text-sm text-white/80">Loading testimonials...</p>
-                  <button
-                    type="button"
-                    onClick={() => void refresh()}
-                    className="rounded-full border border-white/30 bg-white/10 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/20"
-                  >
-                    Retry
-                  </button>
+              {loading && stories.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-16 text-center">
+                  <div className="h-6 w-6 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                  <p className="mt-3 text-sm text-white/80">Loading testimonials...</p>
                 </div>
-              ) : error ? (
+              ) : error && stories.length === 0 ? (
                 <div className="flex flex-col items-center gap-3 py-16 text-center">
                   <p className="m-0 text-sm text-white/80">{error}</p>
                   <button
