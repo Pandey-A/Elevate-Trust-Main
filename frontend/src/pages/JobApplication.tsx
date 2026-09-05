@@ -3,6 +3,8 @@ import { Link, useParams } from "react-router-dom";
 import { ArrowUpRight, Check, Plus, Trash2, Upload } from "lucide-react";
 import FlyCTA from "../components/FlyCTA";
 import { usePublicJobs } from "../hooks/useAdminData";
+import { getErrorMessage } from "../lib/api";
+import { submitCareerEnquiry } from "../lib/careersApi";
 import { parseResumeFile } from "../lib/resumeParser";
 import linkedinLogo from "../assets/footer/LinkedinLogo.svg";
 
@@ -64,6 +66,8 @@ export default function JobApplication() {
   const [currentStep, setCurrentStep] = useState<Step>("My Information");
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   const [autofillStatus, setAutofillStatus] = useState<"idle" | "loading" | "done" | "error">("idle");
   const [autofillMessage, setAutofillMessage] = useState("");
   const resumeInputRef = useRef<HTMLInputElement>(null);
@@ -183,9 +187,62 @@ export default function JobApplication() {
     }
   };
 
-  const handleSubmit = () => {
-    setSubmitted(true);
-    window.scrollTo(0, 0);
+  const handleSubmit = async () => {
+    if (submitting) return;
+
+    setSubmitError("");
+
+    const fullName = `${formData.firstName} ${formData.lastName}`.trim();
+    if (!fullName || !formData.email.trim() || !formData.phone.trim()) {
+      setSubmitError("Please complete your name, email, and phone before submitting.");
+      return;
+    }
+
+    if (!formData.resumeFile) {
+      setSubmitError("Please upload your resume before submitting.");
+      return;
+    }
+
+    const expertise = formData.experiences
+      .map((exp) => {
+        const parts = [exp.workTitle, exp.duration, exp.description]
+          .map((part) => part.trim())
+          .filter(Boolean);
+        return parts.join(" — ");
+      })
+      .filter(Boolean)
+      .join("\n");
+
+    const messageParts = [
+      formData.address1 && `Address: ${formData.address1}`,
+      formData.address2 && `Address 2: ${formData.address2}`,
+      formData.city && `City: ${formData.city}`,
+      formData.state && `State: ${formData.state}`,
+      formData.zipCode && `ZIP: ${formData.zipCode}`,
+      formData.homePhone && `Home phone: ${formData.homePhone}`,
+      formData.coverLetterFile && `Cover letter attached: ${formData.coverLetterFile.name}`,
+    ].filter(Boolean);
+
+    try {
+      setSubmitting(true);
+      await submitCareerEnquiry({
+        fullName,
+        email: formData.email.trim(),
+        phone: `${formData.countryCode} ${formData.phone}`.trim(),
+        jobTitle: job?.title || "",
+        expertise,
+        message: messageParts.join("\n"),
+        cv: formData.resumeFile,
+      });
+      setSubmitted(true);
+      window.scrollTo(0, 0);
+    } catch (error) {
+      setSubmitError(
+        getErrorMessage(error, "Unable to submit your application. Please try again."),
+      );
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   if (submitted) {
@@ -619,20 +676,28 @@ export default function JobApplication() {
               )}
             </div>
 
+            {submitError ? (
+              <p className="mb-6 rounded-[12px] bg-[#EEF3FB] px-4 py-3 text-sm text-[#2365aa]">
+                {submitError}
+              </p>
+            ) : null}
+
             <div className="flex justify-between mt-10">
               <button
                 type="button"
                 onClick={goBack}
-                className="inline-flex items-center gap-1.5 py-3 pl-[26px] pr-3.5 border-2 border-[#2365aa] rounded-full text-[#2365aa] font-normal text-base leading-[1.2] uppercase hover:bg-[#f4f7f9] transition-colors"
+                disabled={submitting}
+                className="inline-flex items-center gap-1.5 py-3 pl-[26px] pr-3.5 border-2 border-[#2365aa] rounded-full text-[#2365aa] font-normal text-base leading-[1.2] uppercase hover:bg-[#f4f7f9] transition-colors disabled:cursor-not-allowed disabled:opacity-70"
               >
                 Back
               </button>
               <button
                 type="button"
                 onClick={handleSubmit}
-                className="inline-flex items-center gap-1.5 py-3 pl-[26px] pr-3.5 bg-[#2365aa] rounded-full text-white font-normal text-base leading-[1.2] uppercase no-underline hover:bg-[#1a5490] transition-colors"
+                disabled={submitting}
+                className="inline-flex items-center gap-1.5 py-3 pl-[26px] pr-3.5 bg-[#2365aa] rounded-full text-white font-normal text-base leading-[1.2] uppercase no-underline hover:bg-[#1a5490] transition-colors disabled:cursor-not-allowed disabled:opacity-70"
               >
-                Submit Application
+                {submitting ? "Submitting..." : "Submit Application"}
                 <span className="inline-flex items-center justify-center w-[37px] h-[37px] rounded-full bg-white text-[#2365aa]">
                   <ArrowUpRight size={18} strokeWidth={2.5} />
                 </span>

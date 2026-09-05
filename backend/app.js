@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import helmet from "helmet";
 import morgan from "morgan";
+import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import pool from "./config/db.js";
@@ -32,16 +33,39 @@ const allowedOrigins = (
   .map((origin) => origin.trim())
   .filter(Boolean);
 
+const allowedOriginPatterns = (
+  process.env.CORS_ORIGIN_PATTERNS || ""
+)
+  .split(",")
+  .map((pattern) => pattern.trim())
+  .filter(Boolean)
+  .map((pattern) => {
+    try {
+      return new RegExp(pattern, "i");
+    } catch (error) {
+      console.warn("Invalid CORS_ORIGIN_PATTERNS entry ignored:", pattern, error);
+      return null;
+    }
+  })
+  .filter(Boolean);
+
 function isLocalDevOrigin(origin) {
   if (process.env.NODE_ENV === "production") return false;
   return /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i.test(origin);
+}
+
+function isAllowedOrigin(origin) {
+  if (!origin) return true;
+  if (allowedOrigins.includes(origin)) return true;
+  if (isLocalDevOrigin(origin)) return true;
+  return allowedOriginPatterns.some((pattern) => pattern.test(origin));
 }
 
 app.use(
   cors({
     origin(origin, callback) {
       // Same-origin / non-browser tools (curl, Postman) have no Origin header.
-      if (!origin || allowedOrigins.includes(origin) || isLocalDevOrigin(origin)) {
+      if (isAllowedOrigin(origin)) {
         return callback(null, true);
       }
 
@@ -57,8 +81,14 @@ app.use(
   }),
 );
 app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev"));
-app.use(express.json({ limit: "32kb" }));
-app.use(express.urlencoded({ extended: true, limit: "32kb" }));
+app.set("trust proxy", process.env.TRUST_PROXY || 1);
+app.use(express.json({ limit: process.env.JSON_BODY_LIMIT || "10mb" }));
+app.use(
+  express.urlencoded({
+    extended: true,
+    limit: process.env.URLENCODED_BODY_LIMIT || "10mb",
+  }),
+);
 app.use(
   "/uploads",
   express.static(path.join(__dirname, "uploads"), {
@@ -158,35 +188,33 @@ function listenOnPort(port) {
   });
 }
 
+async function ensureDatabaseSchema() {
+  const schemaPath = path.join(__dirname, "sql/schema.sql");
+  const schema = fs.readFileSync(schemaPath, "utf8");
+  await pool.query(schema);
+
+  await pool.query(`
+    DO $$
+    BEGIN
+      BEGIN
+        ALTER TABLE demos ALTER COLUMN video_id DROP NOT NULL;
+      EXCEPTION WHEN others THEN NULL;
+      END;
+      BEGIN
+        ALTER TABLE demos ALTER COLUMN youtube_url DROP NOT NULL;
+      EXCEPTION WHEN others THEN NULL;
+      END;
+    END $$;
+  `);
+}
+
 async function startServer() {
   try {
-    await pool.query(`
-      ALTER TABLE demos ADD COLUMN IF NOT EXISTS video_url TEXT;
-      ALTER TABLE demos ADD COLUMN IF NOT EXISTS thumbnail_url TEXT;
-    `);
+    await ensureDatabaseSchema();
+    console.log("Database schema ensured.");
   } catch (error) {
-    console.warn("Demo schema ensure skipped:", error?.message || error);
-  }
-
-  try {
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS jobs (
-        id VARCHAR(120) PRIMARY KEY,
-        title VARCHAR(255) NOT NULL,
-        tag VARCHAR(120) NOT NULL DEFAULT '',
-        description TEXT NOT NULL DEFAULT '',
-        type VARCHAR(120) NOT NULL DEFAULT 'Full-time',
-        location VARCHAR(120) NOT NULL DEFAULT 'Remotely',
-        category VARCHAR(255) NOT NULL DEFAULT '',
-        category_subtitle VARCHAR(255) NOT NULL DEFAULT '',
-        sort_order INTEGER NOT NULL DEFAULT 0,
-        created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-        updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-      );
-      CREATE INDEX IF NOT EXISTS idx_jobs_sort_order ON jobs (sort_order ASC, created_at DESC);
-    `);
-  } catch (error) {
-    console.warn("Jobs schema ensure skipped:", error?.message || error);
+    console.error("Failed to ensure database schema:", error?.message || error);
+    process.exit(1);
   }
 
   let lastError = null;

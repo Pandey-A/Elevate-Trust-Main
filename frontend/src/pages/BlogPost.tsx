@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link, Navigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import FlyCTA from "../components/FlyCTA";
 import BlogArticleBody from "../components/blog/BlogArticleBody";
@@ -7,6 +7,7 @@ import BlogHtmlContent from "../components/blog/BlogHtmlContent";
 import { parseBlogDescription } from "../components/blog/parseBlogDescription";
 import worldMapBackground from "../assets/homepage-icons/Group(3).png";
 import { getBlogSections } from "../data/blogSections";
+import { getBlogPost } from "../data/blogs";
 import { looksLikeHtml } from "../lib/blogContent";
 import { usePublicBlogs } from "../hooks/useAdminData";
 import { fetchPublicBlogById, type BlogPost as ApiBlogPost } from "../lib/blogsApi";
@@ -23,12 +24,26 @@ function formatDate(iso: string) {
   });
 }
 
+function mapStaticBlogToApiPost(slug: string): ApiBlogPost | null {
+  const curated = getBlogPost(slug);
+  if (!curated) return null;
+  return {
+    id: curated.slug,
+    title: curated.title,
+    description: "",
+    imageUrl: curated.cover,
+    createdAt: curated.date,
+    updatedAt: curated.date,
+  };
+}
+
 export default function BlogPostPage() {
   const { slug = "" } = useParams();
   const { blogs } = usePublicBlogs();
   const [post, setPost] = useState<ApiBlogPost | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -36,19 +51,28 @@ export default function BlogPostPage() {
     async function loadPost() {
       if (!slug) {
         setLoading(false);
+        setNotFound(true);
         return;
       }
 
       try {
         setLoading(true);
+        setNotFound(false);
         const data = await fetchPublicBlogById(slug);
         if (!cancelled) {
           setPost(data);
           setError("");
         }
       } catch (err) {
-        if (!cancelled) {
+        if (cancelled) return;
+        const staticPost = mapStaticBlogToApiPost(slug);
+        if (staticPost) {
+          setPost(staticPost);
+          setError("");
+          setNotFound(false);
+        } else {
           setPost(null);
+          setNotFound(true);
           setError(getErrorMessage(err, "Blog not found."));
         }
       } finally {
@@ -71,6 +95,8 @@ export default function BlogPostPage() {
     if (looksLikeHtml(post.description)) return [];
     const staticSections = getBlogSections(slug);
     if (staticSections?.length) return staticSections;
+    const curatedSections = getBlogPost(slug)?.sections;
+    if (curatedSections?.length) return curatedSections;
     return parseBlogDescription(post.description);
   }, [slug, post]);
 
@@ -84,8 +110,31 @@ export default function BlogPostPage() {
     );
   }
 
-  if (!post) {
-    return <Navigate to="/resources/blogs" replace />;
+  if (notFound || !post) {
+    return (
+      <div className="bg-white font-['Lay_Grotesk_Trial',sans-serif] text-[#272935]">
+        <div className="mx-auto flex min-h-[50vh] w-full max-w-[920px] flex-col items-center justify-center px-6 py-20 text-center">
+          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#2365aa]">
+            Blog
+          </p>
+          <h1 className="mt-3 text-[clamp(26px,3.4vw,40px)] font-bold text-[#1F2432]">
+            Article not found
+          </h1>
+          <p className="mt-4 max-w-md text-[#848b9b]">
+            This blog post does not exist or is no longer available.
+          </p>
+          {error ? <p className="mt-2 text-sm text-[#2365aa]">{error}</p> : null}
+          <Link
+            to="/resources/blogs"
+            className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-[#2365aa] no-underline hover:text-[#1a5490]"
+          >
+            <ArrowLeft size={16} />
+            Back to all blogs
+          </Link>
+        </div>
+        <FlyCTA />
+      </div>
+    );
   }
 
   const related = blogs.filter((item) => item.id !== post.id).slice(0, 3);

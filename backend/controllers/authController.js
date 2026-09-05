@@ -52,6 +52,8 @@ export async function register(req, res) {
     }
 
     const totalUsers = await countUsers();
+    // Bootstrap admin only on a completely empty user table.
+    // After seed/init creates accounts, public registration cannot self-promote.
     const role = totalUsers === 0 ? "admin" : "user";
     const passwordHash = await bcrypt.hash(password, 10);
 

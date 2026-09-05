@@ -17,8 +17,8 @@ import { fetchAdminJobs, fetchPublicJobs } from "../lib/jobsApi";
 import { fetchDemoTags, type DemoTag } from "../lib/tagsApi";
 import { INDUSTRY_TAGS } from "../data/adminDefaults";
 
-/** Keep list pages snappy when navigating away and back. */
-const PUBLIC_CACHE_TTL_MS = 60_000;
+/** Keep list pages snappy when navigating away and back (1 hour). */
+const PUBLIC_CACHE_TTL_MS = 60 * 60 * 1000;
 
 type ResourceCache<T> = {
   peek: () => T | null;
@@ -103,6 +103,29 @@ const publicDemoTagsCache = createResourceCache(async () => {
   const names = data.map((tag: DemoTag) => tag.name).filter(Boolean);
   return names.length > 0 ? names : [...INDUSTRY_TAGS];
 }, "et_cache_public_tags");
+
+/** Schedule work after first paint / when the browser is idle (does not block LCP). */
+export function scheduleIdlePrefetch(task: () => void) {
+  if (typeof window === "undefined") return () => {};
+
+  const ric = window.requestIdleCallback?.bind(window);
+  if (typeof ric === "function") {
+    const id = ric(() => task(), { timeout: 2500 });
+    return () => window.cancelIdleCallback?.(id);
+  }
+
+  // Fallback: after first paint, then next task
+  let cancelled = false;
+  const raf = window.requestAnimationFrame(() => {
+    window.setTimeout(() => {
+      if (!cancelled) task();
+    }, 0);
+  });
+  return () => {
+    cancelled = true;
+    window.cancelAnimationFrame(raf);
+  };
+}
 
 /** Warm cache before the user lands on Demo/Blog (e.g. nav hover). */
 export function prefetchPublicDemos() {

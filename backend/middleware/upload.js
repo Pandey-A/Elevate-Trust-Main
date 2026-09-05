@@ -20,24 +20,47 @@ const demoUploadTmpDir = path.join(uploadsDemoDir, ".tmp");
 /** Max demo video / multipart file size (supports high-quality uploads). */
 export const DEMO_VIDEO_MAX_BYTES = 500 * 1024 * 1024;
 
-if (!fs.existsSync(uploadsCvDir)) {
-  fs.mkdirSync(uploadsCvDir, { recursive: true });
+function isCloudinaryConfigured() {
+  return Boolean(
+    process.env.CLOUDINARY_CLOUD_NAME &&
+      process.env.CLOUDINARY_API_KEY &&
+      process.env.CLOUDINARY_API_SECRET,
+  );
 }
 
-if (!fs.existsSync(uploadsBlogDir)) {
-  fs.mkdirSync(uploadsBlogDir, { recursive: true });
+function allowLocalUploadFallback() {
+  // Production/serverless must use persistent object storage (Cloudinary).
+  // Local disk is only a development fallback.
+  return process.env.NODE_ENV !== "production";
 }
 
-if (!fs.existsSync(uploadsTestimonialDir)) {
-  fs.mkdirSync(uploadsTestimonialDir, { recursive: true });
+function requireCloudStorageOrThrow(context) {
+  if (isCloudinaryConfigured()) return;
+  throw new Error(
+    `Cloudinary is required for ${context} uploads in this environment.`,
+  );
 }
 
-if (!fs.existsSync(uploadsDemoDir)) {
-  fs.mkdirSync(uploadsDemoDir, { recursive: true });
-}
-
-if (!fs.existsSync(demoUploadTmpDir)) {
-  fs.mkdirSync(demoUploadTmpDir, { recursive: true });
+if (allowLocalUploadFallback()) {
+  for (const dir of [
+    uploadsCvDir,
+    uploadsBlogDir,
+    uploadsTestimonialDir,
+    uploadsDemoDir,
+    demoUploadTmpDir,
+  ]) {
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+  }
+} else {
+  try {
+    if (!fs.existsSync(demoUploadTmpDir)) {
+      fs.mkdirSync(demoUploadTmpDir, { recursive: true });
+    }
+  } catch (error) {
+    console.warn("Unable to create demo upload temp dir:", error?.message || error);
+  }
 }
 
 async function cleanupTempUpload(file) {
@@ -415,10 +438,22 @@ function uploadVideoToCloudinary(file, folder = "elevate-trust/demos") {
 
 async function isPubliclyReadable(url) {
   try {
-    const response = await fetch(url, { method: "GET" });
-    if (!response.ok) return false;
-    const bytes = Buffer.from(await response.arrayBuffer());
-    return bytes.length > 0;
+    const headResponse = await fetch(url, { method: "HEAD" });
+    if (headResponse.ok) return true;
+
+    // Some CDNs reject HEAD; fall back to a ranged GET that does not buffer the body.
+    const getResponse = await fetch(url, {
+      method: "GET",
+      headers: { Range: "bytes=0-0" },
+    });
+    if (!(getResponse.ok || getResponse.status === 206)) return false;
+    // Drain/cancel without loading the full file into memory.
+    try {
+      await getResponse.body?.cancel?.();
+    } catch {
+      // ignore cancel errors
+    }
+    return true;
   } catch {
     return false;
   }
@@ -468,10 +503,14 @@ function buildPublicUrl(req, folder, storedName) {
   return `${base.replace(/\/$/, "")}/uploads/${folder}/${storedName}`;
 }
 
-/** Prefer Cloudinary only if the file is publicly openable; otherwise use local disk. */
+/** Prefer Cloudinary; local disk only as a development fallback. */
 export async function storeCvFile(file, req) {
   if (!file?.buffer) {
     throw new Error("Resume file is required.");
+  }
+
+  if (!allowLocalUploadFallback()) {
+    requireCloudStorageOrThrow("resume");
   }
 
   try {
@@ -493,10 +532,17 @@ export async function storeCvFile(file, req) {
       );
     }
   } catch (error) {
+    if (!allowLocalUploadFallback()) {
+      throw error;
+    }
     console.warn(
       "Cloudinary upload failed, saving resume locally:",
       error?.message || error,
     );
+  }
+
+  if (!allowLocalUploadFallback()) {
+    throw new Error("Unable to store resume in persistent cloud storage.");
   }
 
   const storedName = await saveCvLocally(file);
@@ -508,10 +554,14 @@ export async function storeCvFile(file, req) {
   };
 }
 
-/** Blog cover image: Cloudinary with local fallback. */
+/** Blog cover image: Cloudinary with local fallback (dev only). */
 export async function storeBlogImage(file, req) {
   if (!file?.buffer) {
     throw new Error("Blog image is required.");
+  }
+
+  if (!allowLocalUploadFallback()) {
+    requireCloudStorageOrThrow("blog image");
   }
 
   try {
@@ -532,10 +582,17 @@ export async function storeBlogImage(file, req) {
       );
     }
   } catch (error) {
+    if (!allowLocalUploadFallback()) {
+      throw error;
+    }
     console.warn(
       "Cloudinary blog image upload failed, saving locally:",
       error?.message || error,
     );
+  }
+
+  if (!allowLocalUploadFallback()) {
+    throw new Error("Unable to store blog image in persistent cloud storage.");
   }
 
   const storedName = await saveBlogImageLocally(file);
@@ -546,10 +603,14 @@ export async function storeBlogImage(file, req) {
   };
 }
 
-/** Testimonial logo/profile image: Cloudinary with local fallback. */
+/** Testimonial logo/profile image: Cloudinary with local fallback (dev only). */
 export async function storeTestimonialImage(file, req, kind = "profile") {
   if (!file?.buffer) {
     throw new Error(`Testimonial ${kind} image is required.`);
+  }
+
+  if (!allowLocalUploadFallback()) {
+    requireCloudStorageOrThrow(`testimonial ${kind} image`);
   }
 
   try {
@@ -573,9 +634,18 @@ export async function storeTestimonialImage(file, req, kind = "profile") {
       );
     }
   } catch (error) {
+    if (!allowLocalUploadFallback()) {
+      throw error;
+    }
     console.warn(
       "Cloudinary testimonial image upload failed, saving locally:",
       error?.message || error,
+    );
+  }
+
+  if (!allowLocalUploadFallback()) {
+    throw new Error(
+      `Unable to store testimonial ${kind} image in persistent cloud storage.`,
     );
   }
 
@@ -587,10 +657,14 @@ export async function storeTestimonialImage(file, req, kind = "profile") {
   };
 }
 
-/** Demo thumbnail image: Cloudinary with local fallback. */
+/** Demo thumbnail image: Cloudinary with local fallback (dev only). */
 export async function storeDemoThumbnail(file, req) {
   if (!hasUploadPayload(file)) {
     throw new Error("Demo thumbnail image is required.");
+  }
+
+  if (!allowLocalUploadFallback()) {
+    requireCloudStorageOrThrow("demo thumbnail");
   }
 
   try {
@@ -604,10 +678,17 @@ export async function storeDemoThumbnail(file, req) {
         };
       }
     } catch (error) {
+      if (!allowLocalUploadFallback()) {
+        throw error;
+      }
       console.warn(
         "Cloudinary demo thumbnail upload failed, saving locally:",
         error?.message || error,
       );
+    }
+
+    if (!allowLocalUploadFallback()) {
+      throw new Error("Unable to store demo thumbnail in persistent cloud storage.");
     }
 
     const storedName = await saveDemoFileLocally(file);
@@ -621,10 +702,14 @@ export async function storeDemoThumbnail(file, req) {
   }
 }
 
-/** Demo video or document file: Cloudinary with local fallback. */
+/** Demo video or document file: Cloudinary with local fallback (dev only). */
 export async function storeDemoVideo(file, req) {
   if (!hasUploadPayload(file)) {
     throw new Error("Demo video file is required.");
+  }
+
+  if (!allowLocalUploadFallback()) {
+    requireCloudStorageOrThrow("demo media");
   }
 
   const isDocument = Boolean(getDemoDocumentKindFromFile(file));
@@ -642,10 +727,17 @@ export async function storeDemoVideo(file, req) {
         };
       }
     } catch (error) {
+      if (!allowLocalUploadFallback()) {
+        throw error;
+      }
       console.warn(
         `Cloudinary demo ${isDocument ? "document" : "video"} upload failed, saving locally:`,
         error?.message || error,
       );
+    }
+
+    if (!allowLocalUploadFallback()) {
+      throw new Error("Unable to store demo media in persistent cloud storage.");
     }
 
     const storedName = await saveDemoFileLocally(file);

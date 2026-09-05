@@ -1,12 +1,27 @@
 import axios from "axios";
 
-const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:5000").replace(
-  /\/$/,
-  "",
-);
+function resolveApiUrl() {
+  const configured = String(import.meta.env.VITE_API_URL || "")
+    .trim()
+    .replace(/\/$/, "");
+
+  if (configured) return configured;
+
+  // Never silently point production builds at the visitor's localhost.
+  if (import.meta.env.PROD) {
+    console.error(
+      "VITE_API_URL is missing in this production build. API requests will fail until it is configured.",
+    );
+    return "";
+  }
+
+  return "http://localhost:5000";
+}
+
+const API_URL = resolveApiUrl();
 
 export const api = axios.create({
-  baseURL: API_URL,
+  baseURL: API_URL || undefined,
   headers: {
     Accept: "application/json",
   },

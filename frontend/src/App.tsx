@@ -45,6 +45,7 @@ import DigitalMarketing from './pages/DigitalMarketing';
 import ErpSolutions from './pages/ErpSolutions';
 import AdminAuth from './pages/admin/AdminAuth';
 import AdminDashboard from './pages/admin/AdminDashboard';
+import NotFound from './pages/NotFound';
 import { ToastProvider } from './components/ui/ToastProvider';
 
 function AppShell() {
@@ -101,6 +102,7 @@ function AppShell() {
         <Route path="/careers/apply/:jobId" element={<JobApplication />} />
         <Route path="/admin" element={<AdminAuth />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
       {!isAdminRoute ? <FooterSection /> : null}
     </>

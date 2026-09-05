@@ -21,33 +21,52 @@ async function extractTextFromFile(file: File): Promise<string> {
     return file.text();
   }
 
-  if (name.endsWith(".docx") || name.endsWith(".doc")) {
-    const mammoth = await import("mammoth");
-    const buffer = await file.arrayBuffer();
-    const result = await mammoth.extractRawText({ arrayBuffer: buffer });
-    return result.value || "";
+  // Mammoth only supports OpenXML .docx (zip-based), not legacy binary .doc
+  if (name.endsWith(".doc") && !name.endsWith(".docx")) {
+    throw new Error(
+      "Legacy .doc files are not supported for autofill. Please upload a .docx or PDF resume.",
+    );
+  }
+
+  if (name.endsWith(".docx")) {
+    try {
+      const mammoth = await import("mammoth");
+      const buffer = await file.arrayBuffer();
+      const result = await mammoth.extractRawText({ arrayBuffer: buffer });
+      return result.value || "";
+    } catch {
+      throw new Error(
+        "Unable to read this Word file. Please try a .docx or PDF resume.",
+      );
+    }
   }
 
   if (name.endsWith(".pdf")) {
-    const pdfjs = await import("pdfjs-dist");
-    // Vite-friendly worker URL from the installed package
-    const worker = await import("pdfjs-dist/build/pdf.worker.min.mjs?url");
-    pdfjs.GlobalWorkerOptions.workerSrc = worker.default;
+    try {
+      const pdfjs = await import("pdfjs-dist");
+      // Vite-friendly worker URL from the installed package
+      const worker = await import("pdfjs-dist/build/pdf.worker.min.mjs?url");
+      pdfjs.GlobalWorkerOptions.workerSrc = worker.default;
 
-    const data = new Uint8Array(await file.arrayBuffer());
-    const pdf = await pdfjs.getDocument({ data }).promise;
-    const pages: string[] = [];
+      const data = new Uint8Array(await file.arrayBuffer());
+      const pdf = await pdfjs.getDocument({ data }).promise;
+      const pages: string[] = [];
 
-    for (let i = 1; i <= pdf.numPages; i++) {
-      const page = await pdf.getPage(i);
-      const content = await page.getTextContent();
-      const pageText = content.items
-        .map((item) => ("str" in item ? item.str : ""))
-        .join(" ");
-      pages.push(pageText);
+      for (let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i);
+        const content = await page.getTextContent();
+        const pageText = content.items
+          .map((item) => ("str" in item ? item.str : ""))
+          .join(" ");
+        pages.push(pageText);
+      }
+
+      return pages.join("\n");
+    } catch {
+      throw new Error(
+        "Unable to read this PDF. Please try another file or fill the form manually.",
+      );
     }
-
-    return pages.join("\n");
   }
 
   return file.text();
@@ -62,7 +81,18 @@ function firstMatch(text: string, patterns: RegExp[]): string | undefined {
 }
 
 export async function parseResumeFile(file: File): Promise<ParsedResume> {
-  const raw = await extractTextFromFile(file);
+  let raw: string;
+  try {
+    raw = await extractTextFromFile(file);
+  } catch (error) {
+    if (error instanceof Error && error.message) {
+      throw error;
+    }
+    throw new Error(
+      "Unable to parse this resume. Please use a .docx or PDF file, or fill the form manually.",
+    );
+  }
+
   const text = raw.replace(/\r/g, "\n").replace(/[ \t]+/g, " ").trim();
   const lines = text
     .split("\n")

@@ -10,15 +10,17 @@ import LatestWorks from "../components/LatestWorks";
 import Testimonials from "../components/testimonials";
 import FlyCTA from "../components/FlyCTA";
 import Service from "../components/Service";
-import { prefetchPublicTestimonials } from "../hooks/useAdminData";
+import {
+  prefetchPublicTestimonials,
+  scheduleIdlePrefetch,
+} from "../hooks/useAdminData";
 
 export default function Home() {
   useEffect(() => {
-    // Defer testimonials prefetch so hero/LCP images get bandwidth first.
-    const timer = window.setTimeout(() => {
+    // Prefetch once first content paints / browser is idle (no fixed 1.2s delay).
+    return scheduleIdlePrefetch(() => {
       void prefetchPublicTestimonials();
-    }, 1200);
-    return () => window.clearTimeout(timer);
+    });
   }, []);
 
   return (

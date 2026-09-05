@@ -113,3 +113,14 @@ CREATE TABLE IF NOT EXISTS jobs (
 
 CREATE INDEX IF NOT EXISTS idx_jobs_sort_order ON jobs (sort_order ASC, created_at DESC);
 
+CREATE TABLE IF NOT EXISTS contact_leads (
+  id SERIAL PRIMARY KEY,
+  email VARCHAR(255) NOT NULL,
+  source VARCHAR(50) NOT NULL DEFAULT 'other',
+  email_status VARCHAR(50) NOT NULL DEFAULT 'pending',
+  email_error TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_contact_leads_created_at ON contact_leads (created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_contact_leads_email ON contact_leads (LOWER(email));

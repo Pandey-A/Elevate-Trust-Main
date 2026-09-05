@@ -227,14 +227,14 @@ export default function IndustryPageTemplate({ content }: Props) {
                 key={item.title}
                 className="mx-auto flex w-full min-w-0 max-w-[360px] flex-col sm:max-w-none"
               >
-                <div className="mb-5 overflow-hidden rounded-[20px] sm:mb-6">
+                <div className="mb-5 aspect-[3/2] w-full shrink-0 overflow-hidden rounded-[24px] bg-[#eef4fb] sm:mb-6">
                   <img
                     src={item.icon}
                     alt=""
                     aria-hidden
                     loading="lazy"
                     decoding="async"
-                    className="block h-auto w-full object-cover object-center"
+                    className="block h-full w-full object-cover object-center"
                   />
                 </div>
                 <h3 className="text-[clamp(16px,1.3vw,20px)] font-bold leading-snug text-[#1F2432] 2xl:text-[22px]">

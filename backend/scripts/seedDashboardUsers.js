@@ -6,36 +6,77 @@ import {
 } from "../module/authModules.js";
 import pool from "../config/db.js";
 
-const USERS = [
-  {
-    oldEmail: "sachin2026@ET.example",
-    email: "sachin2026@elevatetrust.ai",
-    fullName: "Sachin",
-    passwordPlain: "sachin2026@ET",
-    role: "sales",
-  },
-  {
-    oldEmail: "om2026@ET.example",
-    email: "om2026@elevatetrust.ai",
-    fullName: "Om",
-    passwordPlain: "om2026@ET",
-    role: "sales",
-  },
-  {
-    oldEmail: "shivanshi2026@ET.example",
-    email: "shivanshi2026@elevatetrust.ai",
-    fullName: "Shivanshi",
-    passwordPlain: "shivanshi2026@ET",
-    role: "sales",
-  },
-  {
-    oldEmail: "diksha2026@ET.example",
-    email: "diksha2026@elevatetrust.ai",
-    fullName: "Diksha",
-    passwordPlain: "diksha2026@ET",
-    role: "sales",
-  },
-];
+function requireEnv(name) {
+  const value = String(process.env[name] || "").trim();
+  if (!value) {
+    throw new Error(
+      `Missing required env ${name}. Set seed credentials in environment variables (never commit plaintext passwords).`,
+    );
+  }
+  return value;
+}
+
+function optionalEnv(name, fallback = "") {
+  const value = String(process.env[name] || "").trim();
+  return value || fallback;
+}
+
+function buildSeedUsers() {
+  const users = [
+    {
+      email: requireEnv("SEED_ADMIN_EMAIL"),
+      fullName: optionalEnv("SEED_ADMIN_NAME", "Admin"),
+      passwordPlain: requireEnv("SEED_ADMIN_PASSWORD"),
+      role: "admin",
+    },
+  ];
+
+  const salesDefs = [
+    {
+      emailEnv: "SEED_SALES_1_EMAIL",
+      nameEnv: "SEED_SALES_1_NAME",
+      passwordEnv: "SEED_SALES_1_PASSWORD",
+      defaultName: "Sales User 1",
+    },
+    {
+      emailEnv: "SEED_SALES_2_EMAIL",
+      nameEnv: "SEED_SALES_2_NAME",
+      passwordEnv: "SEED_SALES_2_PASSWORD",
+      defaultName: "Sales User 2",
+    },
+    {
+      emailEnv: "SEED_SALES_3_EMAIL",
+      nameEnv: "SEED_SALES_3_NAME",
+      passwordEnv: "SEED_SALES_3_PASSWORD",
+      defaultName: "Sales User 3",
+    },
+    {
+      emailEnv: "SEED_SALES_4_EMAIL",
+      nameEnv: "SEED_SALES_4_NAME",
+      passwordEnv: "SEED_SALES_4_PASSWORD",
+      defaultName: "Sales User 4",
+    },
+  ];
+
+  for (const def of salesDefs) {
+    const email = optionalEnv(def.emailEnv);
+    const passwordPlain = optionalEnv(def.passwordEnv);
+    if (!email && !passwordPlain) continue;
+    if (!email || !passwordPlain) {
+      throw new Error(
+        `Both ${def.emailEnv} and ${def.passwordEnv} are required when seeding a sales user.`,
+      );
+    }
+    users.push({
+      email,
+      fullName: optionalEnv(def.nameEnv, def.defaultName),
+      passwordPlain,
+      role: "sales",
+    });
+  }
+
+  return users;
+}
 
 /** Rename legacy roles once: admin → sales, superAdmin → admin (order matters). */
 async function migrateLegacyRoles() {
@@ -58,54 +99,24 @@ async function migrateLegacyRoles() {
   );
 }
 
-async function upsertAdminUser({
-  oldEmail,
-  email,
-  fullName,
-  role,
-  passwordPlain,
-}) {
-  const existingOld = await findUserByEmail(oldEmail);
-  const existingNew = existingOld ? null : await findUserByEmail(email);
-
+async function upsertAdminUser({ email, fullName, role, passwordPlain }) {
+  const existing = await findUserByEmail(email);
   const passwordHash = await bcrypt.hash(passwordPlain, 10);
 
-  // If old user exists, update that record (including email change) to avoid duplicates.
-  if (existingOld) {
-    await pool.query(
-      `
-        UPDATE admin_users
-        SET email = $2, full_name = $3, password_hash = $4, role = $5
-        WHERE id = $1
-      `,
-      [existingOld.id, email, fullName, passwordHash, role],
-    );
-    return {
-      id: existingOld.id,
-      email,
-      fullName,
-      role,
-      passwordPlain,
-      action: "updated",
-    };
-  }
-
-  // If new email already exists, just update password/full_name/role there.
-  if (existingNew) {
+  if (existing) {
     await pool.query(
       `
         UPDATE admin_users
         SET full_name = $2, password_hash = $3, role = $4
         WHERE id = $1
       `,
-      [existingNew.id, fullName, passwordHash, role],
+      [existing.id, fullName, passwordHash, role],
     );
     return {
-      id: existingNew.id,
+      id: existing.id,
       email,
       fullName,
       role,
-      passwordPlain,
       action: "updated",
     };
   }
@@ -122,16 +133,16 @@ async function upsertAdminUser({
     email,
     fullName,
     role,
-    passwordPlain,
     action: "created",
   };
 }
 
 async function main() {
+  const users = buildSeedUsers();
   await migrateLegacyRoles();
 
   const createdOrUpdated = [];
-  for (const user of USERS) {
+  for (const user of users) {
     const result = await upsertAdminUser(user);
     createdOrUpdated.push(result);
     console.log(
@@ -139,10 +150,13 @@ async function main() {
     );
   }
 
-  console.log("\n=== Sales Login List ===");
+  console.log("\n=== Seeded Dashboard Users ===");
   for (const item of createdOrUpdated) {
-    console.log(`${item.id}\t${item.email}\t${item.passwordPlain}`);
+    console.log(`${item.id}\t${item.email}\t${item.role}\t(${item.action})`);
   }
+  console.log(
+    "Passwords are loaded from environment variables and are not printed.",
+  );
 }
 
 main()

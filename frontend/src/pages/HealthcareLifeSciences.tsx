@@ -402,11 +402,11 @@ export default function HealthcareLifeSciences() {
                 key={item.title}
                 className="mx-auto flex w-full min-w-0 max-w-[360px] flex-col sm:max-w-none"
               >
-                <div className="mb-5 overflow-hidden rounded-[20px] sm:mb-6">
+                <div className="mb-5 aspect-[3/2] w-full shrink-0 overflow-hidden rounded-[24px] bg-[#eef4fb] sm:mb-6">
                   <img
                     src={item.icon}
                     alt=""
-                    className="block h-auto w-full object-cover object-center"
+                    className="block h-full w-full object-cover object-center"
                     aria-hidden
                   />
                 </div>
