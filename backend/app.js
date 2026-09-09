@@ -16,6 +16,7 @@ import testimonialRouter from "./route/testimonials.js";
 import contactRouter from "./route/contact.js";
 import jobRouter from "./route/jobs.js";
 import { logMailStatus } from "./config/mail.js";
+import { maybeSeedDashboardUsersOnStart } from "./scripts/seedDashboardUsers.js";
 
 dotenv.config();
 
@@ -214,6 +215,16 @@ async function startServer() {
     console.log("Database schema ensured.");
   } catch (error) {
     console.error("Failed to ensure database schema:", error?.message || error);
+    process.exit(1);
+  }
+
+  try {
+    await maybeSeedDashboardUsersOnStart();
+  } catch (error) {
+    console.error(
+      "Failed to seed dashboard users on start:",
+      error?.message || error,
+    );
     process.exit(1);
   }
 

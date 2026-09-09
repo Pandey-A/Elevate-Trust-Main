@@ -221,10 +221,16 @@ async function main() {
   }
   if (process.env.CLOUDINARY_CLOUD_NAME) ok("BUG-010 Cloudinary configured");
   else fail("BUG-010 Cloudinary configured", "missing CLOUDINARY_CLOUD_NAME");
-  if (process.env.SEED_ADMIN_EMAIL && process.env.SEED_ADMIN_PASSWORD) {
+  const hasAdmin1 =
+    (process.env.SEED_ADMIN_1_EMAIL && process.env.SEED_ADMIN_1_PASSWORD) ||
+    (process.env.SEED_ADMIN_EMAIL && process.env.SEED_ADMIN_PASSWORD);
+  if (hasAdmin1) {
     ok("BUG-016 seed credentials are env-based");
   } else {
-    fail("BUG-016 seed credentials", "SEED_ADMIN_EMAIL/PASSWORD missing in .env");
+    fail(
+      "BUG-016 seed credentials",
+      "SEED_ADMIN_1_EMAIL/PASSWORD (or legacy SEED_ADMIN_*) missing in .env",
+    );
     failures += 1;
   }
 

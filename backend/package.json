@@ -8,7 +8,8 @@
   "scripts": {
     "dev": "node --watch --watch-path=./app.js --watch-path=./config --watch-path=./controllers --watch-path=./route --watch-path=./middleware --watch-path=./module --watch-path=./utils --watch-path=./data app.js",
     "start": "node app.js",
-    "db:init": "node scripts/initDb.js"
+    "db:init": "node scripts/initDb.js",
+    "db:seed": "node scripts/seedDashboardUsers.js"
   },
   "engines": {
     "node": ">=18"

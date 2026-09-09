@@ -9,7 +9,6 @@ import csRfp from "../assets/case-studies/cs-rfp.png";
 import csTalent from "../assets/case-studies/cs-talent.png";
 import csPredictive1 from "../assets/case-studies/cs-predictive-1.png";
 import csSupportBpo from "../assets/case-studies/cs-support-bpo.png";
-import csPredictive2 from "../assets/case-studies/cs-predictive-2.png";
 import csSupportShipment from "../assets/case-studies/cs-support-shipment.png";
 import csPredictive3 from "../assets/case-studies/cs-predictive-3.png";
 import csVendorFraud from "../assets/case-studies/cs-vendor-fraud.png";
@@ -59,15 +58,6 @@ const caseStudies: CaseStudy[] = [
       "An agentic-based generative AI solution was built to reduce manual content searching and integrate past successful solutions for agent recommendations. The system offers deep customization for organization-specific workflows and utilizes a Kubernetes-based deployment to ensure the solution scales effectively with demand",
     image: csSupportBpo,
     href: "/case-studies/support-automation-bpo",
-    titleClassName: "cs-card__title--lg",
-  },
-  {
-    title:
-      "Predictive maintenance using IoT devices and sensors for the oil industry",
-    description:
-      "Leverages a specialized AI and IoT framework for real-time anomaly detection, using high-precision sensor integrations to capture early signs of leakages and machine malfunctions.",
-    image: csPredictive2,
-    href: "/case-studies/predictive-maintenance",
     titleClassName: "cs-card__title--lg",
   },
   {
