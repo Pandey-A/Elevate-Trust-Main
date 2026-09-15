@@ -30,47 +30,58 @@ type Story = {
 const DEFAULT_STORIES: Story[] = [
   {
     id: "story-1",
-    logo: threeIlogo,
-    profile: happyFeetCeo,
+    logo: "https://res.cloudinary.com/diyg8zovc/image/upload/v1786035820/elevate-trust/testimonials/1786035819907-image_15.svg",
+    profile: "https://res.cloudinary.com/diyg8zovc/image/upload/v1786035822/elevate-trust/testimonials/1786035822646-Screenshot_2026-08-06_221904.png",
     quote:
-      "ElevateTrust built our autonomous AI pipeline that transformed our verification process, delivering 99.4% accuracy with zero downtime.",
+      "Elevate Trust has become a trusted extension of our team. Whenever we need additional expertise, capability, or development capacity, they are quick to step in and deliver. What sets them apart is their commitment to understanding the business outcome before discussing the technology. From day one, they have focused on our goals, challenging assumptions, contributing ideas, and ensuring that every technical decision supports a real business objective",
     fullQuote:
-      "ElevateTrust built our autonomous AI pipeline that transformed our verification process, delivering 99.4% accuracy with zero downtime. Their engineers integrated fine-tuned local models that scale effortlessly with our peak customer volumes.",
-    name: "Alexandre Dumas",
-    title: "CEO, HappyFeet",
+      "Elevate Trust has become a trusted extension of our team. Whenever we need additional expertise, capability, or development capacity, they are quick to step in and deliver.\n\nWhat sets them apart is their commitment to understanding the business outcome before discussing the technology. From day one, they have focused on our goals, challenging assumptions, contributing ideas, and ensuring that every technical decision supports a real business objective.\n\nWe've worked with many technology providers over the years, and the difference with Elevate Trust is clear. They don't view projects as transactions. They take ownership of the outcome, remain engaged throughout the journey, and work alongside us until we are genuinely satisfied with the result. Their flexibility, responsiveness, and customer-first mindset make them a pleasure to work with.\n\nOne of the most significant projects Elevate Trust has delivered for us is the AI matching engine within our recruitment platform. The solution automatically scores applicants, explains its recommendations, and identifies high-quality candidates from our talent pool. Today, it is a cornerstone of our platform and a key competitive differentiator.\n\nTo achieve this, the Elevate Trust team invested considerable time evaluating alternative approaches, researching the latest advancements in AI, and designing a solution tailored to our needs. The result is the most accurate candidate matching system I have seen, and they continue to innovate and refine it as technology evolves.\n\nI would highly recommend Elevate Trust to any organisation looking for a technology partner that combines technical excellence with a genuine commitment to achieving business results.",
+    name: "Simon Oldham",
+    title: "CEO & Co-Founder, QJumpers",
   },
   {
     id: "story-2",
-    logo: genaiLogo,
-    profile: roshanImg,
+    logo: "https://res.cloudinary.com/diyg8zovc/image/upload/v1785492878/elevate-trust/testimonials/1785492875706-testimonial-reshu-choudhary-logo.svg",
+    profile: "https://res.cloudinary.com/diyg8zovc/image/upload/v1788635734/elevate-trust/testimonials/1788635734174-profile-cropped.jpg",
     quote:
-      "Their AI-native engineering team accelerated our product release cycle by 3x while cutting infrastructure compute costs by 45%.",
+      "Working with Elevate trust to develop our marketing compliance platform was an excellent experience. The team quickly understood our product vision and translated complex requirements into a strong, practical technical solution. We appreciated their expertise, thoughtful approach, and commitment throughout the development process.",
     fullQuote:
-      "Their AI-native engineering team accelerated our product release cycle by 3x while cutting infrastructure compute costs by 45%. The level of technical depth and responsiveness made them an indispensable strategic partner.",
-    name: "Roshan K.",
-    title: "VP of Product Engineering",
+      "Working with Elevate trust to develop our marketing compliance platform was an excellent experience. The team quickly understood our product vision and translated complex requirements into a strong, practical technical solution. We appreciated their expertise, thoughtful approach, and commitment throughout the development process.",
+    name: "Reshu Choudhary",
+    title: "Co-Founder, ComplyCore",
   },
   {
     id: "story-3",
-    logo: image10Logo,
-    profile: reshuImg,
+    logo: "https://res.cloudinary.com/diyg8zovc/image/upload/v1786037780/elevate-trust/testimonials/1786037777084-106892_FLAT_ARUPA_AI_JP_R_02_1.svg",
+    profile: "https://res.cloudinary.com/diyg8zovc/image/upload/v1788367403/elevate-trust/testimonials/1788367402829-profile-cropped.jpg",
     quote:
-      "ElevateTrust automated our complex compliance auditing using agentic workflows, saving our analysts hundreds of manual hours every month.",
+      "We had a very specific requirement and team Elevate trust made solutions that suited our team's strengths. Synergies are important for any positive association. We have Elevated Synergies with \"Elevate Trust\"",
     fullQuote:
-      "ElevateTrust automated our complex compliance auditing using agentic workflows, saving our analysts hundreds of manual hours every month. The custom LLM tooling they built is secure, accurate, and incredibly intuitive.",
-    name: "Reshu Sharma",
-    title: "Head of Operations, ComplyCore",
+      "We had a very specific requirement and team Elevate trust made solutions that suited our team's strengths. Synergies are important for any positive association. We have Elevated Synergies with \"Elevate Trust\"",
+    name: "Dr Ramanth Kumar Reddy",
+    title: "CEO , Arupa AI",
   },
   {
     id: "story-4",
-    logo: threeIlogo,
-    profile: simonImg,
+    logo: "https://res.cloudinary.com/diyg8zovc/image/upload/v1785493325/elevate-trust/testimonials/1785493322994-testimonial-roshan-hire-logo.svg",
+    profile: "https://res.cloudinary.com/diyg8zovc/image/upload/v1788632476/elevate-trust/testimonials/1788632476582-WhatsApp_Image_2026-07-24_at_11.17.43-cropped.jpg",
     quote:
-      "From intelligent search to real-time analytics, their engineering team delivered high-impact AI capabilities that directly increased user retention.",
+      "Working with Elevate Trust for our website development was a great experience. They understood our travel business needs and delivered a modern, user-friendly website with excellent support throughout the process. Highly professional team and we truly appreciate their dedication and efforts.",
     fullQuote:
-      "From intelligent search to real-time analytics, their engineering team delivered high-impact AI capabilities that directly increased user retention. We couldn't be happier with the outcome.",
-    name: "Simon Vance",
-    title: "Founder & CTO, QJumper",
+      "Working with Elevate Trust for our website development was a great experience. They understood our travel business needs and delivered a modern, user-friendly website with excellent support throughout the process. Highly professional team and we truly appreciate their dedication and efforts.",
+    name: "Roshan Hire",
+    title: "Co-Founder, Happy Feet Travellers",
+  },
+  {
+    id: "story-5",
+    logo: "https://res.cloudinary.com/diyg8zovc/image/upload/v1788633733/elevate-trust/testimonials/1788633733380-image_18.jpg",
+    profile: "https://res.cloudinary.com/diyg8zovc/image/upload/v1788633734/elevate-trust/testimonials/1788633734243-WhatsApp_Image_2026-07-24_at_11.24.18-cropped.jpg",
+    quote:
+      "Elevate Trust did an excellent job creating our website. Their team understood our vision, provided creative solutions, and delivered a website that truly represents our brand. Great communication, timely execution, and highly recommended!",
+    fullQuote:
+      "Elevate Trust did an excellent job creating our website. Their team understood our vision, provided creative solutions, and delivered a website that truly represents our brand. Great communication, timely execution, and highly recommended!",
+    name: "Narita Mahajan",
+    title: "Owner",
   },
 ];
 
