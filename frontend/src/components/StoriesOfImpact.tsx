@@ -8,14 +8,6 @@ import { usePublicTestimonials } from "../hooks/useAdminData";
 import { getOptimizedImageUrl } from "../lib/optimizeImageUrl";
 import "./StoriesOfImpact.css";
 
-// Client testimonial assets
-import roshanImg from "../assets/testimonial/RoshanHireHappyFeet.png";
-import happyFeetCeo from "../assets/testimonial/happyFeetCEO.png";
-import reshuImg from "../assets/testimonial/reshu-complyCore.jpeg";
-import simonImg from "../assets/testimonial/simon-qjumper.png";
-import threeIlogo from "../assets/testimonial/3i-Infotech-Logo 1.svg";
-import genaiLogo from "../assets/testimonial/genai_logo-main 1.svg";
-import image10Logo from "../assets/testimonial/image 10.svg";
 
 type Story = {
   id: string;
