@@ -10,7 +10,8 @@
     "start": "node app.js",
     "db:init": "node scripts/initDb.js",
     "db:seed": "node scripts/seedDashboardUsers.js",
-    "db:migrate": "node scripts/migrateSupabaseToPostgres.js"
+    "db:migrate": "node scripts/migrateSupabaseToPostgres.js",
+    "db:users": "node scripts/resetUsers.js"
   },
   "engines": {
     "node": ">=18"
