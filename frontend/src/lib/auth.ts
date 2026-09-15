@@ -154,5 +154,8 @@ export function clearLegacyLocalAdminData() {
     "et_admin_demos_schema",
     "et_admin_auth",
     "et_admin_users",
+    "et_cache_public_testimonials",
+    "et_cache_public_demos",
+    "et_cache_public_blogs",
   ].forEach((key) => localStorage.removeItem(key));
 }
