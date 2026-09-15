@@ -2,11 +2,9 @@
  * Automated Migration Script: Supabase Postgres -> Target Postgres (AWS RDS / Docker / Local)
  *
  * Usage:
- *   SOURCE_DATABASE_URL="postgresql://postgres:pass@db.xxx.supabase.co:5432/postgres" \
- *   TARGET_DATABASE_URL="postgresql://postgres:pass@your-aws-rds-host:5432/elevate_trust" \
+ *   SOURCE_DATABASE_URL="postgresql://..." \
+ *   TARGET_DATABASE_URL="postgresql://..." \
  *   node scripts/migrateSupabaseToPostgres.js
- *
- * If TARGET_DATABASE_URL is omitted, it defaults to process.env.DATABASE_URL.
  */
 import pg from "pg";
 import dotenv from "dotenv";
@@ -35,7 +33,6 @@ if (!sourceUrl) {
   console.error(
     '  node scripts/migrateSupabaseToPostgres.js "<source_supabase_url>" ["<target_postgres_url>"]',
   );
-  console.error("Or set SOURCE_DATABASE_URL in backend/.env.");
   process.exit(1);
 }
 
@@ -69,11 +66,7 @@ async function ensureTargetSchema() {
   console.log("Database schema applied successfully.");
 }
 
-async function migrateTable({
-  name,
-  idColumn = "id",
-  conflictAction = "DO NOTHING",
-}) {
+async function migrateTable({ name, idColumn = "id" }) {
   console.log(`\nMigrating table: [${name}]...`);
   const { rows } = await sourcePool.query(`SELECT * FROM ${name}`);
   if (rows.length === 0) {
@@ -90,17 +83,21 @@ async function migrateTable({
     const placeholders = keys.map((_, i) => `$${i + 1}`).join(", ");
     const values = keys.map((k) => {
       const v = row[k];
-      // Convert JSON objects/arrays to JSON string for Postgres JSONB columns
       if (v !== null && typeof v === "object" && !(v instanceof Date)) {
         return JSON.stringify(v);
       }
       return v;
     });
 
+    const updateSet = keys
+      .filter((k) => k !== idColumn)
+      .map((k) => `"${k}" = EXCLUDED."${k}"`)
+      .join(", ");
+
     const query = `
       INSERT INTO ${name} (${cols})
       VALUES (${placeholders})
-      ON CONFLICT (${idColumn}) ${conflictAction}
+      ON CONFLICT (${idColumn}) ${updateSet ? `DO UPDATE SET ${updateSet}` : "DO NOTHING"}
     `;
 
     try {
@@ -111,7 +108,7 @@ async function migrateTable({
     }
   }
 
-  console.log(`  Transferred ${transferred}/${rows.length} row(s) to [${name}].`);
+  console.log(`  Transferred/Updated ${transferred}/${rows.length} row(s) to [${name}].`);
 
   // Update serial sequence if applicable
   try {
@@ -135,19 +132,16 @@ async function main() {
   console.log("==================================================");
 
   try {
-    // Test connections
     await sourcePool.query("SELECT 1");
-    console.log("Connected to Source Database.");
+    console.log("Connected to Source Supabase Database.");
 
     await targetPool.query("SELECT 1");
     console.log("Connected to Target Database.");
 
-    // Ensure schema exists on target
     await ensureTargetSchema();
 
-    // Tables in logical dependency order
+    // Migrate content tables
     await migrateTable({ name: "demo_tags", idColumn: "name" });
-    await migrateTable({ name: "admin_users", idColumn: "email" });
     await migrateTable({ name: "demos", idColumn: "id" });
     await migrateTable({ name: "blogs", idColumn: "id" });
     await migrateTable({ name: "testimonials", idColumn: "id" });
