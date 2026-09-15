@@ -13,13 +13,22 @@ const clientLogos = [
   { name: "Qjumpers", src: qjumpersLogo },
 ];
 
-/** Repeat once so each track half stays wider than the viewport — no empty gaps in the loop. */
-const logoSequence = [...clientLogos, ...clientLogos];
+/** Repeat 6 times so each track (30 logos) is ~5,700px wide, far exceeding any 4K/ultrawide monitor.
+ * With two identical tracks translating -100%, the handoff is 100% seamless with zero gaps or restarts.
+ */
+const logoSequence = [
+  ...clientLogos,
+  ...clientLogos,
+  ...clientLogos,
+  ...clientLogos,
+  ...clientLogos,
+  ...clientLogos,
+];
 
-function LogoGroup({ duplicate = false }: { duplicate?: boolean }) {
+function LogoTrack({ duplicate = false }: { duplicate?: boolean }) {
   return (
     <div
-      className="client-strip__group flex shrink-0 items-center"
+      className="client-strip__track flex shrink-0 items-center"
       aria-hidden={duplicate || undefined}
     >
       {logoSequence.map((client, index) => (
@@ -27,11 +36,11 @@ function LogoGroup({ duplicate = false }: { duplicate?: boolean }) {
           key={`${duplicate ? "dup" : "main"}-${client.name}-${index}`}
           className="flex shrink-0 items-center"
         >
-          <div className="flex h-7 items-center justify-center px-5 sm:h-8 sm:px-8 md:h-9 md:px-10 lg:h-10 lg:px-12">
+          <div className="flex h-14 items-center justify-center px-7 sm:h-8 sm:px-8 md:h-9 md:px-10 lg:h-10 lg:px-12">
             <img
               src={client.src}
               alt={duplicate ? "" : client.name}
-              className="max-h-5 w-auto object-contain sm:max-h-6 md:max-h-7 lg:max-h-8"
+              className="max-h-10 w-auto object-contain sm:max-h-6 md:max-h-7 lg:max-h-8"
               draggable={false}
             />
           </div>
@@ -45,12 +54,12 @@ function LogoGroup({ duplicate = false }: { duplicate?: boolean }) {
 export default function ClientStrip() {
   return (
     <section
-      className="client-strip relative overflow-hidden bg-white py-2.5 sm:py-3.5 md:py-4 lg:py-5"
+      className="client-strip relative overflow-hidden bg-white py-5 sm:py-3.5 md:py-4 lg:py-5"
       aria-label="Our customers"
     >
-      <div className="client-strip__track flex w-max items-center">
-        <LogoGroup />
-        <LogoGroup duplicate />
+      <div className="client-strip__wrapper flex w-max items-center">
+        <LogoTrack />
+        <LogoTrack duplicate />
       </div>
     </section>
   );

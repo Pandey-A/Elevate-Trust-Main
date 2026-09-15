@@ -20,11 +20,17 @@ type TestimonialApiRow = {
   title: string;
   quote: string;
   fullQuote?: string;
+  full_quote?: string;
   logoUrl?: string;
+  logo_url?: string;
   profileUrl?: string;
+  profile_url?: string;
   sortOrder?: number;
-  createdAt: string;
-  updatedAt: string;
+  sort_order?: number;
+  createdAt?: string;
+  created_at?: string;
+  updatedAt?: string;
+  updated_at?: string;
 };
 
 function mapTestimonial(row: TestimonialApiRow): Testimonial {
@@ -33,12 +39,12 @@ function mapTestimonial(row: TestimonialApiRow): Testimonial {
     name: row.name,
     title: row.title || "",
     quote: row.quote || "",
-    fullQuote: row.fullQuote || "",
-    logoUrl: row.logoUrl || "",
-    profileUrl: row.profileUrl || "",
-    sortOrder: Number(row.sortOrder) || 0,
-    createdAt: row.createdAt,
-    updatedAt: row.updatedAt,
+    fullQuote: row.fullQuote || row.full_quote || "",
+    logoUrl: row.logoUrl || row.logo_url || "",
+    profileUrl: row.profileUrl || row.profile_url || "",
+    sortOrder: Number(row.sortOrder ?? row.sort_order) || 0,
+    createdAt: row.createdAt || row.created_at || "",
+    updatedAt: row.updatedAt || row.updated_at || "",
   };
 }
 

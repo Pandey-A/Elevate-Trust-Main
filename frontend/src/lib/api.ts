@@ -7,11 +7,9 @@ function resolveApiUrl() {
 
   if (configured) return configured;
 
-  // Never silently point production builds at the visitor's localhost.
+  // In production, an empty VITE_API_URL enables same-origin relative API routing
+  // (e.g. when deployed with Nginx or AWS CloudFront reverse proxy routing /api/* to backend).
   if (import.meta.env.PROD) {
-    console.error(
-      "VITE_API_URL is missing in this production build. API requests will fail until it is configured.",
-    );
     return "";
   }
 
@@ -22,6 +20,8 @@ const API_URL = resolveApiUrl();
 
 export const api = axios.create({
   baseURL: API_URL || undefined,
+  // Enables sending and receiving cookies across origins and same-origin
+  withCredentials: true,
   headers: {
     Accept: "application/json",
   },

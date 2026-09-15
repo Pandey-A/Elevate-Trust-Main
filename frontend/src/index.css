@@ -1,5 +1,114 @@
 @import "tailwindcss";
 
+/* ── Product Sans Font-Face Declarations ──────────────────────────────────── */
+@font-face {
+  font-family: "Product Sans";
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: local("Product Sans Light"),
+       url("./assets/fonts/ProductSans-Light.woff") format("woff"),
+       url("https://fonts.cdnfonts.com/s/14955/ProductSans-Light.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Product Sans";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local("Product Sans"),
+       local("Product Sans Regular"),
+       url("./assets/fonts/ProductSans-Regular.woff") format("woff"),
+       url("https://fonts.cdnfonts.com/s/14955/ProductSans-Regular.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Product Sans";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local("Product Sans Italic"),
+       url("./assets/fonts/ProductSans-Italic.woff") format("woff"),
+       url("https://fonts.cdnfonts.com/s/14955/ProductSans-Italic.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Product Sans";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: local("Product Sans Medium"),
+       url("./assets/fonts/ProductSans-Medium.woff") format("woff"),
+       url("https://fonts.cdnfonts.com/s/14955/ProductSans-Medium.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Product Sans";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local("Product Sans Bold"),
+       local("Product Sans Medium"),
+       url("./assets/fonts/ProductSans-Bold.woff") format("woff"),
+       url("https://fonts.cdnfonts.com/s/14955/ProductSans-Bold.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Product Sans";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local("Product Sans Bold"),
+       url("./assets/fonts/ProductSans-Bold.woff") format("woff"),
+       url("https://fonts.cdnfonts.com/s/14955/ProductSans-Bold.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Product Sans";
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: local("Product Sans Bold Italic"),
+       url("./assets/fonts/ProductSans-BoldItalic.woff") format("woff"),
+       url("https://fonts.cdnfonts.com/s/14955/ProductSans-BoldItalic.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Product Sans";
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: local("Product Sans Black"),
+       local("Product Sans Bold"),
+       url("./assets/fonts/ProductSans-Black.woff") format("woff"),
+       url("https://fonts.cdnfonts.com/s/14955/ProductSans-Black.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Product Sans";
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: local("Product Sans Black"),
+       url("./assets/fonts/ProductSans-Black.woff") format("woff"),
+       url("https://fonts.cdnfonts.com/s/14955/ProductSans-Black.woff") format("woff");
+}
+
+/* Fallback aliases for legacy theme declarations */
+@font-face {
+  font-family: "Lay Grotesk Trial";
+  font-display: swap;
+  src: local("Product Sans"),
+       url("./assets/fonts/ProductSans-Regular.woff") format("woff");
+}
+
+@font-face {
+  font-family: "Lay Grotesk - Trial";
+  font-display: swap;
+  src: local("Product Sans"),
+       url("./assets/fonts/ProductSans-Regular.woff") format("woff");
+}
+
 @custom-variant dark (&:is(.dark *));
 
 :root {
@@ -15,8 +124,9 @@
   --shadow:
     rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
 
-  --font-lay-grotesk: "Lay Grotesk Trial", "Lay Grotesk - Trial", sans-serif;
-  --font-ubuntu: "Ubuntu", sans-serif;
+  --font-product-sans: "Product Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-lay-grotesk: "Product Sans", "Lay Grotesk Trial", "Lay Grotesk - Trial", system-ui, sans-serif;
+  --font-ubuntu: "Product Sans", "Ubuntu", system-ui, sans-serif;
   --site-max-width: clamp(1280px, 92vw, 1440px);
   --content-max-width: clamp(1080px, 88vw, 1280px);
   --site-padding-x: clamp(1rem, 2vw, 2.5rem);
@@ -32,8 +142,8 @@
   --fs-section-title: clamp(28px, 3vw, 48px);
   --fs-card-title: clamp(20px, 1.5vw, 28px);
   --fs-subtitle: clamp(14px, 1.2vw, 18px);
-  --sans: var(--font-lay-grotesk);
-  --heading: var(--font-lay-grotesk);
+  --sans: var(--font-product-sans);
+  --heading: var(--font-product-sans);
   --mono: ui-monospace, Consolas, monospace;
 
   /* shadcn/ui theme tokens */
@@ -181,14 +291,15 @@ html,
 body,
 #root {
   min-height: 100%;
+  font-family: var(--font-product-sans);
 }
 
 body {
-  font-family: var(--font-lay-grotesk);
+  font-family: var(--font-product-sans);
 }
 
 .font-ubuntu {
-  font-family: var(--font-ubuntu);
+  font-family: var(--font-product-sans);
 }
 
 .site-container {
@@ -261,13 +372,13 @@ body {
 }
 
 @keyframes client-strip-scroll {
-  from {
+  0% {
     transform: translate3d(0, 0, 0);
   }
 
-  to {
-    /* Exactly one LogoGroup width — seamless handoff to the duplicate group */
-    transform: translate3d(-50%, 0, 0);
+  100% {
+    /* Translate exactly 100% of this track's width — seamless infinite loop */
+    transform: translate3d(-100%, 0, 0);
   }
 }
 
@@ -275,10 +386,16 @@ body {
   width: 100%;
 }
 
-.client-strip__track {
+.client-strip__wrapper {
   display: flex;
   width: max-content;
-  animation: client-strip-scroll 40s linear infinite;
+}
+
+.client-strip__track {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  animation: client-strip-scroll 65s linear infinite;
   will-change: transform;
 }
 
@@ -298,9 +415,21 @@ body {
 .client-strip__sep {
   display: block;
   width: 1px;
-  height: 56px;
+  height: 32px;
   flex-shrink: 0;
   background-color: #d0d5dd;
+}
+
+@media (min-width: 768px) {
+  .client-strip__sep {
+    height: 44px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .client-strip__sep {
+    height: 56px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -687,4 +816,12 @@ body {
     padding-right: 48px;
   }
 }
+
+@media (max-width: 768px) {
+  /* Customer Logo Carousel separator */
+  .client-strip__sep {
+    height: 44px !important;
+  }
+}
+
 

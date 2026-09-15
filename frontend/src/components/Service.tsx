@@ -166,6 +166,20 @@ export default function Service() {
     };
   }, []);
 
+  const handleSelectTab = (index: number) => {
+    setActiveTab(index);
+    if (tabsRef.current && window.innerWidth < 1024) {
+      const selectedBtn = tabsRef.current.children[index] as HTMLElement | undefined;
+      if (selectedBtn) {
+        selectedBtn.scrollIntoView({
+          behavior: "smooth",
+          inline: "center",
+          block: "nearest",
+        });
+      }
+    }
+  };
+
   return (
     <section className="service-section" aria-label="Our Services">
       <img
@@ -201,21 +215,23 @@ export default function Service() {
                 type="button"
                 role="tab"
                 aria-selected={activeTab === index}
-                onClick={() => setActiveTab(index)}
+                onClick={() => handleSelectTab(index)}
                 className={`service-section__tab ${
                   activeTab === index
                     ? "service-section__tab--active"
                     : "service-section__tab--inactive"
                 }`}
               >
-                <img
-                  src={service.image}
-                  className="service-section__tab-icon"
-                  alt=""
-                  aria-hidden="true"
-                  loading="lazy"
-                  decoding="async"
-                />
+                <div className="service-section__tab-thumb">
+                  <img
+                    src={service.image}
+                    className="service-section__tab-icon"
+                    alt=""
+                    aria-hidden="true"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
                 <span className="service-section__tab-label">{service.title}</span>
               </button>
             ))}
@@ -226,7 +242,7 @@ export default function Service() {
             role="tabpanel"
             style={panelHeight ? { height: panelHeight } : undefined}
           >
-            <div className="service-section__card">
+            <div key={activeService.title} className="service-section__card">
               <div className="service-section__card-body">
                 <div>
                   <h3 className="service-section__card-title">{activeService.title}</h3>

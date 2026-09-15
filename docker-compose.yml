@@ -1,0 +1,105 @@
+services:
+  # ---------------------------------------------------------------------------
+  # 1. PostgreSQL Database ($0 Cloud Database Cost on EC2/Lightsail)
+  # (If you prefer AWS RDS, simply omit or stop this service and set DATABASE_URL)
+  # ---------------------------------------------------------------------------
+  postgres:
+    image: postgres:16-alpine
+    container_name: et_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME:-elevate_trust}
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres} -d ${DB_NAME:-elevate_trust}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - et_network
+
+  # ---------------------------------------------------------------------------
+  # 2. Node.js Express Backend API
+  # ---------------------------------------------------------------------------
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: et_backend
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 5000
+      DATABASE_URL: ${DATABASE_URL:-postgresql://postgres:postgres@postgres:5432/elevate_trust}
+      DB_SSL: ${DB_SSL:-false}
+      JWT_SECRET: ${JWT_SECRET:-change-this-to-a-very-long-production-jwt-secret}
+      ALLOW_LOCAL_STORAGE: "true"
+      STORAGE_DRIVER: local
+      COOKIE_DOMAIN: ${COOKIE_DOMAIN:-}
+      COOKIE_SAMESITE: ${COOKIE_SAMESITE:-lax}
+      COOKIE_SECURE: ${COOKIE_SECURE:-true}
+      TRUST_PROXY: "1"
+      SEED_ON_START: ${SEED_ON_START:-false}
+      SEED_ADMIN_1_EMAIL: ${SEED_ADMIN_1_EMAIL:-admin1@elevatetrust.ai}
+      SEED_ADMIN_1_NAME: ${SEED_ADMIN_1_NAME:-Admin One}
+      SEED_ADMIN_1_PASSWORD: ${SEED_ADMIN_1_PASSWORD:-change-me-admin1-password}
+      CLOUDINARY_CLOUD_NAME: ${CLOUDINARY_CLOUD_NAME:-}
+      CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY:-}
+      CLOUDINARY_API_SECRET: ${CLOUDINARY_API_SECRET:-}
+      AZURE_TENANT_ID: ${AZURE_TENANT_ID:-}
+      AZURE_CLIENT_ID: ${AZURE_CLIENT_ID:-}
+      AZURE_CLIENT_SECRET: ${AZURE_CLIENT_SECRET:-}
+      CONTACT_FROM_EMAIL: ${CONTACT_FROM_EMAIL:-}
+      CONTACT_TO_EMAIL: ${CONTACT_TO_EMAIL:-}
+    volumes:
+      - uploads_data:/app/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - et_network
+
+  # ---------------------------------------------------------------------------
+  # 3. React Vite Frontend
+  # ---------------------------------------------------------------------------
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: et_frontend
+    restart: unless-stopped
+    networks:
+      - et_network
+
+  # ---------------------------------------------------------------------------
+  # 4. Nginx Reverse Proxy / API Gateway
+  # Unites Frontend & Backend on the same origin (Port 80/443).
+  # Eliminates CORS and makes HttpOnly cookies 100% first-party in all browsers!
+  # ---------------------------------------------------------------------------
+  gateway:
+    image: nginx:alpine
+    container_name: et_gateway
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - backend
+      - frontend
+    networks:
+      - et_network
+
+volumes:
+  postgres_data:
+    driver: local
+  uploads_data:
+    driver: local
+
+networks:
+  et_network:
+    driver: bridge

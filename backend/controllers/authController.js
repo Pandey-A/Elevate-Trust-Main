@@ -4,7 +4,12 @@ import {
   createUser,
   findUserByEmail,
 } from "../module/authModules.js";
-import { isDashboardRole, signAuthToken } from "../middleware/auth.js";
+import {
+  clearAuthCookie,
+  isDashboardRole,
+  setAuthCookie,
+  signAuthToken,
+} from "../middleware/auth.js";
 
 function publicUser(user) {
   return {
@@ -65,6 +70,7 @@ export async function register(req, res) {
     });
 
     const token = signAuthToken(user);
+    setAuthCookie(res, token);
 
     return res.status(201).json({
       success: true,
@@ -122,6 +128,7 @@ export async function login(req, res) {
     }
 
     const token = signAuthToken(user);
+    setAuthCookie(res, token);
 
     return res.status(200).json({
       success: true,
@@ -136,6 +143,22 @@ export async function login(req, res) {
     return res.status(500).json({
       success: false,
       message: "Unable to log in right now. Please try again.",
+    });
+  }
+}
+
+export async function logout(req, res) {
+  try {
+    clearAuthCookie(res);
+    return res.status(200).json({
+      success: true,
+      message: "Logged out successfully.",
+    });
+  } catch (error) {
+    console.error("Logout error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Unable to log out right now.",
     });
   }
 }

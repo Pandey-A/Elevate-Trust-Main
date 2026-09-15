@@ -29,37 +29,40 @@ function isCloudinaryConfigured() {
 }
 
 function allowLocalUploadFallback() {
-  // Production/serverless must use persistent object storage (Cloudinary).
-  // Local disk is only a development fallback.
+  // Allow persistent local storage on AWS EC2 / Lightsail EBS volumes ($0 extra cost)
+  if (
+    String(process.env.ALLOW_LOCAL_STORAGE || "").toLowerCase() === "true" ||
+    process.env.STORAGE_DRIVER === "local"
+  ) {
+    return true;
+  }
+  // If Cloudinary keys are missing in env, fall back to local disk rather than throwing 500
+  if (!isCloudinaryConfigured()) {
+    return true;
+  }
   return process.env.NODE_ENV !== "production";
 }
 
 function requireCloudStorageOrThrow(context) {
-  if (isCloudinaryConfigured()) return;
+  if (isCloudinaryConfigured() || allowLocalUploadFallback()) return;
   throw new Error(
-    `Cloudinary is required for ${context} uploads in this environment.`,
+    `Storage is not configured for ${context} uploads. Please configure Cloudinary or set ALLOW_LOCAL_STORAGE=true in .env.`,
   );
 }
 
-if (allowLocalUploadFallback()) {
-  for (const dir of [
-    uploadsCvDir,
-    uploadsBlogDir,
-    uploadsTestimonialDir,
-    uploadsDemoDir,
-    demoUploadTmpDir,
-  ]) {
+for (const dir of [
+  uploadsCvDir,
+  uploadsBlogDir,
+  uploadsTestimonialDir,
+  uploadsDemoDir,
+  demoUploadTmpDir,
+]) {
+  try {
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir, { recursive: true });
     }
-  }
-} else {
-  try {
-    if (!fs.existsSync(demoUploadTmpDir)) {
-      fs.mkdirSync(demoUploadTmpDir, { recursive: true });
-    }
   } catch (error) {
-    console.warn("Unable to create demo upload temp dir:", error?.message || error);
+    console.warn(`Unable to create upload dir ${dir}:`, error?.message || error);
   }
 }
 

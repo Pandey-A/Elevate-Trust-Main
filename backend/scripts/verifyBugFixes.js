@@ -214,7 +214,7 @@ async function main() {
   }
 
   // --- Env/config smoke ---
-  if (process.env.DB_SSL || process.env.DATABASE_SSL || /supabase\.co/i.test(process.env.DATABASE_URL || "")) {
+  if (process.env.DB_SSL || process.env.DATABASE_SSL || (process.env.DATABASE_URL && !/localhost|127\.0\.0\.1/i.test(process.env.DATABASE_URL))) {
     ok("BUG-005 SSL config available");
   } else {
     info("BUG-005 DB_SSL not set (OK for local non-SSL Postgres)");

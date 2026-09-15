@@ -4,12 +4,11 @@
   cursor: grab;
   touch-action: pan-y;
   will-change: transform;
-  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .stories-track.is-dragging {
   cursor: grabbing;
-  transition: none;
+  user-select: none;
 }
 
 .stories-track [data-story-card] {

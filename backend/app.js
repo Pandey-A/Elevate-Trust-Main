@@ -3,10 +3,11 @@ import cors from "cors";
 import dotenv from "dotenv";
 import helmet from "helmet";
 import morgan from "morgan";
+import cookieParser from "cookie-parser";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import pool from "./config/db.js";
+import pool, { closePool, testDbConnection } from "./config/db.js";
 import careerRouter from "./route/career.js";
 import authRouter from "./route/auth.js";
 import demoRouter from "./route/demo.js";
@@ -81,6 +82,7 @@ app.use(
     crossOriginResourcePolicy: { policy: "cross-origin" },
   }),
 );
+app.use(cookieParser());
 app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev"));
 app.set("trust proxy", process.env.TRUST_PROXY || 1);
 app.use(express.json({ limit: process.env.JSON_BODY_LIMIT || "10mb" }));
@@ -120,11 +122,17 @@ app.get("/", (_req, res) => {
   });
 });
 
-app.get("/api/health", (_req, res) => {
-  res.status(200).json({
-    status: "ok",
+app.get("/api/health", async (_req, res) => {
+  const dbStatus = await testDbConnection();
+  const isHealthy = dbStatus.ok;
+  res.status(isHealthy ? 200 : 503).json({
+    status: isHealthy ? "ok" : "degraded",
     service: "elevate-revamp-backend",
+    database: isHealthy ? "connected" : "disconnected",
+    dbLatencyMs: dbStatus.latencyMs ?? null,
+    dbError: dbStatus.error || undefined,
     port: Number(process.env.RUNTIME_PORT || PREFERRED_PORT),
+    uptimeSeconds: Math.floor(process.uptime()),
     timestamp: new Date().toISOString(),
   });
 });
@@ -209,6 +217,31 @@ async function ensureDatabaseSchema() {
   `);
 }
 
+function setupGracefulShutdown(server) {
+  let isShuttingDown = false;
+  const shutdown = async (signal) => {
+    if (isShuttingDown) return;
+    isShuttingDown = true;
+    console.log(`\nReceived ${signal}. Shutting down gracefully...`);
+
+    server.close(async () => {
+      console.log("HTTP server closed.");
+      await closePool();
+      console.log("PostgreSQL connections closed.");
+      process.exit(0);
+    });
+
+    // Force exit after 10 seconds if connections refuse to close
+    setTimeout(() => {
+      console.error("Graceful shutdown timed out. Forcing process exit.");
+      process.exit(1);
+    }, 10_000).unref();
+  };
+
+  process.on("SIGTERM", () => shutdown("SIGTERM"));
+  process.on("SIGINT", () => shutdown("SIGINT"));
+}
+
 async function startServer() {
   try {
     await ensureDatabaseSchema();
@@ -242,11 +275,13 @@ async function startServer() {
         `http://localhost:${port}`;
 
       console.log(`Server is running on http://localhost:${port}`);
-      console.log(`Auth API: POST http://localhost:${port}/api/auth/register|login`);
+      console.log(`Auth API: POST http://localhost:${port}/api/auth/register|login|logout`);
       console.log(`Career API: POST http://localhost:${port}/api/careers`);
       console.log(`Jobs API: GET/POST http://localhost:${port}/api/jobs`);
       console.log(`Contact API: POST http://localhost:${port}/api/contact`);
       logMailStatus();
+
+      setupGracefulShutdown(server);
 
       if (port !== PREFERRED_PORT) {
         console.warn(

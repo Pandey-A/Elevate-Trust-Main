@@ -52,7 +52,7 @@ export function getToken(): string | null {
 export function getAuthSession(): AuthSession | null {
   try {
     const raw = localStorage.getItem(USER_KEY);
-    if (!raw || !getToken()) return null;
+    if (!raw) return null;
     return JSON.parse(raw) as AuthSession;
   } catch {
     return null;
@@ -60,11 +60,13 @@ export function getAuthSession(): AuthSession | null {
 }
 
 export function isAuthenticated() {
-  return Boolean(getToken() && getAuthSession());
+  return Boolean(getAuthSession());
 }
 
 function persistSession(token: string, user: AuthUser) {
-  localStorage.setItem(TOKEN_KEY, token);
+  if (token) {
+    localStorage.setItem(TOKEN_KEY, token);
+  }
   localStorage.setItem(
     USER_KEY,
     JSON.stringify({
@@ -80,6 +82,8 @@ export function logoutUser() {
   localStorage.removeItem(TOKEN_KEY);
   localStorage.removeItem(USER_KEY);
   notifyAuthChanged();
+  // Call server to clear HttpOnly cookie
+  api.post("/api/auth/logout").catch(() => {});
 }
 
 export async function loginUser(email: string, password: string) {
@@ -98,25 +102,29 @@ export async function loginUser(email: string, password: string) {
 
 export async function fetchCurrentUser() {
   const token = getToken();
-  if (!token) return null;
 
-  const { data } = await api.get<{
-    success: boolean;
-    data: { user: AuthUser };
-  }>("/api/auth/me", {
-    headers: { Authorization: `Bearer ${token}` },
-  });
+  try {
+    const { data } = await api.get<{
+      success: boolean;
+      data: { user: AuthUser };
+    }>("/api/auth/me", {
+      headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+    });
 
-  if (!data.success || !data.data?.user) {
-    logoutUser();
+    if (!data.success || !data.data?.user) {
+      if (token) logoutUser();
+      return null;
+    }
+
+    persistSession(token || "", data.data.user);
+    return data.data.user;
+  } catch {
+    if (token) logoutUser();
     return null;
   }
-
-  persistSession(token, data.data.user);
-  return data.data.user;
 }
 
-/** Attach JWT to API requests when present. */
+/** Attach JWT to API requests when present (Bearer fallback). */
 api.interceptors.request.use((config) => {
   const token = getToken();
   if (token) {
@@ -128,16 +136,10 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    // Only clear session when a token was sent and rejected (expired/invalid).
-    // Unauthenticated probes (no Bearer) also return 401 — do not treat those as logout.
+    // Only clear session when a token/cookie was rejected as unauthorized (401).
     if (error?.response?.status === 401) {
-      const hadToken = Boolean(getToken());
-      const authHeader = String(
-        error?.config?.headers?.Authorization ||
-          error?.config?.headers?.authorization ||
-          "",
-      );
-      if (hadToken || authHeader.startsWith("Bearer ")) {
+      const hadSession = Boolean(getAuthSession());
+      if (hadSession) {
         logoutUser();
       }
     }
@@ -145,7 +147,7 @@ api.interceptors.response.use(
   },
 );
 
-/** Clear old localStorage-only auth/demo keys from the previous frontend setup. */
+/** Clear old localStorage-only auth/demo keys from previous frontend setup. */
 export function clearLegacyLocalAdminData() {
   [
     "et_admin_demos",
