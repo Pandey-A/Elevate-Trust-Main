@@ -416,6 +416,10 @@ export default function StoriesOfImpact() {
                 >
                   {clonedStories.map((story, index) => {
                     const isFocused = index === currentIndex;
+                    const hasMore = Boolean(
+                      (story.fullQuote && story.fullQuote.trim() && story.fullQuote.trim() !== story.quote.trim()) ||
+                      story.quote.trim().length > 120
+                    );
 
                     return (
                       <article
@@ -461,7 +465,7 @@ export default function StoriesOfImpact() {
                               "{story.quote.replace(/^["“]|["”]$/g, "")}"
                             </p>
 
-                            {story.fullQuote ? (
+                            {hasMore ? (
                               <button
                                 type="button"
                                 onPointerDown={(event) => event.stopPropagation()}
@@ -471,7 +475,7 @@ export default function StoriesOfImpact() {
                                 }}
                                 className="relative z-10 mt-1 inline-block text-left text-[11px] font-semibold text-[#2365AA] transition hover:text-[#113D77] hover:underline sm:text-xs"
                               >
-                                More
+                                View more
                               </button>
                             ) : null}
                           </div>
@@ -550,7 +554,7 @@ export default function StoriesOfImpact() {
                 </div>
 
                 <StoryQuote
-                  text={expandedStory.fullQuote ?? expandedStory.quote}
+                  text={(expandedStory.fullQuote && expandedStory.fullQuote.trim()) || expandedStory.quote}
                   className="mt-4 text-xs leading-relaxed text-[#5A5A5A] sm:mt-6 sm:text-sm sm:leading-6"
                 />
 

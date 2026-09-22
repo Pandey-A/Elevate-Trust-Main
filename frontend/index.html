@@ -2,7 +2,44 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <script>
+      (function () {
+        function isExtensionConnectionError(msg) {
+          return (
+            typeof msg === "string" &&
+            (msg.indexOf("Could not establish connection") !== -1 ||
+              msg.indexOf("Receiving end does not exist") !== -1 ||
+              msg.indexOf("runtime.lastError") !== -1)
+          );
+        }
+        window.addEventListener(
+          "unhandledrejection",
+          function (event) {
+            var reason = event && event.reason;
+            var msg = (reason && reason.message) || String(reason || "");
+            if (isExtensionConnectionError(msg)) {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+          },
+          true,
+        );
+        window.addEventListener(
+          "error",
+          function (event) {
+            var msg = (event && event.message) || "";
+            if (isExtensionConnectionError(msg)) {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+          },
+          true,
+        );
+      })();
+    </script>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <meta name="description" content="Elevate Trust - AI Native Product Engineering Firm. Build scalable, fine-tuned local LLM solutions with a trusted AI/ML implementation partner." />

@@ -511,26 +511,29 @@
 }
 
 /*
-  Laptop / desktop below 1920 — same structure as Figma @ 2012,
-  scaled ~0.58–0.72 so it fits without looking oversized.
+  Laptop / desktop responsive layout — balanced, compact scale
+  so all 7 tabs, content, and the bottom-right illustration fit
+  on laptop screens (1280px-1440px) as well as external monitors.
 */
-@media (min-width: 1024px) and (max-width: 1919px) {
+@media (min-width: 1024px) {
   .service-section {
-    padding: 3.5rem 1.5rem 4rem;
+    padding: 2.25rem 1.25rem 2.5rem;
   }
 
   .service-section__vector {
-    width: min(520px, 40vw);
-    opacity: 0.55;
+    width: min(480px, 36vw);
+    opacity: 0.45;
   }
 
   .service-section__inner {
     gap: 0;
+    max-width: 1280px;
+    margin-inline: auto;
   }
 
   .service-section__header {
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 1.25rem;
   }
 
   .service-section__heading-label {
@@ -540,17 +543,16 @@
   }
 
   .service-section__heading-title {
-    margin: 0.65rem auto 0;
+    margin: 0.4rem auto 0;
     max-width: 36rem;
-    font-size: clamp(1.5rem, 2.2vw, 1.85rem);
+    font-size: clamp(1.35rem, 1.8vw, 1.65rem);
     font-weight: 700;
-    line-height: 1.15;
+    line-height: 1.2;
   }
 
-  /* Figma: tabs 536 + panel overlap → grid with connected active tab */
   .service-section__layout {
     display: grid;
-    grid-template-columns: 260px minmax(0, 1fr);
+    grid-template-columns: 245px minmax(0, 1fr);
     align-items: stretch;
     gap: 0;
     margin-top: 0;
@@ -559,7 +561,7 @@
   .service-section__tabs {
     width: 100%;
     flex-direction: column;
-    gap: 6px;
+    gap: 5px;
     overflow: visible;
     margin: 0;
     padding: 0;
@@ -576,18 +578,20 @@
     display: block;
     min-width: 0;
     width: 100%;
-    height: 72px;
+    height: 52px;
     padding: 0;
     border: none;
-    border-radius: 16px;
+    border-radius: 14px;
     gap: 0;
   }
 
   .service-section__tab--active {
     width: calc(100% + 20px);
-    border-radius: 16px 0 0 16px;
+    border-radius: 14px 0 0 14px;
     box-shadow: none;
-    z-index: 2;
+    background-color: #2365aa;
+    color: #ffffff;
+    z-index: 4;
   }
 
   .service-section__tab--inactive {
@@ -601,23 +605,23 @@
 
   .service-section__tab-icon {
     position: absolute;
-    left: 18px;
+    left: 14px;
     top: 50%;
     transform: translateY(-50%);
-    width: 44px;
-    height: 36px;
+    width: 34px;
+    height: 28px;
   }
 
   .service-section__tab-label {
     position: absolute;
-    left: 78px;
-    right: 14px;
+    left: 56px;
+    right: 12px;
     top: 50%;
     transform: translateY(-50%);
     flex: none;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
-    line-height: 1.25;
+    line-height: 1.22;
   }
 
   .service-section__tab--active .service-section__tab-label {
@@ -630,44 +634,254 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    z-index: 3;
+    z-index: 2;
   }
 
   .service-section__card {
+    position: relative;
     flex: 1;
     height: 100%;
     min-height: 0;
-    padding: 28px 28px 24px 32px;
+    padding: 22px 24px 18px 28px;
     border: none;
-    border-radius: 16px;
+    border-radius: 14px;
     box-shadow: none;
     background: #ffffff;
   }
 
   .service-section__card-body {
-    max-width: calc(100% - 120px);
+    max-width: calc(100% - 105px);
     gap: 0;
     overflow: visible;
   }
 
   .service-section__card-title {
-    margin: 0 0 18px;
-    font-size: 20px;
+    margin: 0 0 10px;
+    font-size: 18px;
     font-weight: 600;
     line-height: 1.2;
     color: #272935;
   }
 
   .service-section__card-desc {
-    margin: 0 0 18px;
-    font-size: 14px;
+    margin: 0 0 12px;
+    font-size: 12.5px;
     font-weight: 500;
-    line-height: 1.4;
+    line-height: 1.36;
     color: #848b9b;
   }
 
   .service-section__features {
-    gap: 14px;
+    gap: 10px;
+  }
+
+  .service-section__feature {
+    gap: 10px;
+  }
+
+  .service-section__feature-check {
+    width: 18px;
+    height: 18px;
+    margin-top: 1px;
+  }
+
+  .service-section__feature-check svg {
+    width: 9px;
+    height: 9px;
+  }
+
+  .service-section__feature-title {
+    margin: 0 0 2px;
+    font-size: 13.5px;
+    font-weight: 500;
+    line-height: 1.25;
+    color: #272935;
+  }
+
+  .service-section__feature-text {
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.35;
+    color: #848b9b;
+  }
+
+  .service-section__card-illustration {
+    position: absolute;
+    right: 16px;
+    bottom: 14px;
+    width: 100px;
+    height: 82px;
+    margin: 0;
+  }
+}
+
+/* Laptop screen (1280px-1439px) — perfectly sized for standard laptops */
+@media (min-width: 1280px) {
+  .service-section {
+    padding: 2.5rem 1.5rem 2.75rem;
+  }
+
+  .service-section__inner {
+    max-width: 1340px;
+  }
+
+  .service-section__header {
+    margin-bottom: 1.35rem;
+  }
+
+  .service-section__heading-title {
+    font-size: clamp(1.45rem, 1.8vw, 1.75rem);
+  }
+
+  .service-section__layout {
+    grid-template-columns: 270px minmax(0, 1fr);
+  }
+
+  .service-section__tabs {
+    gap: 6px;
+  }
+
+  .service-section__tab {
+    height: 56px;
+    border-radius: 16px;
+  }
+
+  .service-section__tab--active {
+    width: calc(100% + 22px);
+    border-radius: 16px 0 0 16px;
+  }
+
+  .service-section__tab-icon {
+    left: 16px;
+    width: 38px;
+    height: 32px;
+  }
+
+  .service-section__tab-label {
+    left: 64px;
+    right: 12px;
+    font-size: 13.5px;
+  }
+
+  .service-section__card {
+    padding: 24px 28px 20px 32px;
+    border-radius: 16px;
+  }
+
+  .service-section__card-body {
+    max-width: calc(100% - 120px);
+  }
+
+  .service-section__card-title {
+    margin-bottom: 12px;
+    font-size: 19px;
+  }
+
+  .service-section__card-desc {
+    margin-bottom: 14px;
+    font-size: 13px;
+  }
+
+  .service-section__features {
+    gap: 11px;
+  }
+
+  .service-section__feature {
+    gap: 11px;
+  }
+
+  .service-section__feature-check {
+    width: 19px;
+    height: 19px;
+  }
+
+  .service-section__feature-title {
+    font-size: 14px;
+    margin-bottom: 2px;
+  }
+
+  .service-section__feature-text {
+    font-size: 12.5px;
+  }
+
+  .service-section__card-illustration {
+    right: 20px;
+    bottom: 16px;
+    width: 115px;
+    height: 94px;
+  }
+}
+
+/* Mid/large laptop & desktop (1440px-1679px) */
+@media (min-width: 1440px) {
+  .service-section {
+    padding: 2.75rem 2rem 3rem;
+  }
+
+  .service-section__inner {
+    max-width: 1440px;
+  }
+
+  .service-section__header {
+    margin-bottom: 1.5rem;
+  }
+
+  .service-section__heading-title {
+    font-size: clamp(1.55rem, 1.8vw, 1.85rem);
+    max-width: 40rem;
+  }
+
+  .service-section__layout {
+    grid-template-columns: 295px minmax(0, 1fr);
+  }
+
+  .service-section__tabs {
+    gap: 6px;
+  }
+
+  .service-section__tab {
+    height: 60px;
+    border-radius: 16px;
+  }
+
+  .service-section__tab--active {
+    width: calc(100% + 24px);
+    border-radius: 16px 0 0 16px;
+  }
+
+  .service-section__tab-icon {
+    left: 18px;
+    width: 42px;
+    height: 34px;
+  }
+
+  .service-section__tab-label {
+    left: 70px;
+    right: 14px;
+    font-size: 14.5px;
+  }
+
+  .service-section__card {
+    padding: 28px 30px 22px 36px;
+    border-radius: 18px;
+  }
+
+  .service-section__card-body {
+    max-width: calc(100% - 135px);
+  }
+
+  .service-section__card-title {
+    margin-bottom: 14px;
+    font-size: 21px;
+  }
+
+  .service-section__card-desc {
+    margin-bottom: 16px;
+    font-size: 14px;
+  }
+
+  .service-section__features {
+    gap: 12px;
   }
 
   .service-section__feature {
@@ -677,56 +891,41 @@
   .service-section__feature-check {
     width: 20px;
     height: 20px;
-    margin-top: 1px;
-  }
-
-  .service-section__feature-check svg {
-    width: 10px;
-    height: 10px;
   }
 
   .service-section__feature-title {
-    margin: 0 0 4px;
     font-size: 15px;
-    font-weight: 500;
-    line-height: 1.3;
-    color: #272935;
+    margin-bottom: 3px;
   }
 
   .service-section__feature-text {
     font-size: 13px;
-    font-weight: 500;
-    line-height: 1.4;
-    color: #848b9b;
   }
 
   .service-section__card-illustration {
-    position: absolute;
-    right: 20px;
-    bottom: 20px;
-    width: 120px;
-    height: 98px;
-    margin: 0;
+    right: 22px;
+    bottom: 18px;
+    width: 128px;
+    height: 105px;
   }
 }
 
-/* Mid laptop / desktop — scale up toward Figma */
-@media (min-width: 1280px) and (max-width: 1919px) {
+/* Extra screen (1680px-1919px, or 1080p @ 90% zoom) */
+@media (min-width: 1680px) {
   .service-section {
-    padding: 4rem 2rem 4.5rem;
+    padding: 3rem 2.25rem 3.25rem;
   }
 
-  .service-section__heading-label {
-    font-size: 14px;
+  .service-section__inner {
+    max-width: 1540px;
   }
 
-  .service-section__heading-title {
-    font-size: clamp(1.65rem, 2vw, 2rem);
-    max-width: 40rem;
+  .service-section__header {
+    margin-bottom: 1.65rem;
   }
 
   .service-section__layout {
-    grid-template-columns: 300px minmax(0, 1fr);
+    grid-template-columns: 320px minmax(0, 1fr);
   }
 
   .service-section__tabs {
@@ -734,51 +933,52 @@
   }
 
   .service-section__tab {
-    height: 82px;
+    height: 66px;
     border-radius: 18px;
   }
 
   .service-section__tab--active {
-    width: calc(100% + 24px);
+    width: calc(100% + 26px);
     border-radius: 18px 0 0 18px;
   }
 
   .service-section__tab-icon {
-    left: 22px;
-    width: 52px;
-    height: 42px;
+    left: 20px;
+    width: 46px;
+    height: 38px;
   }
 
   .service-section__tab-label {
-    left: 92px;
-    font-size: 15px;
+    left: 78px;
+    right: 14px;
+    font-size: 15.5px;
   }
 
   .service-section__card {
-    padding: 36px 34px 28px 38px;
+    padding: 32px 34px 24px 40px;
     border-radius: 20px;
   }
 
   .service-section__card-body {
-    max-width: calc(100% - 140px);
+    max-width: calc(100% - 150px);
   }
 
   .service-section__card-title {
-    margin-bottom: 24px;
+    margin-bottom: 16px;
     font-size: 22px;
   }
 
   .service-section__card-desc {
-    margin-bottom: 22px;
-    font-size: 15px;
+    margin-bottom: 18px;
+    font-size: 14.5px;
   }
 
   .service-section__features {
-    gap: 16px;
+    gap: 13px;
   }
 
   .service-section__feature {
-    gap: 14px;
+    gap: 13px;
   }
 
   .service-section__feature-check {
@@ -787,8 +987,8 @@
   }
 
   .service-section__feature-title {
-    font-size: 16px;
-    margin-bottom: 5px;
+    font-size: 15.5px;
+    margin-bottom: 3px;
   }
 
   .service-section__feature-text {
@@ -797,276 +997,84 @@
 
   .service-section__card-illustration {
     right: 24px;
-    bottom: 24px;
-    width: 145px;
-    height: 118px;
+    bottom: 20px;
+    width: 140px;
+    height: 115px;
   }
 }
 
-@media (min-width: 1440px) and (max-width: 1919px) {
-  .service-section {
-    padding: 4.5rem 2.5rem 5rem;
-  }
-
-  .service-section__vector {
-    width: min(600px, 38vw);
-  }
-
-  .service-section__heading-label {
-    font-size: 15px;
-  }
-
-  .service-section__heading-title {
-    font-size: clamp(1.85rem, 2vw, 2.25rem);
-    max-width: 44rem;
-  }
-
-  .service-section__layout {
-    grid-template-columns: 340px minmax(0, 1fr);
-  }
-
-  .service-section__tabs {
-    gap: 8px;
-  }
-
-  .service-section__tab {
-    height: 96px;
-    border-radius: 22px;
-  }
-
-  .service-section__tab--active {
-    width: calc(100% + 28px);
-    border-radius: 22px 0 0 22px;
-  }
-
-  .service-section__tab-icon {
-    left: 28px;
-    width: 60px;
-    height: 48px;
-  }
-
-  .service-section__tab-label {
-    left: 108px;
-    right: 18px;
-    font-size: 17px;
-    line-height: 1.25;
-  }
-
-  .service-section__card {
-    padding: 44px 40px 32px 44px;
-    border-radius: 24px;
-  }
-
-  .service-section__card-body {
-    max-width: calc(100% - 170px);
-  }
-
-  .service-section__card-title {
-    margin-bottom: 28px;
-    font-size: 26px;
-  }
-
-  .service-section__card-desc {
-    margin-bottom: 28px;
-    font-size: 17px;
-    line-height: 1.39;
-  }
-
-  .service-section__features {
-    gap: 18px;
-  }
-
-  .service-section__feature {
-    gap: 15px;
-  }
-
-  .service-section__feature-check {
-    width: 26px;
-    height: 26px;
-  }
-
-  .service-section__feature-check svg {
-    width: 12px;
-    height: 12px;
-  }
-
-  .service-section__feature-title {
-    font-size: 18px;
-    margin-bottom: 6px;
-    line-height: 1.3;
-  }
-
-  .service-section__feature-text {
-    font-size: 15px;
-    line-height: 1.39;
-  }
-
-  .service-section__card-illustration {
-    right: 28px;
-    bottom: 28px;
-    width: 180px;
-    height: 147px;
-  }
-}
-
-@media (min-width: 1680px) and (max-width: 1919px) {
-  .service-section__layout {
-    grid-template-columns: 380px minmax(0, 1fr);
-  }
-
-  .service-section__tabs {
-    gap: 9px;
-  }
-
-  .service-section__tab {
-    height: 110px;
-    border-radius: 26px;
-  }
-
-  .service-section__tab--active {
-    width: calc(100% + 32px);
-    border-radius: 26px 0 0 26px;
-  }
-
-  .service-section__tab-icon {
-    left: 32px;
-    width: 70px;
-    height: 56px;
-  }
-
-  .service-section__tab-label {
-    left: 124px;
-    font-size: 20px;
-  }
-
-  .service-section__card {
-    padding: 52px 48px 36px 52px;
-    border-radius: 28px;
-  }
-
-  .service-section__card-body {
-    max-width: calc(100% - 200px);
-  }
-
-  .service-section__card-title {
-    margin-bottom: 36px;
-    font-size: 28px;
-  }
-
-  .service-section__card-desc {
-    margin-bottom: 36px;
-    font-size: 19px;
-  }
-
-  .service-section__features {
-    gap: 20px;
-  }
-
-  .service-section__feature-check {
-    width: 28px;
-    height: 28px;
-  }
-
-  .service-section__feature-title {
-    font-size: 20px;
-  }
-
-  .service-section__feature-text {
-    font-size: 16px;
-  }
-
-  .service-section__card-illustration {
-    right: 32px;
-    bottom: 32px;
-    width: 210px;
-    height: 172px;
-  }
-}
-
-/* Exact Figma match @ 1920px+ (#961:3688 / 2012 artboard) */
+/* Large / 4K displays (1920px+) — proportional, sleek, not oversized */
 @media (min-width: 1920px) {
   .service-section {
     width: 100%;
     max-width: none;
-    min-height: 1542px;
-    margin-inline: 0;
-    padding: 0;
-    box-sizing: border-box;
+    min-height: auto;
+    padding: 3.25rem 2.5rem 3.5rem;
     background-color: #f3f8fc;
   }
 
   .service-section__vector {
-    width: 720px;
-    opacity: 0.6;
-    right: calc((100vw - 2012px) / 2);
+    width: min(540px, 32vw);
+    opacity: 0.5;
+    right: max(1rem, calc((100vw - 1600px) / 2));
   }
 
   .service-section__inner {
     position: relative;
-    width: 2012px;
-    max-width: 2012px;
-    min-height: 1542px;
+    max-width: 1600px;
+    width: 100%;
+    min-height: auto;
     margin-inline: auto;
     padding: 0;
-    display: block;
+    display: flex;
+    flex-direction: column;
   }
 
   .service-section__header {
-    position: relative;
+    position: static;
     width: 100%;
-    height: 277px;
+    height: auto;
     text-align: center;
-    margin-bottom: 0;
+    margin-bottom: 1.75rem;
   }
 
   .service-section__heading-label {
-    position: absolute;
-    top: 113px;
-    left: 50%;
-    transform: translateX(-50%);
-    margin: 0;
-    font-family: "Lay Grotesk Trial", "Lay Grotesk - Trial", sans-serif;
-    font-size: 20px;
+    position: static;
+    transform: none;
+    font-size: 14px;
     font-weight: 600;
-    line-height: 1.1;
-    text-transform: uppercase;
-    letter-spacing: 0;
-    white-space: nowrap;
+    letter-spacing: 0.04em;
   }
 
   .service-section__heading-title {
-    position: absolute;
-    top: 169px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 736px;
-    max-width: 736px;
-    margin: 0;
-    font-family: "Lay Grotesk Trial", "Lay Grotesk - Trial", sans-serif;
-    font-size: 48px;
+    position: static;
+    transform: none;
+    width: auto;
+    max-width: 44rem;
+    margin: 0.5rem auto 0;
+    font-size: clamp(1.65rem, 2vw, 2rem);
     font-weight: 700;
-    line-height: 1.12;
-    text-align: center;
+    line-height: 1.2;
     color: #272935;
   }
 
   .service-section__layout {
     position: relative;
-    display: block;
+    display: grid;
+    grid-template-columns: 340px minmax(0, 1fr);
+    align-items: stretch;
+    gap: 0;
     width: 100%;
-    min-height: 1265px;
+    min-height: auto;
     margin: 0;
-    grid-template-columns: none;
   }
 
   .service-section__tabs {
-    position: absolute;
-    left: 159px;
-    top: 100px;
-    width: 536px;
+    position: static;
+    width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 7px;
     overflow: visible;
     margin: 0;
     padding: 0;
@@ -1074,161 +1082,144 @@
     z-index: 1;
   }
 
-  .service-section__tab-thumb {
-    display: contents;
-  }
-
   .service-section__tab {
     position: relative;
     flex-shrink: 0;
-    width: 441px;
-    height: 140px;
+    width: 100%;
+    height: 70px;
     min-width: 0;
     margin: 0;
     padding: 0;
-    border-radius: 30px;
+    border-radius: 18px;
     border: none;
     gap: 0;
-    scroll-snap-align: none;
     display: block;
   }
 
   .service-section__tab--active {
-    width: 468px;
-    height: 139px;
+    width: calc(100% + 28px);
+    height: 70px;
     background-color: #2365aa;
     border: none;
-    border-radius: 30px 0 0 30px;
+    border-radius: 18px 0 0 18px;
     color: #ffffff;
     box-shadow: none;
-    z-index: 2;
-  }
-
-  .service-section__tab--inactive {
-    background-color: #ffffff;
-    color: #272935;
+    z-index: 4;
   }
 
   .service-section__tab-icon {
     position: absolute;
-    left: 41px;
+    left: 20px;
     top: 50%;
     transform: translateY(-50%);
-    width: 87px;
-    height: 71px;
+    width: 48px;
+    height: 40px;
   }
 
   .service-section__tab-label {
     position: absolute;
-    left: 190px;
-    right: 24px;
+    left: 80px;
+    right: 18px;
     top: 50%;
     transform: translateY(-50%);
-    flex: none;
-    font-family: "Lay Grotesk Trial", "Lay Grotesk - Trial", sans-serif;
-    font-size: 28px;
+    font-size: 16px;
     font-weight: 600;
-    line-height: 34px;
+    line-height: 1.25;
   }
 
   .service-section__tab--active .service-section__tab-label {
-    right: 28px;
-    max-width: 250px;
+    right: 22px;
+    max-width: none;
     overflow: visible;
     white-space: normal;
   }
 
   .service-section__panel {
-    position: absolute;
-    left: 610px;
-    top: 99px;
-    width: 1243px;
-    height: 1040px;
-    display: block;
+    position: static;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
     z-index: 2;
   }
 
   .service-section__card {
-    width: 1243px;
-    height: 1040px;
-    min-height: 1040px;
-    padding: 69px 67px 44px;
-    border-radius: 30px;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    padding: 34px 36px 26px 40px;
+    border-radius: 20px;
     border: none;
     background: #ffffff;
     box-shadow: none;
-    z-index: 2;
   }
 
   .service-section__card-body {
-    max-width: 829px;
+    max-width: calc(100% - 165px);
     gap: 0;
     overflow: visible;
   }
 
   .service-section__card-title {
-    margin: 0 0 53px;
-    font-family: "Lay Grotesk Trial", "Lay Grotesk - Trial", sans-serif;
-    font-size: 35px;
+    margin: 0 0 18px;
+    font-size: 24px;
     font-weight: 600;
     line-height: 1.2;
     color: #272935;
   }
 
   .service-section__card-desc {
-    margin: 0 0 49px;
-    font-family: "Lay Grotesk Trial", "Lay Grotesk - Trial", sans-serif;
-    font-size: 25px;
+    margin: 0 0 18px;
+    font-size: 15px;
     font-weight: 500;
-    line-height: 1.39;
+    line-height: 1.4;
     color: #848b9b;
   }
 
   .service-section__features {
-    gap: 23px;
+    gap: 14px;
   }
 
   .service-section__feature {
-    gap: 19px;
+    gap: 13px;
     align-items: flex-start;
   }
 
   .service-section__feature-check {
-    width: 33px;
-    height: 33px;
+    width: 22px;
+    height: 22px;
     margin-top: 2px;
     border-width: 2px;
   }
 
   .service-section__feature-check svg {
-    width: 16px;
-    height: 16px;
+    width: 11px;
+    height: 11px;
   }
 
   .service-section__feature-title {
-    margin: 0 0 10px;
-    font-family: "Lay Grotesk Trial", "Lay Grotesk - Trial", sans-serif;
-    font-size: 24px;
+    margin: 0 0 3px;
+    font-size: 16px;
     font-weight: 500;
-    line-height: 34px;
+    line-height: 1.3;
     color: #272935;
   }
 
   .service-section__feature-text {
-    max-width: 777px;
-    font-family: "Lay Grotesk Trial", "Lay Grotesk - Trial", sans-serif;
-    font-size: 20px;
+    max-width: 750px;
+    font-size: 13.5px;
     font-weight: 500;
-    line-height: 1.39;
+    line-height: 1.4;
     color: #848b9b;
   }
 
   .service-section__card-illustration {
     position: absolute;
-    right: 41px;
-    bottom: 44px;
-    width: 290px;
-    height: 237px;
+    right: 28px;
+    bottom: 22px;
+    width: 155px;
+    height: 126px;
     margin: 0;
   }
 }

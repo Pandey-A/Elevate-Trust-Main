@@ -129,19 +129,19 @@ export function scheduleIdlePrefetch(task: () => void) {
 
 /** Warm cache before the user lands on Demo/Blog (e.g. nav hover). */
 export function prefetchPublicDemos() {
-  return publicDemosCache.get(false);
+  return publicDemosCache.get(false).catch(() => null);
 }
 
 export function prefetchPublicBlogs() {
-  return publicBlogsCache.get(false);
+  return publicBlogsCache.get(false).catch(() => null);
 }
 
 export function prefetchPublicTestimonials() {
-  return publicTestimonialsCache.get(false);
+  return publicTestimonialsCache.get(false).catch(() => null);
 }
 
 export function prefetchPublicJobs() {
-  return publicJobsCache.get(false);
+  return publicJobsCache.get(false).catch(() => null);
 }
 
 export function prefetchDemoTags() {
