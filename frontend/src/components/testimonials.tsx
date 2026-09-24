@@ -60,7 +60,7 @@ export default function Testimonials() {
           <div className="text-center">
             <div className="mb-4 flex items-center justify-center gap-2">
               <span className="section-eyebrow font-semibold uppercase tracking-[0.12em] text-[#2365AA]">
-                Client Testimonials
+                Blogs
               </span>
             </div>
 
