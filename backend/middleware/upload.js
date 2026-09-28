@@ -499,11 +499,22 @@ async function saveDemoFileLocally(file) {
 }
 
 function buildPublicUrl(req, folder, storedName) {
-  const base =
-    process.env.PUBLIC_API_URL ||
-    `${req.protocol}://${req.get("host")}` ||
-    "http://localhost:5000";
-  return `${base.replace(/\/$/, "")}/uploads/${folder}/${storedName}`;
+  // 1. Agar environment me dedicated production API URL configured hai toh wahi use karo
+  if (process.env.PUBLIC_API_URL) {
+    return `${process.env.PUBLIC_API_URL.replace(/\/$/, "")}/uploads/${folder}/${storedName}`;
+  }
+
+  // 2. Dynamic host detection (Nginx/Reverse Proxy & SSL headers friendly)
+  const protocol = req.headers["x-forwarded-proto"] || req.protocol || "https";
+  const host = req.get("host");
+
+  if (host && !host.includes("localhost") && !host.includes("127.0.0.1")) {
+    return `${protocol}://${host}/uploads/${folder}/${storedName}`;
+  }
+
+  // 3. Fallback for pure local dev setup
+  const port = process.env.RUNTIME_PORT || process.env.PORT || 5000;
+  return `http://localhost:${port}/uploads/${folder}/${storedName}`;
 }
 
 /** Prefer Cloudinary; local disk only as a development fallback. */

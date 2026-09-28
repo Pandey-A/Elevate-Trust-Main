@@ -27,17 +27,20 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PREFERRED_PORT = Number(process.env.PORT || 5000);
 const MAX_PORT_TRIES = Number(process.env.PORT_TRIES || 20);
-const allowedOrigins = (
-  process.env.CORS_ORIGIN ||
-  "http://localhost:5173,https://et-revamp-2-1.vercel.app"
-)
-  .split(",")
-  .map((origin) => origin.trim())
-  .filter(Boolean);
 
-const allowedOriginPatterns = (
-  process.env.CORS_ORIGIN_PATTERNS || ""
-)
+// ✅ Dynamic CORS Origins Configuration
+const defaultOrigins = [
+  "http://localhost:5173",
+  "http://localhost:3000",
+  "https://elevatetrust.co.in",
+  "https://et-revamp-2-1.vercel.app"
+];
+
+const allowedOrigins = process.env.CORS_ORIGIN
+  ? process.env.CORS_ORIGIN.split(",").map((o) => o.trim()).filter(Boolean)
+  : defaultOrigins;
+
+const allowedOriginPatterns = (process.env.CORS_ORIGIN_PATTERNS || "")
   .split(",")
   .map((pattern) => pattern.trim())
   .filter(Boolean)
@@ -66,17 +69,15 @@ function isAllowedOrigin(origin) {
 app.use(
   cors({
     origin(origin, callback) {
-      // Same-origin / non-browser tools (curl, Postman) have no Origin header.
       if (isAllowedOrigin(origin)) {
         return callback(null, true);
       }
-
-      // Reject without throwing — throwing floods the global error handler.
       return callback(null, false);
     },
     credentials: true,
   }),
 );
+
 app.use(
   helmet({
     crossOriginResourcePolicy: { policy: "cross-origin" },
@@ -92,11 +93,11 @@ app.use(
     limit: process.env.URLENCODED_BODY_LIMIT || "10mb",
   }),
 );
+
 app.use(
   "/uploads",
   express.static(path.join(__dirname, "uploads"), {
     setHeaders(res, filePath) {
-      // Prefer inline viewing; never force attachment download for demo media.
       res.setHeader("Content-Disposition", "inline");
       res.setHeader("X-Content-Type-Options", "nosniff");
       const lower = String(filePath || "").toLowerCase();
@@ -231,7 +232,6 @@ function setupGracefulShutdown(server) {
       process.exit(0);
     });
 
-    // Force exit after 10 seconds if connections refuse to close
     setTimeout(() => {
       console.error("Graceful shutdown timed out. Forcing process exit.");
       process.exit(1);
@@ -270,25 +270,24 @@ async function startServer() {
       const server = await listenOnPort(port);
 
       process.env.RUNTIME_PORT = String(port);
-      process.env.PUBLIC_API_URL =
-        process.env.PUBLIC_API_URL?.replace(/:\d+$/, `:${port}`) ||
-        `http://localhost:${port}`;
 
-      console.log(`Server is running on http://localhost:${port}`);
-      console.log(`Auth API: POST http://localhost:${port}/api/auth/register|login|logout`);
-      console.log(`Career API: POST http://localhost:${port}/api/careers`);
-      console.log(`Jobs API: GET/POST http://localhost:${port}/api/jobs`);
-      console.log(`Contact API: POST http://localhost:${port}/api/contact`);
+      // ✅ Safe PUBLIC_API_URL initialization (Won't overwrite production config)
+      if (!process.env.PUBLIC_API_URL) {
+        process.env.PUBLIC_API_URL = process.env.NODE_ENV === "production"
+          ? "https://elevatetrust.co.in"
+          : `http://localhost:${port}`;
+      }
+
+      const displayUrl = process.env.PUBLIC_API_URL;
+      console.log(`Server is running on: ${displayUrl}`);
+      console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
       logMailStatus();
 
       setupGracefulShutdown(server);
 
-      if (port !== PREFERRED_PORT) {
+      if (port !== PREFERRED_PORT && process.env.NODE_ENV !== "production") {
         console.warn(
           `Port ${PREFERRED_PORT} was busy, so backend started on ${port}.`,
-        );
-        console.warn(
-          `Update frontend/.env -> VITE_API_URL=http://localhost:${port} and restart frontend.`,
         );
       }
 
