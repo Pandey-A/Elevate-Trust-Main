@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import Link from "@tiptap/extension-link";
+// import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
-import Underline from "@tiptap/extension-underline";
+// import Underline from "@tiptap/extension-underline";
 import type { ReactNode } from "react";
 import {
   Bold,
@@ -58,12 +58,11 @@ export default function BlogRichTextEditor({
     extensions: [
       StarterKit.configure({
         heading: { levels: [2, 3] },
-      }),
-      Underline,
-      Link.configure({
-        openOnClick: false,
-        autolink: true,
-        defaultProtocol: "https",
+        link: {
+          openOnClick: false,
+          autolink: true,
+          defaultProtocol: "https",
+        },
       }),
       Placeholder.configure({ placeholder }),
     ],

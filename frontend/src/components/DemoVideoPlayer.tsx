@@ -83,7 +83,7 @@ function DocumentViewer({
   // Website: no full-screen click overlay — it blocks wheel/touch scroll inside
   // cross-origin PDF/Office iframes. Sandbox (no allow-popups / top-nav) still
   // limits outbound link behavior.
-  const sandboxed = documentKind === "PDF" || blockDocumentClicks;
+  const sandboxed = isOfficeDoc && blockDocumentClicks;
 
   return (
     <div

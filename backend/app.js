@@ -98,6 +98,11 @@ app.use(
   "/uploads",
   express.static(path.join(__dirname, "uploads"), {
     setHeaders(res, filePath) {
+      res.removeHeader("X-Frame-Options");
+      res.setHeader(
+      "Content-Security-Policy",
+      "frame-ancestors 'self' https://elevatetrust.co.in https://et-revamp-2-1.vercel.app http://localhost:5173"
+      );
       res.setHeader("Content-Disposition", "inline");
       res.setHeader("X-Content-Type-Options", "nosniff");
       const lower = String(filePath || "").toLowerCase();
@@ -150,13 +155,7 @@ app.use("/api/jobs", jobRouter);
 app.use((error, _req, res, _next) => {
   console.error("Unhandled error:", error);
 
-  if (
-    error instanceof Error &&
-    (error.message.includes("Only PDF") ||
-      error.message.includes("Only JPG") ||
-      error.message.includes("images are allowed") ||
-      error.message.includes("Only video files"))
-  ) {
+  if (error instanceof Error && error.message.startsWith("Only ")) {
     return res.status(400).json({
       success: false,
       message: error.message,

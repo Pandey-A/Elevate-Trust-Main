@@ -733,13 +733,18 @@ export async function storeDemoVideo(file, req) {
       const uploaded = isDocument
         ? await uploadRawToCloudinary(file, "elevate-trust/demos")
         : await uploadVideoToCloudinary(file, "elevate-trust/demos");
-      if (uploaded?.secure_url) {
-        return {
-          videoUrl: uploaded.secure_url,
-          videoPath: uploaded.public_id || null,
-          storage: "cloudinary",
-        };
-      }
+        if (uploaded?.secure_url) {
+          const okToUse =
+            !isDocument || (await isPubliclyReadable(uploaded.secure_url));
+          if (okToUse) {
+            return {
+              videoUrl: uploaded.secure_url,
+              videoPath: uploaded.public_id || null,
+              storage: "cloudinary",
+            };
+          }
+          console.warn("Demo document not publicly readable:", uploaded.secure_url);
+        }
     } catch (error) {
       if (!allowLocalUploadFallback()) {
         throw error;
