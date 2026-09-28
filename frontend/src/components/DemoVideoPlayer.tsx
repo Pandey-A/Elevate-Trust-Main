@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type MouseEvent } from "react";
 import { getDemoDocumentKind, type DemoDocumentKind } from "../lib/demoMedia";
 import { getOptimizedDemoVideoUrl } from "../lib/demoVideoUrl";
+import { resolveMediaUrl } from "../lib/optimizeImageUrl";
 
 type Props = {
   title: string;
@@ -186,20 +187,23 @@ export default function DemoVideoPlayer({
   poster,
   blockDocumentClicks = false,
 }: Props) {
-  if (videoUrl) {
-    const documentKind = getDemoDocumentKind(videoUrl);
+  const resolvedVideo = resolveMediaUrl(videoUrl);
+  const resolvedPoster = resolveMediaUrl(poster);
+
+  if (resolvedVideo) {
+    const documentKind = getDemoDocumentKind(resolvedVideo);
     if (documentKind) {
       return (
         <DocumentViewer
           title={title}
-          videoUrl={videoUrl}
+          videoUrl={resolvedVideo}
           documentKind={documentKind}
           blockDocumentClicks={blockDocumentClicks}
         />
       );
     }
 
-    return <NativeVideoPlayer videoUrl={videoUrl} poster={poster} />;
+    return <NativeVideoPlayer videoUrl={resolvedVideo} poster={resolvedPoster} />;
   }
 
   if (videoId) {

@@ -2,6 +2,7 @@ import type { AdminDemo, IndustryTag } from "../data/adminDefaults";
 import { normalizeIndustryTags } from "../data/industries";
 import { api } from "./api";
 import { ADMIN_DATA_EVENT } from "./adminStorage";
+import { resolveMediaUrl } from "./optimizeImageUrl";
 
 type DemoApiRow = {
   id: string;
@@ -21,9 +22,9 @@ function mapDemo(row: DemoApiRow): AdminDemo {
     title: row.title,
     videoId: row.videoId || "",
     youtubeUrl: row.youtubeUrl || "",
-    videoUrl: row.videoUrl ?? null,
+    videoUrl: resolveMediaUrl(row.videoUrl) || null,
     industries,
-    thumbnailUrl: row.thumbnailUrl ?? null,
+    thumbnailUrl: resolveMediaUrl(row.thumbnailUrl) || null,
     isPublic: row.isPublic !== false,
   };
 }

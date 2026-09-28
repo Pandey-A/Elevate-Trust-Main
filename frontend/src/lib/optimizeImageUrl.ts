@@ -6,7 +6,14 @@ import { API_URL } from "./api";
  */
 export function resolveMediaUrl(url: string | null | undefined): string {
   if (!url) return "";
-  const trimmed = url.trim();
+  let trimmed = url.trim();
+
+  // Strip accidental http://localhost:XXXX or http://127.0.0.1:XXXX before /uploads/
+  trimmed = trimmed.replace(
+    /^https?:\/\/(?:localhost|127\.0\.0\.1)(?::\d+)?(?=\/uploads\/)/i,
+    "",
+  );
+
   if (trimmed.startsWith("/uploads/")) {
     return API_URL ? `${API_URL}${trimmed}` : trimmed;
   }

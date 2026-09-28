@@ -1,5 +1,6 @@
 import { api } from "./api";
 import { ADMIN_DATA_EVENT } from "./adminStorage";
+import { resolveMediaUrl } from "./optimizeImageUrl";
 
 export type BlogPost = {
   id: string;
@@ -24,7 +25,7 @@ function mapBlog(row: BlogApiRow): BlogPost {
     id: row.id,
     title: row.title,
     description: row.description || "",
-    imageUrl: row.imageUrl || "",
+    imageUrl: resolveMediaUrl(row.imageUrl) || "",
     createdAt: row.createdAt,
     updatedAt: row.updatedAt,
   };

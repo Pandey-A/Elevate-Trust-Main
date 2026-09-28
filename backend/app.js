@@ -214,6 +214,31 @@ async function ensureDatabaseSchema() {
       EXCEPTION WHEN others THEN NULL;
       END;
     END $$;
+
+    -- Automatically sanitize any existing localhost/loopback media URLs to clean relative paths
+    UPDATE demos
+    SET video_url = REGEXP_REPLACE(video_url, '^https?://(?:localhost|127\\.0\\.0\\.1)(?::[0-9]+)?', '')
+    WHERE video_url ~* '^https?://(?:localhost|127\\.0\\.0\\.1)';
+
+    UPDATE demos
+    SET thumbnail_url = REGEXP_REPLACE(thumbnail_url, '^https?://(?:localhost|127\\.0\\.0\\.1)(?::[0-9]+)?', '')
+    WHERE thumbnail_url ~* '^https?://(?:localhost|127\\.0\\.0\\.1)';
+
+    UPDATE blogs
+    SET image_url = REGEXP_REPLACE(image_url, '^https?://(?:localhost|127\\.0\\.0\\.1)(?::[0-9]+)?', '')
+    WHERE image_url ~* '^https?://(?:localhost|127\\.0\\.0\\.1)';
+
+    UPDATE testimonials
+    SET logo_url = REGEXP_REPLACE(logo_url, '^https?://(?:localhost|127\\.0\\.0\\.1)(?::[0-9]+)?', '')
+    WHERE logo_url ~* '^https?://(?:localhost|127\\.0\\.0\\.1)';
+
+    UPDATE testimonials
+    SET profile_url = REGEXP_REPLACE(profile_url, '^https?://(?:localhost|127\\.0\\.0\\.1)(?::[0-9]+)?', '')
+    WHERE profile_url ~* '^https?://(?:localhost|127\\.0\\.0\\.1)';
+
+    UPDATE career_applications
+    SET cv_url = REGEXP_REPLACE(cv_url, '^https?://(?:localhost|127\\.0\\.0\\.1)(?::[0-9]+)?', '')
+    WHERE cv_url ~* '^https?://(?:localhost|127\\.0\\.0\\.1)';
   `);
 }
 

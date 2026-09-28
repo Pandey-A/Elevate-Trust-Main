@@ -1,5 +1,6 @@
 import { api } from "./api";
 import { ADMIN_DATA_EVENT } from "./adminStorage";
+import { resolveMediaUrl } from "./optimizeImageUrl";
 
 export type Testimonial = {
   id: string;
@@ -40,8 +41,8 @@ function mapTestimonial(row: TestimonialApiRow): Testimonial {
     title: row.title || "",
     quote: row.quote || "",
     fullQuote: row.fullQuote || row.full_quote || "",
-    logoUrl: row.logoUrl || row.logo_url || "",
-    profileUrl: row.profileUrl || row.profile_url || "",
+    logoUrl: resolveMediaUrl(row.logoUrl || row.logo_url) || "",
+    profileUrl: resolveMediaUrl(row.profileUrl || row.profile_url) || "",
     sortOrder: Number(row.sortOrder ?? row.sort_order) || 0,
     createdAt: row.createdAt || row.created_at || "",
     updatedAt: row.updatedAt || row.updated_at || "",

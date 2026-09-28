@@ -283,14 +283,12 @@ async function saveDemoFileLocally(file) {
   return storedName;
 }
 
-function buildPublicUrl(req, folder, storedName) {
-  const host = req?.get?.("host");
-  const protocol = req?.protocol || "http";
-  const base =
-    process.env.PUBLIC_API_URL ||
-    (host ? `${protocol}://${host}` : "") ||
-    "http://localhost:5000";
-  return `${base.replace(/\/$/, "")}/uploads/${folder}/${storedName}`;
+function buildPublicUrl(_req, folder, storedName) {
+  const configured = (process.env.PUBLIC_API_URL || "").trim().replace(/\/$/, "");
+  if (configured && !/localhost|127\.0\.0\.1/i.test(configured)) {
+    return `${configured}/uploads/${folder}/${storedName}`;
+  }
+  return `/uploads/${folder}/${storedName}`;
 }
 
 /** Store resume locally on server */
