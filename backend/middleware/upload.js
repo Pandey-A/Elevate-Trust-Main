@@ -134,7 +134,7 @@ export const uploadCv = multer({
   storage: multer.memoryStorage(),
   fileFilter: cvFileFilter,
   limits: {
-    fileSize: 5 * 1024 * 1024,
+    fileSize: 25 * 1024 * 1024,
   },
 });
 
@@ -142,7 +142,7 @@ export const uploadBlogImage = multer({
   storage: multer.memoryStorage(),
   fileFilter: imageFileFilter,
   limits: {
-    fileSize: 5 * 1024 * 1024,
+    fileSize: 25 * 1024 * 1024,
   },
 });
 
@@ -150,7 +150,7 @@ export const uploadTestimonialImages = multer({
   storage: multer.memoryStorage(),
   fileFilter: imageFileFilter,
   limits: {
-    fileSize: 5 * 1024 * 1024,
+    fileSize: 25 * 1024 * 1024,
   },
 });
 
@@ -251,6 +251,7 @@ async function saveCvLocally(file) {
   const ext = getExtension(file.originalname, file.mimetype);
   const storedName = `${Date.now()}-${safeBaseName(file.originalname)}.${ext}`;
   const fullPath = path.join(uploadsCvDir, storedName);
+  await fs.promises.mkdir(uploadsCvDir, { recursive: true });
   await fs.promises.writeFile(fullPath, file.buffer);
   return storedName;
 }
@@ -259,6 +260,7 @@ async function saveBlogImageLocally(file) {
   const ext = getExtension(file.originalname, file.mimetype);
   const storedName = `${Date.now()}-${safeBaseName(file.originalname)}.${ext}`;
   const fullPath = path.join(uploadsBlogDir, storedName);
+  await fs.promises.mkdir(uploadsBlogDir, { recursive: true });
   await fs.promises.writeFile(fullPath, file.buffer);
   return storedName;
 }
@@ -267,6 +269,7 @@ async function saveTestimonialImageLocally(file) {
   const ext = getExtension(file.originalname, file.mimetype);
   const storedName = `${Date.now()}-${safeBaseName(file.originalname)}.${ext}`;
   const fullPath = path.join(uploadsTestimonialDir, storedName);
+  await fs.promises.mkdir(uploadsTestimonialDir, { recursive: true });
   await fs.promises.writeFile(fullPath, file.buffer);
   return storedName;
 }
@@ -275,6 +278,7 @@ async function saveDemoFileLocally(file) {
   const ext = getExtension(file.originalname, file.mimetype) || "mp4";
   const storedName = `${Date.now()}-${safeBaseName(file.originalname)}.${ext}`;
   const fullPath = path.join(uploadsDemoDir, storedName);
+  await fs.promises.mkdir(uploadsDemoDir, { recursive: true });
   if (file.path) {
     await fs.promises.copyFile(file.path, fullPath);
   } else {

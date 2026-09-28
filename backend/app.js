@@ -164,11 +164,14 @@ app.use((error, _req, res, _next) => {
 
   if (error?.code === "LIMIT_FILE_SIZE") {
     const isCareerCv = String(_req?.originalUrl || "").includes("/api/careers");
+    const isDemo = String(_req?.originalUrl || "").includes("/api/demos");
     return res.status(400).json({
       success: false,
       message: isCareerCv
-        ? "Resume file is too large. Maximum size is 5MB."
-        : "File is too large. Please try a smaller file.",
+        ? "Resume file is too large. Maximum size is 25MB."
+        : isDemo
+          ? "Demo video is too large. Maximum size is 500MB."
+          : "File is too large. Maximum size is 25MB.",
     });
   }
 
