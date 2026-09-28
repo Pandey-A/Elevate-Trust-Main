@@ -1,10 +1,13 @@
+import { resolveMediaUrl } from "./optimizeImageUrl";
+
 /**
- * Delivery URL for Cloudinary demo videos: keeps uploaded HD source,
- * streams a web-friendly 1280p H.264 variant so playback starts faster.
+ * Delivery URL for demo videos:
+ * Handles local server uploads and Cloudinary URLs.
  */
 export function getOptimizedDemoVideoUrl(url: string): string {
-  if (!url.includes("res.cloudinary.com") || !url.includes("/video/upload/")) {
-    return url;
+  const resolved = resolveMediaUrl(url);
+  if (!resolved.includes("res.cloudinary.com") || !resolved.includes("/video/upload/")) {
+    return resolved;
   }
 
   // Already transformed

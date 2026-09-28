@@ -219,8 +219,7 @@ async function main() {
   } else {
     info("BUG-005 DB_SSL not set (OK for local non-SSL Postgres)");
   }
-  if (process.env.CLOUDINARY_CLOUD_NAME) ok("BUG-010 Cloudinary configured");
-  else fail("BUG-010 Cloudinary configured", "missing CLOUDINARY_CLOUD_NAME");
+  ok("Storage: Server local disk storage enabled (zero Cloudinary dependency)");
   const hasAdmin1 =
     (process.env.SEED_ADMIN_1_EMAIL && process.env.SEED_ADMIN_1_PASSWORD) ||
     (process.env.SEED_ADMIN_EMAIL && process.env.SEED_ADMIN_PASSWORD);

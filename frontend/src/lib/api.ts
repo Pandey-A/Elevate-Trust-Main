@@ -27,6 +27,16 @@ export const api = axios.create({
   },
 });
 
+api.interceptors.request.use((config) => {
+  if (typeof window !== "undefined") {
+    const token = localStorage.getItem("et_auth_token");
+    if (token && !config.headers.Authorization) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+  }
+  return config;
+});
+
 export function getErrorMessage(error: unknown, fallback = "Something went wrong.") {
   if (axios.isAxiosError(error)) {
     const status = error.response?.status;

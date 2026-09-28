@@ -24,7 +24,7 @@ dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const app = express();
+export const app = express();
 const PREFERRED_PORT = Number(process.env.PORT || 5000);
 const MAX_PORT_TRIES = Number(process.env.PORT_TRIES || 20);
 const allowedOrigins = (
@@ -314,7 +314,11 @@ async function startServer() {
   process.exit(1);
 }
 
-startServer().catch((error) => {
-  console.error("Failed to start server:", error);
-  process.exit(1);
-});
+if (process.env.NODE_ENV !== "test") {
+  startServer().catch((error) => {
+    console.error("Failed to start server:", error);
+    process.exit(1);
+  });
+}
+
+export default app;

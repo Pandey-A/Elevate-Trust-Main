@@ -18,18 +18,19 @@ export type AuthSession = {
   role: string;
 };
 
-/** Full dashboard access (role: admin). */
-export function isSuperAdminRole(role?: string | null) {
-  return String(role || "") === "admin";
-}
+const DASHBOARD_ROLES = new Set(["admin", "sales", "editor", "superadmin"]);
 
 export function isDashboardRole(role?: string | null) {
-  const value = String(role || "");
-  return value === "admin" || value === "sales";
+  const value = String(role || "").toLowerCase().trim();
+  return DASHBOARD_ROLES.has(value);
+}
+
+export function isSuperAdminRole(role?: string | null) {
+  return isDashboardRole(role);
 }
 
 export function canManageAdminContent(role?: string | null) {
-  return isSuperAdminRole(role);
+  return isDashboardRole(role);
 }
 
 type AuthResponse = {

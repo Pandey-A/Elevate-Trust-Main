@@ -1,14 +1,30 @@
+import { API_URL } from "./api";
+
 /**
- * Optimize delivery URLs for Cloudinary images (blogs, testimonials, demos).
- * Leaves non-Cloudinary / already-transformed URLs unchanged.
+ * Resolves local server uploads or absolute URLs.
+ * If url starts with /uploads/, prepends API_URL when configured.
+ */
+export function resolveMediaUrl(url: string | null | undefined): string {
+  if (!url) return "";
+  const trimmed = url.trim();
+  if (trimmed.startsWith("/uploads/")) {
+    return API_URL ? `${API_URL}${trimmed}` : trimmed;
+  }
+  return trimmed;
+}
+
+/**
+ * Optimize delivery URLs for media assets.
+ * Leaves non-Cloudinary / local / already-transformed URLs unchanged.
  */
 export function getOptimizedImageUrl(
   url: string | null | undefined,
   options: { width?: number; height?: number; crop?: "fill" | "limit" } = {},
 ): string {
   if (!url) return "";
-  if (!url.includes("res.cloudinary.com") || !url.includes("/image/upload/")) {
-    return url;
+  const resolved = resolveMediaUrl(url);
+  if (!resolved.includes("res.cloudinary.com") || !resolved.includes("/image/upload/")) {
+    return resolved;
   }
 
   // Already has transforms after /image/upload/

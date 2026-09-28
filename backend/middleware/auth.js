@@ -4,15 +4,17 @@ function getJwtSecret() {
   return process.env.JWT_SECRET || "elevate-trust-dev-secret-change-me";
 }
 
-const DASHBOARD_ROLES = new Set(["admin", "sales"]);
+const DASHBOARD_ROLES = new Set(["admin", "sales", "editor", "superadmin"]);
 
 export function isDashboardRole(role) {
-  return DASHBOARD_ROLES.has(String(role || ""));
+  const normalized = String(role || "").trim().toLowerCase();
+  return DASHBOARD_ROLES.has(normalized);
 }
 
-/** Full dashboard access (role: admin). Legacy name kept for call sites. */
+/** Full dashboard access for authorized team roles */
 export function isSuperAdminRole(role) {
-  return String(role || "") === "admin";
+  const normalized = String(role || "").trim().toLowerCase();
+  return DASHBOARD_ROLES.has(normalized);
 }
 
 export const AUTH_COOKIE_NAME = "et_token";
@@ -98,7 +100,7 @@ export function requireAuth(req, res, next) {
       id: payload.sub,
       email: payload.email,
       name: payload.name,
-      role: payload.role,
+      role: String(payload.role || "").trim().toLowerCase(),
     };
     return next();
   } catch {

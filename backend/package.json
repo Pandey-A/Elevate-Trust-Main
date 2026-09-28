@@ -11,7 +11,8 @@
     "db:init": "node scripts/initDb.js",
     "db:seed": "node scripts/seedDashboardUsers.js",
     "db:migrate": "node scripts/migrateSupabaseToPostgres.js",
-    "db:users": "node scripts/resetUsers.js"
+    "db:users": "node scripts/resetUsers.js",
+    "test": "node scripts/testRoutesAndUpload.js"
   },
   "engines": {
     "node": ">=18"
