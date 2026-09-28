@@ -68,6 +68,7 @@ import BlogRichTextEditor from "../../components/blog/BlogRichTextEditor";
 import CircularImageCropper from "../../components/admin/CircularImageCropper";
 import DemoPlayCover from "../../components/DemoPlayCover";
 import DemoVideoPlayer from "../../components/DemoVideoPlayer";
+import { resolveMediaUrl } from "../../lib/optimizeImageUrl";
 import { excerptFromContent, isRichTextEmpty } from "../../lib/blogContent";
 import elevateLogo from "../../assets/nav/elevate-logo.svg";
 import {
@@ -2834,6 +2835,18 @@ export default function AdminDashboard() {
                 {playingDemo.title}
               </h3>
               <div className="flex items-center gap-2">
+                {playingDemo.videoUrl ? (
+                  <a
+                    href={resolveMediaUrl(playingDemo.videoUrl) || playingDemo.videoUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex size-9 cursor-pointer items-center justify-center rounded-full border-0 bg-white/10 text-white transition-colors hover:bg-white/20"
+                    aria-label="Open in new tab"
+                    title="Open in new tab"
+                  >
+                    <ExternalLink size={18} />
+                  </a>
+                ) : null}
                 <button
                   type="button"
                   onClick={() => setPlayingDemoExpanded((v) => !v)}

@@ -79,7 +79,9 @@ app.use(
 );
 app.use(
   helmet({
+    contentSecurityPolicy: false,
     crossOriginResourcePolicy: { policy: "cross-origin" },
+    crossOriginEmbedderPolicy: false,
   }),
 );
 app.use(cookieParser());
@@ -94,11 +96,18 @@ app.use(
 );
 app.use(
   "/uploads",
+  (_req, res, next) => {
+    res.removeHeader("Content-Security-Policy");
+    res.removeHeader("X-Content-Security-Policy");
+    res.removeHeader("X-WebKit-CSP");
+    next();
+  },
   express.static(path.join(__dirname, "uploads"), {
     setHeaders(res, filePath) {
       // Prefer inline viewing; never force attachment download for demo media.
       res.setHeader("Content-Disposition", "inline");
       res.setHeader("X-Content-Type-Options", "nosniff");
+      res.setHeader("Access-Control-Allow-Origin", "*");
       const lower = String(filePath || "").toLowerCase();
       if (
         lower.endsWith(".pdf") ||

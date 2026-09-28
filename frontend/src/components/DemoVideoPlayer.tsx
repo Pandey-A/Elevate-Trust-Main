@@ -27,13 +27,25 @@ function youtubeEmbed(videoId: string) {
   return `https://www.youtube-nocookie.com/embed/${videoId}?${params.toString()}`;
 }
 
+function toAbsoluteUrl(url: string): string {
+  if (typeof window === "undefined") return url;
+  if (!url) return "";
+  if (url.startsWith("http://") || url.startsWith("https://")) return url;
+  try {
+    return new URL(url, window.location.origin).href;
+  } catch {
+    return url;
+  }
+}
+
 /** Prefer embedded viewers over raw file URLs so the browser download UI is reduced. */
 function getDocumentViewerUrl(videoUrl: string, kind: DemoDocumentKind) {
   if (kind === "PDF") {
     const base = videoUrl.split("#")[0];
     return `${base}#toolbar=0&navpanes=0`;
   }
-  return `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(videoUrl)}`;
+  const absoluteDocUrl = toAbsoluteUrl(videoUrl);
+  return `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(absoluteDocUrl)}`;
 }
 
 function blockContextMenu(event: MouseEvent) {
@@ -48,7 +60,6 @@ function DocumentViewer({
   title,
   videoUrl,
   documentKind,
-  blockDocumentClicks = false,
 }: {
   title: string;
   videoUrl: string;
@@ -62,13 +73,19 @@ function DocumentViewer({
 
   useEffect(() => {
     setCoverVisible(true);
+    // Safety fallback: dismiss cover after timeout if onLoad doesn't fire
+    const timer = window.setTimeout(
+      () => setCoverVisible(false),
+      isOfficeDoc ? 3000 : 1500,
+    );
     return () => {
+      window.clearTimeout(timer);
       if (revealTimerRef.current !== null) {
         window.clearTimeout(revealTimerRef.current);
         revealTimerRef.current = null;
       }
     };
-  }, [viewerUrl]);
+  }, [viewerUrl, isOfficeDoc]);
 
   const reveal = () => {
     if (revealTimerRef.current !== null) {
@@ -77,14 +94,9 @@ function DocumentViewer({
     // Office splash (Word/PPT logo) often stays after iframe onLoad.
     revealTimerRef.current = window.setTimeout(
       () => setCoverVisible(false),
-      isOfficeDoc ? 1800 : 400,
+      isOfficeDoc ? 1200 : 200,
     );
   };
-
-  // Website: no full-screen click overlay — it blocks wheel/touch scroll inside
-  // cross-origin PDF/Office iframes. Sandbox (no allow-popups / top-nav) still
-  // limits outbound link behavior.
-  const sandboxed = documentKind === "PDF" || blockDocumentClicks;
 
   return (
     <div
@@ -104,13 +116,6 @@ function DocumentViewer({
           allowFullScreen
           onLoad={reveal}
           scrolling="yes"
-          {...(sandboxed
-            ? {
-                sandbox:
-                  "allow-scripts allow-same-origin allow-forms allow-presentation",
-              }
-            : {})}
-          referrerPolicy="no-referrer"
         />
         {coverVisible ? (
           <div
