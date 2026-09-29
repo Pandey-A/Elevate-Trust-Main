@@ -274,9 +274,12 @@ async function saveTestimonialImageLocally(file) {
   return storedName;
 }
 
-async function saveDemoFileLocally(file) {
+async function saveDemoFileLocally(file, titleCandidate = "") {
   const ext = getExtension(file.originalname, file.mimetype) || "mp4";
-  const storedName = `${Date.now()}-${safeBaseName(file.originalname)}.${ext}`;
+  const nameBase = titleCandidate
+    ? safeBaseName(titleCandidate)
+    : safeBaseName(file.originalname);
+  const storedName = `${nameBase || "demo"}-${Date.now()}.${ext}`;
   const fullPath = path.join(uploadsDemoDir, storedName);
   await fs.promises.mkdir(uploadsDemoDir, { recursive: true });
   if (file.path) {
@@ -345,7 +348,8 @@ export async function storeDemoThumbnail(file, req) {
   }
 
   try {
-    const storedName = await saveDemoFileLocally(file);
+    const titleCandidate = req?.body?.title ? `${req.body.title}-thumb` : "";
+    const storedName = await saveDemoFileLocally(file, titleCandidate);
     return {
       imageUrl: buildPublicUrl(req, "demos", storedName),
       imagePath: storedName,
@@ -363,7 +367,8 @@ export async function storeDemoVideo(file, req) {
   }
 
   try {
-    const storedName = await saveDemoFileLocally(file);
+    const titleCandidate = req?.body?.title || "";
+    const storedName = await saveDemoFileLocally(file, titleCandidate);
     return {
       videoUrl: buildPublicUrl(req, "demos", storedName),
       videoPath: storedName,

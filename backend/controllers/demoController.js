@@ -1,3 +1,5 @@
+import fs from "fs";
+import path from "path";
 import {
   createDemo,
   deleteDemo,
@@ -12,6 +14,7 @@ import {
   storeDemoThumbnail,
   storeDemoVideo,
   storeGeneratedDocumentCover,
+  uploadsDemoDir,
 } from "../middleware/upload.js";
 import { getDemoDocumentKind, getDemoDocumentKindFromFile } from "../utils/demoMedia.js";
 
@@ -379,5 +382,102 @@ export async function toggleDemoVisibilityHandler(req, res) {
       success: false,
       message: "Unable to update visibility right now.",
     });
+  }
+}
+
+/** Get a single demo by ID for preview page */
+export async function getPublicDemoById(req, res) {
+  try {
+    const id = String(req.params.id || "").trim();
+    if (!id) {
+      return res.status(400).json({ success: false, message: "Demo id is required." });
+    }
+    const demo = await getDemoById(id);
+    if (!demo) {
+      return res.status(404).json({ success: false, message: "Demo not found." });
+    }
+    return res.status(200).json({ success: true, data: demo });
+  } catch (error) {
+    console.error("Get demo by ID error:", error);
+    return res.status(500).json({ success: false, message: "Unable to load demo right now." });
+  }
+}
+
+/** Stream demo video/document with range support and friendly demo title URL */
+export async function streamDemoMediaHandler(req, res) {
+  try {
+    const id = String(req.params.id || "").trim();
+    if (!id) {
+      return res.status(400).json({ success: false, message: "Demo id is required." });
+    }
+    const demo = await getDemoById(id);
+    if (!demo || !demo.videoUrl) {
+      return res.status(404).json({ success: false, message: "Demo media not found." });
+    }
+
+    if (demo.videoUrl.startsWith("http://") || demo.videoUrl.startsWith("https://")) {
+      return res.redirect(demo.videoUrl);
+    }
+
+    const cleanPath = demo.videoUrl.replace(/^\/uploads\/demos\//, "").replace(/^\/uploads\//, "");
+    const fileName = path.basename(cleanPath);
+    const filePath = path.join(uploadsDemoDir, fileName);
+
+    if (!fs.existsSync(filePath)) {
+      return res.status(404).json({ success: false, message: "Media file not found on server." });
+    }
+
+    const stat = await fs.promises.stat(filePath);
+    const fileSize = stat.size;
+    const ext = path.extname(filePath).toLowerCase();
+
+    const mimeTypes = {
+      ".mp4": "video/mp4",
+      ".webm": "video/webm",
+      ".mov": "video/quicktime",
+      ".pdf": "application/pdf",
+      ".ppt": "application/vnd.ms-powerpoint",
+      ".pptx": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+      ".doc": "application/msword",
+      ".docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    };
+    const contentType = mimeTypes[ext] || "application/octet-stream";
+
+    res.setHeader("X-Content-Type-Options", "nosniff");
+    res.setHeader("Access-Control-Allow-Origin", "*");
+
+    const range = req.headers.range;
+    if (range) {
+      const parts = range.replace(/bytes=/, "").split("-");
+      const start = parseInt(parts[0], 10);
+      const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
+
+      if (start >= fileSize || end >= fileSize) {
+        res.setHeader("Content-Range", `bytes */${fileSize}`);
+        return res.status(416).end();
+      }
+
+      const chunksize = end - start + 1;
+      const file = fs.createReadStream(filePath, { start, end });
+      res.writeHead(206, {
+        "Content-Range": `bytes ${start}-${end}/${fileSize}`,
+        "Accept-Ranges": "bytes",
+        "Content-Length": chunksize,
+        "Content-Type": contentType,
+        "Content-Disposition": "inline",
+      });
+      file.pipe(res);
+    } else {
+      res.writeHead(200, {
+        "Content-Length": fileSize,
+        "Content-Type": contentType,
+        "Accept-Ranges": "bytes",
+        "Content-Disposition": "inline",
+      });
+      fs.createReadStream(filePath).pipe(res);
+    }
+  } catch (error) {
+    console.error("Stream demo media error:", error);
+    return res.status(500).json({ success: false, message: "Unable to stream demo media." });
   }
 }

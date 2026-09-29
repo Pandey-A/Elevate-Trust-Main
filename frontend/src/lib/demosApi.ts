@@ -53,6 +53,40 @@ export async function fetchAdminDemos(): Promise<AdminDemo[]> {
   return data.data.map(mapDemo);
 }
 
+export async function fetchDemoById(id: string): Promise<AdminDemo> {
+  const { data } = await api.get<{ success: boolean; data: DemoApiRow }>(
+    `/api/demos/${encodeURIComponent(id)}`,
+  );
+  if (!data.success || !data.data) {
+    throw new Error("Demo not found.");
+  }
+  return mapDemo(data.data);
+}
+
+/** Convert a demo title into a clean, SEO-friendly URL slug */
+export function slugifyDemoTitle(title?: string | null): string {
+  const clean = String(title || "")
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, "")
+    .replace(/[\s_-]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+  return clean || "demo";
+}
+
+/** Generate a clean preview URL using the demo's title */
+export function getDemoPreviewUrl(demo: { id: string; title: string }): string {
+  const slug = slugifyDemoTitle(demo.title);
+  return `/demo/preview/${encodeURIComponent(demo.id)}/${slug}`;
+}
+
+/** Generate direct streaming URL using the demo title as filename */
+export function getDemoStreamUrl(demo: { id: string; title: string; videoUrl?: string | null }): string {
+  const slug = slugifyDemoTitle(demo.title);
+  const ext = (demo.videoUrl || "").split("?")[0].split("#")[0].split(".").pop()?.toLowerCase() || "mp4";
+  return `/api/demos/${encodeURIComponent(demo.id)}/stream/${slug}.${ext}`;
+}
+
 /** @deprecated Use fetchPublicDemos or fetchAdminDemos */
 export async function fetchDemos(): Promise<AdminDemo[]> {
   return fetchPublicDemos();

@@ -18,7 +18,8 @@ export type AuthSession = {
   role: string;
 };
 
-const DASHBOARD_ROLES = new Set(["admin", "sales", "editor", "superadmin"]);
+const DASHBOARD_ROLES = new Set(["admin", "sales", "editor", "superadmin", "viewer", "view"]);
+const ADMIN_ROLES = new Set(["admin", "superadmin"]);
 
 export function isDashboardRole(role?: string | null) {
   const value = String(role || "").toLowerCase().trim();
@@ -26,11 +27,13 @@ export function isDashboardRole(role?: string | null) {
 }
 
 export function isSuperAdminRole(role?: string | null) {
-  return isDashboardRole(role);
+  const value = String(role || "").toLowerCase().trim();
+  return ADMIN_ROLES.has(value);
 }
 
 export function canManageAdminContent(role?: string | null) {
-  return isDashboardRole(role);
+  const value = String(role || "").toLowerCase().trim();
+  return ADMIN_ROLES.has(value);
 }
 
 type AuthResponse = {

@@ -45,17 +45,22 @@ import DigitalMarketing from './pages/DigitalMarketing';
 import ErpSolutions from './pages/ErpSolutions';
 import AdminAuth from './pages/admin/AdminAuth';
 import AdminDashboard from './pages/admin/AdminDashboard';
+import DemoPreview from './pages/DemoPreview';
 import NotFound from './pages/NotFound';
 import { ToastProvider } from './components/ui/ToastProvider';
 
 function AppShell() {
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith('/admin');
+  const isPreviewRoute =
+    location.pathname.startsWith('/demo/preview') ||
+    location.pathname.startsWith('/demos/preview');
+  const isCleanShellRoute = isAdminRoute || isPreviewRoute;
 
   return (
     <>
       <ScrollToTop />
-      {!isAdminRoute ? <Navbar /> : null}
+      {!isCleanShellRoute ? <Navbar /> : null}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<AboutUs />} />
@@ -96,6 +101,10 @@ function AppShell() {
         <Route path="/case-studies/solar-rooftop-detection" element={<SolarRooftopCaseStudy />} />
         <Route path="/case-studies/genai-enabled-sdlc" element={<GenAiSdlcCaseStudy />} />
         <Route path="/resources/demo" element={<Demo />} />
+        <Route path="/demo/preview/:id/:slug" element={<DemoPreview />} />
+        <Route path="/demo/preview/:id" element={<DemoPreview />} />
+        <Route path="/demos/preview/:id/:slug" element={<DemoPreview />} />
+        <Route path="/demos/preview/:id" element={<DemoPreview />} />
         <Route path="/resources/blogs" element={<Blog />} />
         <Route path="/resources/blogs/:slug" element={<BlogPost />} />
         <Route path="/careers" element={<Careers />} />
@@ -104,7 +113,7 @@ function AppShell() {
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
-      {!isAdminRoute ? <FooterSection /> : null}
+      {!isCleanShellRoute ? <FooterSection /> : null}
     </>
   );
 }

@@ -167,8 +167,8 @@ async function runTests() {
   const salesToken = signAuthToken(salesUser);
   const salesDecoded = verifyAuthToken(salesToken);
   assert(salesDecoded.email === "sachin@elevatetrust.ai", "Sales JWT signed and verified");
-  assert(isDashboardRole(salesUser.role) === true, "Sales role recognized by isDashboardRole");
-  assert(isSuperAdminRole(salesUser.role) === true, "Sales role recognized by isSuperAdminRole (no 403 on upload/write)");
+  assert(isDashboardRole(salesUser.role) === true, "Sales role recognized by isDashboardRole (can access dashboard)");
+  assert(isSuperAdminRole(salesUser.role) === false, "Sales role restricted: isSuperAdminRole is false (viewer cannot upload/modify)");
 
   // Unauthorized role
   assert(isDashboardRole("unauthorized_guest") === false, "Guest role rejected by isDashboardRole");

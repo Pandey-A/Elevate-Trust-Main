@@ -4,17 +4,18 @@ function getJwtSecret() {
   return process.env.JWT_SECRET || "elevate-trust-dev-secret-change-me";
 }
 
-const DASHBOARD_ROLES = new Set(["admin", "sales", "editor", "superadmin"]);
+const DASHBOARD_ROLES = new Set(["admin", "sales", "editor", "superadmin", "viewer", "view"]);
+const ADMIN_ROLES = new Set(["admin", "superadmin"]);
 
 export function isDashboardRole(role) {
   const normalized = String(role || "").trim().toLowerCase();
   return DASHBOARD_ROLES.has(normalized);
 }
 
-/** Full dashboard access for authorized team roles */
+/** Full write, upload, modify, and delete access is restricted to admin/superadmin only */
 export function isSuperAdminRole(role) {
   const normalized = String(role || "").trim().toLowerCase();
-  return DASHBOARD_ROLES.has(normalized);
+  return ADMIN_ROLES.has(normalized);
 }
 
 export const AUTH_COOKIE_NAME = "et_token";
@@ -122,12 +123,12 @@ export function requireAdmin(req, res, next) {
   return next();
 }
 
-/** Admin only — create / edit / delete and full admin APIs. */
+/** Admin only — create / edit / delete and full admin APIs. Viewers are rejected with 403. */
 export function requireSuperAdmin(req, res, next) {
   if (!isSuperAdminRole(req.user?.role)) {
     return res.status(403).json({
       success: false,
-      message: "Admin access required.",
+      message: "Admin access required. Viewers cannot upload, modify, or delete content.",
     });
   }
   return next();

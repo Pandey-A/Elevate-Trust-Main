@@ -8,7 +8,7 @@ import worldMapBackground from "../assets/homepage-icons/Group(3).png";
 import { type IndustryTag } from "../data/adminDefaults";
 import { normalizeIndustryTags } from "../data/industries";
 import { isDemoDocumentDemo } from "../lib/demoMedia";
-import { resolveMediaUrl } from "../lib/optimizeImageUrl";
+import { getDemoPreviewUrl } from "../lib/demosApi";
 import { useDemoTags, usePublicDemos } from "../hooks/useAdminData";
 import type { AdminDemo } from "../data/adminDefaults";
 
@@ -517,18 +517,16 @@ export default function Demo() {
                 {activeDemo.title}
               </h3>
               <div className="flex items-center gap-2">
-                {activeDemo.videoUrl ? (
-                  <a
-                    href={resolveMediaUrl(activeDemo.videoUrl) || activeDemo.videoUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border-0 bg-white/10 text-white transition-colors hover:bg-white/20"
-                    aria-label="Open in new tab"
-                    title="Open in new tab"
-                  >
-                    <ExternalLink size={18} />
-                  </a>
-                ) : null}
+                <a
+                  href={getDemoPreviewUrl(activeDemo)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border-0 bg-white/10 text-white transition-colors hover:bg-white/20"
+                  aria-label="Open preview in new tab"
+                  title="Open preview in new tab"
+                >
+                  <ExternalLink size={18} />
+                </a>
                 <button
                   type="button"
                   onClick={() => setActiveDemoExpanded((v) => !v)}
