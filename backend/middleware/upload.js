@@ -202,6 +202,7 @@ export const uploadDemoFields = multer({
       const mime = String(file.mimetype || "").toLowerCase();
       const ext = getFileExtension(file.originalname);
       const videoExts = ["mp4", "webm", "mov", "m4v", "ogg"];
+      const audioExts = ["mp3", "wav", "m4a", "aac", "flac", "oga", "opus"];
       const documentExts = ["pdf", "ppt", "pptx", "doc", "docx"];
       const documentMimes = [
         "application/pdf",
@@ -217,13 +218,16 @@ export const uploadDemoFields = multer({
         videoExts.includes(ext) ||
         ((mime === "" || mime === "application/octet-stream") &&
           (!ext || videoExts.includes(ext)));
-      if (isDocument || isVideo) {
+          const isAudio =
+  mime.startsWith("audio/") ||
+  audioExts.includes(ext);
+      if (isDocument || isVideo || isAudio) {
         cb(null, true);
         return;
       }
       cb(
         new Error(
-          "Only video (MP4, WEBM, MOV) or document (PPTX, PDF, DOCX) files are allowed.",
+          "Only video, audio (MP3, WAV, M4A, AAC, FLAC), or document (PPTX, PDF, DOCX) files are allowed.",
         ),
       );
       return;
@@ -727,6 +731,13 @@ export async function storeDemoVideo(file, req) {
   }
 
   const isDocument = Boolean(getDemoDocumentKindFromFile(file));
+
+  const mime = String(file.mimetype || "").toLowerCase();
+const ext = getFileExtension(file.originalname);
+
+const isAudio =
+  mime.startsWith("audio/") ||
+  ["mp3", "wav", "m4a", "aac", "flac", "oga", "opus"].includes(ext);
 
   try {
     try {

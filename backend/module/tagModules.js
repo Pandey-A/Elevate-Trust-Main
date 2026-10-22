@@ -48,40 +48,147 @@ export async function createDemoTag(name) {
   };
 }
 
+// export async function updateDemoTag(id, name) {
+//   const result = await pool.query(
+//     `
+//       UPDATE demo_tags
+//       SET name = $2
+//       WHERE id = $1
+//       RETURNING id, name, created_at
+//     `,
+//     [id, name.trim()],
+//   );
+//   if (!result.rows[0]) return null;
+//   return {
+//     id: result.rows[0].id,
+//     name: result.rows[0].name,
+//     createdAt: result.rows[0].created_at,
+//   };
+// }
+
+
 export async function updateDemoTag(id, name) {
-  const result = await pool.query(
-    `
-      UPDATE demo_tags
-      SET name = $2
-      WHERE id = $1
-      RETURNING id, name, created_at
-    `,
-    [id, name.trim()],
-  );
-  if (!result.rows[0]) return null;
-  return {
-    id: result.rows[0].id,
-    name: result.rows[0].name,
-    createdAt: result.rows[0].created_at,
-  };
+  const client = await pool.connect();
+
+  try {
+    await client.query("BEGIN");
+
+    const currentResult = await client.query(
+      `
+        SELECT id, name, created_at
+        FROM demo_tags
+        WHERE id = $1
+        FOR UPDATE
+      `,
+      [id],
+    );
+
+    if (!currentResult.rows[0]) {
+      await client.query("ROLLBACK");
+      return null;
+    }
+
+    const oldName = currentResult.rows[0].name;
+    const newName = name.trim();
+
+    const result = await client.query(
+      `
+        UPDATE demo_tags
+        SET name = $2
+        WHERE id = $1
+        RETURNING id, name, created_at
+      `,
+      [id, newName],
+    );
+
+    await client.query(
+      `
+        UPDATE demos
+        SET industries = (
+          SELECT COALESCE(
+            jsonb_agg(
+              CASE
+                WHEN item.value = to_jsonb($1::text)
+                THEN to_jsonb($2::text)
+                ELSE item.value
+              END
+              ORDER BY item.ordinality
+            ),
+            '[]'::jsonb
+          )
+          FROM jsonb_array_elements(demos.industries)
+            WITH ORDINALITY AS item(value, ordinality)
+        ),
+        updated_at = NOW()
+        WHERE industries @> jsonb_build_array($1::text)
+      `,
+      [oldName, newName],
+    );
+
+    await client.query("COMMIT");
+
+    return {
+      id: result.rows[0].id,
+      name: result.rows[0].name,
+      createdAt: result.rows[0].created_at,
+    };
+  } catch (error) {
+    await client.query("ROLLBACK");
+    throw error;
+  } finally {
+    client.release();
+  }
 }
 
+
+
 export async function deleteDemoTag(id) {
-  const result = await pool.query(
-    `
-      DELETE FROM demo_tags
-      WHERE id = $1
-      RETURNING id, name, created_at
-    `,
-    [id],
-  );
-  if (!result.rows[0]) return null;
-  return {
-    id: result.rows[0].id,
-    name: result.rows[0].name,
-    createdAt: result.rows[0].created_at,
-  };
+  const client = await pool.connect();
+
+  try {
+    await client.query("BEGIN");
+
+    const result = await client.query(
+      `
+        DELETE FROM demo_tags
+        WHERE id = $1
+        RETURNING id, name, created_at
+      `,
+      [id],
+    );
+
+    if (!result.rows[0]) {
+      await client.query("ROLLBACK");
+      return null;
+    }
+
+    const deletedTag = result.rows[0];
+
+    await client.query(
+      `
+        UPDATE demos
+        SET industries = industries - $1::text,
+            updated_at = NOW()
+        WHERE industries ? $1
+      `,
+      [deletedTag.name],
+    );
+
+    await client.query("COMMIT");
+
+    return {
+      id: deletedTag.id,
+      name: deletedTag.name,
+      createdAt: deletedTag.created_at,
+    };
+  } catch (error) {
+    await client.query("ROLLBACK");
+    throw error;
+  } finally {
+    client.release();
+  }
 }
+
 
 export async function findDemoTagById(id) {
   const result = await pool.query(

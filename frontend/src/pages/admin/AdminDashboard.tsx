@@ -75,6 +75,7 @@ import {
   DEMO_MEDIA_ACCEPT,
   getDemoDocumentKind,
   getDemoDocumentKindFromFile,
+  isDemoAudio,
   isDemoDocumentDemo,
 } from "../../lib/demoMedia";
 
@@ -147,6 +148,12 @@ export default function AdminDashboard() {
   const homeTagMenuRef = useRef<HTMLDivElement>(null);
   const homeTagButtonRef = useRef<HTMLButtonElement>(null);
   const [demoForm, setDemoForm] = useState(emptyDemoForm);
+  const originalDemoRef = useRef<{
+    title: string;
+    youtubeUrl: string;
+    industries: IndustryTag[];
+    isPublic: boolean;
+  } | null>(null);
   const [demoThumbnailFile, setDemoThumbnailFile] = useState<File | null>(null);
   const [demoThumbnailPreview, setDemoThumbnailPreview] = useState<string | null>(null);
   const [demoVideoFile, setDemoVideoFile] = useState<File | null>(null);
@@ -395,22 +402,53 @@ export default function AdminDashboard() {
   };
 
   const editingDemo = Boolean(demoForm.id);
+  const hasDemoChanges = (() => {
+    const original = originalDemoRef.current;
+  
+    if (!editingDemo || !original) return true;
+  
+    return (
+      demoForm.title.trim() !== original.title ||
+      demoForm.youtubeUrl.trim() !== original.youtubeUrl ||
+      [...demoForm.industries].sort().join("|") !==
+        [...original.industries].sort().join("|") ||
+      demoForm.isPublic !== original.isPublic ||
+      demoThumbnailFile !== null ||
+      demoVideoFile !== null
+    );
+  })();
   const editingBlog = Boolean(blogForm.id);
   const editingTestimonial = Boolean(testimonialForm.id);
   const editingJob = Boolean(jobForm.id);
 
+
+  const activeDemoIndustries = (demo: AdminDemo) =>
+    demo.industries.filter((industry) => demoTags.includes(industry));
+  
+
   const filteredDemos = useMemo(() => {
     const query = demoSearch.trim().toLowerCase();
+
     return demos.filter((demo) => {
-      const matchesTitle = !query || demo.title.toLowerCase().includes(query);
+      const activeIndustries = activeDemoIndustries(demo);
+
+      const matchesSearch =
+        !query ||
+        demo.title.toLowerCase().includes(query) ||
+        activeIndustries.some((industry) =>
+          industry.toLowerCase().includes(query),
+        );
+
       const matchesCategory =
         demoCategoryFilter === "All" ||
-        demo.industries.some(
-          (industry) => industry.toLowerCase() === demoCategoryFilter.toLowerCase(),
+        activeIndustries.some(
+          (industry) =>
+            industry.toLowerCase() === demoCategoryFilter.toLowerCase(),
         );
-      return matchesTitle && matchesCategory;
+
+      return matchesSearch && matchesCategory;
     });
-  }, [demos, demoSearch, demoCategoryFilter]);
+  }, [demos, demoSearch, demoCategoryFilter, demoTags]);
 
   const homeFilterTags = useMemo(() => {
     return [...demoTags].sort((a, b) => a.localeCompare(b));
@@ -418,16 +456,64 @@ export default function AdminDashboard() {
 
   const homeFilteredDemos = useMemo(() => {
     const query = homeDemoSearch.trim().toLowerCase();
+
     return demos.filter((demo) => {
-      const matchesSearch = !query || demo.title.toLowerCase().includes(query);
+      const activeIndustries = activeDemoIndustries(demo);
+
+      const matchesSearch =
+        !query || demo.title.toLowerCase().includes(query);
+
       const matchesTag =
         homeTagFilter === "All" ||
-        demo.industries.some(
-          (industry) => industry.toLowerCase() === homeTagFilter.trim().toLowerCase(),
+        activeIndustries.some(
+          (industry) =>
+            industry.toLowerCase() ===
+            homeTagFilter.trim().toLowerCase(),
         );
+
       return matchesSearch && matchesTag;
     });
-  }, [demos, homeDemoSearch, homeTagFilter]);
+  }, [demos, homeDemoSearch, homeTagFilter, demoTags]);
+
+
+  // const filteredDemos = useMemo(() => {
+  //   const query = demoSearch.trim().toLowerCase();
+  
+  //   return demos.filter((demo) => {
+  //     const matchesSearch =
+  // !query ||
+  // demo.title.toLowerCase().includes(query) ||
+  // activeDemoIndustries(demo).some((industry) =>
+  //   industry.toLowerCase().includes(query),
+  // );
+  
+  //     const matchesCategory =
+  //       demoCategoryFilter === "All" ||
+  //       demo.industries.some(
+  //         (industry) =>
+  //           industry.toLowerCase() === demoCategoryFilter.toLowerCase(),
+  //       );
+  
+  //     return matchesSearch && matchesCategory;
+  //   });
+  // }, [demos, demoSearch, demoCategoryFilter]);
+
+  // const homeFilterTags = useMemo(() => {
+  //   return [...demoTags].sort((a, b) => a.localeCompare(b));
+  // }, [demoTags]);
+
+  // const homeFilteredDemos = useMemo(() => {
+  //   const query = homeDemoSearch.trim().toLowerCase();
+  //   return demos.filter((demo) => {
+  //     const matchesSearch = !query || demo.title.toLowerCase().includes(query);
+  //     const matchesTag =
+  //       homeTagFilter === "All" ||
+  //       demo.industries.some(
+  //         (industry) => industry.toLowerCase() === homeTagFilter.trim().toLowerCase(),
+  //       );
+  //     return matchesSearch && matchesTag;
+  //   });
+  // }, [demos, homeDemoSearch, homeTagFilter]);
 
   const homeFilterActive =
     homeDemoSearch.trim().length > 0 || homeTagFilter !== "All";
@@ -496,18 +582,33 @@ export default function AdminDashboard() {
 
   const onEditDemo = (demo: AdminDemo) => {
     if (!isSuperAdmin) return;
+    originalDemoRef.current = {
+      title: demo.title,
+      youtubeUrl: demo.youtubeUrl,
+      industries: demo.industries.filter((industry) =>
+        demoTags.includes(industry)
+      ),
+      isPublic: demo.isPublic,
+    };
+  
     setTab("demos");
+  
     setDemoForm({
       id: demo.id,
       title: demo.title,
       youtubeUrl: demo.youtubeUrl,
-      industries: demo.industries,
+      industries: demo.industries.filter((industry) =>
+        demoTags.includes(industry)
+      ),
       isPublic: demo.isPublic,
     });
+  
     setDemoThumbnailFile(null);
     setDemoThumbnailPreview(demo.thumbnailUrl ?? null);
     setDemoVideoFile(null);
+  
     if (demoVideoPreview) URL.revokeObjectURL(demoVideoPreview);
+  
     setDemoVideoPreview(null);
     setDemoExistingVideoUrl(demo.videoUrl ?? null);
     autoDocCoverRef.current = false;
@@ -559,10 +660,14 @@ export default function AdminDashboard() {
     const documentKind = getDemoDocumentKindFromFile(file);
     const isVideo =
       file.type.startsWith("video/") || /\.(mp4|webm|mov|m4v|ogg)$/i.test(file.name);
-    if (!documentKind && !isVideo) {
-      setDemoError("Please upload a video (MP4, WEBM, MOV) or document (PPTX, PDF, DOCX).");
-      return;
-    }
+      const isAudio = isDemoAudio(file.name, file.type);
+
+      if (!documentKind && !isVideo && !isAudio) {
+        setDemoError(
+          "Please upload a video, audio (MP3, WAV, M4A), or document (PPTX, PDF, DOCX)."
+        );
+        return;
+      }
     if (file.size > DEMO_VIDEO_MAX_BYTES) {
       setDemoError("File must be 500MB or smaller.");
       return;
@@ -572,8 +677,13 @@ export default function AdminDashboard() {
     setDemoVideoFile(file);
     setDemoVideoPreview(documentKind ? null : URL.createObjectURL(file));
 
+    // if (documentKind) {
+    //   setDemoForm((prev) => ({ ...prev, industries: [], youtubeUrl: "" }));
     if (documentKind) {
-      setDemoForm((prev) => ({ ...prev, industries: [], youtubeUrl: "" }));
+      setDemoForm((prev) => ({
+        ...prev,
+        youtubeUrl: "",
+      }));
       try {
         const cover = await createDocumentCoverFile(documentKind);
         setDemoThumbnailFile(cover);
@@ -600,6 +710,9 @@ export default function AdminDashboard() {
   const demoUploadKindLabel = (() => {
     const kind = getDemoDocumentKindFromFile(demoVideoFile);
     if (kind) return kind;
+    if (demoVideoFile && isDemoAudio(demoVideoFile.name, demoVideoFile.type)) {
+      return "audio";
+    }
     if (demoVideoFile) return "video";
     if (demoThumbnailFile) return "thumbnail";
     return "file";
@@ -624,15 +737,15 @@ export default function AdminDashboard() {
       setDemoError("Upload a demo video or document, or paste a YouTube URL (temporary).");
       return;
     }
-    if (!isDocumentDemo && demoForm.industries.length === 0) {
-      setDemoError("Select at least one industry tag.");
-      return;
-    }
+    // if (!isDocumentDemo && demoForm.industries.length === 0) {
+    //   setDemoError("Select at least one industry tag.");
+    //   return;
+    // }
 
     const payload = {
       title: demoForm.title.trim(),
       youtubeUrl: isDocumentDemo ? "" : demoForm.youtubeUrl.trim(),
-      industries: isDocumentDemo ? [] : demoForm.industries,
+      industries: demoForm.industries,
       isPublic: demoForm.isPublic,
       thumbnailFile: demoThumbnailFile,
       videoFile: demoVideoFile,
@@ -1378,22 +1491,24 @@ export default function AdminDashboard() {
                       <h3 className="m-0 min-h-[3rem] text-base font-bold leading-snug text-[#1F2432]">
                         {demo.title}
                       </h3>
-                      <div className="mt-2 flex min-h-[3.25rem] flex-wrap content-start gap-1.5">
-                        {demo.industries.length > 0 ? (
-                          demo.industries.map((industry) => (
-                            <span
-                              key={industry}
-                              className="rounded-full bg-[#EFF7FC] px-2.5 py-1 text-[11px] font-semibold text-[#2365aa]"
-                            >
-                              {industry}
-                            </span>
-                          ))
-                        ) : (
-                          <span className="rounded-full bg-[#fff1f1] px-2.5 py-1 text-[11px] font-semibold text-[#DC2626]">
-                            {isDemoDocumentDemo(demo) ? "Document · no tags" : "No tags"}
-                          </span>
-                        )}
-                      </div>
+                      
+<div className="mt-2 flex min-h-[3.25rem] flex-wrap content-start gap-1.5">
+  {activeDemoIndustries(demo).length > 0 ? (
+    activeDemoIndustries(demo).map((industry) => (
+      <span
+        key={industry}
+        className="rounded-full bg-[#EFF7FC] px-2.5 py-1 text-[11px] font-semibold text-[#2365aa]"
+      >
+        {industry}
+      </span>
+    ))
+  ) : (
+    <span className="rounded-full bg-[#fff1f1] px-2.5 py-1 text-[11px] font-semibold text-[#DC2626]">
+      {isDemoDocumentDemo(demo) ? "Document · no tags" : "No tags"}
+    </span>
+  )}
+</div>
+
                       <div className="mt-auto flex flex-col gap-2 pt-4 md:flex-row md:flex-wrap">
                         {isSuperAdmin ? (
                           <>
@@ -2609,14 +2724,14 @@ export default function AdminDashboard() {
                     </div>
                   </section>
 
-                {isDocumentDemo ? (
+                {/* {isDocumentDemo ? (
                   <section className="space-y-2.5 rounded-2xl border border-[#d7e6f3] bg-[#fff7f7] p-4">
                     <p className="m-0 text-sm font-semibold text-[#1F2432]">Industry tags</p>
                     <p className="m-0 text-xs leading-5 text-[#687181]">
                       Document demos stay without tags and only appear under All on the website.
                     </p>
                   </section>
-                ) : (
+                ) : ( */}
                 <section className="space-y-2.5">
                   <div className="flex flex-wrap items-end justify-between gap-2">
                     <div>
@@ -2723,7 +2838,7 @@ export default function AdminDashboard() {
                     </div>
                   ) : null}
                 </section>
-                )}
+                {/* )} */}
 
                 <section className="space-y-2.5">
                     <div>
@@ -2783,8 +2898,8 @@ export default function AdminDashboard() {
                 ) : null}
                 <button
                   type="submit"
-                  disabled={demoSaving}
-                  className="inline-flex cursor-pointer items-center gap-2 rounded-full border-0 bg-[#2365aa] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#1a5490] disabled:cursor-not-allowed disabled:opacity-70"
+                  disabled={demoSaving || !hasDemoChanges}
+                  className="inline-flex cursor-pointer items-center gap-2 rounded-full border-0 bg-[#2365aa] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#1a5490] disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {demoSaving
                     ? demoUploadButtonText

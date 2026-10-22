@@ -3,7 +3,7 @@ import type { AdminDemo } from "../data/adminDefaults";
 export type DemoDocumentKind = "PPT" | "PDF" | "DOCX";
 
 export const DEMO_MEDIA_ACCEPT =
-  "video/mp4,video/webm,video/quicktime,video/*,application/pdf,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.mp4,.webm,.mov,.pdf,.ppt,.pptx,.doc,.docx";
+  "video/mp4,video/webm,video/quicktime,video/*,audio/*,application/pdf,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.mp4,.webm,.mov,.m4v,.ogg,.mp3,.wav,.m4a,.aac,.flac,.pdf,.ppt,.pptx,.doc,.docx";
 
 function extensionFrom(value: string) {
   const clean = String(value || "").split("?")[0].split("#")[0].toLowerCase();
@@ -43,6 +43,21 @@ export function getDemoDocumentKind(
 export function getDemoDocumentKindFromFile(file: File | null | undefined) {
   if (!file) return null;
   return getDemoDocumentKind(file.name, file.type);
+}
+
+// Audio file extensions
+export function isDemoAudio(
+  nameOrUrl = "",
+  mime = "",
+): boolean {
+  const ext = extensionFrom(nameOrUrl);
+  const type = String(mime || "").toLowerCase();
+
+  return (
+    type.startsWith("audio/") ||
+    /\.(mp3|wav|m4a|aac|flac|oga|opus)$/i.test(`.${ext}`) ||
+    ["mp3", "wav", "m4a", "aac", "flac", "oga", "opus"].includes(ext)
+  );
 }
 
 export function isDemoDocumentDemo(
