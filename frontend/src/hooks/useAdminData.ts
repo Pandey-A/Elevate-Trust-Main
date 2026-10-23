@@ -15,7 +15,7 @@ import type { Testimonial } from "../lib/testimonialsApi";
 import { fetchAdminTestimonials, fetchPublicTestimonials } from "../lib/testimonialsApi";
 import { fetchAdminJobs, fetchPublicJobs } from "../lib/jobsApi";
 import { fetchDemoTags, type DemoTag } from "../lib/tagsApi";
-import { INDUSTRY_TAGS } from "../data/adminDefaults";
+// import { INDUSTRY_TAGS } from "../data/adminDefaults";
 
 /** Keep list pages snappy when navigating away and back (1 hour). */
 const PUBLIC_CACHE_TTL_MS = 60 * 60 * 1000;
@@ -100,8 +100,10 @@ const publicTestimonialsCache = createResourceCache(fetchPublicTestimonials, "et
 const publicJobsCache = createResourceCache(fetchPublicJobs, "et_cache_public_jobs");
 const publicDemoTagsCache = createResourceCache(async () => {
   const data = await fetchDemoTags();
-  const names = data.map((tag: DemoTag) => tag.name).filter(Boolean);
-  return names.length > 0 ? names : [...INDUSTRY_TAGS];
+
+  return data
+    .map((tag: DemoTag) => tag.name)
+    .filter(Boolean);
 }, "et_cache_public_tags");
 
 /** Schedule work after first paint / when the browser is idle (does not block LCP). */
@@ -415,7 +417,7 @@ export function useAdminTestimonials() {
 
 export function useDemoTags() {
   const initial = publicDemoTagsCache.peek();
-  const [tags, setTags] = useState<string[]>(() => initial ?? [...INDUSTRY_TAGS]);
+  const [tags, setTags] = useState<string[]>(() => initial ?? []);
   const [loading, setLoading] = useState(() => initial === null);
   const [error, setError] = useState("");
 
@@ -428,7 +430,7 @@ export function useDemoTags() {
       setError("");
     } catch (err) {
       if (publicDemoTagsCache.peek() === null) {
-        setTags([...INDUSTRY_TAGS]);
+        setTags([]);
         setError(getErrorMessage(err, "Unable to load tags."));
       }
     } finally {

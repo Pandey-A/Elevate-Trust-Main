@@ -97,7 +97,7 @@ function validateDemoPayload(
 ) {
   const title = String(body.title || "").trim();
   const youtubeUrl = String(body.youtubeUrl || body.youtube_url || "").trim();
-  const industries = isDocument ? [] : parseIndustries(body);
+  const industries = parseIndustries(body);
   const videoId = isDocument
     ? ""
     : extractYoutubeId(youtubeUrl) ||
@@ -110,7 +110,7 @@ function validateDemoPayload(
   const errors = [];
   if (!title) errors.push("title");
   if (!hasYoutube && !hasCloudVideo) errors.push("video");
-  if (!isDocument && industries.length === 0) errors.push("industries");
+  // if (!isDocument && industries.length === 0) errors.push("industries");
 
   return {
     title,

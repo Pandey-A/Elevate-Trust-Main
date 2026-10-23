@@ -1,7 +1,9 @@
 import fs from "fs";
 import path from "path";
+import { Readable } from "stream";
 import multer from "multer";
 import { fileURLToPath } from "url";
+import cloudinary from "../config/cloudinary.js";
 import {
   createDocumentCoverSvg,
   getDemoDocumentKindFromFile,
@@ -18,6 +20,35 @@ const demoUploadTmpDir = path.join(uploadsDemoDir, ".tmp");
 /** Max demo video / multipart file size (supports high-quality uploads). */
 export const DEMO_VIDEO_MAX_BYTES = 500 * 1024 * 1024;
 
+function isCloudinaryConfigured() {
+  return Boolean(
+    process.env.CLOUDINARY_CLOUD_NAME &&
+      process.env.CLOUDINARY_API_KEY &&
+      process.env.CLOUDINARY_API_SECRET,
+  );
+}
+
+function allowLocalUploadFallback() {
+  if (
+    String(process.env.ALLOW_LOCAL_STORAGE || "").toLowerCase() === "true" ||
+    process.env.STORAGE_DRIVER === "local"
+  ) {
+    return true;
+  }
+
+  if (!isCloudinaryConfigured()) {
+    return true;
+  }
+
+  return process.env.NODE_ENV !== "production";
+}
+
+function requireCloudStorageOrThrow(context) {
+  if (isCloudinaryConfigured() || allowLocalUploadFallback()) return;
+  throw new Error(
+    `Storage is not configured for ${context} uploads. Please configure Cloudinary or set ALLOW_LOCAL_STORAGE=true in .env.`,
+  );
+}
 
 for (const dir of [
   uploadsCvDir,
@@ -171,6 +202,7 @@ export const uploadDemoFields = multer({
       const mime = String(file.mimetype || "").toLowerCase();
       const ext = getFileExtension(file.originalname);
       const videoExts = ["mp4", "webm", "mov", "m4v", "ogg"];
+      const audioExts = ["mp3", "wav", "m4a", "aac", "flac", "oga", "opus"];
       const documentExts = ["pdf", "ppt", "pptx", "doc", "docx"];
       const documentMimes = [
         "application/pdf",
@@ -186,13 +218,16 @@ export const uploadDemoFields = multer({
         videoExts.includes(ext) ||
         ((mime === "" || mime === "application/octet-stream") &&
           (!ext || videoExts.includes(ext)));
-      if (isDocument || isVideo) {
+          const isAudio =
+  mime.startsWith("audio/") ||
+  audioExts.includes(ext);
+      if (isDocument || isVideo || isAudio) {
         cb(null, true);
         return;
       }
       cb(
         new Error(
-          "Only video (MP4, WEBM, MOV) or document (PPTX, PDF, DOCX) files are allowed.",
+          "Only video, audio (MP3, WAV, M4A, AAC, FLAC), or document (PPTX, PDF, DOCX) files are allowed.",
         ),
       );
       return;
@@ -290,12 +325,119 @@ async function saveDemoFileLocally(file, titleCandidate = "") {
   return storedName;
 }
 
-function buildPublicUrl(_req, folder, storedName) {
+function buildPublicUrl(req, folder, storedName) {
   const configured = (process.env.PUBLIC_API_URL || "").trim().replace(/\/$/, "");
   if (configured && !/localhost|127\.0\.0\.1/i.test(configured)) {
     return `${configured}/uploads/${folder}/${storedName}`;
   }
-  return `/uploads/${folder}/${storedName}`;
+
+  if (req?.headers) {
+    const protocol = req.headers["x-forwarded-proto"] || req.protocol || "https";
+    const host = req.get ? req.get("host") : req.headers.host;
+    if (host && !/localhost|127\.0\.0\.1/i.test(host)) {
+      return `${protocol}://${host}/uploads/${folder}/${storedName}`;
+    }
+  }
+
+  const port = process.env.RUNTIME_PORT || process.env.PORT || 5000;
+  return `http://localhost:${port}/uploads/${folder}/${storedName}`;
+}
+
+function uploadVideoToCloudinary(file, folder = "elevate-trust/demos") {
+  if (!hasUploadPayload(file)) {
+    return Promise.resolve(null);
+  }
+
+  if (!isCloudinaryConfigured()) {
+    return Promise.reject(new Error("Cloudinary is not configured"));
+  }
+
+  const publicId = `${Date.now()}-${safeBaseName(file.originalname)}`;
+  const options = {
+    resource_type: "video",
+    folder,
+    public_id: publicId,
+    type: "upload",
+    access_mode: "public",
+    overwrite: false,
+    chunk_size: 6_000_000,
+  };
+
+  if (file.path) {
+    return cloudinary.uploader.upload(file.path, options);
+  }
+
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(options, (error, result) => {
+      if (error) {
+        reject(error);
+        return;
+      }
+      resolve(result);
+    });
+
+    Readable.from(file.buffer).pipe(stream);
+  });
+}
+
+function uploadRawToCloudinary(file, folder = "elevate-trust/demos") {
+  if (!hasUploadPayload(file)) {
+    return Promise.resolve(null);
+  }
+
+  if (!isCloudinaryConfigured()) {
+    return Promise.reject(new Error("Cloudinary is not configured"));
+  }
+
+  const ext = getExtension(file.originalname, file.mimetype);
+  const publicId = `${Date.now()}-${safeBaseName(file.originalname)}.${ext}`;
+  const options = {
+    resource_type: "raw",
+    folder,
+    public_id: publicId,
+    type: "upload",
+    access_mode: "public",
+    overwrite: false,
+    chunk_size: 6_000_000,
+  };
+
+  if (file.path) {
+    return cloudinary.uploader.upload(file.path, options);
+  }
+
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(options, (error, result) => {
+      if (error) {
+        reject(error);
+        return;
+      }
+      resolve(result);
+    });
+
+    Readable.from(file.buffer).pipe(stream);
+  });
+}
+
+async function isPubliclyReadable(url) {
+  try {
+    const headResponse = await fetch(url, { method: "HEAD" });
+    if (headResponse.ok) return true;
+
+    const getResponse = await fetch(url, {
+      method: "GET",
+      headers: { Range: "bytes=0-0" },
+    });
+    if (!(getResponse.ok || getResponse.status === 206)) return false;
+
+    try {
+      await getResponse.body?.cancel?.();
+    } catch {
+      // ignore cancel errors
+    }
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 /** Store resume locally on server */
@@ -366,7 +508,51 @@ export async function storeDemoVideo(file, req) {
     throw new Error("Demo video file is required.");
   }
 
+  const isDocument = Boolean(getDemoDocumentKindFromFile(file));
+  const mime = String(file.mimetype || "").toLowerCase();
+  const ext = getFileExtension(file.originalname);
+  const isAudio =
+    mime.startsWith("audio/") ||
+    ["mp3", "wav", "m4a", "aac", "flac", "oga", "opus"].includes(ext);
+
+  if (!allowLocalUploadFallback()) {
+    requireCloudStorageOrThrow("demo media");
+  }
+
   try {
+    if (isCloudinaryConfigured()) {
+      try {
+        const uploaded = isDocument
+          ? await uploadRawToCloudinary(file, "elevate-trust/demos")
+          : await uploadVideoToCloudinary(file, "elevate-trust/demos");
+
+        if (uploaded?.secure_url) {
+          const okToUse = !isDocument || (await isPubliclyReadable(uploaded.secure_url));
+          if (okToUse) {
+            return {
+              videoUrl: uploaded.secure_url,
+              videoPath: uploaded.public_id || null,
+              storage: "cloudinary",
+            };
+          }
+          console.warn("Demo document not publicly readable:", uploaded.secure_url);
+        }
+      } catch (error) {
+        if (!allowLocalUploadFallback()) {
+          throw error;
+        }
+
+        console.warn(
+          `Cloudinary demo ${isDocument ? "document" : "video"} upload failed, saving locally:`,
+          error?.message || error,
+        );
+      }
+    }
+
+    if (!allowLocalUploadFallback()) {
+      throw new Error("Unable to store demo media in persistent cloud storage.");
+    }
+
     const titleCandidate = req?.body?.title || "";
     const storedName = await saveDemoFileLocally(file, titleCandidate);
     return {

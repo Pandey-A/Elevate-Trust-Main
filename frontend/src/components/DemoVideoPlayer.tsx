@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type MouseEvent } from "react";
-import { getDemoDocumentKind, type DemoDocumentKind } from "../lib/demoMedia";
+import { getDemoDocumentKind, isDemoAudio, type DemoDocumentKind } from "../lib/demoMedia";
 import { getOptimizedDemoVideoUrl } from "../lib/demoVideoUrl";
 import { resolveMediaUrl } from "../lib/optimizeImageUrl";
 
@@ -98,6 +98,9 @@ function DocumentViewer({
     );
   };
 
+  // Website: no full-screen click overlay — it blocks wheel/touch scroll inside
+  // cross-origin PDF/Office iframes. Keep the viewer accessible without
+  // introducing an overlay that breaks document scrolling.
   return (
     <div
       className="absolute inset-0 flex flex-col bg-white"
@@ -207,6 +210,26 @@ export default function DemoVideoPlayer({
         />
       );
     }
+    // NEW: Audio/MP3 playback
+  if (isDemoAudio(videoUrl)) {
+    return (
+      <div className="flex h-full w-full items-center justify-center bg-black p-6">
+        <div className="w-full max-w-xl rounded-xl bg-white p-5">
+          <p className="mb-3 text-lg font-semibold text-gray-900">
+            {title}
+          </p>
+          <audio
+            className="w-full"
+            src={videoUrl}
+            controls
+            preload="metadata"
+          >
+            Your browser does not support audio playback.
+          </audio>
+        </div>
+      </div>
+    );
+  }
 
     return <NativeVideoPlayer videoUrl={resolvedVideo} poster={resolvedPoster} />;
   }
