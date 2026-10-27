@@ -3,10 +3,17 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft, Check, Copy, ExternalLink } from "lucide-react";
 import DemoVideoPlayer from "../components/DemoVideoPlayer";
 import elevateLogo from "../assets/nav/elevate-logo.svg";
-import { fetchDemoById, getDemoStreamUrl, slugifyDemoTitle } from "../lib/demosApi";
+import {
+  fetchDemoById,
+  getDemoStreamUrl,
+  slugifyDemoTitle,
+} from "../lib/demosApi";
+import { getDemoDocumentKind } from "../lib/demoMedia";
 import type { AdminDemo } from "../data/adminDefaults";
+import { getAuthSession } from "../lib/auth";
 
 export default function DemoPreview() {
+  const isAdmin = getAuthSession()?.role?.toLowerCase() === "admin";
   const { id, slug } = useParams<{ id: string; slug?: string }>();
   const navigate = useNavigate();
   const [demo, setDemo] = useState<AdminDemo | null>(null);
@@ -30,7 +37,7 @@ export default function DemoPreview() {
         if (!isMounted) return;
         setDemo(data);
         const expectedSlug = slugifyDemoTitle(data.title);
-        // Ensure the URL always has the friendly title slug
+        // Ensure the URL always has the friendly title slug.
         if (!slug || slug !== expectedSlug) {
           navigate(`/demo/preview/${encodeURIComponent(data.id)}/${expectedSlug}`, {
             replace: true,
@@ -51,28 +58,33 @@ export default function DemoPreview() {
   }, [id, slug, navigate]);
 
   useEffect(() => {
-    if (demo?.title) {
-      document.title = `${demo.title} | Elevate Trust`;
-    } else {
-      document.title = "Demo Preview | Elevate Trust";
-    }
+    document.title = demo?.title
+      ? `${demo.title} | Elevate Trust`
+      : "Demo Preview | Elevate Trust";
   }, [demo?.title]);
 
+  const documentKind = demo?.videoUrl
+    ? getDemoDocumentKind(demo.videoUrl)
+    : null;
+  const isDocumentDemo = Boolean(documentKind);
+  const streamUrl = demo && isDocumentDemo ? getDemoStreamUrl(demo) : "";
+
   const copyShareLink = async () => {
+    if (!streamUrl) return;
+
     try {
-      await navigator.clipboard.writeText(window.location.href);
+      // Copy the absolute direct-stream URL, not this preview page's URL.
+      const directStreamUrl = new URL(streamUrl, window.location.origin).href;
+      await navigator.clipboard.writeText(directStreamUrl);
       setCopied(true);
-      setTimeout(() => setCopied(false), 2500);
+      window.setTimeout(() => setCopied(false), 2500);
     } catch {
-      // ignore clipboard error
+      // Clipboard may be unavailable in an insecure context or restricted browser.
     }
   };
 
-  const streamUrl = demo ? getDemoStreamUrl(demo) : "";
-
   return (
     <div className="flex min-h-screen flex-col bg-[#06090e] text-slate-100 selection:bg-[#2365aa]/40">
-      {/* Top Header */}
       <header className="sticky top-0 z-50 flex h-16 shrink-0 items-center justify-between border-b border-white/10 bg-[#090e17]/90 px-4 backdrop-blur-md sm:px-6">
         <div className="flex min-w-0 items-center gap-3 sm:gap-4">
           <Link
@@ -108,34 +120,37 @@ export default function DemoPreview() {
           )}
         </div>
 
-        {/* Action Controls */}
-        <div className="flex items-center gap-2">
-          {streamUrl && demo?.videoUrl ? (
+        {/* Direct Stream and Copy Link are document-only controls. */}
+        {isAdmin && isDocumentDemo && streamUrl ? (
+          <div className="flex items-center gap-2">
             <a
-              href={streamUrl}
+              href={new URL(streamUrl, window.location.origin).href}
               target="_blank"
               rel="noopener noreferrer"
               className="hidden items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-slate-300 transition-colors hover:bg-white/10 hover:text-white md:inline-flex"
-              title="Open raw direct media stream"
+              title="Open direct document stream"
             >
               <ExternalLink size={14} />
               <span>Direct Stream</span>
             </a>
-          ) : null}
 
-          <button
-            type="button"
-            onClick={copyShareLink}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-[#2365aa]/40 bg-[#2365aa]/15 px-3 py-1.5 text-xs font-medium text-[#7bb8f5] transition-colors hover:bg-[#2365aa]/25 hover:text-white"
-            title="Copy preview link"
-          >
-            {copied ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
-            <span>{copied ? "Link Copied!" : "Copy Link"}</span>
-          </button>
-        </div>
+            <button
+              type="button"
+              onClick={copyShareLink}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-[#2365aa]/40 bg-[#2365aa]/15 px-3 py-1.5 text-xs font-medium text-[#7bb8f5] transition-colors hover:bg-[#2365aa]/25 hover:text-white"
+              title="Copy direct document stream URL"
+            >
+              {copied ? (
+                <Check size={14} className="text-emerald-400" />
+              ) : (
+                <Copy size={14} />
+              )}
+              <span>{copied ? "Link Copied!" : "Copy Link"}</span>
+            </button>
+          </div>
+        ) : null}
       </header>
 
-      {/* Main Preview Player Area */}
       <main className="relative flex flex-1 items-center justify-center p-3 sm:p-6 lg:p-8">
         {loading ? (
           <div className="flex flex-col items-center justify-center gap-3 text-center">
@@ -161,12 +176,12 @@ export default function DemoPreview() {
               videoUrl={demo.videoUrl}
               videoId={demo.videoId}
               poster={demo.thumbnailUrl}
+              isAdmin={isAdmin}
             />
           </div>
         ) : null}
       </main>
 
-      {/* Footer Info */}
       <footer className="border-t border-white/5 bg-[#04060a] px-4 py-3 text-center text-xs text-slate-500">
         <p className="m-0">
           Elevate Trust Demo Platform •{" "}

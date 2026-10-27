@@ -33,7 +33,7 @@ import {
   extractYoutubeId,
 } from "../../lib/adminStorage";
 import { getErrorMessage } from "../../lib/api";
-import { canManageAdminContent, getAuthSession, logoutUser } from "../../lib/auth";
+import { canManageAdminContent, logoutUser } from "../../lib/auth";
 import {
   createJob,
   deleteJob,
@@ -77,6 +77,7 @@ import {
   getDemoDocumentKind,
   getDemoDocumentKindFromFile,
   isDemoAudio,
+  isDemoImage,
   isDemoDocumentDemo,
 } from "../../lib/demoMedia";
 
@@ -138,9 +139,7 @@ export default function AdminDashboard() {
   } = useAdminJobs();
   const { showToast } = useToast();
 
-  const [tab, setTab] = useState<Tab>(() =>
-    canManageAdminContent(getAuthSession()?.role) ? "overview" : "demos",
-  );
+  const [tab, setTab] = useState<Tab>("overview");
   const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
   const [homeDemoSearch, setHomeDemoSearch] = useState("");
   const [homeTagFilter, setHomeTagFilter] = useState("All");
@@ -310,8 +309,8 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     if (!session) return;
-    if (!isSuperAdmin && tab !== "demos") {
-      setTab("demos");
+    if (!isSuperAdmin && tab !== "overview") {
+      setTab("overview");
     }
   }, [session, isSuperAdmin, tab]);
 
@@ -661,14 +660,15 @@ export default function AdminDashboard() {
     const documentKind = getDemoDocumentKindFromFile(file);
     const isVideo =
       file.type.startsWith("video/") || /\.(mp4|webm|mov|m4v|ogg)$/i.test(file.name);
-      const isAudio = isDemoAudio(file.name, file.type);
+    const isAudio = isDemoAudio(file.name, file.type);
+    const isImage = isDemoImage(file.name, file.type);
 
-      if (!documentKind && !isVideo && !isAudio) {
-        setDemoError(
-          "Please upload a video, audio (MP3, WAV, M4A), or document (PPTX, PDF, DOCX)."
-        );
-        return;
-      }
+    if (!documentKind && !isVideo && !isAudio && !isImage) {
+      setDemoError(
+        "Please upload an image, video, audio (MP3, WAV, M4A), or document (PPTX, PDF, DOCX).",
+      );
+      return;
+    }
     if (file.size > DEMO_VIDEO_MAX_BYTES) {
       setDemoError("File must be 500MB or smaller.");
       return;
@@ -680,11 +680,14 @@ export default function AdminDashboard() {
 
     // if (documentKind) {
     //   setDemoForm((prev) => ({ ...prev, industries: [], youtubeUrl: "" }));
-    if (documentKind) {
+    if (documentKind || isImage) {
       setDemoForm((prev) => ({
         ...prev,
         youtubeUrl: "",
       }));
+    }
+
+    if (documentKind) {
       try {
         const cover = await createDocumentCoverFile(documentKind);
         setDemoThumbnailFile(cover);
@@ -706,13 +709,21 @@ export default function AdminDashboard() {
   const selectedDocumentKind =
     getDemoDocumentKindFromFile(demoVideoFile) ||
     getDemoDocumentKind(demoExistingVideoUrl || "");
+  const selectedImageDemo = isDemoImage(
+    demoVideoFile?.name || demoExistingVideoUrl || "",
+    demoVideoFile?.type || "",
+  );
   const isDocumentDemo = Boolean(selectedDocumentKind);
+  const isNonVideoFileDemo = isDocumentDemo || selectedImageDemo;
 
   const demoUploadKindLabel = (() => {
     const kind = getDemoDocumentKindFromFile(demoVideoFile);
     if (kind) return kind;
     if (demoVideoFile && isDemoAudio(demoVideoFile.name, demoVideoFile.type)) {
       return "audio";
+    }
+    if (demoVideoFile && isDemoImage(demoVideoFile.name, demoVideoFile.type)) {
+      return "image";
     }
     if (demoVideoFile) return "video";
     if (demoThumbnailFile) return "thumbnail";
@@ -745,7 +756,7 @@ export default function AdminDashboard() {
 
     const payload = {
       title: demoForm.title.trim(),
-      youtubeUrl: isDocumentDemo ? "" : demoForm.youtubeUrl.trim(),
+      youtubeUrl: isNonVideoFileDemo ? "" : demoForm.youtubeUrl.trim(),
       industries: demoForm.industries,
       isPublic: demoForm.isPublic,
       thumbnailFile: demoThumbnailFile,
@@ -1087,7 +1098,7 @@ export default function AdminDashboard() {
                 ["applications", "Manage Applications", FileText],
               ] as const
             )
-              .filter(([id]) => isSuperAdmin || id === "demos")
+              .filter(([id]) => isSuperAdmin || id === "overview")
               .map(([id, label, Icon]) => (
               <button
                 key={id}
@@ -1122,7 +1133,7 @@ export default function AdminDashboard() {
         ) : null}
 
         <main className="min-w-0 overflow-x-hidden">
-          {tab === "overview" && isSuperAdmin ? (
+        {tab === "overview" ? (
             <section className="space-y-5 sm:space-y-6 2xl:space-y-8">
               <div className="flex flex-col gap-3 rounded-[18px] border border-[#d7e6f3] bg-white p-3 sm:p-3.5 xl:flex-row xl:items-center xl:gap-4">
                 <h2 className="m-0 shrink-0 px-1 text-xl font-bold text-[#1F2432] 2xl:text-2xl">
@@ -2528,6 +2539,12 @@ export default function AdminDashboard() {
                           <div className="flex h-full w-full items-center justify-center bg-[#DC2626] text-2xl font-bold text-white">
                             {selectedDocumentKind}
                           </div>
+                        ) : selectedImageDemo && demoVideoPreview ? (
+                          <img
+                            src={demoVideoPreview}
+                            alt="Selected demo image preview"
+                            className="h-full w-full object-contain"
+                          />
                         ) : demoVideoPreview ? (
                           <video
                             src={demoVideoPreview}
@@ -2583,7 +2600,9 @@ export default function AdminDashboard() {
                         <p className="m-0 truncate text-sm font-semibold text-[#1F2432]">
                           {selectedDocumentKind
                             ? `Current uploaded ${selectedDocumentKind}`
-                            : "Current uploaded video"}
+                            : selectedImageDemo
+                              ? "Current uploaded image"
+                              : "Current uploaded video"}
                         </p>
                         <p className="mt-0.5 text-xs text-[#687181]">
                           Kept unless you upload a new file
@@ -2633,10 +2652,10 @@ export default function AdminDashboard() {
                         <UploadCloud size={20} />
                       </span>
                       <span className="text-sm font-semibold text-[#1F2432]">
-                        Drag & drop video or document here
+                        Drag & drop an image, video or document here
                       </span>
                       <span className="text-xs text-[#687181]">
-                        or browse · MP4 / WEBM / MOV / PPTX / PDF / DOCX · up to 500MB
+                        or browse · JPG / PNG / WEBP / MP4 / PDF / PPTX / DOCX · up to 500MB
                       </span>
                       <input
                         type="file"
@@ -2652,7 +2671,7 @@ export default function AdminDashboard() {
                   )}
                 </section>
 
-                {!isDocumentDemo ? (
+                {!isNonVideoFileDemo ? (
                 <section className="space-y-2.5">
                   <div>
                     <p className="m-0 text-sm font-semibold text-[#1F2432]">
