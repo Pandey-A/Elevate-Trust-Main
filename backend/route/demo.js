@@ -9,7 +9,7 @@ import {
   toggleDemoVisibilityHandler,
   updateDemoHandler,
 } from "../controllers/demoController.js";
-import { requireAdmin, requireAuth, requireSuperAdmin } from "../middleware/auth.js";
+import { optionalAuth, requireAdmin, requireAuth, requireSuperAdmin } from "../middleware/auth.js";
 import { uploadDemoFields } from "../middleware/upload.js";
 
 const router = express.Router();
@@ -22,9 +22,9 @@ const demoMultipart = uploadDemoFields.fields([
 router.get("/", getPublicDemos);
 router.get("/admin", requireAuth, requireAdmin, getAdminDemos);
 router.get("/admin/all", requireAuth, requireAdmin, getAdminDemos);
-router.get("/:id", getPublicDemoById);
-router.get("/:id/stream", streamDemoMediaHandler);
-router.get("/:id/stream/:filename", streamDemoMediaHandler);
+router.get("/:id", optionalAuth, getPublicDemoById);
+router.get("/:id/stream", optionalAuth, streamDemoMediaHandler);
+router.get("/:id/stream/:filename", optionalAuth, streamDemoMediaHandler);
 router.post("/", requireAuth, requireSuperAdmin, demoMultipart, createDemoHandler);
 router.patch("/:id/visibility", requireAuth, requireSuperAdmin, toggleDemoVisibilityHandler);
 router.put("/:id", requireAuth, requireSuperAdmin, demoMultipart, updateDemoHandler);

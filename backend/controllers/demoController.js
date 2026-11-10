@@ -396,6 +396,10 @@ export async function getPublicDemoById(req, res) {
     if (!demo) {
       return res.status(404).json({ success: false, message: "Demo not found." });
     }
+    const hasDashboardAccess = ["admin", "sales"].includes(req.user?.role);
+    if (!demo.isPublic && !hasDashboardAccess) {
+      return res.status(404).json({ success: false, message: "Demo not found." });
+    }
     return res.status(200).json({ success: true, data: demo });
   } catch (error) {
     console.error("Get demo by ID error:", error);
@@ -415,6 +419,13 @@ export async function streamDemoMediaHandler(req, res) {
       return res.status(404).json({ success: false, message: "Demo media not found." });
     }
 
+    const hasDashboardAccess = ["admin", "sales"].includes(req.user?.role);
+    if (!demo.isPublic && !hasDashboardAccess) {
+      return res.status(404).json({ success: false, message: "Demo media not found." });
+    }
+
+    // External media URLs currently redirect to their storage provider. This preserves
+    // playback but cannot prevent a user from extracting the provider URL.
     if (demo.videoUrl.startsWith("http://") || demo.videoUrl.startsWith("https://")) {
       return res.redirect(demo.videoUrl);
     }
@@ -435,11 +446,36 @@ export async function streamDemoMediaHandler(req, res) {
       ".mp4": "video/mp4",
       ".webm": "video/webm",
       ".mov": "video/quicktime",
+      ".m4v": "video/x-m4v",
+      ".ogg": "video/ogg",
+    
       ".pdf": "application/pdf",
       ".ppt": "application/vnd.ms-powerpoint",
-      ".pptx": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+      ".pptx":
+        "application/vnd.openxmlformats-officedocument.presentationml.presentation",
       ".doc": "application/msword",
-      ".docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      ".docx":
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    
+      ".jpg": "image/jpeg",
+      ".jpeg": "image/jpeg",
+      ".png": "image/png",
+      ".webp": "image/webp",
+      ".gif": "image/gif",
+      ".avif": "image/avif",
+      ".bmp": "image/bmp",
+      ".svg": "image/svg+xml",
+      ".ico": "image/x-icon",
+      ".heic": "image/heic",
+      ".heif": "image/heif",
+    
+      ".mp3": "audio/mpeg",
+      ".wav": "audio/wav",
+      ".m4a": "audio/mp4",
+      ".aac": "audio/aac",
+      ".flac": "audio/flac",
+      ".oga": "audio/ogg",
+      ".opus": "audio/opus",
     };
     const contentType = mimeTypes[ext] || "application/octet-stream";
 

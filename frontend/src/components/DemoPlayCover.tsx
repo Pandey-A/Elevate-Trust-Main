@@ -1,6 +1,6 @@
 import { Play } from "lucide-react";
 import type { AdminDemo } from "../data/adminDefaults";
-import { getDemoDocumentKind, isDemoDocumentDemo } from "../lib/demoMedia";
+import { getDemoDocumentKind, isDemoDocumentDemo, isDemoImage } from "../lib/demoMedia";
 import { getDemoTitleImage, hasDemoTitleImage } from "../lib/demoThumbnails";
 import { getOptimizedImageUrl } from "../lib/optimizeImageUrl";
 
@@ -26,16 +26,25 @@ export default function DemoPlayCover({
 }: DemoPlayCoverProps) {
   const documentKind = getDemoDocumentKind(demo.videoUrl || "");
   const isDocument = Boolean(documentKind);
+  const isImageDemo = isDemoImage(demo.videoUrl || "");
   const src = getOptimizedImageUrl(getDemoTitleImage(demo), {
     width: 960,
     height: 540,
     crop: "fill",
   });
-  const branded = hasDemoTitleImage(demo) || isDocument;
+  const branded = hasDemoTitleImage(demo) || isDocument || isImageDemo;
 
   const content = (
     <>
-      {demo.thumbnailUrl || !isDocument ? (
+      {isImageDemo ? (
+        <img
+          src={demo.videoUrl || undefined}
+          alt={demo.title}
+          loading="lazy"
+          decoding="async"
+          className="absolute inset-0 h-full w-full object-cover object-center transition duration-500 ease-out group-hover:scale-[1.03]"
+        />
+      ) : demo.thumbnailUrl || !isDocument ? (
         <img
           src={src || undefined}
           alt={demo.title}

@@ -4,8 +4,8 @@ function getJwtSecret() {
   return process.env.JWT_SECRET || "elevate-trust-dev-secret-change-me";
 }
 
-const DASHBOARD_ROLES = new Set(["admin", "sales", "editor", "superadmin", "viewer", "view"]);
-const ADMIN_ROLES = new Set(["admin", "superadmin"]);
+const DASHBOARD_ROLES = new Set(["admin", "sales"]);
+const ADMIN_ROLES = new Set(["admin"]);
 
 export function isDashboardRole(role) {
   const normalized = String(role || "").trim().toLowerCase();
@@ -95,6 +95,38 @@ export function requireAuth(req, res, next) {
         message: "Please log in to continue.",
       });
     }
+
+    const payload = verifyAuthToken(token);
+    req.user = {
+      id: payload.sub,
+      email: payload.email,
+      name: payload.name,
+      role: String(payload.role || "").trim().toLowerCase(),
+    };
+    return next();
+  } catch {
+    return res.status(401).json({
+      success: false,
+      message: "Session expired. Please log in again.",
+    });
+  }
+}
+
+/** Optional authentication for public demo pages and streams.
+ * If a valid session is present, req.user is populated; otherwise the request
+ * continues as an anonymous website visitor. Invalid supplied tokens are rejected.
+ */
+export function optionalAuth(req, res, next) {
+  try {
+    let token = req.cookies?.[AUTH_COOKIE_NAME];
+
+    if (!token) {
+      const header = req.headers.authorization || "";
+      const [scheme, bearerToken] = header.split(" ");
+      if (scheme === "Bearer" && bearerToken) token = bearerToken;
+    }
+
+    if (!token) return next();
 
     const payload = verifyAuthToken(token);
     req.user = {

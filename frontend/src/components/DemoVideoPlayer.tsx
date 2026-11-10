@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type MouseEvent } from "react";
-import { getDemoDocumentKind, isDemoAudio, type DemoDocumentKind } from "../lib/demoMedia";
+import { getDemoDocumentKind, isDemoAudio, isDemoImage, type DemoDocumentKind, } from "../lib/demoMedia";
 import { getOptimizedDemoVideoUrl } from "../lib/demoVideoUrl";
 import { resolveMediaUrl } from "../lib/optimizeImageUrl";
 
@@ -8,8 +8,8 @@ type Props = {
   videoUrl?: string | null;
   videoId?: string | null;
   poster?: string | null;
-  /** Website-only: block clicks/links inside PDF/PPT/DOCX embeds. */
   blockDocumentClicks?: boolean;
+  isAdmin?: boolean;
 };
 
 function youtubeEmbed(videoId: string) {
@@ -139,9 +139,11 @@ function DocumentViewer({
 function NativeVideoPlayer({
   videoUrl,
   poster,
+  isAdmin,
 }: {
   videoUrl: string;
   poster?: string | null;
+  isAdmin: boolean;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const optimizedUrl = getOptimizedDemoVideoUrl(videoUrl);
@@ -158,7 +160,7 @@ function NativeVideoPlayer({
     // Modal opens on user click — try play with sound first.
     void video.play().catch(() => {
       video.muted = true;
-      void video.play().catch(() => {});
+      void video.play().catch(() => { });
     });
   }, [playbackUrl]);
 
@@ -172,7 +174,7 @@ function NativeVideoPlayer({
       controls
       playsInline
       preload="auto"
-      controlsList="nodownload noremoteplayback"
+      controlsList={isAdmin ? undefined : "nodownload noremoteplayback"}
       disablePictureInPicture
       disableRemotePlayback
       onContextMenu={blockContextMenu}
@@ -194,11 +196,25 @@ export default function DemoVideoPlayer({
   videoId,
   poster,
   blockDocumentClicks = false,
+  isAdmin = false,
 }: Props) {
   const resolvedVideo = resolveMediaUrl(videoUrl);
   const resolvedPoster = resolveMediaUrl(poster);
 
   if (resolvedVideo) {
+    if (isDemoImage(resolvedVideo)) {
+      return (
+        <div className="absolute inset-0 flex items-center justify-center bg-black p-4">
+          <img
+            src={resolvedVideo}
+            alt={title}
+            className="max-h-full max-w-full object-contain"
+            onContextMenu={blockContextMenu}
+            draggable={false}
+          />
+        </div>
+      );
+    }
     const documentKind = getDemoDocumentKind(resolvedVideo);
     if (documentKind) {
       return (
@@ -216,20 +232,37 @@ export default function DemoVideoPlayer({
         <div className="flex h-full w-full items-center justify-center bg-black p-6">
           <div className="w-full max-w-xl rounded-xl bg-white p-5">
             <p className="mb-3 text-lg font-semibold text-gray-900">{title}</p>
+    
             <audio
               className="w-full"
               src={resolvedVideo}
               controls
+              controlsList={isAdmin ? undefined : "nodownload noplaybackrate"}
+              onContextMenu={blockContextMenu}
               preload="metadata"
-            >
-              Your browser does not support audio playback.
-            </audio>
+            />
+    
+    {isAdmin && (
+  <a
+    href={resolvedVideo}
+    download
+    className="mt-3 inline-block rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+  >
+    Download Audio
+  </a>
+)}
           </div>
         </div>
       );
     }
 
-    return <NativeVideoPlayer videoUrl={resolvedVideo} poster={resolvedPoster} />;
+    return (
+      <NativeVideoPlayer
+        videoUrl={resolvedVideo}
+        poster={resolvedPoster}
+        isAdmin={isAdmin}
+      />
+    );
   }
 
   if (videoId) {

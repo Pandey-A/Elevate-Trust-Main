@@ -204,6 +204,19 @@ export const uploadDemoFields = multer({
       const videoExts = ["mp4", "webm", "mov", "m4v", "ogg"];
       const audioExts = ["mp3", "wav", "m4a", "aac", "flac", "oga", "opus"];
       const documentExts = ["pdf", "ppt", "pptx", "doc", "docx"];
+      const imageExts = [
+        "jpg",
+        "jpeg",
+        "png",
+        "webp",
+        "gif",
+        "avif",
+        "bmp",
+      ];
+      
+      const isImage =
+        mime.startsWith("image/") ||
+        imageExts.includes(ext);
       const documentMimes = [
         "application/pdf",
         "application/msword",
@@ -221,13 +234,13 @@ export const uploadDemoFields = multer({
           const isAudio =
   mime.startsWith("audio/") ||
   audioExts.includes(ext);
-      if (isDocument || isVideo || isAudio) {
-        cb(null, true);
-        return;
+  if (isDocument || isVideo || isAudio || isImage) {
+      cb(null, true);
+       return;
       }
       cb(
         new Error(
-          "Only video, audio (MP3, WAV, M4A, AAC, FLAC), or document (PPTX, PDF, DOCX) files are allowed.",
+          "Only image, video, audio, or supported document files are allowed.",
         ),
       );
       return;
@@ -380,6 +393,49 @@ function uploadVideoToCloudinary(file, folder = "elevate-trust/demos") {
   });
 }
 
+
+function uploadImageToCloudinary(file, folder = "elevate-trust/demos") {
+  if (!hasUploadPayload(file)) {
+    return Promise.resolve(null);
+  }
+
+  if (!isCloudinaryConfigured()) {
+    return Promise.reject(new Error("Cloudinary is not configured"));
+  }
+
+  const publicId = `${Date.now()}-${safeBaseName(file.originalname)}`;
+
+  const options = {
+    resource_type: "image",
+    folder,
+    public_id: publicId,
+    type: "upload",
+    access_mode: "public",
+    overwrite: false,
+  };
+
+  if (file.path) {
+    return cloudinary.uploader.upload(file.path, options);
+  }
+
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      options,
+      (error, result) => {
+        if (error) {
+          reject(error);
+          return;
+        }
+
+        resolve(result);
+      },
+    );
+
+    Readable.from(file.buffer).pipe(stream);
+  });
+}
+
+
 function uploadRawToCloudinary(file, folder = "elevate-trust/demos") {
   if (!hasUploadPayload(file)) {
     return Promise.resolve(null);
@@ -508,12 +564,17 @@ export async function storeDemoVideo(file, req) {
     throw new Error("Demo video file is required.");
   }
 
-  const isDocument = Boolean(getDemoDocumentKindFromFile(file));
-  const mime = String(file.mimetype || "").toLowerCase();
-  const ext = getFileExtension(file.originalname);
-  const isAudio =
-    mime.startsWith("audio/") ||
-    ["mp3", "wav", "m4a", "aac", "flac", "oga", "opus"].includes(ext);
+const isDocument = Boolean(getDemoDocumentKindFromFile(file));
+const mime = String(file.mimetype || "").toLowerCase();
+const ext = getFileExtension(file.originalname);
+
+const isImage =
+  mime.startsWith("image/") ||
+  ["jpg", "jpeg", "png", "webp", "gif", "avif", "bmp", "svg", "heic", "heif", "ico"].includes(ext);
+
+const isAudio =
+  mime.startsWith("audio/") ||
+  ["mp3", "wav", "m4a", "aac", "flac", "oga", "opus"].includes(ext);
 
   if (!allowLocalUploadFallback()) {
     requireCloudStorageOrThrow("demo media");
@@ -522,9 +583,11 @@ export async function storeDemoVideo(file, req) {
   try {
     if (isCloudinaryConfigured()) {
       try {
-        const uploaded = isDocument
-          ? await uploadRawToCloudinary(file, "elevate-trust/demos")
-          : await uploadVideoToCloudinary(file, "elevate-trust/demos");
+        const uploaded = isImage
+          ? await uploadImageToCloudinary(file, "elevate-trust/demos")
+          : isDocument
+            ? await uploadRawToCloudinary(file, "elevate-trust/demos")
+            : await uploadVideoToCloudinary(file, "elevate-trust/demos");
 
         if (uploaded?.secure_url) {
           const okToUse = !isDocument || (await isPubliclyReadable(uploaded.secure_url));
